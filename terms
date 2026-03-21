@@ -1,1 +1,103 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms &amp; Conditions — The Wish Wall</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Quicksand',sans-serif;background:#1a0e05;color:#e8dcc8;line-height:1.75;min-height:100vh;}
+.wrap{max-width:760px;margin:0 auto;padding:60px 24px 80px;}
+header{text-align:center;margin-bottom:52px;}
+.logo{font-size:2rem;margin-bottom:8px;}
+h1{font-size:2rem;color:#FFE566;margin-bottom:6px;}
+.sub{color:rgba(255,255,255,.45);font-size:13px;}
+h2{font-size:1.15rem;color:#FF7B2C;margin:36px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);}
+p{margin-bottom:14px;color:rgba(255,255,255,.72);}
+ul{margin:0 0 14px 20px;color:rgba(255,255,255,.72);}
+li{margin-bottom:6px;}
+a{color:#FF7B2C;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:40px;color:#FF7B2C;font-weight:600;font-size:14px;}
+.box{background:rgba(255,229,102,.07);border:1px solid rgba(255,229,102,.18);border-radius:12px;padding:16px 20px;margin-bottom:20px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">✨</div>
+    <h1>Terms &amp; Conditions</h1>
+    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall</p>
+  </header>
+
+<a class="back" href="index.html">← Back to The Wish Wall</a>
+
+  <div class="box">
+    <strong style="color:#FFE566;">Important:</strong> The Wish Wall is a community kindness project, not a registered charity. The £2 pin fee and guardian donations support wish-granting activities. We make no guarantee that any specific wish will be granted.
+  </div>
+
+  <h2>1. Acceptance of Terms</h2>
+  <p>By accessing or using The Wish Wall ("the Platform"), you agree to be bound by these Terms &amp; Conditions. If you do not agree, please do not use the Platform.</p>
+
+  <h2>2. What The Wish Wall Is</h2>
+  <p>The Wish Wall is an anonymous community wish-pinning platform. Users pay a £2 fee to post a wish. Community members ("Guardians") may voluntarily donate funds toward granting posted wishes. The Platform operates a live transparency ledger showing all funds collected and spent.</p>
+  <p>The Wish Wall is <strong>not</strong> a registered charity. Donations are voluntary contributions to a community project and are not tax-deductible charitable gifts under UK law.</p>
+
+  <h2>3. The £2 Pin Fee</h2>
+  <ul>
+    <li>The £2 fee covers platform operating costs (hosting, payment processing, development).</li>
+    <li>The fee is <strong>non-refundable</strong> once payment is confirmed and your wish has been pinned.</li>
+    <li>Payments are processed securely by Stripe. We do not store your payment card details.</li>
+    <li>All transactions are in GBP. You are responsible for any currency conversion fees charged by your bank.</li>
+  </ul>
+
+  <h2>4. Guardian Donations</h2>
+  <ul>
+    <li>Guardian donations are entirely voluntary.</li>
+    <li>Donations go into the community pot and are used to fund wishes at the discretion of The Wish Wall team.</li>
+    <li>Donations are <strong>non-refundable</strong>.</li>
+    <li>We make no guarantee that your donation will fund a specific wish.</li>
+    <li>We publish a live ledger of all donations and grants for full transparency.</li>
+  </ul>
+
+  <h2>5. Content Rules</h2>
+  <p>By posting a wish, you confirm that your content:</p>
+  <ul>
+    <li>Does not contain hate speech, discrimination, or targeted harassment</li>
+    <li>Does not contain sexually explicit material</li>
+    <li>Does not solicit illegal activity</li>
+    <li>Does not impersonate any person or organisation</li>
+    <li>Does not contain personal data of third parties without their consent</li>
+    <li>Is genuinely a personal wish, not an advertisement or spam</li>
+  </ul>
+  <p>We reserve the right to remove any wish that violates these rules without refund.</p>
+
+  <h2>6. Anonymity</h2>
+  <p>You may post wishes anonymously. We store your email address solely to notify you if your wish is granted. Your email is never displayed publicly. See our <a href="privacy.html">Privacy Policy</a> for full details.</p>
+
+  <h2>7. No Guarantee of Wish Granting</h2>
+  <p>Posting a wish does not guarantee it will be granted. Granting is subject to available funds, feasibility, and the decision of The Wish Wall community and team. We will make reasonable efforts to grant wishes but accept no legal liability for wishes not granted.</p>
+
+  <h2>8. Intellectual Property</h2>
+  <p>The Wish Wall platform, design, and code are the intellectual property of The Wish Wall. Wish content submitted by users remains the property of the submitting user. By submitting a wish, you grant us a non-exclusive licence to display it on the Platform.</p>
+
+  <h2>9. Limitation of Liability</h2>
+  <p>To the maximum extent permitted by UK law, The Wish Wall shall not be liable for any indirect, incidental, special, or consequential loss arising from use of the Platform. Our total liability shall not exceed the amount you paid to use the Platform.</p>
+
+  <h2>10. Governing Law</h2>
+  <p>These terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+
+  <h2>11. Changes to These Terms</h2>
+  <p>We may update these terms from time to time. Continued use of the Platform after changes constitutes acceptance of the updated terms. Material changes will be notified on the Platform.</p>
+
+  <h2>12. Contact</h2>
+  <p>For any queries about these terms: <a href="mailto:hello@thewishwall.co.uk">hello@thewishwall.co.uk</a></p>
+
+  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall. All rights reserved.</p>
+</div>
+</body>
+</html>
