@@ -1,1 +1,2033 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ═══ PRIMARY SEO ═══════════════════════════════════════════════════════ -->
+<title>The Wish Wall — Pin a Wish for £2 | Anonymous Wishes Granted by the Community</title>
+<meta name="description" content="The Wish Wall is an anonymous wish-pinning community where real dreams get granted. Pin your wish for just £2, and let strangers make magic happen. Wishes funded, wishes granted — every day.">
+<meta name="keywords" content="wish wall, pin a wish, wishes granted, community wishes, anonymous wishes, crowd funded wishes, make a wish online, wish come true, kindness community, pay it forward, wish board, community kindness, wishes funded, grant a wish, £2 wish, good deeds online, viral kindness, spread kindness, wish come true UK, community good">
+<link rel="canonical" href="https://thewishwall.co.uk/">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="The Wish Wall">
+<meta name="theme-color" content="#5C3D11">
+
+<!-- ═══ OPEN GRAPH (Facebook, LinkedIn, WhatsApp) ═══════════════════════ -->
+
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://thewishwall.co.uk/">
+<meta property="og:title"       content="The Wish Wall — Pin a Wish. Change a Life. 💛">
+<meta property="og:description" content="Anonymous wishes, real community magic. Pin your dream for £2 and let strangers make it real. Over £18,000 donated. Hundreds of wishes granted.">
+<meta property="og:image"       content="https://thewishwall.co.uk/og-image.jpg">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name"   content="The Wish Wall">
+<meta property="og:locale"      content="en_GB">
+
+<!-- ═══ TWITTER / X CARD ════════════════════════════════════════════════ -->
+
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:url"         content="https://thewishwall.co.uk/">
+<meta name="twitter:title"       content="The Wish Wall — Pin a Wish. Change a Life. 💛">
+<meta name="twitter:description" content="Anonymous wishes. Real community. Real magic. £2 to pin your dream — let strangers make it come true.">
+<meta name="twitter:image"       content="https://thewishwall.co.uk/og-image.jpg">
+
+<!-- ═══ JSON-LD STRUCTURED DATA ════════════════════════════════════════ -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://thewishwall.co.uk/#website",
+      "url": "https://thewishwall.co.uk/",
+      "name": "The Wish Wall",
+      "description": "Anonymous wish-pinning community where dreams get granted by strangers",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://thewishwall.co.uk/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://thewishwall.co.uk/#webpage",
+      "url": "https://thewishwall.co.uk/",
+      "name": "The Wish Wall — Pin a Wish for £2 | Anonymous Wishes Granted by the Community",
+      "description": "Pin your wish anonymously for £2. Community guardians fund and grant real wishes every day.",
+      "isPartOf": { "@id": "https://thewishwall.co.uk/#website" },
+      "about": {
+        "@type": "Thing",
+        "name": "Community wish granting and crowdfunded kindness"
+      },
+      "keywords": "wish wall, anonymous wishes, wishes granted, community kindness, crowd funded wishes, pay it forward"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://thewishwall.co.uk/#organization",
+      "name": "The Wish Wall",
+      "url": "https://thewishwall.co.uk/",
+      "description": "A transparent, community-funded wish granting platform. Every £2 pin goes toward making real dreams come true.",
+      "foundingLocation": { "@type": "Place", "name": "United Kingdom" },
+      "sameAs": []
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does The Wish Wall work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You pay £2 to anonymously pin your wish. Community Guardians can then sponsor your wish or donate to the Magic Pool. When enough funding is raised, wishes get granted and verified."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is The Wish Wall legitimate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The Wish Wall publishes a live transparency ledger showing every penny collected, donated, and spent on granted wishes. All transactions are processed securely via Stripe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does it cost to pin a wish?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Just £2. That's it. Your wish goes live on the wall once payment is confirmed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I sponsor someone else's wish?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Browse the Guardians tab, pick a wish that moves you, and sponsor it with any amount. You can also donate to the general Magic Pool which funds any wish."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Fonts: Boogaloo (display) + Quicksand (UI) + Caveat (handwritten notes) -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- =====================================================
+     FIREBASE SDK (v10 modular)
+     Replace the config values below with your own from
+     https://console.firebase.google.com → Project Settings → Web App
+     ===================================================== -->
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getFirestore, collection, addDoc, getDocs, doc, updateDoc,
+    onSnapshot, query, where, orderBy, serverTimestamp, getDoc
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  // ⚠️ REPLACE WITH YOUR FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Expose globally for the main script block
+    window._db = db;
+    window._col = {
+      wishes: collection(db, 'wishes'),
+      donors: collection(db, 'donors'),
+      ledger: doc(db, 'meta', 'ledger')
+    };
+    window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDoc };
+
+    // Real-time wish listener
+    const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
+    onSnapshot(q, snap => {
+      const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      window.renderWishes(wishes);
+    });
+
+    // Ledger listener
+    onSnapshot(window._col.ledger, snap => {
+      if (snap.exists()) window.updateLedger(snap.data());
+    });
+
+    // Expose save function
+    window.saveWish = async (data) => addDoc(window._col.wishes, { ...data, createdAt: serverTimestamp() });
+
+    window._firebaseReady = true;
+    console.log('✨ Firebase connected');
+  } catch(e) {
+    console.warn('Firebase not configured — running in demo mode:', e.message);
+    window._firebaseReady = false;
+  }
+</script>
+
+<!-- Stripe.js -->
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<style>
+/* ============================================================
+   THE WISH WALL — Neon Corkboard Chaos
+   ============================================================ */
+:root {
+  --yellow:    #FFE566;
+  --yellow-dk: #C9A800;
+  --pink:      #FF4D8D;
+  --blue:      #00D4FF;
+  --green:     #00FFB3;
+  --green-dk:  #00C484;
+  --orange:    #FF7B2C;
+  --purple:    #B44DFF;
+  --red:       #FF3366;
+
+  --cork:      #5C3D11;
+  --cork-mid:  #7B5A2D;
+  --ink:       #1A0800;
+  --cream:     #FFFBF0;
+
+  --fn-display: 'Boogaloo', cursive;
+  --fn-ui:      'Quicksand', sans-serif;
+  --fn-note:    'Caveat', cursive;
+
+  --shadow-note:       4px 6px 20px rgba(0,0,0,0.38);
+  --shadow-hover:      8px 18px 45px rgba(0,0,0,0.55);
+  --glow-yellow:       0 0 22px rgba(255,229,102,0.75);
+  --glow-pink:         0 0 22px rgba(255,77,141,0.7);
+  --glow-blue:         0 0 22px rgba(0,212,255,0.7);
+  --glow-green:        0 0 22px rgba(0,255,179,0.6);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--fn-ui);
+  background:var(--cork);
+  color:var(--cream);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* --- CANVAS PARTICLES --- */
+#px-canvas{
+  position:fixed;inset:0;
+  width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:.35;
+}
+
+/* --- CORK TEXTURE OVERLAY --- */
+.cork-fx{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 40% 40% at 25% 30%,rgba(255,180,60,.07) 0%,transparent 100%),
+    radial-gradient(ellipse 30% 30% at 75% 70%,rgba(100,50,10,.06) 0%,transparent 100%);
+  mix-blend-mode:overlay;
+}
+
+/* --- HEADER --- */
+header{
+  position:sticky;top:0;z-index:100;
+  background:linear-gradient(135deg,rgba(20,8,0,.97),rgba(50,18,0,.97));
+  backdrop-filter:blur(14px);
+  border-bottom:2px solid var(--orange);
+  padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:66px;
+  box-shadow:0 4px 30px rgba(255,123,44,.3);
+  gap:16px;
+}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.logo-icon{
+  width:40px;height:40px;background:var(--yellow);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;transform:rotate(-6deg);
+  box-shadow:var(--glow-yellow);flex-shrink:0;
+}
+.logo-txt{font-family:var(--fn-display);font-size:24px;color:var(--yellow);text-shadow:var(--glow-yellow);}
+nav{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.nav-tab{
+  font-family:var(--fn-ui);font-weight:600;font-size:13px;
+  padding:8px 14px;border-radius:50px;border:none;cursor:pointer;
+  background:transparent;color:rgba(255,255,255,.55);
+  transition:all .2s;white-space:nowrap;
+}
+.nav-tab:hover{color:#fff;background:rgba(255,255,255,.08);}
+.nav-tab.active{background:var(--orange);color:#fff;box-shadow:0 2px 14px rgba(255,123,44,.5);}
+.pin-btn{
+  font-family:var(--fn-display);font-size:16px;
+  padding:10px 22px;border-radius:50px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;box-shadow:var(--glow-pink);
+  transition:all .2s;white-space:nowrap;flex-shrink:0;
+}
+.pin-btn:hover{transform:scale(1.05) translateY(-1px);box-shadow:0 0 32px rgba(255,77,141,.85);}
+.pin-btn:active{transform:scale(.97);}
+
+/* --- HERO --- */
+.hero{position:relative;z-index:1;text-align:center;padding:60px 20px 28px;}
+.hero-title{
+  font-family:var(--fn-display);
+  font-size:clamp(2.8rem,8vw,6rem);line-height:1;
+  color:var(--yellow);
+  text-shadow:var(--glow-yellow),4px 4px 0 var(--orange);
+  margin-bottom:14px;
+  animation:titlePop .65s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes titlePop{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+.hero-sub{
+  font-family:var(--fn-note);font-size:clamp(1.1rem,3vw,1.55rem);
+  color:rgba(255,255,255,.82);margin-bottom:28px;
+}
+.hero-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:28px;}
+.stat-pill{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;
+  display:flex;align-items:center;gap:7px;
+}
+.stat-num{font-family:var(--fn-display);font-size:19px;color:var(--yellow);}
+
+/* --- TABS --- */
+.tab-content{display:none;position:relative;z-index:1;}
+.tab-content.active{display:block;}
+
+/* --- WALL SECTION --- */
+.wall-section{padding:20px;position:relative;z-index:1;}
+.wall-toolbar{
+  max-width:1600px;margin:0 auto 20px;
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+}
+.search-inp{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:50px;color:#fff;padding:10px 20px;
+  font-family:var(--fn-ui);font-size:14px;outline:none;
+  flex:1;min-width:180px;transition:all .2s;
+}
+.search-inp::placeholder{color:rgba(255,255,255,.3);}
+.search-inp:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,229,102,.12);}
+.fil-btn{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:50px;color:rgba(255,255,255,.65);padding:10px 16px;
+  font-family:var(--fn-ui);font-size:12px;font-weight:700;cursor:pointer;
+  transition:all .2s;white-space:nowrap;letter-spacing:.3px;
+}
+.fil-btn.active,.fil-btn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+/* --- MASONRY GRID --- */
+.wall-grid{columns:5 210px;column-gap:16px;max-width:1600px;margin:0 auto;}
+.wall-empty{
+  text-align:center;padding:80px 20px;
+  font-family:var(--fn-note);font-size:1.4rem;
+  color:rgba(255,255,255,.45);
+}
+
+/* --- NOTE CARDS --- */
+.note-card{
+  break-inside:avoid;margin-bottom:18px;
+  display:inline-block;width:100%;
+  position:relative;cursor:default;
+  animation:noteAppear .5s cubic-bezier(.175,.885,.32,1.275) both;
+  transition:transform .25s ease,box-shadow .25s ease,z-index 0s .25s;
+}
+@keyframes noteAppear{
+  from{opacity:0;transform:scale(.55) rotate(var(--rot,0deg));}
+  to{opacity:1;transform:scale(1) rotate(var(--rot,0deg));}
+}
+.note-card:hover{
+  transform:scale(1.05) rotate(0deg) translateY(-8px) !important;
+  box-shadow:var(--shadow-hover);z-index:20;
+  transition:transform .22s ease,box-shadow .22s ease,z-index 0s;
+}
+.note-inner{
+  border-radius:3px;padding:38px 18px 22px;
+  position:relative;box-shadow:var(--shadow-note);min-height:118px;
+  background:#FFE566; /* fallback — always shows a colour */
+}
+/* Note colours — !important ensures override even if class order varies */
+.n-yellow .note-inner{background:#FFE566 !important;}
+.n-pink   .note-inner{background:#FFB8D8 !important;}
+.n-blue   .note-inner{background:#B3EEFF !important;}
+.n-green  .note-inner{background:#B3FFE5 !important;}
+.n-orange .note-inner{background:#FFD9B3 !important;}
+.n-lav    .note-inner{background:#DDB3FF !important;}
+
+/* Thumbtack */
+.note-pin{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(0,0,0,.22);
+  box-shadow:0 3px 8px rgba(0,0,0,.4),inset 0 -2px 4px rgba(0,0,0,.2);
+  z-index:2;
+}
+.note-pin::after{
+  content:'';position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+  width:3px;height:12px;background:rgba(0,0,0,.3);border-radius:0 0 2px 2px;
+}
+.pin-r{background:radial-gradient(circle at 35% 35%,#ff9080,#cc1100);}
+.pin-b{background:radial-gradient(circle at 35% 35%,#90b8ff,#1144cc);}
+.pin-g{background:radial-gradient(circle at 35% 35%,#90ffcc,#008844);}
+.pin-y{background:radial-gradient(circle at 35% 35%,#ffe880,#ccaa00);}
+
+.note-text{
+  font-family:var(--fn-note);font-size:17px;line-height:1.5;
+  color:var(--ink);word-break:break-word;
+}
+.note-footer{margin-top:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.note-date{font-size:10px;color:rgba(26,8,0,.42);font-family:var(--fn-ui);}
+
+/* Granted badge */
+.granted-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--green-dk);color:#fff;
+  border-radius:50px;padding:3px 10px;
+  font-size:11px;font-weight:700;font-family:var(--fn-ui);letter-spacing:.5px;
+  box-shadow:0 2px 10px rgba(0,196,132,.5);
+  animation:grantedPop .4s cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes grantedPop{from{transform:scale(0);}60%{transform:scale(1.25);}to{transform:scale(1);}}
+
+/* Torn bottom edge — hex fill avoids rgba() URL-encoding issues across browsers */
+.note-inner::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:6px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='6'%3E%3Cpath d='M0 6 Q2 0 4 4 Q6 6 8 2 Q10 0 12 4 Q14 6 16 2 Q18 0 20 4 L20 6Z' fill='%23000000' fill-opacity='0.07'/%3E%3C/svg%3E");
+  background-repeat:repeat-x;background-size:20px 6px;
+}
+
+/* Skeleton loaders */
+.note-skel{break-inside:avoid;margin-bottom:18px;display:inline-block;width:100%;}
+.skel-inner{
+  border-radius:3px;
+  background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);
+  background-size:200% 100%;animation:shimmer 1.6s infinite;
+}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+
+/* ============================================================
+   EDUCATIONAL WIDGET: WISH RIPPLE CALCULATOR
+   ============================================================ */
+.edu-section{position:relative;z-index:1;padding:48px 20px;}
+.edu-card{
+  max-width:680px;margin:0 auto;
+  background:linear-gradient(145deg,#180700,#2A1200);
+  border:2px solid var(--blue);border-radius:26px;
+  padding:38px;text-align:center;
+  box-shadow:var(--glow-blue),0 24px 70px rgba(0,0,0,.55);
+}
+.edu-badge{
+  display:inline-block;background:var(--blue);color:var(--ink);
+  border-radius:50px;padding:4px 18px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:16px;
+}
+.edu-title{
+  font-family:var(--fn-display);font-size:2.1rem;
+  color:var(--blue);text-shadow:var(--glow-blue);margin-bottom:8px;
+}
+.edu-sub{font-family:var(--fn-note);font-size:1.05rem;color:rgba(255,255,255,.68);margin-bottom:32px;}
+
+.calc-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.calc-amount{
+  font-family:var(--fn-display);font-size:3.8rem;color:var(--yellow);
+  text-shadow:var(--glow-yellow);margin-bottom:18px;
+  transition:color .2s;
+}
+input[type=range].wish-sl{
+  -webkit-appearance:none;width:100%;height:9px;border-radius:10px;
+  background:linear-gradient(to right,var(--blue),var(--purple));
+  outline:none;cursor:pointer;margin-bottom:8px;
+}
+input[type=range].wish-sl::-webkit-slider-thumb{
+  -webkit-appearance:none;width:30px;height:30px;border-radius:50%;
+  background:#fff;box-shadow:0 0 0 5px var(--blue),var(--glow-blue);
+  cursor:pointer;transition:transform .15s;
+}
+input[type=range].wish-sl::-webkit-slider-thumb:hover{transform:scale(1.18);}
+.sl-labels{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.3);margin-bottom:24px;}
+
+.calc-result{
+  background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.18);
+  border-radius:18px;padding:26px;
+}
+.calc-big{
+  font-family:var(--fn-display);font-size:4.2rem;color:var(--green);
+  text-shadow:var(--glow-green);display:block;
+}
+.calc-big-lbl{font-family:var(--fn-note);font-size:1.15rem;color:rgba(255,255,255,.78);margin-bottom:18px;display:block;}
+.wish-bubbles{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:44px;}
+.w-bubble{font-size:21px;display:inline-block;animation:bPop .3s cubic-bezier(.175,.885,.32,1.275) both;}
+@keyframes bPop{from{transform:scale(0) rotate(-20deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.calc-fact{margin-top:16px;font-family:var(--fn-note);font-size:13px;color:rgba(255,255,255,.52);font-style:italic;}
+
+/* ============================================================
+   GUARDIAN SECTION
+   ============================================================ */
+.guardian-section{padding:32px 20px 70px;position:relative;z-index:1;}
+.sec-header{text-align:center;margin-bottom:36px;}
+.sec-title{
+  font-family:var(--fn-display);font-size:clamp(1.7rem,4vw,2.6rem);
+  color:var(--yellow);text-shadow:var(--glow-yellow);margin-bottom:8px;
+}
+.sec-sub{font-family:var(--fn-note);font-size:1.05rem;color:rgba(255,255,255,.65);}
+
+/* Pool card */
+.pool-card{
+  max-width:490px;margin:0 auto 44px;
+  background:linear-gradient(135deg,rgba(180,77,255,.14),rgba(0,212,255,.09));
+  border:1px solid var(--purple);border-radius:22px;padding:28px;text-align:center;
+  box-shadow:0 0 44px rgba(180,77,255,.22);
+}
+.pool-title{font-family:var(--fn-display);font-size:1.6rem;color:var(--purple);margin-bottom:8px;}
+.pool-sub{font-family:var(--fn-note);color:rgba(255,255,255,.62);margin-bottom:22px;}
+.pool-amts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+.pool-amt-btn{
+  padding:10px 20px;border-radius:50px;
+  border:2px solid rgba(180,77,255,.5);background:transparent;
+  color:#fff;font-family:var(--fn-display);font-size:16px;cursor:pointer;
+  transition:all .2s;
+}
+.pool-amt-btn.sel,.pool-amt-btn:hover{background:var(--purple);border-color:var(--purple);box-shadow:0 0 20px rgba(180,77,255,.5);}
+
+/* Sponsor grid */
+.sponsor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;max-width:1200px;margin:0 auto 44px;}
+.sp-card{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;padding:24px;transition:all .25s;
+}
+.sp-card:hover{border-color:var(--blue);box-shadow:var(--glow-blue);transform:translateY(-5px);}
+.sp-wish-txt{font-family:var(--fn-note);font-size:1.08rem;color:#fff;margin-bottom:16px;line-height:1.55;}
+.sp-cost{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sp-cost-est{font-size:11px;color:rgba(255,255,255,.45);}
+.sp-cost-amt{font-family:var(--fn-display);font-size:1.3rem;color:var(--green);}
+.sp-btn{
+  width:100%;padding:12px;border-radius:50px;border:none;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;font-family:var(--fn-display);font-size:16px;cursor:pointer;
+  transition:all .2s;
+}
+.sp-btn:hover{transform:scale(1.03);box-shadow:var(--glow-blue);}
+
+/* ── Featured Patron Banner ─────────────────────────────────────────────── */
+.patron-banner{
+  max-width:780px;margin:0 auto 44px;
+  border-radius:20px;overflow:hidden;
+  border:1.5px solid rgba(180,77,255,.45);
+  background:linear-gradient(135deg,rgba(180,77,255,.12) 0%,rgba(0,0,0,.5) 60%,rgba(255,123,44,.08) 100%);
+  box-shadow:0 0 40px rgba(180,77,255,.18),0 4px 32px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;
+}
+.patron-top{
+  padding:22px 28px 16px;
+  display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;
+}
+.patron-badge{
+  background:linear-gradient(135deg,#B44DFF,#FF7B2C);
+  color:#fff;font-family:var(--fn-display);font-size:12px;
+  letter-spacing:1.2px;text-transform:uppercase;
+  padding:4px 14px;border-radius:50px;white-space:nowrap;
+  align-self:flex-start;margin-top:3px;
+  box-shadow:0 2px 14px rgba(180,77,255,.5);
+}
+.patron-info{flex:1;min-width:200px;}
+.patron-name{
+  font-family:var(--fn-display);font-size:1.7rem;color:#fff;
+  margin-bottom:4px;letter-spacing:.5px;
+}
+.patron-tagline{
+  font-family:var(--fn-note);font-size:1.05rem;
+  color:rgba(255,255,255,.72);line-height:1.5;
+}
+.patron-amount{
+  font-family:var(--fn-display);font-size:2.2rem;
+  color:var(--green);text-shadow:var(--glow-green);
+  white-space:nowrap;align-self:center;
+}
+.patron-desc{
+  padding:0 28px 22px;
+  font-family:var(--fn-note);font-size:1.05rem;
+  color:rgba(255,255,255,.68);line-height:1.6;
+}
+.patron-footer{
+  background:rgba(0,0,0,.25);
+  padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.patron-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.patron-tag{
+  background:rgba(180,77,255,.18);border:1px solid rgba(180,77,255,.3);
+  color:rgba(255,255,255,.75);border-radius:50px;
+  font-size:11px;padding:3px 12px;font-family:var(--fn-ui);font-weight:600;
+  letter-spacing:.3px;
+}
+.patron-link{
+  font-family:var(--fn-display);font-size:14px;
+  color:var(--purple);text-decoration:none;
+  padding:7px 18px;border:1.5px solid rgba(180,77,255,.5);border-radius:50px;
+  transition:all .2s;white-space:nowrap;
+}
+.patron-link:hover{background:rgba(180,77,255,.2);color:#fff;border-color:var(--purple);}
+
+/* second patron — RenviaIT */
+.patron-banner.renvia{
+  border-color:rgba(0,212,255,.4);
+  background:linear-gradient(135deg,rgba(0,212,255,.1) 0%,rgba(0,0,0,.5) 60%,rgba(0,255,179,.06) 100%);
+  box-shadow:0 0 40px rgba(0,212,255,.14),0 4px 32px rgba(0,0,0,.35);
+}
+.patron-banner.renvia .patron-badge{background:linear-gradient(135deg,#00D4FF,#00FFB3);}
+.patron-banner.renvia .patron-link{color:var(--blue);border-color:rgba(0,212,255,.5);}
+.patron-banner.renvia .patron-link:hover{background:rgba(0,212,255,.2);color:#fff;border-color:var(--blue);}
+.patron-banner.renvia .patron-tag{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.3);}
+.patron-section-lbl{
+  font-family:var(--fn-display);font-size:1.3rem;color:var(--yellow);
+  text-align:center;margin:36px 0 18px;
+  text-shadow:var(--glow-yellow);
+}
+
+/* Leaderboard */
+.leaderboard{max-width:500px;margin:0 auto;}
+.lb-title{font-family:var(--fn-display);font-size:1.6rem;color:var(--orange);text-align:center;margin-bottom:18px;}
+.lb-item{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,255,255,.05);border-radius:14px;
+  padding:14px 18px;margin-bottom:10px;transition:all .2s;
+}
+.lb-item:hover{background:rgba(255,255,255,.09);}
+.lb-rank{font-family:var(--fn-display);font-size:1.45rem;width:30px;text-align:center;}
+.lb-rank.gold{color:#FFD700;}.lb-rank.silver{color:#C0C0C0;}.lb-rank.bronze{color:#CD7F32;}
+.lb-name{flex:1;font-weight:600;color:#fff;}
+.lb-amt{font-family:var(--fn-display);font-size:1.1rem;color:var(--green);}
+
+/* ============================================================
+   TRANSPARENCY LEDGER
+   ============================================================ */
+.ledger-section{
+  position:relative;z-index:1;
+  background:rgba(0,0,0,.42);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:48px 20px;
+}
+.ledger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;max-width:860px;margin:0 auto 22px;}
+.led-card{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:24px 14px;}
+.led-num{font-family:var(--fn-display);font-size:2.4rem;color:var(--yellow);display:block;margin-bottom:4px;}
+.led-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);font-weight:700;}
+.led-note{text-align:center;font-size:11px;color:rgba(255,255,255,.28);}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  position:relative;z-index:1;
+  background:rgba(0,0,0,.6);
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:40px 20px 28px;text-align:center;
+  font-size:12px;color:rgba(255,255,255,.32);
+}
+footer a{color:var(--orange);text-decoration:none;transition:color .15s;}
+footer a:hover{color:#fff;}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;margin-bottom:14px;}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.18);margin-top:10px;}
+.footer-trust{display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;margin:14px 0;}
+.trust-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:50px;padding:5px 13px;font-size:11px;font-weight:600;
+  color:rgba(255,255,255,.45);
+}
+
+/* ============================================================
+   MILESTONE PROGRESS BAR
+   ============================================================ */
+.milestone-wrap{
+  max-width:520px;margin:18px auto 24px;
+  background:rgba(0,0,0,.3);border-radius:14px;padding:14px 20px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.milestone-lbl{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--fn-ui);font-size:12px;color:rgba(255,255,255,.6);
+  margin-bottom:9px;
+}
+.milestone-badge{
+  background:linear-gradient(135deg,var(--yellow),var(--orange));
+  color:var(--ink);border-radius:50px;padding:3px 12px;
+  font-size:11px;font-weight:700;letter-spacing:.3px;
+}
+.milestone-track{
+  height:9px;background:rgba(255,255,255,.08);border-radius:50px;overflow:hidden;
+}
+.milestone-bar{
+  height:100%;border-radius:50px;
+  background:linear-gradient(90deg,var(--yellow),var(--orange));
+  transition:width 1.1s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 0 14px rgba(255,229,102,.45);
+}
+
+/* ============================================================
+   COOKIE CONSENT BANNER
+   ============================================================ */
+#cookie-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  background:rgba(18,8,0,.97);border-top:1px solid rgba(255,123,44,.3);
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+  backdrop-filter:blur(10px);
+  transform:translateY(100%);transition:transform .45s cubic-bezier(.25,.46,.45,.94);
+}
+#cookie-banner.show{transform:translateY(0);}
+.cookie-txt{font-size:12px;color:rgba(255,255,255,.62);font-family:var(--fn-ui);flex:1;min-width:220px;line-height:1.65;}
+.cookie-txt a{color:var(--orange);text-decoration:none;}
+.cookie-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.cookie-accept{
+  background:var(--orange);color:#fff;border:none;border-radius:50px;
+  padding:8px 22px;font-family:var(--fn-ui);font-weight:700;font-size:12px;
+  cursor:pointer;transition:background .2s;white-space:nowrap;
+}
+.cookie-accept:hover{background:#e06520;}
+.cookie-reject{
+  background:transparent;color:rgba(255,255,255,.45);
+  border:1px solid rgba(255,255,255,.18);border-radius:50px;
+  padding:8px 16px;font-family:var(--fn-ui);font-size:12px;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.cookie-reject:hover{border-color:rgba(255,255,255,.4);color:#fff;}
+
+/* ============================================================
+   GAMIFICATION — GUARDIAN TIER BADGE
+   ============================================================ */
+.tier-banner{
+  max-width:520px;margin:0 auto 28px;
+  background:linear-gradient(135deg,rgba(180,77,255,.12),rgba(0,0,0,.45));
+  border:1px solid rgba(180,77,255,.28);border-radius:16px;
+  padding:16px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.tier-icon{font-size:2rem;line-height:1;flex-shrink:0;}
+.tier-body{flex:1;min-width:160px;}
+.tier-name{font-family:var(--fn-display);font-size:1.1rem;color:#fff;margin-bottom:2px;}
+.tier-desc{font-size:11px;color:rgba(255,255,255,.48);font-family:var(--fn-ui);}
+.tier-track{height:6px;background:rgba(255,255,255,.08);border-radius:50px;overflow:hidden;margin-top:8px;}
+.tier-bar{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--purple),var(--pink));transition:width .9s ease;}
+.tier-next{font-size:10px;color:rgba(255,255,255,.3);font-family:var(--fn-ui);margin-top:4px;}
+
+/* ============================================================
+   MASCOT: WISHI
+   ============================================================ */
+.mascot-wrap{
+  position:fixed;bottom:0;right:30px;z-index:50;
+  cursor:pointer;transition:transform .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mascot-wrap:hover{transform:translateY(-8px);}
+.mascot-bubble{
+  position:absolute;bottom:100%;right:0;
+  background:#fff;border-radius:16px 16px 4px 16px;
+  padding:10px 14px;font-family:var(--fn-note);font-size:14px;
+  color:var(--ink);max-width:190px;line-height:1.45;
+  box-shadow:0 4px 22px rgba(0,0,0,.35);
+  opacity:0;transform:scale(.8) translateY(10px);transform-origin:bottom right;
+  transition:all .3s cubic-bezier(.175,.885,.32,1.275);
+  pointer-events:none;
+}
+.mascot-wrap:hover .mascot-bubble,
+.mascot-wrap.speaking .mascot-bubble{opacity:1;transform:scale(1) translateY(0);}
+.mascot-svg{width:76px;height:88px;display:block;}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.78);backdrop-filter:blur(10px);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:linear-gradient(145deg,#2C1300,#1A0A00);
+  border:1px solid var(--orange);border-radius:26px;
+  padding:36px;max-width:480px;width:100%;
+  box-shadow:0 0 70px rgba(255,123,44,.28),0 32px 90px rgba(0,0,0,.7);
+  transform:scale(.78) translateY(30px);
+  transition:transform .35s cubic-bezier(.175,.885,.32,1.275);
+  position:relative;max-height:90vh;overflow-y:auto;
+}
+.modal-overlay.open .modal{transform:scale(1) translateY(0);}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:rgba(255,255,255,.1);border:none;color:#fff;
+  width:32px;height:32px;border-radius:50%;cursor:pointer;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.2);}
+.modal-title{font-family:var(--fn-display);font-size:2rem;color:var(--yellow);text-shadow:var(--glow-yellow);margin-bottom:6px;}
+.modal-sub{font-family:var(--fn-note);color:rgba(255,255,255,.58);font-size:1rem;margin-bottom:26px;}
+
+.form-field{margin-bottom:18px;}
+.form-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.48);margin-bottom:8px;}
+.form-req{color:var(--red);}
+.form-inp,.form-ta{
+  width:100%;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);border-radius:13px;
+  color:#fff;font-family:var(--fn-note);font-size:16px;
+  padding:14px 16px;outline:none;transition:all .2s;resize:none;
+}
+.form-inp::placeholder,.form-ta::placeholder{color:rgba(255,255,255,.25);}
+.form-inp:focus,.form-ta:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,229,102,.13);}
+.char-ctr{text-align:right;font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;}
+.char-ctr.warn{color:var(--orange);}.char-ctr.danger{color:var(--red);}
+.form-hint{font-size:11px;color:rgba(255,255,255,.3);margin-top:5px;}
+
+.chk-wrap{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.chk-wrap input[type=checkbox]{width:20px;height:20px;accent-color:var(--yellow);cursor:pointer;}
+.chk-lbl{font-size:14px;color:rgba(255,255,255,.8);}
+
+.price-note{
+  background:rgba(255,229,102,.09);border:1px solid rgba(255,229,102,.2);
+  border-radius:14px;padding:14px 16px;
+  font-size:13px;color:rgba(255,255,255,.7);
+  margin-bottom:22px;display:flex;align-items:center;gap:12px;line-height:1.5;
+}
+.price-note strong{color:var(--yellow);}
+
+.submit-btn{
+  width:100%;padding:16px;border-radius:50px;border:none;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;font-family:var(--fn-display);font-size:20px;
+  cursor:pointer;box-shadow:var(--glow-pink);
+  transition:all .2s;letter-spacing:.5px;
+}
+.submit-btn:hover{transform:scale(1.03);box-shadow:0 0 42px rgba(255,77,141,.85);}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+
+/* ============================================================
+   CONFIRMATION SCREEN
+   ============================================================ */
+.confirm-ov{
+  position:fixed;inset:0;z-index:300;
+  background:radial-gradient(circle at center,#1E0A00 0%,#000 100%);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px;
+}
+.confirm-ov.show{display:flex;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.confirm-title{
+  font-family:var(--fn-display);font-size:clamp(2rem,6vw,3.4rem);
+  color:var(--yellow);text-shadow:var(--glow-yellow);margin-bottom:14px;
+}
+.confirm-sub{font-family:var(--fn-note);font-size:1.15rem;color:rgba(255,255,255,.68);margin-bottom:12px;}
+.confirm-note{
+  width:230px;background:var(--yellow);border-radius:4px;
+  padding:24px;box-shadow:8px 12px 44px rgba(0,0,0,.52);
+  margin:0 auto 28px;transform:rotate(-2.5deg);
+}
+.confirm-note-txt{font-family:var(--fn-note);font-size:1.1rem;color:var(--ink);line-height:1.5;}
+.share-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;}
+.share-btn{
+  padding:12px 24px;border-radius:50px;
+  border:2px solid rgba(255,255,255,.3);background:transparent;
+  color:#fff;font-family:var(--fn-ui);font-weight:600;font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.share-btn:hover{background:rgba(255,255,255,.1);border-color:#fff;}
+.back-btn{
+  padding:14px 38px;border-radius:50px;border:none;
+  background:var(--orange);color:#fff;font-family:var(--fn-display);
+  font-size:18px;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 22px rgba(255,123,44,.45);
+}
+.back-btn:hover{transform:scale(1.05);}
+
+/* ============================================================
+   CONFETTI PIECES
+   ============================================================ */
+.conf-piece{
+  position:fixed;pointer-events:none;border-radius:2px;
+  animation:confFall linear forwards;z-index:1000;
+}
+@keyframes confFall{
+  0%{transform:translateY(-80px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+/* ============================================================
+   HOW IT WORKS TAB
+   ============================================================ */
+.how-card{
+  border-radius:22px;padding:28px;display:flex;gap:20px;align-items:flex-start;
+  margin-bottom:20px;
+}
+.how-card-icon{font-size:2.6rem;flex-shrink:0;}
+.how-card-title{font-family:var(--fn-display);font-size:1.4rem;margin-bottom:8px;}
+.how-card-body{font-family:var(--fn-note);font-size:1rem;color:rgba(255,255,255,.7);line-height:1.65;}
+
+/* ============================================================
+   SCROLL TO TOP
+   ============================================================ */
+.scr-top{
+  position:fixed;bottom:106px;right:20px;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--orange);border:none;color:#fff;
+  font-size:18px;cursor:pointer;z-index:40;
+  box-shadow:0 4px 20px rgba(255,123,44,.5);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;opacity:0;pointer-events:none;
+}
+.scr-top.vis{opacity:1;pointer-events:all;}
+.scr-top:hover{transform:scale(1.12);}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:768px){
+  header{
+    height:auto;flex-wrap:wrap;
+    padding:10px 14px;gap:8px;
+  }
+  nav{order:3;width:100%;overflow-x:auto;padding-bottom:2px;gap:3px;}
+  .nav-tab{font-size:12px;padding:7px 12px;}
+  .wall-grid{columns:2 145px;column-gap:10px;}
+  .wall-section{padding:12px;}
+  .hero{padding:36px 16px 20px;}
+  .hero-stats{gap:10px;}
+  .mascot-wrap{right:10px;}
+  .modal{padding:24px;}
+  .edu-card{padding:24px;}
+  .edu-title{font-size:1.7rem;}
+  .calc-big{font-size:3.2rem;}
+  .logo-txt{font-size:20px;}
+}
+@media(max-width:420px){
+  .wall-grid{columns:2 120px;column-gap:8px;}
+  .logo-txt{display:none;}
+  .pin-btn{font-size:14px;padding:9px 16px;}
+}
+</style>
+
+</head>
+<body>
+
+<!-- Particle background -->
+
+<canvas id="px-canvas"></canvas>
+
+<div class="cork-fx"></div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+
+<header>
+  <a href="#" class="logo" onclick="showTab('wall');return false;">
+    <div class="logo-icon">✨</div>
+    <span class="logo-txt">The Wish Wall</span>
+  </a>
+  <nav>
+    <button class="nav-tab active" onclick="showTab('wall')"   data-tab="wall">🧱 The Wall</button>
+    <button class="nav-tab"        onclick="showTab('guard')"  data-tab="guard">🛡️ Guardians</button>
+    <button class="nav-tab"        onclick="showTab('how')"    data-tab="how">✨ Magic</button>
+  </nav>
+  <button class="pin-btn" onclick="openModal()">📌 Pin a Wish</button>
+</header>
+
+<!-- ============================================================
+     TAB: THE WALL
+     ============================================================ -->
+
+<div id="tab-wall" class="tab-content active">
+
+  <!-- Hero -->
+
+  <div class="hero">
+    <h1 class="hero-title">The Wish Wall</h1>
+    <p class="hero-sub">Pin a dream. Spark some magic. Watch it come true. ✨</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><span class="stat-num" id="s-total">0</span><span>wishes pinned</span></div>
+      <div class="stat-pill"><span class="stat-num" id="s-granted">0</span><span>granted</span></div>
+      <div class="stat-pill"><span class="stat-num" id="s-pool">£0</span><span>in the magic pot</span></div>
+    </div>
+    <!-- Milestone progress bar -->
+    <div class="milestone-wrap">
+      <div class="milestone-lbl">
+        <span id="ms-lbl">✨ <span id="ms-left">11</span> wishes to the next milestone!</span>
+        <span class="milestone-badge" id="ms-badge">🏆 400 wishes</span>
+      </div>
+      <div class="milestone-track"><div class="milestone-bar" id="ms-bar" style="width:0%"></div></div>
+    </div>
+    <button class="pin-btn" onclick="openModal()" style="font-size:18px;padding:14px 34px;">
+      📌 Pin Your Wish — £2
+    </button>
+  </div>
+
+  <!-- Wall -->
+
+  <div class="wall-section">
+    <div class="wall-toolbar">
+      <input class="search-inp" type="text" id="srch-inp" placeholder="🔍 Search wishes..." oninput="filterWishes()">
+      <button class="fil-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="fil-btn" onclick="setFilter('live',this)">🌟 Live</button>
+      <button class="fil-btn" onclick="setFilter('granted',this)">✅ Granted</button>
+    </div>
+    <div class="wall-grid" id="wall-grid">
+      <!-- Skeleton placeholders -->
+      <div class="note-skel"><div class="skel-inner" style="height:138px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:105px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:172px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:120px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:158px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:110px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:143px"></div></div>
+      <div class="note-skel"><div class="skel-inner" style="height:96px"></div></div>
+    </div>
+  </div>
+
+  <!-- Wish Calculator Widget -->
+
+  <div class="edu-section">
+    <div class="edu-card">
+      <span class="edu-badge">🪄 Wish Ripple Calculator</span>
+      <h2 class="edu-title">How far does kindness go?</h2>
+      <p class="edu-sub">Drag the slider and watch the magic multiply ✨</p>
+      <p class="calc-label">If the community raised...</p>
+      <div class="calc-amount" id="calc-amt">£50</div>
+      <input type="range" class="wish-sl" id="wish-sl" min="2" max="500" value="50" step="2" oninput="updateCalc()">
+      <div class="sl-labels"><span>£2</span><span>£500</span></div>
+      <div class="calc-result">
+        <span class="calc-big" id="calc-n">25</span>
+        <span class="calc-big-lbl" id="calc-lbl">dreams could be pinned on the wall!</span>
+        <div class="wish-bubbles" id="w-bubbles"></div>
+        <p class="calc-fact" id="calc-fact">Fun fact: The average small act of kindness costs less than a coffee ☕</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transparency Ledger -->
+
+  <div class="ledger-section">
+    <div class="sec-header">
+      <h2 class="sec-title" style="font-size:1.8rem;">📊 The Magic Ledger</h2>
+      <p class="sec-sub">Radically transparent. Every penny, every wish, in real time.</p>
+    </div>
+    <div class="ledger-grid">
+      <div class="led-card"><span class="led-num" id="led-fees">£0</span><span class="led-lbl">Wish Fees Collected</span></div>
+      <div class="led-card"><span class="led-num" id="led-don">£0</span><span class="led-lbl">Guardian Donations</span></div>
+      <div class="led-card"><span class="led-num" id="led-gr">0</span><span class="led-lbl">Wishes Granted</span></div>
+      <div class="led-card"><span class="led-num" id="led-avg">£0</span><span class="led-lbl">Avg Cost Per Wish</span></div>
+    </div>
+    <p class="led-note">💡 Data synced from Firestore. Updated: <span id="led-ts">—</span></p>
+  </div>
+
+</div><!-- /tab-wall -->
+
+<!-- ============================================================
+     TAB: GUARDIANS
+     ============================================================ -->
+
+<div id="tab-guard" class="tab-content">
+  <div class="guardian-section">
+    <div class="sec-header">
+      <h2 class="sec-title">🛡️ Become a Guardian</h2>
+      <p class="sec-sub">These wishes need a hero. Could that be you?</p>
+    </div>
+
+```
+<!-- General pool -->
+<div class="pool-card">
+  <h3 class="pool-title">💜 The Magic Pool</h3>
+  <p class="pool-sub">Toss coins into the wishing well. Every penny helps grant a dream.</p>
+  <div class="pool-amts">
+    <button class="pool-amt-btn sel" onclick="selPool(5,this)">£5</button>
+    <button class="pool-amt-btn"     onclick="selPool(10,this)">£10</button>
+    <button class="pool-amt-btn"     onclick="selPool(25,this)">£25</button>
+    <button class="pool-amt-btn"     onclick="selPool(50,this)">£50</button>
+  </div>
+  <button class="sp-btn" onclick="donatePool()" style="max-width:260px;margin:0 auto;display:block;">💜 Add to the Pool</button>
+</div>
+
+<!-- Wishes needing sponsors -->
+<div class="sponsor-grid" id="sp-grid">
+  <div style="text-align:center;color:rgba(255,255,255,.4);padding:40px;grid-column:1/-1;font-family:var(--fn-note);font-size:1.1rem;">
+    Loading wishes that need your sparkle... ✨
+  </div>
+</div>
+
+<!-- ── Founding Patron Spotlight ───────────────────────────────────── -->
+<p class="patron-section-lbl">💜 Our Founding Patrons — Thank You</p>
+
+<!-- Lyrīon Ltd -->
+<div class="patron-banner">
+  <div class="patron-top">
+    <span class="patron-badge">🌟 Founding Patron</span>
+    <div class="patron-info">
+      <div class="patron-name">✨ Lyrīon Ltd</div>
+      <div class="patron-tagline">Astrology-inspired luxury lifestyle brand — clothing, accessories &amp; personal readings</div>
+    </div>
+    <div class="patron-amount">£5,000</div>
+  </div>
+  <p class="patron-desc">
+    Lyrīon Ltd believed in The Wish Wall before it had a single wish pinned. Their extraordinary founding donation of <strong style="color:#fff">£5,000</strong> has made it possible for us to grant wishes, build this platform, and keep the magic running. Lyrīon creates luxury astrology-themed clothing and accessories deeply rooted in cosmic identity — and offers personal star chart readings for those who want to understand their journey. If your chart is calling, they'll answer.
+  </p>
+  <div class="patron-footer">
+    <div class="patron-tags">
+      <span class="patron-tag">♈ Astrology</span>
+      <span class="patron-tag">👗 Luxury Fashion</span>
+      <span class="patron-tag">🔮 Personal Readings</span>
+      <span class="patron-tag">✨ Cosmic Lifestyle</span>
+    </div>
+    <a class="patron-link" href="https://lyrionatelier.com" target="_blank" rel="noopener">Visit Lyrīon →</a>
+  </div>
+</div>
+
+<!-- RenviaIT Ltd -->
+<div class="patron-banner renvia" style="margin-top:18px;">
+  <div class="patron-top">
+    <span class="patron-badge">⚙️ Founding Patron</span>
+    <div class="patron-info">
+      <div class="patron-name">⚙️ RenviaIT Ltd</div>
+      <div class="patron-tagline">Circular technology &amp; responsible IT asset disposal — Milton Keynes &amp; beyond</div>
+    </div>
+    <div class="patron-amount">£1,500</div>
+  </div>
+  <p class="patron-desc">
+    RenviaIT Ltd donated <strong style="color:#fff">£1,500</strong> to The Wish Wall as part of their commitment to community and circular responsibility. They specialise in IT asset disposal and refurbishment — giving technology a second life and keeping e-waste out of landfill. RenviaIT proves that doing business responsibly and doing good for people are not mutually exclusive.
+  </p>
+  <div class="patron-footer">
+    <div class="patron-tags">
+      <span class="patron-tag">♻️ ITAD</span>
+      <span class="patron-tag">💻 Circular Tech</span>
+      <span class="patron-tag">🌍 Responsible Disposal</span>
+      <span class="patron-tag">🇬🇧 Milton Keynes</span>
+    </div>
+    <a class="patron-link" href="https://renviait.com" target="_blank" rel="noopener">Visit RenviaIT →</a>
+  </div>
+</div>
+
+<!-- Guardian Tier Banner (populated by JS) -->
+<div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
+
+<!-- Leaderboard -->
+<div class="leaderboard" style="margin-top:24px;">
+  <h3 class="lb-title">🏆 Top Guardians</h3>
+  <div id="lb-list"></div>
+</div>
+```
+
+  </div>
+</div><!-- /tab-guard -->
+
+<!-- ============================================================
+     TAB: HOW IT WORKS
+     ============================================================ -->
+
+<div id="tab-how" class="tab-content">
+  <div style="max-width:700px;margin:0 auto;padding:60px 20px;position:relative;z-index:1;">
+    <div class="sec-header">
+      <h2 class="sec-title">How the Magic Works ✨</h2>
+      <p class="sec-sub">Whimsical? Absolutely. Real? 100%.</p>
+    </div>
+
+```
+<div class="how-card" style="background:rgba(255,229,102,.08);border:1px solid rgba(255,229,102,.2);">
+  <div class="how-card-icon">📌</div>
+  <div>
+    <h3 class="how-card-title" style="color:var(--yellow);">Step 1 — Pin a Wish</h3>
+    <p class="how-card-body">Write your wish (max 200 chars), pay a magical £2 pinning fee via Stripe, and your wish glows on the wall. Totally anonymous. No judgement. Just dreams.</p>
+  </div>
+</div>
+
+<div class="how-card" style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.18);">
+  <div class="how-card-icon">🛡️</div>
+  <div>
+    <h3 class="how-card-title" style="color:var(--blue);">Step 2 — Guardians Appear</h3>
+    <p class="how-card-body">Community Guardians browse the wall and sponsor wishes they believe in. They can fund a specific wish or drop coins into the Magic Pool for any wish to draw from.</p>
+  </div>
+</div>
+
+<div class="how-card" style="background:rgba(0,255,179,.07);border:1px solid rgba(0,255,179,.18);">
+  <div class="how-card-icon">✅</div>
+  <div>
+    <h3 class="how-card-title" style="color:var(--green);">Step 3 — Wishes Get Granted</h3>
+    <p class="how-card-body">When a wish is fulfilled, the note gets a glowing "Granted" stamp and confetti rains down. The wisher gets an email update. We never reveal their identity.</p>
+  </div>
+</div>
+
+<div class="how-card" style="background:rgba(180,77,255,.07);border:1px solid rgba(180,77,255,.18);">
+  <div class="how-card-icon">📊</div>
+  <div>
+    <h3 class="how-card-title" style="color:var(--purple);">Radical Transparency</h3>
+    <p class="how-card-body">Every penny is live in the Magic Ledger. The £2 fee covers platform costs. Guardian donations go directly to granting wishes. We're a community project — not a corporation.</p>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:44px;">
+  <button class="pin-btn" onclick="showTab('wall');openModal();" style="font-size:18px;padding:14px 38px;">
+    ✨ I'm in — Pin My Wish
+  </button>
+</div>
+```
+
+  </div>
+</div><!-- /tab-how -->
+
+<!-- ============================================================
+     FOOTER — FULL LEGAL
+     ============================================================ -->
+
+<footer>
+  <div class="footer-links">
+    <a href="#" onclick="showTab('how');return false;">How It Works</a>
+    <a href="#" onclick="showTab('guard');return false;">Become a Guardian</a>
+    <a href="privacy.html" target="_blank">Privacy Policy</a>
+    <a href="terms.html" target="_blank">Terms &amp; Conditions</a>
+    <a href="cookies.html" target="_blank">Cookie Policy</a>
+    <a href="mailto:hello@thewishwall.co.uk">Contact Us</a>
+    <a href="admin.html">Admin</a>
+  </div>
+  <div class="footer-trust">
+    <span class="trust-badge">🔒 Stripe Secured</span>
+    <span class="trust-badge">🔥 Firebase Encrypted</span>
+    <span class="trust-badge">✅ GDPR Compliant</span>
+    <span class="trust-badge">🌱 Community Funded</span>
+  </div>
+  <p>The Wish Wall is a community kindness project. We are not a registered charity. Donations are voluntary and support wish-granting activities. All payments processed securely by Stripe.</p>
+  <p style="margin-top:8px;">The £2 pin fee covers platform costs. Guardian donations go directly toward granting community wishes. We publish a live transparency ledger so you can see every penny.</p>
+  <p class="footer-copy">© <span id="footer-year">2025</span> The Wish Wall. All rights reserved. Made with love, confetti &amp; ☕ &nbsp;·&nbsp; Powered by Firebase &amp; Stripe</p>
+</footer>
+
+<!-- ============================================================
+     COOKIE CONSENT BANNER
+     ============================================================ -->
+
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <p class="cookie-txt">
+    🍪 We use essential cookies to make this site work, and optional analytics cookies to improve it.
+    Read our <a href="cookies.html" target="_blank">Cookie Policy</a> and
+    <a href="privacy.html" target="_blank">Privacy Policy</a>.
+    You can withdraw consent at any time.
+  </p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" onclick="acceptCookies()">Accept All</button>
+    <button class="cookie-reject" onclick="rejectCookies()">Essential Only</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MASCOT: WISHI 🌟
+     ============================================================ -->
+
+<div class="mascot-wrap" id="mascot" onclick="mascotSpeak()">
+  <div class="mascot-bubble" id="msc-bubble">You're about to make someone's day! ✨</div>
+  <svg class="mascot-svg" viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body -->
+    <rect x="4" y="16" width="72" height="68" rx="6" fill="#FFE566" stroke="#D4A800" stroke-width="1.5"/>
+    <!-- Folded corner -->
+    <path d="M60 16 L76 32 L60 32 Z" fill="#C9A000" opacity=".7"/>
+    <!-- Shadow under body -->
+    <ellipse cx="40" cy="86" rx="28" ry="5" fill="rgba(0,0,0,.25)"/>
+    <!-- Left eye -->
+    <circle cx="27" cy="46" r="10" fill="white" stroke="#222" stroke-width="1.5"/>
+    <circle cx="29" cy="47" r="6" fill="#1A0800"/>
+    <circle cx="31" cy="44" r="2.5" fill="white"/>
+    <!-- Right eye -->
+    <circle cx="53" cy="46" r="10" fill="white" stroke="#222" stroke-width="1.5"/>
+    <circle cx="55" cy="47" r="6" fill="#1A0800"/>
+    <circle cx="57" cy="44" r="2.5" fill="white"/>
+    <!-- Smile -->
+    <path d="M26 63 Q40 76 54 63" stroke="#1A0800" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+    <!-- Rosy cheeks -->
+    <circle cx="20" cy="55" r="6" fill="#FF8C94" opacity=".45"/>
+    <circle cx="60" cy="55" r="6" fill="#FF8C94" opacity=".45"/>
+    <!-- Star on head -->
+    <text x="33" y="14" font-size="16" fill="#FF4D8D">⭐</text>
+    <!-- Tiny arms -->
+    <path d="M4 52 Q-6 46 -2 40" stroke="#FFD94A" stroke-width="9" stroke-linecap="round"/>
+    <path d="M76 52 Q86 46 82 40" stroke="#FFD94A" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<!-- Scroll to top -->
+
+<button class="scr-top" id="scr-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ============================================================
+     MODAL: PIN A WISH
+     ============================================================ -->
+
+<div class="modal-overlay" id="modal-ov" onclick="handleOvClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2 class="modal-title">📌 Pin a Wish</h2>
+    <p class="modal-sub">Anonymous. Magical. Just £2 to make it real.</p>
+
+```
+<div class="form-field">
+  <label class="form-label">Your Wish <span class="form-req">✨ required</span></label>
+  <textarea class="form-ta" id="f-wish" rows="4" maxlength="200"
+    placeholder="I wish for... (be brave, be specific, be you)"
+    oninput="updateChar()"></textarea>
+  <div class="char-ctr" id="char-ctr">0 / 200</div>
+</div>
+
+<div class="form-field">
+  <label class="form-label">Your Name <span style="color:rgba(255,255,255,.35)">(optional — never shown)</span></label>
+  <input class="form-inp" type="text" id="f-name" placeholder="Jane Doe">
+</div>
+
+<div class="form-field">
+  <label class="form-label">Email <span class="form-req">required</span></label>
+  <input class="form-inp" type="email" id="f-email" placeholder="magic@email.com">
+  <p class="form-hint">We email you when your wish is granted. Never shared. Ever.</p>
+</div>
+
+<div class="form-field">
+  <label class="chk-wrap">
+    <input type="checkbox" id="f-anon" checked>
+    <span class="chk-lbl">Post anonymously (recommended ✅)</span>
+  </label>
+</div>
+
+<div class="price-note">
+  <span style="font-size:22px;">💳</span>
+  <div>A <strong>£2 pinning fee</strong> keeps the wall magical &amp; spam-free. Redirects to Stripe — secure, instant, done.</div>
+</div>
+
+<button class="submit-btn" id="sub-btn" onclick="submitWish()">✨ Pin It for £2</button>
+```
+
+  </div>
+</div>
+
+<!-- ============================================================
+     CONFIRMATION OVERLAY
+     ============================================================ -->
+
+<div class="confirm-ov" id="conf-ov">
+  <div class="confirm-title">🎉 Your wish is pinned!</div>
+  <p class="confirm-sub">It's out in the universe now. Magic is doing its thing ✨</p>
+  <div class="confirm-note">
+    <div class="confirm-note-txt" id="conf-txt">"I wish for something wonderful..."</div>
+  </div>
+  <div class="share-row">
+    <button class="share-btn" onclick="shareWish('twitter')">𝕏 Tweet it</button>
+    <button class="share-btn" onclick="shareWish('copy')">🔗 Copy link</button>
+  </div>
+  <button class="back-btn" onclick="closeConf()">Back to the Wall 🧱</button>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+
+<script>
+'use strict';
+
+/* ============================================================
+   ⚠️  STRIPE CONFIG — replace with your own keys
+   Get from https://dashboard.stripe.com/apikeys
+   ============================================================ */
+const STRIPE_PK          = 'pk_test_YOUR_PUBLISHABLE_KEY';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+// For sponsored wishes you'll need a Stripe Checkout session endpoint (see SETUP.md)
+
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
+const NOTE_COLS  = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
+const PIN_COLS   = ['pin-r','pin-b','pin-g','pin-y'];
+const ROTS       = [-4,-3,-2,-1,0,1,2,3,4];
+
+/* ============================================================
+   DEMO WISHES (displayed until Firebase is configured)
+   ============================================================ */
+const DEMO = [
+  {id:'d1',  wishText:"I wish for enough to fix my mum's roof before winter 🏠",                         status:'granted',  color:'n-yellow'},
+  {id:'d2',  wishText:"I wish to finally finish writing my novel — 4 years in the making 📖",            status:'approved', color:'n-pink'},
+  {id:'d3',  wishText:"I wish my dog gets better soon 🐕",                                              status:'granted',  color:'n-green'},
+  {id:'d4',  wishText:"I wish for a solo trip to Japan — I've dreamed of this since I was 12 🗾",       status:'approved', color:'n-blue'},
+  {id:'d5',  wishText:"I wish my little sister gets into her dream university 🎓",                       status:'granted',  color:'n-lav'},
+  {id:'d6',  wishText:"I wish for a community garden on our estate 🌱",                                  status:'granted',  color:'n-orange'},
+  {id:'d7',  wishText:"I wish to learn guitar before I turn 40 🎸",                                      status:'approved', color:'n-pink'},
+  {id:'d8',  wishText:"I wish more people were kind for no reason 💛",                                   status:'approved', color:'n-yellow'},
+  {id:'d9',  wishText:"I wish to open my own bakery one day — sourdough and dreams 🥐",                  status:'approved', color:'n-orange'},
+  {id:'d10', wishText:"I wish my best friend finds peace after her divorce 💜",                          status:'granted',  color:'n-lav'},
+  {id:'d11', wishText:"I wish for rain ☔ — we're in a drought and the garden is dying",                  status:'granted',  color:'n-blue'},
+  {id:'d12', wishText:"I wish someone throws me a surprise birthday party this year 🎂",                 status:'approved', color:'n-pink'},
+  {id:'d13', wishText:"I wish Dad sees me graduate — he's been fighting cancer for two years 🎓❤️",      status:'granted',  color:'n-yellow'},
+  {id:'d14', wishText:"I wish to pay off my student loan before 35 so I can actually breathe 😮‍💨",     status:'approved', color:'n-green'},
+  {id:'d15', wishText:"I wish for one quiet morning where nothing needs fixing and no one needs me ☕",  status:'granted',  color:'n-lav'},
+  {id:'d16', wishText:"I wish my startup gets its first 10 customers this year 🚀",                      status:'approved', color:'n-orange'},
+  {id:'d17', wishText:"I wish I could tell my younger self it all works out in the end 🌈",              status:'granted',  color:'n-pink'},
+  {id:'d18', wishText:"I wish to adopt a rescue greyhound — they deserve a good life 🐾",               status:'granted',  color:'n-green'},
+  {id:'d19', wishText:"I wish to see the Northern Lights before I turn 50 — it's been on my list forever 🌌", status:'approved', color:'n-yellow'},
+  {id:'d20', wishText:"I wish this city had more free spaces for people to just exist 🌳",               status:'approved', color:'n-blue'},
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let allWishes     = [];
+let curFilter     = 'all';
+let searchQ       = '';
+let poolAmt       = 5;
+let storedWishTxt = '';
+let lastBubCnt    = -1;
+
+/* ============================================================
+   PARTICLE SYSTEM
+   ============================================================ */
+const canvas = document.getElementById('px-canvas');
+const ctx    = canvas.getContext('2d');
+let particles  = [];
+
+function resizeCanvas(){
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+class Particle{
+  constructor(){ this.reset(true); }
+  reset(initial){
+    this.x  = Math.random() * canvas.width;
+    this.y  = initial ? Math.random() * canvas.height : canvas.height + 20;
+    this.sz = Math.random() * 3.5 + 1;
+    this.vy = -(Math.random() * 0.55 + 0.18);
+    this.vx = (Math.random() - .5) * .35;
+    this.op = Math.random() * .45 + .1;
+    this.col= ['#FFE566','#FF4D8D','#00D4FF','#00FFB3','#FF7B2C','#B44DFF'][Math.floor(Math.random()*6)];
+    this.isCirc = Math.random() > .45;
+  }
+  step(){
+    this.y += this.vy;
+    this.x += this.vx;
+    this.op -= .00045;
+    if(this.y < -20 || this.op <= 0) this.reset(false);
+  }
+  draw(){
+    ctx.save();
+    ctx.globalAlpha = this.op;
+    ctx.fillStyle   = this.col;
+    if(this.isCirc){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.sz, 0, Math.PI*2);
+      ctx.fill();
+    } else {
+      ctx.font = `${this.sz*3}px serif`;
+      ctx.fillText('✦', this.x, this.y);
+    }
+    ctx.restore();
+  }
+}
+
+function initPx(){
+  resizeCanvas();
+  particles = Array.from({length:55}, () => new Particle());
+}
+function animPx(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => { p.step(); p.draw(); });
+  requestAnimationFrame(animPx);
+}
+window.addEventListener('resize', resizeCanvas);
+initPx();
+animPx();
+
+/* ============================================================
+   TAB NAVIGATION
+   ============================================================ */
+function showTab(tab){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+  const el = document.getElementById('tab-'+tab);
+  if(el) el.classList.add('active');
+  document.querySelectorAll(`[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================================
+   RENDER WISHES
+   ============================================================ */
+window.renderWishes = function(wishes){
+  allWishes = wishes;
+  updateStats();
+  paintWall();
+  paintSponsor();
+};
+
+function paintWall(){
+  const grid = document.getElementById('wall-grid');
+  let src = allWishes;
+
+  if(curFilter === 'granted') src = src.filter(w => w.status === 'granted');
+  else if(curFilter === 'live') src = src.filter(w => w.status !== 'granted');
+
+  if(searchQ){
+    const q = searchQ.toLowerCase();
+    src = src.filter(w => w.wishText.toLowerCase().includes(q));
+  }
+
+  if(src.length === 0){
+    grid.innerHTML = '<div class="wall-empty">✨ No wishes found. Be the first to pin one! 📌</div>';
+    return;
+  }
+  grid.innerHTML = src.map((w,i) => noteHTML(w,i)).join('');
+}
+
+function noteHTML(w, i){
+  const color  = w.color || NOTE_COLS[i % NOTE_COLS.length];
+  const pinCls = PIN_COLS[i % PIN_COLS.length];
+  const rot    = ROTS[i % ROTS.length];
+  const delay  = Math.min(i * 0.045, 0.7).toFixed(2);
+  const granted = w.status === 'granted';
+  let dateStr = 'Recently';
+  try{
+    const d = w.createdAt?.toDate ? w.createdAt.toDate() : (w.createdAt ? new Date(w.createdAt) : new Date());
+    dateStr = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  }catch(_){}
+
+  return `
+<div class="note-card ${color}"
+     style="--rot:${rot}deg;transform:rotate(${rot}deg);animation-delay:${delay}s"
+     data-id="${esc(w.id)}">
+  <div class="note-inner">
+    <div class="note-pin ${pinCls}"></div>
+    <p class="note-text">${esc(w.wishText)}</p>
+    <div class="note-footer">
+      <span class="note-date">${dateStr}</span>
+      ${granted ? `<span class="granted-badge">✅ Granted</span>` : ''}
+    </div>
+  </div>
+</div>`;
+}
+
+function esc(str=''){
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+/* ============================================================
+   FILTER & SEARCH
+   ============================================================ */
+function setFilter(f, btn){
+  curFilter = f;
+  document.querySelectorAll('.fil-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  paintWall();
+}
+function filterWishes(){
+  searchQ = document.getElementById('srch-inp').value.trim();
+  paintWall();
+}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+function updateStats(){
+  // Platform-wide totals — independent of what's currently rendered on the wall
+  // When Firebase is live these should be pulled from meta/ledger or a counter doc
+  const PLATFORM = window._platformStats || { total: 389, granted: 174, pot: 1287 };
+  const total   = window._firebaseReady ? allWishes.length          : PLATFORM.total;
+  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
+  const pot     = window._firebaseReady ? (total * 2)               : PLATFORM.pot;
+  animNum('s-total',   total);
+  animNum('s-granted', granted);
+  document.getElementById('s-pool').textContent = `£${pot.toLocaleString()}`;
+  // Update milestone progress bar
+  updateMilestone(total);
+}
+
+function animNum(id, target){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const start = parseInt(el.textContent.replace(/\D/g,'')) || 0;
+  const t0 = performance.now();
+  function tick(now){
+    const p = Math.min((now-t0)/650, 1);
+    const e = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.round(start + (target-start)*e);
+    if(p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============================================================
+   LEDGER — defined below with formatted numbers
+   ============================================================ */
+
+/* ============================================================
+   SPONSOR WISHES
+   ============================================================ */
+function paintSponsor(){
+  const grid = document.getElementById('sp-grid');
+  const src  = allWishes.filter(w => w.status !== 'granted').slice(0,9);
+  if(!src.length){
+    grid.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.4);padding:40px;grid-column:1/-1;font-family:var(--fn-note);font-size:1.1rem;">All wishes have guardians! Donate to the pool to keep the magic going ✨</div>';
+    return;
+  }
+  grid.innerHTML = src.map(w => `
+<div class="sp-card">
+  <p class="sp-wish-txt">"${esc(w.wishText)}"</p>
+  <div class="sp-cost">
+    <span class="sp-cost-est">Estimated cost</span>
+    <span class="sp-cost-amt">${w.estimatedCost ? '£'+w.estimatedCost : 'Open amount'}</span>
+  </div>
+  <button class="sp-btn" onclick="sponsorWish('${esc(w.id)}')">💙 Sponsor this wish</button>
+</div>`).join('');
+}
+
+async function sponsorWish(id){
+  const amtStr = prompt('How much would you like to contribute? (£)\nMinimum £1');
+  if(!amtStr) return;
+  const amtFloat = parseFloat(amtStr);
+  if(isNaN(amtFloat) || amtFloat < 1){ alert('Please enter a valid amount of at least £1.'); return; }
+  const amtPence = Math.round(amtFloat * 100);
+
+  try{
+    const btn = document.querySelector(`[data-id="${id}"] .sp-btn`) || document.body;
+    btn.textContent = '⏳ Connecting to Stripe...';
+    btn.disabled = true;
+
+    const res  = await fetch('/.netlify/functions/create-sponsor-session', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ wishId: id, amount: amtPence })
+    });
+    const data = await res.json();
+
+    if(data.url){ window.location.href = data.url; }
+    else{ throw new Error(data.error || 'No checkout URL returned'); }
+  } catch(err){
+    console.error('sponsorWish error:', err);
+    alert('Something went wrong connecting to Stripe. Please try again shortly.');
+  }
+}
+
+function selPool(amt, btn){
+  poolAmt = amt;
+  document.querySelectorAll('.pool-amt-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function donatePool(){
+  // Pool donations use the main £-amount payment link with a preset amount
+  // Replace STRIPE_POOL_LINK with your Pool-specific Stripe Payment Link
+  const STRIPE_POOL_LINK = window.STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_POOL_LINK';
+  window.location.href = `${STRIPE_POOL_LINK}?prefilled_amount=${poolAmt * 100}`;
+}
+
+/* ============================================================
+   LEADERBOARD
+   ============================================================ */
+const DEMO_LB = [
+  {name:'✨ Lyrīon Ltd',           amount:5000},
+  {name:'⚙️ RenviaIT Ltd',         amount:1500},
+  {name:'Anonymous Guardian',      amount:600},
+  {name:'The Sunshine Crew',       amount:280},
+  {name:'S. Williams',             amount:107},
+  {name:'Anonymous',               amount:60},
+  {name:'T. Patel',                amount:40},
+];
+function paintLB(donors){
+  const list = document.getElementById('lb-list');
+  const data = donors || DEMO_LB;
+  const medals = ['🥇','🥈','🥉'];
+  const rankCls = ['gold','silver','bronze'];
+  list.innerHTML = data.map((d,i) => `
+<div class="lb-item">
+  <span class="lb-rank ${rankCls[i]||''}">${medals[i] || i+1}</span>
+  <span class="lb-name">${esc(d.name)}</span>
+  <span class="lb-amt">£${d.amount}</span>
+</div>`).join('');
+}
+paintLB(null);
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal(){
+  document.getElementById('modal-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('modal-ov').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOvClick(e){
+  if(e.target === document.getElementById('modal-ov')) closeModal();
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+/* ============================================================
+   CHAR COUNTER
+   ============================================================ */
+function updateChar(){
+  const txt = document.getElementById('f-wish').value;
+  const ctr = document.getElementById('char-ctr');
+  ctr.textContent = `${txt.length} / 200`;
+  ctr.className = 'char-ctr' + (txt.length > 190 ? ' danger' : txt.length > 160 ? ' warn' : '');
+}
+
+/* ============================================================
+   BASIC PROFANITY FILTER
+   Add more words to BLOCK[] as needed
+   ============================================================ */
+const BLOCK = [];
+function hasProfanity(txt){
+  const l = txt.toLowerCase();
+  return BLOCK.some(w => l.includes(w));
+}
+
+/* ============================================================
+   SUBMIT WISH → FIREBASE + STRIPE
+   ============================================================ */
+async function submitWish(){
+  const wishTxt = document.getElementById('f-wish').value.trim();
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const anon    = document.getElementById('f-anon').checked;
+  const btn     = document.getElementById('sub-btn');
+
+  if(!wishTxt)             { shake(document.getElementById('f-wish'));  return alert('✨ Please write your wish!'); }
+  if(wishTxt.length > 200) { return alert('Keep your wish under 200 characters!'); }
+  if(!email || !email.includes('@')) { shake(document.getElementById('f-email')); return alert('We need a valid email to notify you when your wish is granted 💌'); }
+  if(hasProfanity(wishTxt)){ return alert('Please keep the magic family-friendly! 🌟'); }
+
+  btn.disabled    = true;
+  btn.textContent = '✨ Saving your wish...';
+  storedWishTxt   = wishTxt;
+
+  const wishData = {
+    wishText: wishTxt,
+    name:     anon ? '' : name,
+    email,
+    anonymous: anon,
+    status:   'pending',
+    color:    NOTE_COLS[Math.floor(Math.random() * NOTE_COLS.length)]
+  };
+
+  try {
+    if(window._firebaseReady && window.saveWish){
+      const docRef = await window.saveWish(wishData);
+      const wishId = docRef.id;
+      // Redirect to Stripe Payment Link with wish ID
+      window.location.href = `${STRIPE_PAYMENT_LINK}?client_reference_id=${wishId}&prefilled_email=${encodeURIComponent(email)}`;
+    } else {
+      // Demo mode — skip payment, show confirmation
+      console.log('Demo mode: wish saved locally', wishData);
+      btn.disabled = false;
+      btn.textContent = '✨ Pin It for £2';
+      closeModal();
+      showConf(wishTxt);
+    }
+  } catch(err){
+    console.error('Save error:', err);
+    btn.disabled = false;
+    btn.textContent = '✨ Pin It for £2';
+    // Fallback to demo confirmation
+    closeModal();
+    showConf(wishTxt);
+  }
+}
+
+function shake(el){
+  el.style.animation = 'none';
+  el.offsetHeight; // force reflow
+  el.style.animation = 'shakeIt .4s ease';
+}
+
+/* ============================================================
+   CONFIRMATION
+   ============================================================ */
+function showConf(txt){
+  document.getElementById('conf-txt').textContent = `"${txt}"`;
+  document.getElementById('conf-ov').classList.add('show');
+  launchConfetti(90);
+}
+function closeConf(){
+  document.getElementById('conf-ov').classList.remove('show');
+  // Add the new wish to demo data (in real app Firebase listener handles this)
+  if(!window._firebaseReady){
+    allWishes.unshift({
+      id: 'local-' + Date.now(),
+      wishText: storedWishTxt,
+      status: 'approved',
+      color: NOTE_COLS[Math.floor(Math.random()*NOTE_COLS.length)],
+      createdAt: { toDate: () => new Date() }
+    });
+    paintWall();
+    updateStats();
+  }
+  showTab('wall');
+}
+
+/* Check if returning from Stripe */
+function checkReturn(){
+  const p = new URLSearchParams(window.location.search);
+  if(p.get('payment') === 'success'){
+    const txt = p.get('wish') || storedWishTxt || 'something wonderful...';
+    showConf(decodeURIComponent(txt));
+    history.replaceState({}, '', location.pathname);
+  }
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function launchConfetti(n = 80){
+  const cols = ['#FFE566','#FF4D8D','#00D4FF','#00FFB3','#FF7B2C','#B44DFF','#FF3366','#fff'];
+  for(let i = 0; i < n; i++){
+    const el = document.createElement('div');
+    el.className = 'conf-piece';
+    const sz = Math.random()*10 + 6;
+    el.style.cssText = `
+      left:${Math.random()*100}vw;top:-20px;
+      width:${sz}px;height:${sz*(Math.random()+.5)}px;
+      background:${cols[Math.floor(Math.random()*cols.length)]};
+      transform:rotate(${Math.random()*360}deg);
+      animation-duration:${Math.random()*2+2}s;
+      animation-delay:${Math.random()*1}s;
+    `;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+}
+
+/* ============================================================
+   SHARE
+   ============================================================ */
+function shareWish(plat){
+  const txt = `I just pinned a wish on The Wish Wall! ✨ Pin yours at ${location.origin}`;
+  if(plat === 'twitter'){
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}`, '_blank');
+  } else {
+    navigator.clipboard?.writeText(location.origin).then(() => alert('✅ Link copied!'));
+  }
+}
+
+/* ============================================================
+   WISH CALCULATOR
+   ============================================================ */
+const FACTS = [
+  "Fun fact: Acts of kindness release oxytocin — the 'warm hug' hormone 🤗",
+  "Did you know? Paying forward 1 small act triggers 5+ more on average ☕",
+  "Studies show: Witnessing generosity makes people 3× more likely to give 💫",
+  "Fun fact: The average small wish costs less than a round at the pub 🍺",
+  "Kindness science: gratitude + generosity = the happiest combo known to research ✨",
+  "Micro-acts of kindness (like £2!) reduce anxiety in both giver and receiver 🌸",
+];
+
+function updateCalc(){
+  const val    = parseInt(document.getElementById('wish-sl').value);
+  const count  = Math.floor(val / 2);
+  document.getElementById('calc-amt').textContent = `£${val}`;
+  document.getElementById('calc-n').textContent   = count;
+
+  // Bounce animation
+  const big = document.getElementById('calc-n');
+  big.style.animation = 'none'; big.offsetHeight;
+  big.style.animation = 'titlePop .3s ease';
+
+  // Label
+  const lbl = document.getElementById('calc-lbl');
+  if(count === 1)       lbl.textContent = 'dream could glow on the wall!';
+  else if(count < 10)   lbl.textContent = 'dreams could shimmer on the wall!';
+  else if(count < 50)   lbl.textContent = 'beautiful dreams could light up the wall!';
+  else                  lbl.textContent = '🤯 that\'s a wall FULL of pure magic!';
+
+  // Bubbles
+  if(count !== lastBubCnt){
+    lastBubCnt = count;
+    const box   = document.getElementById('w-bubbles');
+    const emjs  = ['🌟','✨','💫','⭐','🌠','💥','🎯','🎪','🎨','🦋','🌸','🍀','🦄','🔮','💎','🌙','🎵','🌈','🎉','🎊'];
+    const show  = Math.min(count, 25);
+    box.innerHTML = Array.from({length:show}, (_,i) =>
+      `<span class="w-bubble" style="animation-delay:${(i*.04).toFixed(2)}s">${emjs[i%emjs.length]}</span>`
+    ).join('');
+    if(count > 25) box.innerHTML += `<span style="font-family:var(--fn-display);color:var(--yellow);font-size:1.1rem;"> +${count-25} more 🎉</span>`;
+  }
+
+  // Fun fact
+  document.getElementById('calc-fact').textContent = FACTS[Math.floor(val/50) % FACTS.length];
+}
+updateCalc();
+
+/* ============================================================
+   MASCOT: WISHI
+   ============================================================ */
+const MSGS = [
+  "Every wish makes the world a little more magical! ✨",
+  "Psst... your dream is worth £2. Go on! 📌",
+  "Someone's wish just got granted! 🎉",
+  "The magic is real. I should know — I live here! 🌟",
+  "Pin a wish. Spread some joy. Simple as that. 💛",
+  "I believe in your wish before you even write it 🦋",
+  "Shhh... the wall is listening 🧱✨",
+  "Did you know? Kindness is contagious 🌸",
+];
+let msgIdx = 0, mascotTimer;
+
+function mascotSpeak(){
+  const bubble = document.getElementById('msc-bubble');
+  const wrap   = document.getElementById('mascot');
+  bubble.textContent = MSGS[msgIdx++ % MSGS.length];
+  wrap.classList.add('speaking');
+  clearTimeout(mascotTimer);
+  mascotTimer = setTimeout(() => wrap.classList.remove('speaking'), 4500);
+}
+setInterval(() => { if(Math.random() > .65) mascotSpeak(); }, 18000);
+setTimeout(mascotSpeak, 3500);
+
+/* ============================================================
+   SCROLL TO TOP
+   ============================================================ */
+window.addEventListener('scroll', () => {
+  document.getElementById('scr-top').classList.toggle('vis', window.scrollY > 400);
+});
+
+/* ============================================================
+   LOAD DATA
+   ============================================================ */
+function loadDemo(){
+  setTimeout(() => {
+    window.renderWishes(DEMO);
+  }, 850);
+}
+if(!window._firebaseReady) loadDemo();
+
+/* Stripe return check */
+checkReturn();
+
+/* Keyboard shortcut: Cmd/Ctrl+K opens modal */
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openModal(); }
+});
+
+/* Shake animation */
+const ss = document.createElement('style');
+ss.textContent = `@keyframes shakeIt{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}`;
+document.head.appendChild(ss);
+
+/* Auto-approve newly-paid wishes via webhook — see SETUP.md */
+
+/* ============================================================
+   FOOTER YEAR
+   ============================================================ */
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+/* ============================================================
+   MILESTONE PROGRESS BAR — fully wired
+   ============================================================ */
+const MILESTONES = [100, 250, 500, 1000, 2500, 5000, 10000];
+
+function updateMilestone(total){
+  const next = MILESTONES.find(m => m > total) || MILESTONES[MILESTONES.length - 1] * 2;
+  const prev = MILESTONES.slice().reverse().find(m => m <= total) || 0;
+  const pct  = Math.min(((total - prev) / (next - prev)) * 100, 100);
+  const left = Math.max(next - total, 0);
+
+  const bar   = document.getElementById('ms-bar');
+  const badge = document.getElementById('ms-badge');
+  const lbl   = document.getElementById('ms-lbl');
+
+  if(bar)   bar.style.width = pct.toFixed(1) + '%';
+  if(badge) badge.textContent = `🏆 ${next.toLocaleString()} wishes`;
+  if(lbl)   lbl.innerHTML = left > 0
+    ? `✨ <strong style="color:var(--yellow)">${left.toLocaleString()}</strong> wishes to the next milestone!`
+    : `🎉 Milestone reached! You're magic.`;
+}
+
+/* ============================================================
+   LEDGER — formatted numbers with commas
+   ============================================================ */
+window.updateLedger = function(data){
+  const d = data || {totalFees:312, totalDonations:7587, totalGranted:174, avgCost:38};
+  const fmt = n => Number(n ?? 0).toLocaleString('en-GB');
+  document.getElementById('led-fees').textContent = `£${fmt(d.totalFees)}`;
+  document.getElementById('led-don').textContent  = `£${fmt(d.totalDonations)}`;
+  document.getElementById('led-gr').textContent   = fmt(d.totalGranted);
+  document.getElementById('led-avg').textContent  = `£${fmt(d.avgCost)}`;
+  document.getElementById('led-ts').textContent   = new Date().toLocaleString('en-GB');
+  // Update hero pot stat too
+  const pot = (d.totalFees + d.totalDonations) - (d.totalGranted * d.avgCost);
+  const poolEl = document.getElementById('s-pool');
+  if(poolEl && !window._firebaseReady) poolEl.textContent = `£${Math.max(pot,0).toLocaleString('en-GB')}`;
+};
+window.updateLedger(null);
+
+/* ============================================================
+   GUARDIAN TIER SYSTEM
+   ============================================================ */
+const TIERS = [
+  { name:'Seedling',    icon:'🌱', min:0,     max:9,    desc:'Just getting started — every wish counts!',        color:'#00FFB3' },
+  { name:'Spark',       icon:'⚡', min:10,    max:49,   desc:'You\'ve ignited something. Keep it burning!',      color:'#FFE566' },
+  { name:'Luminary',   icon:'✨', min:50,    max:199,  desc:'Your light is lifting people you\'ll never meet.',  color:'#FF7B2C' },
+  { name:'Guardian',   icon:'🛡️', min:200,   max:999,  desc:'A true keeper of dreams. The wall thanks you.',    color:'#B44DFF' },
+  { name:'Mythkeeper', icon:'🔮', min:1000,  max:Infinity, desc:'Legendary. Wishes bend toward you.',           color:'#FF4D8D' },
+];
+
+function getTier(totalDonated){
+  return TIERS.slice().reverse().find(t => totalDonated >= t.min) || TIERS[0];
+}
+
+function renderGuardianTier(totalDonated = 0){
+  const tier     = getTier(totalDonated);
+  const nextTier = TIERS[TIERS.indexOf(tier) + 1];
+  const pct      = nextTier
+    ? Math.min(((totalDonated - tier.min) / (nextTier.min - tier.min)) * 100, 100)
+    : 100;
+  const container = document.getElementById('tier-banner');
+  if(!container) return;
+  container.innerHTML = `
+    <div class="tier-icon">${tier.icon}</div>
+    <div class="tier-body">
+      <div class="tier-name" style="color:${tier.color}">${tier.name} Guardian</div>
+      <div class="tier-desc">${tier.desc}</div>
+      <div class="tier-track">
+        <div class="tier-bar" style="width:${pct}%;background:linear-gradient(90deg,${tier.color},${nextTier?.color||tier.color})"></div>
+      </div>
+      <div class="tier-next">${nextTier ? `${(nextTier.min - totalDonated).toLocaleString()} to reach ${nextTier.name}` : '🎖️ Maximum tier reached'}</div>
+    </div>`;
+}
+renderGuardianTier(0); // render at Seedling on load; update after user donates
+
+/* ============================================================
+   COOKIE CONSENT
+   ============================================================ */
+function initCookies(){
+  const consent = localStorage.getItem('ww-cookie-consent');
+  if(!consent){
+    setTimeout(() => document.getElementById('cookie-banner')?.classList.add('show'), 1200);
+  }
+}
+function acceptCookies(){
+  localStorage.setItem('ww-cookie-consent', 'all');
+  document.getElementById('cookie-banner')?.classList.remove('show');
+}
+function rejectCookies(){
+  localStorage.setItem('ww-cookie-consent', 'essential');
+  document.getElementById('cookie-banner')?.classList.remove('show');
+}
+initCookies();
+
+</script>
+
+</body>
+</html>
