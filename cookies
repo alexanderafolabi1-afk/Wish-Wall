@@ -1,1 +1,97 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie Policy — The Wish Wall</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Quicksand',sans-serif;background:#1a0e05;color:#e8dcc8;line-height:1.75;min-height:100vh;}
+.wrap{max-width:760px;margin:0 auto;padding:60px 24px 80px;}
+header{text-align:center;margin-bottom:52px;}
+.logo{font-size:2rem;margin-bottom:8px;}
+h1{font-size:2rem;color:#FFE566;margin-bottom:6px;}
+.sub{color:rgba(255,255,255,.45);font-size:13px;}
+h2{font-size:1.15rem;color:#FF7B2C;margin:36px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);}
+p{margin-bottom:14px;color:rgba(255,255,255,.72);}
+ul{margin:0 0 14px 20px;color:rgba(255,255,255,.72);}
+li{margin-bottom:6px;}
+a{color:#FF7B2C;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:40px;color:#FF7B2C;font-weight:600;font-size:14px;}
+table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
+th{background:rgba(255,255,255,.07);color:#FFE566;padding:10px 14px;text-align:left;font-weight:700;}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.68);}
+.btn{display:inline-block;background:#FF7B2C;color:#fff;border:none;border-radius:50px;padding:10px 24px;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin:4px 4px 4px 0;transition:background .2s;}
+.btn:hover{background:#e06520;}
+.btn.ghost{background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);}
+.btn.ghost:hover{border-color:#fff;color:#fff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">🍪</div>
+    <h1>Cookie Policy</h1>
+    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall</p>
+  </header>
+
+<a class="back" href="index.html">← Back to The Wish Wall</a>
+
+  <h2>What are cookies?</h2>
+  <p>Cookies are small text files stored on your device when you visit a website. They help the site remember your preferences and improve your experience.</p>
+
+  <h2>Cookies we use</h2>
+  <table>
+    <tr><th>Cookie</th><th>Type</th><th>Purpose</th><th>Duration</th></tr>
+    <tr><td>ww-cookie-consent</td><td>Essential</td><td>Remembers your cookie preference so we don't ask again</td><td>1 year</td></tr>
+    <tr><td>__stripe_mid</td><td>Essential</td><td>Stripe fraud prevention and payment security</td><td>1 year</td></tr>
+    <tr><td>__stripe_sid</td><td>Essential</td><td>Stripe session identification</td><td>30 mins</td></tr>
+    <tr><td>firebase:*</td><td>Essential</td><td>Firebase authentication state (if applicable)</td><td>Session</td></tr>
+    <tr><td>_ga, _gid</td><td>Analytics (optional)</td><td>Google Analytics — helps us understand traffic patterns</td><td>2 years / 24hrs</td></tr>
+  </table>
+
+  <h2>Essential cookies</h2>
+  <p>These cookies are strictly necessary for the Platform to function. They cannot be disabled. They do not track you for advertising purposes.</p>
+
+  <h2>Analytics cookies (optional)</h2>
+  <p>With your consent, we use Google Analytics to understand how visitors use the site so we can improve it. No personally identifiable information is collected by analytics cookies. You can opt out at any time below or by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
+
+  <h2>Manage your cookie preferences</h2>
+  <p>You can change your preferences at any time:</p>
+  <button class="btn" onclick="acceptAll()">Accept All Cookies</button>
+  <button class="btn ghost" onclick="essentialOnly()">Essential Only</button>
+
+  <h2>Third-party cookies</h2>
+  <p>Stripe and Firebase may set their own cookies as part of payment processing and database connectivity. These are governed by their respective privacy policies. We have no control over these cookies.</p>
+
+  <h2>How to control cookies in your browser</h2>
+  <ul>
+    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Chrome</a></li>
+    <li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener">Firefox</a></li>
+    <li><a href="https://support.apple.com/en-gb/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
+    <li><a href="https://support.microsoft.com/en-us/help/4468242/microsoft-edge-browsing-data-and-privacy" target="_blank" rel="noopener">Edge</a></li>
+  </ul>
+  <p>Note: Blocking essential cookies may prevent parts of the site from working correctly.</p>
+
+  <h2>Contact</h2>
+  <p>Cookie questions: <a href="mailto:hello@thewishwall.co.uk">hello@thewishwall.co.uk</a></p>
+
+  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall. All rights reserved.</p>
+</div>
+<script>
+function acceptAll(){
+  localStorage.setItem('ww-cookie-consent','all');
+  alert('✅ Cookie preferences saved — all cookies accepted.');
+}
+function essentialOnly(){
+  localStorage.setItem('ww-cookie-consent','essential');
+  alert('✅ Cookie preferences saved — essential cookies only.');
+}
+</script>
+</body>
+</html>
