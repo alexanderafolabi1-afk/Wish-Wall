@@ -1,1 +1,109 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — The Wish Wall</title>
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Quicksand',sans-serif;background:#1a0e05;color:#e8dcc8;line-height:1.75;min-height:100vh;}
+.wrap{max-width:760px;margin:0 auto;padding:60px 24px 80px;}
+header{text-align:center;margin-bottom:52px;}
+.logo{font-size:2rem;margin-bottom:8px;}
+h1{font-size:2rem;color:#FFE566;margin-bottom:6px;}
+.sub{color:rgba(255,255,255,.45);font-size:13px;}
+h2{font-size:1.15rem;color:#FF7B2C;margin:36px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);}
+p{margin-bottom:14px;color:rgba(255,255,255,.72);}
+ul{margin:0 0 14px 20px;color:rgba(255,255,255,.72);}
+li{margin-bottom:6px;}
+a{color:#FF7B2C;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:40px;color:#FF7B2C;font-weight:600;font-size:14px;}
+table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
+th{background:rgba(255,255,255,.07);color:#FFE566;padding:10px 14px;text-align:left;font-weight:700;}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.68);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">✨</div>
+    <h1>Privacy Policy</h1>
+    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall</p>
+  </header>
+
+<a class="back" href="index.html">← Back to The Wish Wall</a>
+
+  <p>The Wish Wall ("we", "us", "our") is committed to protecting your personal data. This policy explains what we collect, why, how we use it, and your rights under the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
+
+  <h2>1. Who We Are</h2>
+  <p>The Wish Wall is operated as a community kindness project based in the United Kingdom. For data protection queries, contact us at: <a href="mailto:hello@thewishwall.co.uk">hello@thewishwall.co.uk</a></p>
+
+  <h2>2. What Data We Collect</h2>
+  <table>
+    <tr><th>Data</th><th>Why We Collect It</th><th>Legal Basis</th></tr>
+    <tr><td>Email address</td><td>To notify you when your wish is granted</td><td>Contract / Legitimate interest</td></tr>
+    <tr><td>Wish text</td><td>To display your wish on the wall</td><td>Consent (you submit it)</td></tr>
+    <tr><td>Display name (optional)</td><td>To show who pinned a wish if you choose</td><td>Consent</td></tr>
+    <tr><td>Payment data</td><td>Processed by Stripe — we never store card details</td><td>Contract</td></tr>
+    <tr><td>IP address / device info</td><td>Security, fraud prevention, analytics</td><td>Legitimate interest</td></tr>
+  </table>
+
+  <h2>3. How We Use Your Data</h2>
+  <ul>
+    <li>To publish your wish on the wall (anonymously if you choose)</li>
+    <li>To notify you by email when your wish is granted</li>
+    <li>To process your £2 payment via Stripe</li>
+    <li>To maintain the transparency ledger (aggregated, never individual)</li>
+    <li>To improve the platform via anonymised analytics</li>
+  </ul>
+
+  <h2>4. Third-Party Services</h2>
+  <ul>
+    <li><strong>Stripe</strong> — payment processing. Stripe's privacy policy: <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener">stripe.com/gb/privacy</a></li>
+    <li><strong>Firebase (Google)</strong> — database and hosting. Google's privacy policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></li>
+    <li><strong>Netlify</strong> — web hosting and serverless functions. Netlify's privacy policy: <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">netlify.com/privacy</a></li>
+  </ul>
+
+  <h2>5. Cookies</h2>
+  <p>We use essential cookies required for the site to function, and optional analytics cookies. See our <a href="cookies.html">Cookie Policy</a> for full details. You can withdraw consent at any time via the cookie banner.</p>
+
+  <h2>6. Data Retention</h2>
+  <ul>
+    <li>Wish text and display name: retained while the wish is live on the wall. You may request deletion at any time.</li>
+    <li>Email address: deleted within 30 days of your wish being granted or removed.</li>
+    <li>Payment records: retained for 7 years as required by UK financial law (held by Stripe, not us).</li>
+  </ul>
+
+  <h2>7. Your Rights</h2>
+  <p>Under UK GDPR you have the right to:</p>
+  <ul>
+    <li><strong>Access</strong> — request a copy of your personal data</li>
+    <li><strong>Rectification</strong> — correct inaccurate data</li>
+    <li><strong>Erasure</strong> — request deletion of your data ("right to be forgotten")</li>
+    <li><strong>Restriction</strong> — limit how we process your data</li>
+    <li><strong>Portability</strong> — receive your data in a machine-readable format</li>
+    <li><strong>Object</strong> — object to processing based on legitimate interest</li>
+  </ul>
+  <p>To exercise any right, email: <a href="mailto:hello@thewishwall.co.uk">hello@thewishwall.co.uk</a>. We will respond within 30 days.</p>
+
+  <h2>8. Data Transfers</h2>
+  <p>Your data may be processed in the United States by our sub-processors (Google/Firebase, Stripe, Netlify). All transfers are covered by appropriate safeguards including Standard Contractual Clauses and the UK-US Data Bridge where applicable.</p>
+
+  <h2>9. Children</h2>
+  <p>The Wish Wall is not directed at children under 13. We do not knowingly collect data from children. If you believe a child has submitted data, contact us immediately and we will delete it.</p>
+
+  <h2>10. Complaints</h2>
+  <p>If you are unhappy with how we handle your data, you have the right to lodge a complaint with the UK's supervisory authority: the <a href="https://ico.org.uk" target="_blank" rel="noopener">Information Commissioner's Office (ICO)</a> at ico.org.uk or by calling 0303 123 1113.</p>
+
+  <h2>11. Changes to This Policy</h2>
+  <p>We may update this policy from time to time. Material changes will be announced on the main site. The date at the top of this page reflects the most recent revision.</p>
+
+  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall. All rights reserved.</p>
+</div>
+</body>
+</html>
