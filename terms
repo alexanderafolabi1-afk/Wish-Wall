@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms &amp; Conditions — The Wish Wall</title>
 <meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://wishwall.xyz/terms.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -31,40 +31,49 @@ a:hover{text-decoration:underline;}
   <header>
     <div class="logo">✨</div>
     <h1>Terms &amp; Conditions</h1>
-    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall</p>
+    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall &nbsp;·&nbsp; <a href="https://wishwall.xyz">wishwall.xyz</a></p>
   </header>
 
-<a class="back" href="index.html">← Back to The Wish Wall</a>
+  <a class="back" href="index.html">← Back to The Wish Wall</a>
 
   <div class="box">
-    <strong style="color:#FFE566;">Important:</strong> The Wish Wall is a community kindness project, not a registered charity. The £2 pin fee and guardian donations support wish-granting activities. We make no guarantee that any specific wish will be granted.
+    <strong style="color:#FFE566;">Important:</strong> The Wish Wall is a community kindness project, not a registered charity. The 2 WishCoin (£2) pin fee and Guardian donations support wish-granting activities. We make no guarantee that any specific wish will be granted.
   </div>
 
   <h2>1. Acceptance of Terms</h2>
-  <p>By accessing or using The Wish Wall ("the Platform"), you agree to be bound by these Terms &amp; Conditions. If you do not agree, please do not use the Platform.</p>
+  <p>By accessing or using The Wish Wall ("the Platform") at <a href="https://wishwall.xyz">wishwall.xyz</a>, you agree to be bound by these Terms &amp; Conditions. If you do not agree, please do not use the Platform.</p>
 
   <h2>2. What The Wish Wall Is</h2>
-  <p>The Wish Wall is an anonymous community wish-pinning platform. Users pay a £2 fee to post a wish. Community members ("Guardians") may voluntarily donate funds toward granting posted wishes. The Platform operates a live transparency ledger showing all funds collected and spent.</p>
+  <p>The Wish Wall is an anonymous community wish-pinning platform. Users pay a £2 fee (2 WishCoins) to post a wish. Community members ("Guardians") may voluntarily donate funds toward granting posted wishes. The Platform operates a Transparency Ledger showing all funds collected and spent. The pot balance is not publicly displayed as an operational decision.</p>
   <p>The Wish Wall is <strong>not</strong> a registered charity. Donations are voluntary contributions to a community project and are not tax-deductible charitable gifts under UK law.</p>
 
-  <h2>3. The £2 Pin Fee</h2>
+  <h2>3. The £2 / 2 WishCoin Pin Fee</h2>
   <ul>
-    <li>The £2 fee covers platform operating costs (hosting, payment processing, development).</li>
-    <li>The fee is <strong>non-refundable</strong> once payment is confirmed and your wish has been pinned.</li>
+    <li>The 2 WishCoin fee (£2 GBP) covers platform operating costs including hosting, payment processing, and development.</li>
+    <li>1 WishCoin = £1 GBP. The fee is <strong>non-refundable</strong> once payment is confirmed and your wish has been pinned.</li>
     <li>Payments are processed securely by Stripe. We do not store your payment card details.</li>
     <li>All transactions are in GBP. You are responsible for any currency conversion fees charged by your bank.</li>
+    <li>You may pin a maximum of 3 wishes per calendar year. This limit resets on 1st January each year.</li>
   </ul>
 
   <h2>4. Guardian Donations</h2>
   <ul>
     <li>Guardian donations are entirely voluntary.</li>
-    <li>Donations go into the community pot and are used to fund wishes at the discretion of The Wish Wall team.</li>
+    <li>Donations go into the community Magic Pool and are used to fund wishes at the discretion of The Wish Wall team.</li>
     <li>Donations are <strong>non-refundable</strong>.</li>
     <li>We make no guarantee that your donation will fund a specific wish.</li>
-    <li>We publish a live ledger of all donations and grants for full transparency.</li>
+    <li>We publish a Transparency Ledger of all donations and grants.</li>
   </ul>
 
-  <h2>5. Content Rules</h2>
+  <h2>5. The Wish Wall: 500-Spot Mosaic</h2>
+  <p>The Wish Wall holds 500 wish note positions at any one time. Together these notes form a mosaic image (a "Thank You ❤️" design) with each note carrying one tile of that image. When the wall is full, older granted wishes are rotated out after 4 hours to make room for new ones. Your wish remains visible until it is granted or rotated out.</p>
+  <p>When a wish is granted, the note is marked with a green tick ✅ and a smile. Cheeky or funny wishes may receive a playful response stamp from our team. Some wishes — introductions, expressions of gratitude, emotional milestones — are simply acknowledged and celebrated.</p>
+
+  <h2>6. Wish Granting &amp; Payouts</h2>
+  <p>When a wish is approved for granting, The Wish Wall will contact the recipient at the email address provided. Grants are disbursed via PayPal or international bank transfer in the recipient's name. A 5% platform administration fee is retained on each granted wish and is disclosed in the live Transparency Ledger. We reserve the right to request verification of identity before disbursing any grant. Fraudulent claims will be referred to the appropriate authorities.</p>
+  <p>For non-monetary wishes (connections to organisations, charities, or support networks), The Wish Wall team will manually research and attempt to facilitate the connection. We make no guarantee of success but will use best efforts in every case.</p>
+
+  <h2>7. Content Rules</h2>
   <p>By posting a wish, you confirm that your content:</p>
   <ul>
     <li>Does not contain hate speech, discrimination, or targeted harassment</li>
@@ -73,31 +82,39 @@ a:hover{text-decoration:underline;}
     <li>Does not impersonate any person or organisation</li>
     <li>Does not contain personal data of third parties without their consent</li>
     <li>Is genuinely a personal wish, not an advertisement or spam</li>
+    <li>Is truthful to the best of your knowledge</li>
   </ul>
   <p>We reserve the right to remove any wish that violates these rules without refund.</p>
 
-  <h2>6. Anonymity</h2>
+  <h2>8. Anonymity</h2>
   <p>You may post wishes anonymously. We store your email address solely to notify you if your wish is granted. Your email is never displayed publicly. See our <a href="privacy.html">Privacy Policy</a> for full details.</p>
 
-  <h2>7. No Guarantee of Wish Granting</h2>
+  <h2>9. WishCredits &amp; Referral Codes</h2>
+  <p>Each pinned wish generates a unique 5-character WishCode (referral code). When 3 friends use your code to pin wishes, you earn 1 WishCredit (worth £1) redeemable against your next pin fee or as a Magic Pool donation. WishCredits have no cash value and cannot be transferred or sold.</p>
+
+  <h2>10. No Guarantee of Wish Granting</h2>
   <p>Posting a wish does not guarantee it will be granted. Granting is subject to available funds, feasibility, and the decision of The Wish Wall community and team. We will make reasonable efforts to grant wishes but accept no legal liability for wishes not granted.</p>
 
-  <h2>8. Intellectual Property</h2>
-  <p>The Wish Wall platform, design, and code are the intellectual property of The Wish Wall. Wish content submitted by users remains the property of the submitting user. By submitting a wish, you grant us a non-exclusive licence to display it on the Platform.</p>
+  <h2>11. Intellectual Property</h2>
+  <p>The Wish Wall platform, design, and code are the intellectual property of The Wish Wall. Wish content submitted by users remains the property of the submitting user. By submitting a wish, you grant us a non-exclusive licence to display it on the Platform and in promotional materials.</p>
 
-  <h2>9. Limitation of Liability</h2>
+  <h2>12. Limitation of Liability</h2>
   <p>To the maximum extent permitted by UK law, The Wish Wall shall not be liable for any indirect, incidental, special, or consequential loss arising from use of the Platform. Our total liability shall not exceed the amount you paid to use the Platform.</p>
 
-  <h2>10. Governing Law</h2>
+  <h2>13. Fraud &amp; Legal Action</h2>
+  <p>Any attempt to obtain grants through deception constitutes fraud. For the purposes of the Computer Misuse Act 1990, Fraud Act 2006 (UK), and equivalent statutes globally, fraudulent submissions may result in account suspension, recovery of disbursed funds, and referral to law enforcement.</p>
+
+  <h2>14. Governing Law</h2>
   <p>These terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
 
-  <h2>11. Changes to These Terms</h2>
+  <h2>15. Changes to These Terms</h2>
   <p>We may update these terms from time to time. Continued use of the Platform after changes constitutes acceptance of the updated terms. Material changes will be notified on the Platform.</p>
 
-  <h2>12. Contact</h2>
-  <p>For any queries about these terms: <a href="mailto:hello@thewishwall.co.uk">hello@thewishwall.co.uk</a></p>
+  <h2>16. Contact</h2>
+  <p>For any queries about these terms: <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a></p>
+  <p>Website: <a href="https://wishwall.xyz">wishwall.xyz</a></p>
 
-  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall. All rights reserved.</p>
+  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall · wishwall.xyz · All rights reserved.</p>
 </div>
 </body>
 </html>
