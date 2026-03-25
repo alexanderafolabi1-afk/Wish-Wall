@@ -543,13 +543,14 @@ nav{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 .n-orange .note-inner{background:#FFD9B3 !important;}
 .n-lav    .note-inner{background:#DDB3FF !important;}
 
-/* Thumbtack */
+/* ── THUMBTACK — ghost notes (small, dim) ──────────────────────────────── */
 .note-pin{
   position:absolute;top:-6px;left:50%;transform:translateX(-50%);
   width:11px;height:11px;border-radius:50%;
   border:1.5px solid rgba(0,0,0,.22);
   box-shadow:0 2px 5px rgba(0,0,0,.4),inset 0 -1px 3px rgba(0,0,0,.2);
   z-index:2;
+  transition:transform .2s,box-shadow .2s;
 }
 .note-pin::after{
   content:'';position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);
@@ -559,6 +560,103 @@ nav{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 .pin-b{background:radial-gradient(circle at 35% 35%,#90b8ff,#1144cc);}
 .pin-g{background:radial-gradient(circle at 35% 35%,#90ffcc,#008844);}
 .pin-y{background:radial-gradient(circle at 35% 35%,#ffe880,#ccaa00);}
+
+/* ── ACTIVE WISH PIN — larger, glowing, tells you to click ─────────────── */
+.note-card.is-real .note-pin{
+  width:16px;height:16px;top:-8px;
+  box-shadow:0 0 0 3px rgba(255,255,255,.18),
+             0 0 12px 4px rgba(255,229,102,.55),
+             0 3px 8px rgba(0,0,0,.5);
+  animation:pinGlow 2.5s ease-in-out infinite;
+}
+.note-card.is-real .note-pin::after{
+  width:3px;height:10px;
+}
+@keyframes pinGlow{
+  0%,100%{box-shadow:0 0 0 3px rgba(255,255,255,.18),0 0 10px 3px rgba(255,229,102,.45),0 3px 8px rgba(0,0,0,.5);}
+  50%    {box-shadow:0 0 0 5px rgba(255,255,255,.25),0 0 20px 8px rgba(255,229,102,.7), 0 3px 8px rgba(0,0,0,.5);}
+}
+
+/* ── ACTIVE WISH CARD — cursor pointer ripple hint ─────────────────────── */
+.note-card.is-real{
+  cursor:pointer;
+}
+.note-card.is-real::after{
+  content:'';
+  position:absolute;inset:0;border-radius:2px;
+  border:1.5px solid rgba(255,229,102,0);
+  transition:border-color .2s;
+  pointer-events:none;z-index:3;
+}
+.note-card.is-real:hover::after{
+  border-color:rgba(255,229,102,.5);
+  box-shadow:inset 0 0 12px rgba(255,229,102,.12);
+}
+.note-card.is-real:hover .note-pin{
+  transform:translateX(-50%) scale(1.25) translateY(-2px);
+  box-shadow:0 0 0 5px rgba(255,255,255,.3),0 0 24px 8px rgba(255,229,102,.8),0 4px 12px rgba(0,0,0,.5);
+}
+
+/* ── CLICK HINT TOOLTIP ─────────────────────────────────────────────────── */
+.note-card.is-real::before{
+  content:'👆 tap to read';
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.85);
+  background:rgba(20,8,0,.92);color:var(--yellow);
+  font-family:var(--fn-ui);font-size:9px;font-weight:700;
+  padding:3px 8px;border-radius:50px;white-space:nowrap;
+  opacity:0;pointer-events:none;z-index:50;
+  transition:opacity .18s,transform .18s;
+  border:1px solid rgba(255,229,102,.25);
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.note-card.is-real:hover::before{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
+
+/* ── GRANTED WISH — gold star pin + green shimmer ───────────────────────── */
+.note-card.is-granted .note-pin{
+  width:18px;height:18px;top:-9px;
+  background:radial-gradient(circle at 35% 35%,#ffe566,#cc8800) !important;
+  box-shadow:0 0 0 3px rgba(255,229,102,.3),
+             0 0 16px 6px rgba(255,200,0,.65),
+             0 3px 10px rgba(0,0,0,.5);
+  animation:grantedPinGlow 3s ease-in-out infinite;
+}
+@keyframes grantedPinGlow{
+  0%,100%{box-shadow:0 0 0 3px rgba(255,229,102,.3),0 0 14px 5px rgba(255,200,0,.55),0 3px 10px rgba(0,0,0,.5);}
+  50%    {box-shadow:0 0 0 6px rgba(255,229,102,.45),0 0 28px 10px rgba(255,200,0,.8),0 3px 10px rgba(0,0,0,.5);}
+}
+/* Star crown above granted pin */
+.note-card.is-granted .note-pin::before{
+  content:'⭐';
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  font-size:10px;line-height:1;
+  filter:drop-shadow(0 0 4px rgba(255,200,0,.8));
+  animation:starSpin 4s linear infinite;
+}
+@keyframes starSpin{
+  0%{transform:translateX(-50%) rotate(0deg);}
+  100%{transform:translateX(-50%) rotate(360deg);}
+}
+/* Green shimmer overlay on granted cards */
+.note-card.is-granted .note-inner::after{
+  content:'';position:absolute;inset:0;border-radius:2px;
+  background:linear-gradient(135deg,rgba(0,255,160,.15) 0%,rgba(0,255,160,0) 60%);
+  pointer-events:none;z-index:1;
+}
+.note-card.is-granted::before{
+  content:'✅ Granted';
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.85);
+  background:linear-gradient(135deg,#00c484,#00875e);color:#fff;
+  font-family:var(--fn-ui);font-size:9px;font-weight:800;
+  padding:3px 10px;border-radius:50px;white-space:nowrap;
+  opacity:0;pointer-events:none;z-index:50;
+  transition:opacity .18s,transform .18s;
+  box-shadow:0 2px 10px rgba(0,196,132,.5);
+}
+.note-card.is-granted:hover::before{
+  opacity:1;transform:translateX(-50%) scale(1);
+}
 
 .note-text{
   font-family:var(--fn-note);font-size:9px;line-height:1.3;
@@ -781,26 +879,73 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover{transform:scale(1.18);}
 .patron-section-lbl{font-family:var(--fn-display);font-size:1.3rem;color:var(--yellow);text-align:center;margin:36px 0 18px;text-shadow:var(--glow-yellow);}
 
 /* Leaderboard */
-.leaderboard{max-width:600px;margin:0 auto;max-height:520px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;}
-.lb-title{font-family:var(--fn-display);font-size:1.6rem;color:var(--orange);text-align:center;margin-bottom:18px;}
-.lb-item{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.05);border-radius:14px;
-  padding:11px 16px;margin-bottom:8px;transition:all .2s;
+.leaderboard{max-width:640px;margin:0 auto;}
+.lb-title{
+  font-family:var(--fn-display);font-size:1.6rem;color:var(--orange);
+  text-align:center;margin-bottom:8px;
+  text-shadow:0 0 20px rgba(255,123,44,.4);
 }
-.lb-item:hover{background:rgba(255,255,255,.09);}
-.lb-rank{font-family:var(--fn-display);font-size:1.2rem;width:26px;text-align:center;flex-shrink:0;}
-.lb-rank.gold{color:#FFD700;}.lb-rank.silver{color:#C0C0C0;}.lb-rank.bronze{color:#CD7F32;}
-.lb-flag{font-size:1rem;flex-shrink:0;}
-.lb-name{flex:1;font-weight:600;color:#fff;font-size:13px;}
-.lb-amt{font-family:var(--fn-display);font-size:1rem;color:var(--green);flex-shrink:0;}
+.lb-subtitle{
+  text-align:center;font-family:var(--fn-note);font-size:1rem;
+  color:rgba(255,255,255,.5);margin-bottom:24px;
+}
+.lb-item{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  padding:14px 18px;margin-bottom:10px;
+  /* scroll-reveal: start invisible, slide in from below */
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .5s ease, transform .5s ease, background .2s, border-color .2s;
+}
+.lb-item.revealed{
+  opacity:1;
+  transform:translateY(0);
+}
+.lb-item:hover{
+  background:rgba(255,255,255,.09);
+  border-color:rgba(255,255,255,.15);
+  transform:translateY(-2px) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
+/* Top 3 get special treatment */
+.lb-item.rank-1{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,150,0,.06));border-color:rgba(255,215,0,.25);}
+.lb-item.rank-2{background:linear-gradient(135deg,rgba(192,192,192,.1),rgba(160,160,160,.06));border-color:rgba(192,192,192,.2);}
+.lb-item.rank-3{background:linear-gradient(135deg,rgba(205,127,50,.1),rgba(180,100,30,.06));border-color:rgba(205,127,50,.2);}
+.lb-rank{
+  font-family:var(--fn-display);font-size:1.3rem;
+  width:32px;text-align:center;flex-shrink:0;
+}
+.lb-rank.gold  {color:#FFD700;text-shadow:0 0 12px rgba(255,215,0,.7);}
+.lb-rank.silver{color:#C0C0C0;text-shadow:0 0 10px rgba(192,192,192,.5);}
+.lb-rank.bronze{color:#CD7F32;text-shadow:0 0 10px rgba(205,127,50,.5);}
+.lb-flag{font-size:1.2rem;flex-shrink:0;}
+.lb-name{flex:1;font-weight:600;color:#fff;font-size:14px;line-height:1.3;}
+.lb-amt{
+  font-family:var(--fn-display);font-size:1.1rem;
+  color:var(--green);flex-shrink:0;
+  text-shadow:0 0 10px rgba(0,255,179,.3);
+}
 .lb-corp-tag{
   display:inline-block;background:rgba(180,77,255,.25);
   border:1px solid rgba(180,77,255,.4);border-radius:50px;
   font-size:9px;padding:1px 7px;color:var(--purple);
   font-family:var(--fn-ui);font-weight:700;letter-spacing:.3px;
-  vertical-align:middle;margin-left:4px;
+  vertical-align:middle;margin-left:6px;
 }
+/* Scroll-reveal stagger — each item delays slightly more */
+.lb-item:nth-child(1) {transition-delay:.05s;}
+.lb-item:nth-child(2) {transition-delay:.10s;}
+.lb-item:nth-child(3) {transition-delay:.15s;}
+.lb-item:nth-child(4) {transition-delay:.20s;}
+.lb-item:nth-child(5) {transition-delay:.25s;}
+.lb-item:nth-child(6) {transition-delay:.30s;}
+.lb-item:nth-child(7) {transition-delay:.35s;}
+.lb-item:nth-child(8) {transition-delay:.40s;}
+.lb-item:nth-child(9) {transition-delay:.45s;}
+.lb-item:nth-child(n+10){transition-delay:.50s;}
 
 /* ============================================================
    TRANSPARENCY LEDGER
@@ -1910,8 +2055,9 @@ footer a:hover{color:#fff;}
     <div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
 
     <!-- Leaderboard -->
-    <div class="leaderboard" style="margin-top:24px;">
-      <h3 class="lb-title">🏆 Top Guardians</h3>
+    <div class="leaderboard" style="margin-top:32px;">
+      <h3 class="lb-title">🏆 Guardian Hall of Fame</h3>
+      <p class="lb-subtitle">The generous souls who make wishes come true</p>
       <div id="lb-list"></div>
     </div>
 
@@ -2886,12 +3032,13 @@ function noteHTML(w, i, tileStyle=''){
   <p class="note-text" style="font-size:8px;opacity:.7;">${esc(w.wishText)}</p></div></div>`;
   }
 
+  const statusCls = granted ? 'is-granted is-real' : 'is-real';
   return `
-<div class="note-card ${color}"
+<div class="note-card ${color} ${statusCls}"
      style="--rot:${rot}deg;${tileStyle}"
      data-id="${safeId}"
      onclick="openWishDetail('${safeId}')"
-     role="button" tabindex="0" aria-label="Read wish">
+     role="button" tabindex="0" aria-label="${granted ? 'Granted wish - click to read' : 'Active wish - click to read'}">
   <div class="note-inner">
     <div class="note-pin ${pinCls}"></div>
     ${stampHtml}
@@ -3167,22 +3314,40 @@ const DEMO_LB = [
 ];
 
 function paintLB(donors){
-  const list   = document.getElementById('lb-list');
-  const data   = (donors || DEMO_LB).slice(0, 167);
-  const medals = ['🥇','🥈','🥉'];
-  const rankCls= ['gold','silver','bronze'];
-  const totalAmt = data.reduce((s,d)=>s+d.amount,0);
+  const list     = document.getElementById('lb-list');
+  const data     = (donors || DEMO_LB).slice(0, 167);
+  const medals   = ['🥇','🥈','🥉'];
+  const rankCls  = ['gold','silver','bronze'];
+  const rankExtra= ['rank-1','rank-2','rank-3'];
+  const totalAmt = data.reduce((s,d) => s + d.amount, 0);
+
   list.innerHTML = `
-    <div style="text-align:center;margin-bottom:16px;font-family:var(--fn-note);font-size:1.05rem;color:rgba(255,255,255,.55);">
-      ${data.length} donors from 🇺🇸🇬🇧🇨🇦🇩🇪🇧🇷🇿🇦 and beyond  -  $${totalAmt.toLocaleString('en-US')} raised together
+    <div style="text-align:center;margin-bottom:20px;font-family:var(--fn-note);font-size:1rem;color:rgba(255,255,255,.5);">
+      ${data.length} donors from 🇺🇸🇬🇧🇨🇦🇩🇪🇧🇷🇿🇦 and beyond &middot; $${totalAmt.toLocaleString('en-US')} raised together
     </div>` +
-  data.map((d,i) => `
-<div class="lb-item">
-  <span class="lb-rank ${rankCls[i]||''}">${medals[i] || (i < 9 ? i+1 : '')}</span>
-  <span class="lb-flag">${d.flag||'🌍'}</span>
-  <span class="lb-name">${esc(d.name)}${d.type==='corporate'?' <span class="lb-corp-tag">Corporate</span>':''}</span>
+  data.map((d, i) => `
+<div class="lb-item ${rankExtra[i] || ''}">
+  <span class="lb-rank ${rankCls[i] || ''}">${medals[i] || (i + 1)}</span>
+  <span class="lb-flag">${d.flag || '🌍'}</span>
+  <span class="lb-name">${esc(d.name)}${d.type === 'corporate' ? ' <span class="lb-corp-tag">Corporate</span>' : ''}</span>
   <span class="lb-amt">$${d.amount}</span>
 </div>`).join('');
+
+  // Scroll-reveal: animate each row into view as user scrolls
+  const items = list.querySelectorAll('.lb-item');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('revealed');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -20px 0px' });
+    items.forEach(item => io.observe(item));
+  } else {
+    items.forEach(item => item.classList.add('revealed'));
+  }
 }
 paintLB(null);
 
