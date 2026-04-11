@@ -1,0 +1,10 @@
+{
+  "name": "wish-wall",
+  "version": "1.0.0",
+  "description": "Anonymous wish-pinning community — pin a dream for £2, let the community make it real",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^13.8.0",
+    "stripe": "^22.0.1"
+  }
+}
