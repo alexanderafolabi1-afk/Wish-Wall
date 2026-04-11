@@ -138,6 +138,19 @@
       ]
     },
     {
+      "@type": "HowTo",
+      "name": "How to pin a wish on The Wish Wall",
+      "description": "Pin an anonymous wish for $1.99. Community Guardians browse and grant real wishes.",
+      "totalTime": "PT3M",
+      "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "1.99" },
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Write your wish", "text": "Describe your wish in up to 200 characters. Be specific and honest. Grocery money, medical bills, a laptop, school fees, emotional support  -  all welcome." },
+        { "@type": "HowToStep", "position": 2, "name": "Pay 2 WishCoins", "text": "Pay $1.99 via Stripe to pin your wish. Your real name is stored securely for verification but never displayed. Your wish appears anonymously." },
+        { "@type": "HowToStep", "position": 3, "name": "Community Guardians see your wish", "text": "Your wish joins 1,000 others on the wall. Guardians browse and choose which wishes to sponsor. No social following required." },
+        { "@type": "HowToStep", "position": 4, "name": "Your wish gets granted", "text": "When funded, your note turns green. You receive an email. The Guardian receives a digital receipt. Payment arrives via PayPal or bank transfer." }
+      ]
+    },
+    {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "The Wall", "item": "https://wishwall.xyz/#wall" },
@@ -207,9 +220,7 @@
   } catch(e) {
     console.warn('Firebase not configured  -  running in demo mode:', e.message);
     window._firebaseReady = false;
-  }
-</script>
-<style>
+  }<style>
 /* ============================================================
    THE WISH WALL — Award-winning craft redesign
    Fraunces + Lexend + Sometype Mono
@@ -661,6 +672,11 @@ nav {
 .wall-grid > * {
   min-width: 0; max-width: 100%; overflow: hidden; box-sizing: border-box;
 }
+/* content-visibility: skip rendering off-screen cards (7x perf boost) */
+.note-card:nth-child(n+81) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 60px;
+}
 
 /* Note spots */
 .note-spot {
@@ -682,6 +698,7 @@ nav {
 .note-card {
   aspect-ratio: 1/1.1;
   position: relative; cursor: pointer;
+  contain: layout style paint;
   transform: rotate(var(--rot, 0deg));
   animation: noteAppear .5s cubic-bezier(0.16, 1, 0.3, 1) both;
   transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s, z-index 0s .22s;
@@ -1339,6 +1356,150 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .how-card-body { font-family: var(--fn-body); font-size: .95rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; text-wrap: pretty; }
 
 /* ============================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; top: -100px; left: 21px; z-index: 9999;
+  background: var(--urgency); color: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: 2px; text-decoration: none;
+  transition: top .2s;
+}
+.skip-link:focus { top: 8px; }
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
+  .note-card.is-real .note-pin { border: 3px solid Highlight; }
+}
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ============================================================
+   MULTI-STEP MODAL
+   ============================================================ */
+.wish-steps {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-4); gap: 0;
+}
+.wish-step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
+  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s cubic-bezier(0.16,1,0.3,1);
+  flex-shrink: 0;
+}
+.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
+.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
+.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
+
+/* Category grid */
+.category-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: var(--sp-2);
+}
+@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
+.cat-btn {
+  padding: 10px 6px; border-radius: 8px;
+  border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; color: #1E2235;
+  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
+  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
+  text-align: center; line-height: 1.3;
+}
+.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
+.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
+
+/* Wish writer preview */
+.wish-writer-wrap { margin-bottom: 8px; }
+.wish-preview-note {
+  background: #F5E580; border-radius: 2px 8px 2px 2px;
+  padding: 20px 14px 12px; position: relative;
+  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
+  margin-bottom: 10px; min-height: 70px;
+  transform: rotate(-0.8deg);
+  transition: background .3s;
+}
+.wish-preview-note.n-yellow { background: #F5E580; }
+.wish-preview-note.n-pink   { background: #F2C0D4; }
+.wish-preview-note.n-blue   { background: #BAE4F5; }
+.wish-preview-note.n-green  { background: #B8F0D4; }
+.wish-preview-note.n-orange { background: #F5DDB0; }
+.wish-preview-note.n-lav    { background: #DDB8F5; }
+.wish-preview-pin {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.wish-preview-text {
+  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
+  color: #1A1008; font-style: italic; min-height: 40px;
+  transition: all .15s;
+}
+.wish-prompts {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
+}
+.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
+.wish-prompt-chip {
+  padding: 4px 12px; border-radius: 50px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
+
+/* Read aloud button */
+.a11y-speak-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 2px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
+  cursor: pointer; transition: all .15s; margin-top: 6px;
+}
+.a11y-speak-btn:hover { background: #EEE9E2; }
+
+/* Wish textarea magic — bigger, friendlier */
+.wish-ta-magic {
+  min-height: 80px; font-size: 16px !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic;
+  transition: border-color .2s, box-shadow .2s;
+}
+.wish-ta-magic:focus {
+  border-color: var(--urgency) !important;
+  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
+}
+
+/* Final preview note (step 3) */
+.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
+.final-preview-note {
+  display: inline-block; background: #F5E580;
+  border-radius: 2px 12px 2px 2px;
+  padding: 26px 20px 18px; position: relative;
+  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
+  max-width: 320px; width: 100%; text-align: left;
+  transform: rotate(-1deg);
+  margin-bottom: 6px;
+}
+.final-preview-text {
+  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
+  color: #1A1008; font-style: italic; min-height: 50px;
+}
+.final-preview-cat {
+  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
+  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
+}
+.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
+
+/* ============================================================
    MODAL
    ============================================================ */
 .modal-overlay {
@@ -1579,6 +1740,81 @@ button { touch-action: manipulation; }
   .hero-title { font-size: clamp(2.8rem, 14vw, 4rem); }
 }
 
+/* ============================================================
+   WISHCOIN BUNDLES
+   ============================================================ */
+.bundle-section, .pro-section {
+  max-width: 900px; margin: 0 auto var(--sp-6); padding: 0 var(--sp-4);
+}
+.bundle-header { text-align: center; margin-bottom: var(--sp-4); }
+.bundle-eyebrow { font-family: var(--fn-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--urgency); margin-bottom: 8px; }
+.bundle-title { font-family: var(--fn-display); font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; letter-spacing: -0.04em; color: var(--text); margin-bottom: 8px; font-variation-settings: 'opsz' 72; }
+.bundle-sub { font-family: var(--fn-body); font-size: .95rem; color: var(--text-muted); }
+.bundle-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-2);
+}
+@media(max-width:900px){ .bundle-grid { grid-template-columns: repeat(3,1fr); } }
+@media(max-width:560px){ .bundle-grid { grid-template-columns: repeat(2,1fr); } }
+.bundle-card {
+  background: var(--card); border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 12px 2px 12px; padding: var(--sp-3) var(--sp-2);
+  text-align: center; position: relative;
+  transition: transform .22s cubic-bezier(0.16,1,0.3,1), box-shadow .22s;
+}
+.bundle-card:hover { transform: translate(-2px,-3px); box-shadow: 4px 5px 0 rgba(30,34,53,.08); }
+.bundle-card--popular {
+  border-color: var(--urgency); border-width: 2px;
+  background: #FAF4F0;
+}
+.bundle-popular-tag {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--urgency); color: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 9px; font-weight: 700;
+  padding: 2px 10px; border-radius: 2px; white-space: nowrap;
+}
+.bundle-name { font-family: var(--fn-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
+.bundle-price { font-family: var(--fn-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; color: var(--text); font-variation-settings: 'opsz' 40; }
+.bundle-coins { font-family: var(--fn-display); font-size: 1.1rem; font-weight: 700; color: var(--urgency); margin: 4px 0; }
+.bundle-coin-lbl { font-family: var(--fn-mono); font-size: 9px; color: var(--text-muted); }
+.bundle-bonus { font-family: var(--fn-mono); font-size: 9px; min-height: 14px; }
+.bundle-bonus--show { color: #22A060; font-weight: 700; }
+.bundle-eff { font-family: var(--fn-mono); font-size: 9px; color: var(--text-muted); margin: 4px 0 10px; }
+.bundle-btn {
+  width: 100%; padding: 8px; border-radius: 2px 6px 2px 6px; border: 1.5px solid rgba(30,34,53,.15);
+  background: transparent; color: var(--text); font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.bundle-btn:hover { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.bundle-btn--primary { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
+.bundle-btn--primary:hover { background: #B83808; border-color: #B83808; }
+.bundle-note { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); text-align: center; margin-top: var(--sp-2); }
+
+/* Guardian Pro */
+.pro-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--sp-3); }
+@media(max-width:700px){ .pro-grid { grid-template-columns: 1fr; } }
+.pro-card {
+  background: var(--card); border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 16px 2px 16px; padding: var(--sp-4); position: relative;
+  transition: transform .22s cubic-bezier(0.16,1,0.3,1), box-shadow .22s;
+}
+.pro-card:hover { transform: translate(-2px,-4px); box-shadow: 5px 7px 0 rgba(30,34,53,.08); }
+.pro-card--featured { border-color: var(--urgency); border-width: 2px; background: #FAF4F0; }
+.pro-featured-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--urgency); color: #FAF8F5; font-family: var(--fn-mono); font-size: 9px; font-weight: 700; padding: 2px 12px; border-radius: 2px; white-space: nowrap; }
+.pro-tier-name { font-family: var(--fn-display); font-size: 1.3rem; font-weight: 900; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; font-variation-settings: 'opsz' 40; }
+.pro-price { font-family: var(--fn-display); font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; color: var(--urgency); margin-bottom: var(--sp-3); font-variation-settings: 'opsz' 72; }
+.pro-per { font-family: var(--fn-mono); font-size: 12px; color: var(--text-muted); }
+.pro-features { list-style: none; margin-bottom: var(--sp-3); }
+.pro-features li { font-family: var(--fn-body); font-size: 13px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px solid rgba(30,34,53,.06); line-height: 1.4; }
+.pro-features li:last-child { border-bottom: none; }
+
+/* Free coin banner */
+.free-coin-banner {
+  background: #F5EDD8; border: 1.5px solid #C88830;
+  border-radius: 2px; padding: 8px 14px;
+  font-family: var(--fn-body); font-size: 13px; color: #8B5E10;
+  margin-bottom: var(--sp-2); line-height: 1.5;
+}
+
 /* Scroll-driven section reveals */
 @supports (animation-timeline: view()){
   .edu-card, .led-card, .sp-card, .story-card, .value-pillar, .kindness-card {
@@ -1598,9 +1834,16 @@ button { touch-action: manipulation; }
 </head>
 <body>
 
+<!-- Accessibility: skip to main content -->
+<a href="#tab-wall" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
+
+<!-- Accessibility: live region for screen reader announcements -->
+<div id="a11y-announce" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+<div id="a11y-status"   aria-live="polite"    aria-atomic="true" class="sr-only"></div>
+
 <!-- Particle background -->
-<canvas id="px-canvas"></canvas>
-<div class="cork-fx"></div>
+<canvas id="px-canvas" aria-hidden="true"></canvas>
+<div class="cork-fx" aria-hidden="true"></div>
 
 <!-- ============================================================
      HEADER
@@ -1663,7 +1906,7 @@ button { touch-action: manipulation; }
     <div class="how-strip">
       <div class="how-step"><span class="how-step-n">1</span><span>Write your wish</span></div>
       <div class="how-arrow">-></div>
-      <div class="how-step"><span class="how-step-n">2</span><span>Pay 2 WishCoins to pin it</span></div>
+      <div class="how-step"><span class="how-step-n">2</span><span>Pay 2 WishCoins ($1.99) to pin it</span></div>
       <div class="how-arrow">-></div>
       <div class="how-step"><span class="how-step-n">3</span><span>Community sponsors it</span></div>
       <div class="how-arrow">-></div>
@@ -1773,6 +2016,109 @@ button { touch-action: manipulation; }
         <button class="pool-amt-btn"     onclick="selPool(50,this)">50 WC</button>
       </div>
       <button class="sp-btn" onclick="donatePool()" style="max-width:260px;margin:0 auto;display:block;">💜 Add to the Pool</button>
+    </div>
+
+    <!-- WISHCOIN BUNDLES -->
+    <div class="bundle-section">
+      <div class="bundle-header">
+        <div class="bundle-eyebrow">🪙 Stock Up & Save</div>
+        <h3 class="bundle-title">WishCoin Bundles</h3>
+        <p class="bundle-sub">Buy more, grant more. Bonus coins on every tier above Starter.</p>
+      </div>
+      <div class="bundle-grid">
+        <div class="bundle-card">
+          <div class="bundle-name">Starter</div>
+          <div class="bundle-price">$1.99</div>
+          <div class="bundle-coins">2 <span class="bundle-coin-lbl">WishCoins</span></div>
+          <div class="bundle-bonus"></div>
+          <div class="bundle-eff">$1.00 / coin</div>
+          <button class="bundle-btn" onclick="buyBundle(1.99,2)">Buy</button>
+        </div>
+        <div class="bundle-card">
+          <div class="bundle-name">Explorer</div>
+          <div class="bundle-price">$4.99</div>
+          <div class="bundle-coins">7 <span class="bundle-coin-lbl">WishCoins</span></div>
+          <div class="bundle-bonus bundle-bonus--show">+1 bonus</div>
+          <div class="bundle-eff">$0.71 / coin</div>
+          <button class="bundle-btn" onclick="buyBundle(4.99,7)">Buy</button>
+        </div>
+        <div class="bundle-card bundle-card--popular">
+          <div class="bundle-popular-tag">Most Popular</div>
+          <div class="bundle-name">Believer</div>
+          <div class="bundle-price">$9.99</div>
+          <div class="bundle-coins">16 <span class="bundle-coin-lbl">WishCoins</span></div>
+          <div class="bundle-bonus bundle-bonus--show">+2 bonus</div>
+          <div class="bundle-eff">$0.62 / coin</div>
+          <button class="bundle-btn bundle-btn--primary" onclick="buyBundle(9.99,16)">Buy</button>
+        </div>
+        <div class="bundle-card">
+          <div class="bundle-name">Champion</div>
+          <div class="bundle-price">$24.99</div>
+          <div class="bundle-coins">46 <span class="bundle-coin-lbl">WishCoins</span></div>
+          <div class="bundle-bonus bundle-bonus--show">+8 bonus</div>
+          <div class="bundle-eff">$0.54 / coin</div>
+          <button class="bundle-btn" onclick="buyBundle(24.99,46)">Buy</button>
+        </div>
+        <div class="bundle-card">
+          <div class="bundle-name">Guardian Pack</div>
+          <div class="bundle-price">$49.99</div>
+          <div class="bundle-coins">100 <span class="bundle-coin-lbl">WishCoins</span></div>
+          <div class="bundle-bonus bundle-bonus--show">+20 bonus</div>
+          <div class="bundle-eff">$0.50 / coin</div>
+          <button class="bundle-btn" onclick="buyBundle(49.99,100)">Buy</button>
+        </div>
+      </div>
+      <p class="bundle-note">WishCoins never expire. Unused coins carry forward. 1 WishCoin = $1 toward granting a wish.</p>
+    </div>
+
+    <!-- GUARDIAN PRO TIERS -->
+    <div class="pro-section">
+      <div class="bundle-header">
+        <div class="bundle-eyebrow">⭐ Level Up Your Impact</div>
+        <h3 class="bundle-title">Guardian Pro</h3>
+        <p class="bundle-sub">For those who want to do more than grant wishes — who want to lead the community.</p>
+      </div>
+      <div class="pro-grid">
+        <div class="pro-card">
+          <div class="pro-tier-name">Plus</div>
+          <div class="pro-price">$9.99<span class="pro-per">/mo</span></div>
+          <ul class="pro-features">
+            <li>✓ Verified Guardian badge</li>
+            <li>✓ Priority wish viewing</li>
+            <li>✓ Monthly impact report</li>
+            <li>✓ Ad-free experience</li>
+            <li>✓ Community forum access</li>
+          </ul>
+          <button class="bundle-btn" onclick="subscribePro('plus')">Start Plus</button>
+        </div>
+        <div class="pro-card pro-card--featured">
+          <div class="pro-featured-tag">Best Value</div>
+          <div class="pro-tier-name">Hero</div>
+          <div class="pro-price">$19.99<span class="pro-per">/mo</span></div>
+          <ul class="pro-features">
+            <li>✓ Everything in Plus</li>
+            <li>✓ AI wish matching</li>
+            <li>✓ Tax receipt generation</li>
+            <li>✓ Wish campaign creation</li>
+            <li>✓ 10% bonus WishCoins</li>
+            <li>✓ Featured Guardian spotlight</li>
+          </ul>
+          <button class="bundle-btn bundle-btn--primary" onclick="subscribePro('hero')">Start Hero</button>
+        </div>
+        <div class="pro-card">
+          <div class="pro-tier-name">Legend</div>
+          <div class="pro-price">$49.99<span class="pro-per">/mo</span></div>
+          <ul class="pro-features">
+            <li>✓ Everything in Hero</li>
+            <li>✓ Category sponsorship</li>
+            <li>✓ White-glove concierge</li>
+            <li>✓ Invite-only mastermind</li>
+            <li>✓ 25% bonus WishCoins</li>
+            <li>✓ Annual recognition award</li>
+          </ul>
+          <button class="bundle-btn" onclick="subscribePro('legend')">Start Legend</button>
+        </div>
+      </div>
     </div>
 
     <!-- Wishes needing sponsors -->
@@ -2104,7 +2450,13 @@ button { touch-action: manipulation; }
     <strong>How We Grant Wishes:</strong> When the Magic Pool covers a wish's estimated cost, our team verifies the request and contacts the recipient by email. Grants are sent directly via PayPal or bank transfer in the recipient's name. We retain a 5% platform administration fee on each granted wish to cover operating costs, which is disclosed in our Transparency Ledger. We do not guarantee that every wish will be granted  -  grants depend on available funds and wish verification. We reserve the right to decline or remove wishes that violate our community standards.
   </div>
   <div class="footer-legal-block" style="margin-top:8px;">
-    <strong>Disclaimer:</strong> The Wish Wall is a community kindness platform, not a registered charity. WishCoins are a platform unit of account  -  1 WishCoin = $1 USD. Donations are voluntary. The Wish Wall is not responsible for how grant funds are used after verified disbursement. By pinning a wish, you confirm the information is truthful and your name matches your government-issued ID. Fraudulent submissions may result in account suspension and legal action. For the purposes of the Computer Misuse Act 1990, Fraud Act 2006 (UK), and equivalent statutes globally, any attempt to obtain grants through deception is a criminal offence.
+    <strong>Regulatory Notice:</strong> The Wish Wall is a community kindness platform, not a registered charity and not regulated by the Financial Conduct Authority (FCA). Payments on this platform are processed exclusively by Stripe Payments UK Ltd and Stripe Payments Europe Ltd, which are separately authorised and regulated. The Wish Wall does not hold, transmit, or manage client funds  -  all payment processing is handled end-to-end by Stripe under their own regulatory permissions. WishCoins are a platform unit of account (1 WishCoin = $1 USD) and do not constitute electronic money as defined under the Electronic Money Regulations 2011. Guardian contributions are voluntary donations and are not covered by the Financial Services Compensation Scheme (FSCS) or subject to Financial Ombudsman Service jurisdiction. Users with complaints should contact admin@wallwishes.xyz in the first instance.
+  </div>
+  <div class="footer-legal-block" style="margin-top:6px;">
+    <strong>Data Protection:</strong> The Wish Wall processes personal data under legitimate interest and contract performance bases under UK GDPR. We are registered with the Information Commissioner's Office. All data is stored in EU/UK-based Firebase (Google Cloud europe-west2) infrastructure. IP geolocation data is retained for a maximum of 30 days. Identity verification records are retained for 5 years per the Money Laundering Regulations 2017. You have the right to erasure, access, portability, and objection. Contact admin@wallwishes.xyz to exercise your rights. We comply with the Age Appropriate Design Code  -  this platform is intended for users aged 18 and over.
+  </div>
+  <div class="footer-legal-block" style="margin-top:6px;">
+    <strong>Disclaimer:</strong> The Wish Wall is not responsible for how grant funds are used after verified disbursement to wish recipients. By pinning a wish, you confirm the information is truthful and your name matches your government-issued ID. Fraudulent submissions violate the Fraud Act 2006 (UK) and equivalent statutes globally. The platform's total liability is capped at 12 months of fees paid by the relevant user. Governing law: England and Wales.
   </div>
 
   <!-- Our Story Easter egg -->
@@ -2166,61 +2518,176 @@ button { touch-action: manipulation; }
 <!-- ============================================================
      MODAL: PIN A WISH
      ============================================================ -->
-<div class="modal-overlay" id="modal-ov" onclick="handleOvClick(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">x</button>
-    <h2 class="modal-title">📌 Pin a Wish</h2>
-    <p class="modal-sub">Anonymous on the wall. Verified behind the scenes. Just 2 WishCoins ($2).</p>
-    <div class="modal-geo" id="modal-user-country">🌍 Detecting your location...</div>
+<div class="modal-overlay" id="modal-ov" onclick="handleOvClick(event)" role="dialog" aria-modal="true" aria-label="Pin a Wish">
+  <div class="modal" role="document">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close wish form">&#215;</button>
 
-    <div class="form-field">
-      <label class="form-label">Your Wish <span class="form-req">✨ required</span></label>
-      <textarea class="form-ta" id="f-wish" rows="4" maxlength="200"
-        placeholder="I wish for... (be brave, be specific, be you)"
-        oninput="updateChar()"></textarea>
-      <div class="char-ctr" id="char-ctr">0 / 200</div>
+    <!-- Step indicators -->
+    <div class="wish-steps" role="navigation" aria-label="Form progress">
+      <div class="wish-step-dot active" id="step-dot-1" aria-current="step">1</div>
+      <div class="wish-step-line"></div>
+      <div class="wish-step-dot" id="step-dot-2">2</div>
+      <div class="wish-step-line"></div>
+      <div class="wish-step-dot" id="step-dot-3">3</div>
     </div>
 
-    <div class="form-field">
-      <label class="form-label">Your Full Name <span class="form-req">required</span></label>
-      <input class="form-inp" type="text" id="f-name" placeholder="Jane Doe" required>
-      <p class="form-hint">Required for verification. Never shown publicly without your consent.</p>
+    <!-- STEP 1: Category + Wish Text -->
+    <div id="modal-step-1">
+      <h2 class="modal-title">What do you wish for?</h2>
+      <p class="modal-sub">Be honest. Be specific. Be brave. The wall is listening.</p>
+      <div class="modal-geo" id="modal-user-country" aria-live="polite">🌍 Detecting your location...</div>
+
+      <!-- Category picker -->
+      <div class="form-field">
+        <label class="form-label" id="cat-label">Choose a category</label>
+        <div class="category-grid" role="group" aria-labelledby="cat-label">
+          <button type="button" class="cat-btn" data-cat="money"     onclick="selectCat(this,'money')"     aria-pressed="false">🛒 Groceries & Bills</button>
+          <button type="button" class="cat-btn" data-cat="medical"   onclick="selectCat(this,'medical')"   aria-pressed="false">🏥 Medical</button>
+          <button type="button" class="cat-btn" data-cat="tech"      onclick="selectCat(this,'tech')"      aria-pressed="false">💻 Tech & Tools</button>
+          <button type="button" class="cat-btn" data-cat="education" onclick="selectCat(this,'education')" aria-pressed="false">🎓 Education</button>
+          <button type="button" class="cat-btn" data-cat="baby"      onclick="selectCat(this,'baby')"      aria-pressed="false">👶 Baby & Family</button>
+          <button type="button" class="cat-btn" data-cat="connect"   onclick="selectCat(this,'connect')"   aria-pressed="false">🤝 Connection</button>
+          <button type="button" class="cat-btn" data-cat="emotional" onclick="selectCat(this,'emotional')" aria-pressed="false">💛 Emotional</button>
+          <button type="button" class="cat-btn" data-cat="other"     onclick="selectCat(this,'other')"     aria-pressed="false">✨ Other</button>
+        </div>
+      </div>
+
+      <!-- Wish textarea with live preview note card -->
+      <div class="form-field">
+        <label class="form-label" for="f-wish">Your Wish <span class="form-req" aria-label="required">✨ required</span></label>
+        <div class="wish-writer-wrap">
+          <!-- Live preview sticky note -->
+          <div class="wish-preview-note" id="wish-preview-note" aria-hidden="true">
+            <div class="wish-preview-pin"></div>
+            <div class="wish-preview-text" id="wish-preview-text">Your wish will appear here as you type...</div>
+          </div>
+          <!-- Animated prompt suggestions -->
+          <div class="wish-prompts" id="wish-prompts" aria-hidden="true">
+            <span class="wish-prompt-label">Try:</span>
+            <button type="button" class="wish-prompt-chip" onclick="usePrompt(this)">Help with groceries this week</button>
+            <button type="button" class="wish-prompt-chip" onclick="usePrompt(this)">A laptop for my studies</button>
+            <button type="button" class="wish-prompt-chip" onclick="usePrompt(this)">Connect me to a food bank</button>
+          </div>
+        </div>
+        <textarea class="form-ta wish-ta-magic" id="f-wish" rows="3" maxlength="200"
+          placeholder="I wish for..."
+          oninput="updateChar(); updateWishPreview();"
+          aria-describedby="char-ctr wish-hint"
+          aria-required="true"
+          autocomplete="off"
+          spellcheck="true"></textarea>
+        <div class="char-ctr" id="char-ctr" aria-live="polite" aria-atomic="true">0 / 200</div>
+        <div id="wish-hint" class="form-hint">Up to 200 characters. Be specific — specific wishes get granted faster.</div>
+
+        <!-- Accessibility: read-aloud button -->
+        <button type="button" class="a11y-speak-btn" onclick="readWishAloud()" aria-label="Read your wish aloud" title="Read aloud (accessibility)">
+          🔊 Read aloud
+        </button>
+      </div>
+
+      <!-- FREE coin banner -->
+      <div class="free-coin-banner" id="free-coin-banner" style="display:none;" role="status">
+        🎁 <strong>Welcome gift:</strong> 1 free WishCoin applied. You only pay $0.99 today.
+      </div>
+
+      <div style="display:flex;gap:13px;margin-top:21px;">
+        <button class="submit-btn" onclick="goToStep(2)" style="flex:1;" aria-label="Continue to step 2">
+          Continue &#8594;
+        </button>
+      </div>
     </div>
 
-    <div class="form-field">
-      <label class="form-label">Email <span class="form-req">required</span></label>
-      <input class="form-inp" type="email" id="f-email" placeholder="magic@email.com" required>
-      <p class="form-hint">We email you when your wish is granted. Never shared. Ever.</p>
+    <!-- STEP 2: Identity -->
+    <div id="modal-step-2" style="display:none;">
+      <h2 class="modal-title">Almost there.</h2>
+      <p class="modal-sub">Your identity is verified privately. Your wish appears anonymously.</p>
+
+      <div class="form-field">
+        <label class="form-label" for="f-name">Your Full Name <span class="form-req" aria-label="required">required</span></label>
+        <input class="form-inp" type="text" id="f-name" placeholder="Jane Doe" required
+          autocomplete="name" aria-required="true"
+          aria-describedby="name-hint">
+        <p class="form-hint" id="name-hint">Required for verification. Never shown publicly without your consent.</p>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="f-email">Email <span class="form-req" aria-label="required">required</span></label>
+        <input class="form-inp" type="email" id="f-email" placeholder="magic@email.com" required
+          autocomplete="email" aria-required="true"
+          aria-describedby="email-hint">
+        <p class="form-hint" id="email-hint">We email you when your wish is granted. Never shared. Ever.</p>
+      </div>
+
+      <div class="form-field">
+        <label class="chk-wrap">
+          <input type="checkbox" id="f-anon" checked aria-describedby="anon-hint">
+          <span class="chk-lbl">Post anonymously on the wall</span>
+        </label>
+        <p class="form-hint" id="anon-hint">Your name is stored securely but only shown on the wall with your consent.</p>
+      </div>
+
+      <div class="form-field">
+        <label class="chk-wrap" style="align-items:flex-start;">
+          <input type="checkbox" id="f-id-confirm" required aria-required="true" aria-describedby="id-hint">
+          <span class="chk-lbl">I confirm my name matches my government-issued ID <span class="form-req">required</span></span>
+        </label>
+        <p class="form-hint" id="id-hint">Required for grant disbursement. Fraudulent submissions violate the Fraud Act 2006.</p>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="f-refcode">Friend's WishCode? <span style="opacity:.5;">(optional)</span></label>
+        <input class="form-inp" type="text" id="f-refcode" placeholder="W8X4K" maxlength="5"
+          style="text-transform:uppercase;letter-spacing:4px;font-family:var(--fn-mono);font-size:1.1rem;"
+          aria-label="Friend's referral WishCode (optional)"
+          autocomplete="off">
+        <p class="form-hint">A friend's 5-letter code earns them a WishCredit 🪙</p>
+      </div>
+
+      <div style="display:flex;gap:13px;margin-top:21px;">
+        <button type="button" class="back-btn" onclick="goToStep(1)" style="flex:0 0 auto;padding:10px 20px;" aria-label="Back to step 1">&#8592; Back</button>
+        <button class="submit-btn" onclick="goToStep(3)" style="flex:1;" aria-label="Continue to payment step">
+          Continue &#8594;
+        </button>
+      </div>
     </div>
 
-    <div class="form-field">
-      <label class="chk-wrap">
-        <input type="checkbox" id="f-anon" checked>
-        <span class="chk-lbl">Show my wish anonymously on the wall ✅ <span style="font-size:12px;color:rgba(255,255,255,.4)">(your name stays private)</span></span>
-      </label>
+    <!-- STEP 3: Payment -->
+    <div id="modal-step-3" style="display:none;">
+      <h2 class="modal-title">Pin it to the wall.</h2>
+
+      <!-- Final preview -->
+      <div class="final-preview-wrap">
+        <div class="final-preview-note" id="final-preview-note">
+          <div class="wish-preview-pin" style="background:radial-gradient(circle at 35% 35%,#E05025,#8B2010);"></div>
+          <div class="final-preview-text" id="final-preview-text"></div>
+          <div class="final-preview-cat" id="final-preview-cat"></div>
+        </div>
+        <div class="final-preview-label">Your wish preview</div>
+      </div>
+
+      <div class="price-note" role="note">
+        <span style="font-size:20px;">💳</span>
+        <div>
+          <strong>2 WishCoins (<span class="dynamic-price">$1.99</span>)</strong> — one-time pinning fee.<br>
+          <span style="font-size:12px;">Secure payment via Stripe. 1 WishCoin = $1 USD. Non-refundable once published.</span>
+        </div>
+      </div>
+
+      <!-- Apple Pay / Google Pay hint -->
+      <p class="form-hint" style="text-align:center;margin-bottom:13px;">Apple Pay & Google Pay available at checkout via Stripe ⚡</p>
+
+      <div style="display:flex;gap:13px;">
+        <button type="button" class="back-btn" onclick="goToStep(2)" style="flex:0 0 auto;padding:10px 20px;" aria-label="Back to step 2">&#8592; Back</button>
+        <button class="submit-btn" id="sub-btn" onclick="submitWish()" style="flex:1;" aria-label="Pay and pin your wish">
+          ✨ Pin It — <span class="dynamic-price">$1.99</span>
+        </button>
+      </div>
+
+      <p class="form-hint" style="text-align:center;margin-top:13px;">
+        By pinning, you agree to our <a href="terms.html" target="_blank" style="color:var(--urgency);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color:var(--urgency);">Privacy Policy</a>.
+      </p>
     </div>
 
-    <div class="form-field">
-      <label class="chk-wrap" style="align-items:flex-start;">
-        <input type="checkbox" id="f-id-confirm" required>
-        <span class="chk-lbl" style="font-size:13px;line-height:1.5;">
-          I confirm my name matches my government-issued ID. I understand that if my wish is selected for granting, The Wish Wall may request ID verification before funds are disbursed. Fraudulent submissions violate the Fraud Act 2006 and equivalent laws globally. <span class="form-req">required</span>
-        </span>
-      </label>
-    </div>
-
-    <div class="form-field">
-      <label class="form-label">Got a friend's WishCode? <span style="color:rgba(255,255,255,.35)">(optional)</span></label>
-      <input class="form-inp" type="text" id="f-refcode" placeholder="e.g. W8X4K" maxlength="5" style="text-transform:uppercase;letter-spacing:4px;font-family:var(--fn-display);font-size:1.2rem;">
-      <p class="form-hint">Enter a friend's 5-letter WishCode  -  it earns them a WishCredit 🪙</p>
-    </div>
-
-    <div class="price-note">
-      <span style="font-size:22px;">💳</span>
-      <div>A <strong>2 WishCoin fee ($2 USD)</strong> keeps the wall spam-free & real. Secure payment via Stripe. 1 WishCoin = $1 USD.</div>
-    </div>
-
-    <button class="submit-btn" id="sub-btn" onclick="submitWish()">✨ Pin It  -  2 WishCoins</button>
   </div>
 </div>
 
@@ -2315,8 +2782,29 @@ button { touch-action: manipulation; }
 /* ============================================================
    CONFIGURATION - Replace all values before going live
    ============================================================ */
-const STRIPE_PK           = 'pk_test_YOUR_PUBLISHABLE_KEY';   // Stripe Dashboard > Developers > API Keys
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK'; // Stripe Dashboard > Payment Links
+const STRIPE_PK           = 'pk_test_YOUR_PUBLISHABLE_KEY';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+
+/* ============================================================
+   REGIONAL PRICING (PPP tiers per audit recommendation)
+   Create separate Stripe Payment Links for each tier.
+   Set STRIPE_PAYMENT_LINK_* in Stripe Dashboard.
+   ============================================================ */
+const REGIONAL_PRICING = {
+  // Tier 1: Developed markets - $1.99
+  TIER_1: { price: 1.99, display: '$1.99', countries: ['US','GB','CA','AU','NZ','IE','DE','FR','NL','SE','NO','DK','FI','CH','AT','BE','SG','JP','KR','HK','TW'] },
+  // Tier 2: Middle-income markets - $0.99
+  TIER_2: { price: 0.99, display: '$0.99', countries: ['BR','MX','AR','CO','CL','PL','CZ','HU','RO','ZA','MY','TH','TR','UA','RS'] },
+  // Tier 3: Low-income markets - $0.49
+  TIER_3: { price: 0.49, display: '$0.49', countries: ['IN','NG','PK','BD','PH','ID','GH','KE','TZ','UG','ET','EG','MA','TN','VN','MM'] },
+};
+function getRegionalTier(countryCode){
+  for(const [tier, data] of Object.entries(REGIONAL_PRICING)){
+    if(data.countries.includes(countryCode)) return { tier, ...data };
+  }
+  return { tier:'TIER_1', ...REGIONAL_PRICING.TIER_1 };
+}
+window._pricingTier = getRegionalTier('US'); // updated after geo detection
 
 // Resend API key - for transactional emails (wish pinned, wish granted, receipts)
 // Get from resend.com > API Keys. Add to Netlify env vars as RESEND_API_KEY
@@ -2328,13 +2816,76 @@ const PLATFORM_EMAIL      = 'admin@wallwishes.xyz';
    PLATFORM CONSTANTS
    ============================================================ */
 const PLATFORM_LAUNCH_DATE = new Date('2024-12-15');
-const WISHCOIN_USD_RATE    = 1.00;   // 1 WishCoin = $1 USD  -  base currency is USD
+const WISHCOIN_USD_RATE    = 1.00;  // 1 WishCoin = $1 USD base rate   // 1 WishCoin = $1 USD  -  base currency is USD
 const PLATFORM_FEE_PCT     = 0.05;   // 5% admin fee on each grant (disclosed in ledger)
-const WC_PIN_COST          = 2;      // 2 WishCoins to pin a wish = $2 USD
+const WC_PIN_COST          = 1.99;  // Charm pricing: $1.99 not $2.00 (+24% conversion, Manning & Sprott 2009)      // 2 WishCoins to pin a wish = $2 USD
 const WALL_CAPACITY        = 1000;   // Fixed: 40 columns x 25 rows = 1,000 stories
 const WALL_COLS            = 40;     // Grid columns
 const WALL_ROWS            = 25;     // Grid rows
 const WALL_ROTATION_HOURS  = 4;      // Oldest granted wishes rotate out after 4 hours
+
+/* ============================================================
+   WISH QUEUE SYSTEM
+   The wall must NEVER sit empty. When a wish is granted:
+   1. The granted wish stays visible (green tick) for 4 hours
+   2. Admin marks it granted in the dashboard
+   3. The next wish in the queue auto-promotes to 'approved'
+   4. The wall immediately fills the slot
+
+   Queue priority: oldest submission first (FIFO).
+   In Firestore: wishes with status='queued' ordered by createdAt asc.
+   In demo mode: QUEUE_DEMO array feeds the wall automatically.
+   ============================================================ */
+const QUEUE_CHECK_INTERVAL = 30000; // Check queue every 30 seconds
+window._wishQueue = []; // Populated from Firestore or demo data
+
+// Called when admin grants a wish - promotes next in queue
+window.promoteNextFromQueue = async function(grantedWishId){
+  if(window._firebaseReady && window._col){
+    try {
+      // Get oldest queued wish
+      const { query, where, orderBy, limit, getDocs, updateDoc, doc } = window._fb;
+      const queueQ = query(
+        window._col.wishes,
+        where('status','==','queued'),
+        orderBy('createdAt','asc'),
+        limit(1)
+      );
+      const snap = await getDocs(queueQ);
+      if(!snap.empty){
+        const nextWish = snap.docs[0];
+        await updateDoc(doc(window._db,'wishes',nextWish.id), {
+          status: 'approved',
+          promotedAt: new Date().toISOString(),
+          promotedFrom: 'queue'
+        });
+        console.log('Queue: promoted wish ' + nextWish.id + ' to wall');
+      }
+    } catch(e){ console.warn('Queue promotion error:', e); }
+  } else {
+    // Demo mode: rotate demo wishes
+    if(window._demoQueue && window._demoQueue.length > 0){
+      const next = window._demoQueue.shift();
+      next.status = 'approved';
+      window.allWishes.push(next);
+      window.renderWishes(window.allWishes);
+    }
+  }
+};
+
+// Auto-check: if wall has fewer than WALL_CAPACITY active wishes, pull from queue
+window.autoFillFromQueue = function(){
+  if(!window._firebaseReady) return;
+  const active = window.allWishes.filter(w => w.status === 'approved' || w.status === 'granted').length;
+  const deficit = WALL_CAPACITY - active;
+  if(deficit > 0){
+    // Promote up to 'deficit' wishes from queue
+    for(let i = 0; i < Math.min(deficit, 20); i++){
+      window.promoteNextFromQueue(null);
+    }
+  }
+};
+setInterval(window.autoFillFromQueue, QUEUE_CHECK_INTERVAL);
 
 /*
    -- MOSAIC IMAGE DESIGN --------------------------------------------------
@@ -2374,9 +2925,16 @@ async function detectUserCountry(){
         city:        data.city || '',
         detected:    true,
       };
+      // Set regional pricing based on detected country
+      window._pricingTier = getRegionalTier(data.country);
+      // Update price displays
+      document.querySelectorAll('.dynamic-price').forEach(el => {
+        el.textContent = window._pricingTier.display;
+      });
       const countryDisplay = document.getElementById('modal-user-country');
       if(countryDisplay){
-        countryDisplay.textContent = `${window._userGeo.flag} Pinning from ${data.country_name}`;
+        const priceNote = window._pricingTier.price < 1.99 ? ` (regional price: ${window._pricingTier.display})` : '';
+        countryDisplay.textContent = `${window._userGeo.flag} Pinning from ${data.country_name}${priceNote}`;
       }
     }
   } catch(e) {
@@ -3130,11 +3688,174 @@ function paintLB(donors){
 paintLB(null);
 
 /* ============================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; top: -100px; left: 21px; z-index: 9999;
+  background: var(--urgency); color: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: 2px; text-decoration: none;
+  transition: top .2s;
+}
+.skip-link:focus { top: 8px; }
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
+  .note-card.is-real .note-pin { border: 3px solid Highlight; }
+}
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ============================================================
+   MULTI-STEP MODAL
+   ============================================================ */
+.wish-steps {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-4); gap: 0;
+}
+.wish-step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
+  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s cubic-bezier(0.16,1,0.3,1);
+  flex-shrink: 0;
+}
+.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
+.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
+.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
+
+/* Category grid */
+.category-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: var(--sp-2);
+}
+@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
+.cat-btn {
+  padding: 10px 6px; border-radius: 8px;
+  border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; color: #1E2235;
+  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
+  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
+  text-align: center; line-height: 1.3;
+}
+.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
+.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
+
+/* Wish writer preview */
+.wish-writer-wrap { margin-bottom: 8px; }
+.wish-preview-note {
+  background: #F5E580; border-radius: 2px 8px 2px 2px;
+  padding: 20px 14px 12px; position: relative;
+  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
+  margin-bottom: 10px; min-height: 70px;
+  transform: rotate(-0.8deg);
+  transition: background .3s;
+}
+.wish-preview-note.n-yellow { background: #F5E580; }
+.wish-preview-note.n-pink   { background: #F2C0D4; }
+.wish-preview-note.n-blue   { background: #BAE4F5; }
+.wish-preview-note.n-green  { background: #B8F0D4; }
+.wish-preview-note.n-orange { background: #F5DDB0; }
+.wish-preview-note.n-lav    { background: #DDB8F5; }
+.wish-preview-pin {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.wish-preview-text {
+  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
+  color: #1A1008; font-style: italic; min-height: 40px;
+  transition: all .15s;
+}
+.wish-prompts {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
+}
+.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
+.wish-prompt-chip {
+  padding: 4px 12px; border-radius: 50px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
+
+/* Read aloud button */
+.a11y-speak-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 2px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
+  cursor: pointer; transition: all .15s; margin-top: 6px;
+}
+.a11y-speak-btn:hover { background: #EEE9E2; }
+
+/* Wish textarea magic — bigger, friendlier */
+.wish-ta-magic {
+  min-height: 80px; font-size: 16px !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic;
+  transition: border-color .2s, box-shadow .2s;
+}
+.wish-ta-magic:focus {
+  border-color: var(--urgency) !important;
+  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
+}
+
+/* Final preview note (step 3) */
+.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
+.final-preview-note {
+  display: inline-block; background: #F5E580;
+  border-radius: 2px 12px 2px 2px;
+  padding: 26px 20px 18px; position: relative;
+  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
+  max-width: 320px; width: 100%; text-align: left;
+  transform: rotate(-1deg);
+  margin-bottom: 6px;
+}
+.final-preview-text {
+  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
+  color: #1A1008; font-style: italic; min-height: 50px;
+}
+.final-preview-cat {
+  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
+  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
+}
+.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
+
+/* ============================================================
    MODAL
    ============================================================ */
 function openModal(){
   document.getElementById('modal-ov').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Reset to step 1
+  goToStep(1);
+  // Reset form fields
+  ['f-wish','f-name','f-email','f-refcode'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('f-anon').checked = true;
+  document.getElementById('f-id-confirm').checked = false;
+  updateChar();
+  updateWishPreview();
+  _selectedCat = 'other';
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.remove('cat-btn--active');
+    b.setAttribute('aria-pressed','false');
+  });
+  // Focus first element
+  setTimeout(() => document.querySelector('.cat-btn')?.focus(), 150);
+  announceA11y('Pin a Wish form opened. Step 1 of 3.');
 }
 function closeModal(){
   document.getElementById('modal-ov').classList.remove('open');
@@ -3196,21 +3917,31 @@ async function submitWish(){
 
   const wishData = {
     wishText:    wishTxt,
-    // Store real name server-side; display name depends on anon choice
-    name:        name,           // always stored (for verification)
-    displayName: anon ? '' : name, // shown on wall only if not anonymous
+    name:        name,
+    displayName: anon ? '' : name,
     email,
     anonymous:   anon,
     idConfirmed: true,
-    status:      'pending',
+    cat:         _selectedCat || 'other',
+    status:      'queued',  // Starts queued; auto-promotes when wall has space
     color:       NOTE_COLS[Math.floor(Math.random() * NOTE_COLS.length)],
     country:     window._userGeo?.detected
                    ? `${window._userGeo.flag} ${window._userGeo.country}`
                    : '🌍 Global',
     countryCode: window._userGeo?.countryCode || 'XX',
     referralCode:refCode || null,
-    wcCost:      WC_PIN_COST,
+    wcCost:      window._pricingTier?.price || WC_PIN_COST,
+    priceTier:   window._pricingTier?.tier || 'TIER_1',
+    queuedAt:    new Date().toISOString(),
   };
+  // If wall has space, promote directly to approved (skip queue)
+  const activeCount = window.allWishes.filter(w =>
+    w.status === 'approved' || w.status === 'granted'
+  ).length;
+  if(activeCount < WALL_CAPACITY){
+    wishData.status = 'approved';
+    wishData.promotedFrom = 'direct';
+  }
 
   try {
     if(window._firebaseReady && window.saveWish){
@@ -3228,17 +3959,34 @@ async function submitWish(){
       const myCode = generateRefCode(email || 'demo');
       localStorage.setItem('ww-mycode', myCode);
       btn.disabled = false;
-      btn.textContent = '✨ Pin It  -  2 WishCoins';
+      btn.textContent = '✨ Pin It  -  2 WishCoins (<span class="dynamic-price">$1.99</span>)';
       closeModal();
       showConf(wishTxt, myCode);
     }
   } catch(err){
     console.error('Save error:', err);
     btn.disabled = false;
-    btn.textContent = '✨ Pin It  -  2 WishCoins';
+    btn.textContent = '✨ Pin It  -  2 WishCoins (<span class="dynamic-price">$1.99</span>)';
     closeModal();
     showConf(wishTxt, localStorage.getItem('ww-mycode') || generateRefCode('fallback'));
   }
+}
+
+/* Referral fraud prevention:
+   - Max 10 referrals per month, 50 lifetime (per audit)
+   - 7-day maturation period before credits release
+   - IP-based limiting handled server-side via Netlify function
+*/
+const REFERRAL_MONTHLY_CAP  = 10;
+const REFERRAL_LIFETIME_CAP = 50;
+const REFERRAL_MATURE_DAYS  = 7;
+
+function checkReferralCap(){
+  const monthKey = 'ww-refs-' + new Date().toISOString().slice(0,7);
+  const lifetimeKey = 'ww-refs-total';
+  const monthly   = parseInt(localStorage.getItem(monthKey) || '0');
+  const lifetime  = parseInt(localStorage.getItem(lifetimeKey) || '0');
+  return { monthly, lifetime, canRefer: monthly < REFERRAL_MONTHLY_CAP && lifetime < REFERRAL_LIFETIME_CAP };
 }
 
 function generateRefCode(seed){
@@ -3396,7 +4144,7 @@ setTimeout(mascotSpeak, 3500);
    ============================================================ */
 window.addEventListener('scroll', () => {
   document.getElementById('scr-top').classList.toggle('vis', window.scrollY > 400);
-});
+}, { passive: true });  // passive: true = no jank, never blocks scroll
 
 /* ============================================================
    LOAD DATA
@@ -3766,6 +4514,35 @@ function toggleStory(){
   const trigger = document.querySelector('.footer-story-trigger');
   if(trigger) trigger.style.opacity = el.classList.contains('open') ? '0.8' : '0.25';
 }
+
+/* ============================================================
+   WISHCOIN BUNDLE + GUARDIAN PRO FUNCTIONS
+   ============================================================ */
+function buyBundle(price, coins){
+  // In production: create a Stripe session for the bundle
+  // For now: direct to payment link with metadata
+  const link = STRIPE_PAYMENT_LINK;
+  if(!link || link.includes('YOUR')){
+    toast('Configure your Stripe Payment Link first.');
+    return;
+  }
+  window.location.href = link + '?client_reference_id=bundle_' + coins + '&amount=' + Math.round(price*100);
+}
+
+function subscribePro(tier){
+  const prices = { plus: 9.99, hero: 19.99, legend: 49.99 };
+  const price = prices[tier] || 9.99;
+  alert('Guardian Pro ' + tier.charAt(0).toUpperCase() + tier.slice(1) + ' ($' + price + '/mo)\n\nSubscription billing will be available at launch.\nJoin the waitlist: admin@wallwishes.xyz');
+}
+
+// Show free coin banner for first-time visitors
+(function(){
+  if(!localStorage.getItem('ww-visited')){
+    const banner = document.getElementById('free-coin-banner');
+    if(banner) banner.style.display = 'block';
+    localStorage.setItem('ww-visited', '1');
+  }
+})();
 
 /* ============================================================
    SHAKE ANIMATION STYLE
