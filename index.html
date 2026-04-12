@@ -202,19 +202,26 @@
     };
     window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDoc };
 
-    // Real-time wish listener — fetch both approved and granted wishes
+    // Real-time wish listener — fetch both approved and granted wishes.
+    // NOTE: This query requires a Firestore composite index on (status ASC, createdAt DESC).
+    // Create it at: Firebase Console → Firestore → Indexes → Add composite index.
+    // If the index is missing, Firestore returns a 'failed-precondition' error and we fall back to approved-only.
     const q = query(window._col.wishes, where('status', 'in', ['approved', 'granted']), orderBy('createdAt', 'desc'));
     onSnapshot(q, snap => {
       const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       window.renderWishes(wishes);
     }, err => {
-      // Fallback: if composite index not yet created, query approved only
-      console.warn('Wish query error (index may be missing), falling back:', err.message);
-      const qFallback = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
-      onSnapshot(qFallback, snap => {
-        const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        window.renderWishes(wishes);
-      });
+      if(err.code === 'failed-precondition'){
+        // Composite index not yet created — fall back to approved-only query
+        console.warn('Firestore composite index missing, falling back to approved-only query. Create index at Firebase Console.', err.message);
+        const qFallback = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
+        onSnapshot(qFallback, snap => {
+          const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          window.renderWishes(wishes);
+        });
+      } else {
+        console.error('Firestore wish listener error:', err.message);
+      }
     });
 
     // Ledger listener  -  internal only, pot balance NOT rendered publicly
@@ -3693,10 +3700,12 @@ if(document.readyState === 'loading'){
    ============================================================ */
 let _renderDebounceTimer = null;
 window.renderWishes = function(rawWishes){
-  // Debounce rapid-fire calls (e.g. Firestore cache then server) to avoid double flicker
+  // Debounce rapid-fire calls: Firestore fires twice (local cache, then server).
+  // 80ms is enough to coalesce both events into a single DOM update, eliminating the double-flicker.
   clearTimeout(_renderDebounceTimer);
   _renderDebounceTimer = setTimeout(function(){
     const wishes     = getDisplayWishes(rawWishes);
+    // Keep both the module-scoped var and window property in sync
     allWishes        = wishes;
     window.allWishes = wishes;
     window._lastWishes = rawWishes || [];  // keep real wishes separately
