@@ -178,7 +178,7 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import {
     getFirestore, collection, addDoc, getDocs, doc, updateDoc,
-    onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc
+    onSnapshot, query, where, orderBy, serverTimestamp, getDoc
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -200,7 +200,7 @@
       donors: collection(db, 'donors'),
       ledger: doc(db, 'meta', 'ledger')
     };
-    window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, limit, getDocs, serverTimestamp, getDoc };
+    window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDoc };
 
     // Real-time wish listener
     const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
@@ -220,9 +220,7 @@
   } catch(e) {
     console.warn('Firebase not configured  -  running in demo mode:', e.message);
     window._firebaseReady = false;
-  }
-</script>
-<style>
+  }<style>
 /* ============================================================
    THE WISH WALL — Award-winning craft redesign
    Fraunces + Lexend + Sometype Mono
@@ -1735,6 +1733,178 @@ footer {
 .eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
 .eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
 
+
+/* ============================================================
+   WISH PIPELINE — transparent tube with bouncing wishes
+   ============================================================ */
+.pipeline-section {
+  max-width: 960px; margin: 0 auto var(--sp-6); padding: 0 var(--sp-4);
+}
+.pipeline-header { text-align: center; margin-bottom: var(--sp-4); }
+.pipeline-eyebrow {
+  font-family: var(--fn-mono); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--urgency);
+  margin-bottom: 8px;
+}
+.pipeline-title {
+  font-family: var(--fn-display); font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 900; letter-spacing: -0.04em; color: var(--text);
+  margin-bottom: 6px; font-variation-settings: 'opsz' 72;
+}
+.pipeline-sub {
+  font-family: var(--fn-body); font-size: .9rem; color: var(--text-muted);
+}
+.pipeline-tube-wrap {
+  display: flex; align-items: center; gap: 0;
+  margin: 0 auto; position: relative;
+}
+/* The transparent tube */
+.pipeline-tube {
+  flex: 1; height: 90px; overflow: hidden;
+  background: rgba(255,255,255,.55);
+  border-top: 3px solid rgba(30,34,53,.12);
+  border-bottom: 3px solid rgba(30,34,53,.12);
+  position: relative;
+  backdrop-filter: blur(4px);
+  box-shadow:
+    inset 0 6px 14px rgba(255,255,255,.6),
+    inset 0 -4px 10px rgba(30,34,53,.06),
+    0 2px 20px rgba(30,34,53,.08);
+}
+/* Tube light shimmer */
+.pipeline-tube::before {
+  content: '';
+  position: absolute; top: 4px; left: 0; right: 0; height: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.7) 0%, transparent 100%);
+  pointer-events: none; z-index: 10;
+  border-radius: 0;
+}
+/* Pipe end caps */
+.pipe-end {
+  display: flex; align-items: center; flex-direction: row; flex-shrink: 0;
+}
+.pipe-end--right { flex-direction: row; }
+.pipe-cap {
+  width: 14px; height: 110px;
+  background: linear-gradient(180deg, rgba(30,34,53,.15), rgba(30,34,53,.08));
+  border-radius: 6px 0 0 6px;
+  border: 2px solid rgba(30,34,53,.15);
+  border-right: none;
+}
+.pipe-cap--right { border-radius: 0 6px 6px 0; border-right: 2px solid rgba(30,34,53,.15); border-left: none; }
+.pipe-opening {
+  width: 6px; height: 90px;
+  background: rgba(255,255,255,.4);
+  border-top: 3px solid rgba(30,34,53,.12);
+  border-bottom: 3px solid rgba(30,34,53,.12);
+}
+.pipe-arrow {
+  font-family: var(--fn-mono); font-size: 10px; font-weight: 700;
+  color: var(--urgency); margin-left: 8px; white-space: nowrap;
+  letter-spacing: .5px;
+  animation: arrowPulse 1.8s ease-in-out infinite;
+}
+@keyframes arrowPulse {
+  0%,100% { opacity: .5; transform: translateX(0); }
+  50%     { opacity: 1;  transform: translateX(3px); }
+}
+
+/* Individual wish bubbles inside the tube */
+.pipe-wish {
+  position: absolute;
+  height: 68px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: default;
+  transition: filter .2s;
+  animation: pipeBounce var(--dur, 18s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  top: 11px;
+  min-width: 120px; max-width: 200px;
+  box-shadow: 2px 2px 6px rgba(30,34,53,.15), inset 0 1px 3px rgba(255,255,255,.5);
+  transform: translateX(-220px);
+}
+.pipe-wish:hover { filter: brightness(1.06) saturate(1.1); }
+.pipe-wish--y { background: #F5E580; }
+.pipe-wish--p { background: #F2C0D4; }
+.pipe-wish--b { background: #BAE4F5; }
+.pipe-wish--g { background: #B8F0D4; }
+.pipe-wish--o { background: #F5DDB0; }
+.pipe-wish--l { background: #DDB8F5; }
+
+.pipe-wish-inner {
+  text-align: center;
+  pointer-events: none;
+}
+.pipe-wish-flag {
+  font-size: 13px; display: block; margin-bottom: 2px;
+}
+.pipe-wish-text {
+  font-family: var(--fn-body); font-size: 9.5px; line-height: 1.35;
+  color: #1A1008; display: -webkit-box;
+  -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  font-style: italic;
+}
+.pipe-pin {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
+  position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+
+/* Bounce animation - travels right across tube */
+@keyframes pipeBounce {
+  0%   { transform: translateX(-220px) translateY(0px);       opacity: 0; }
+  3%   { opacity: 1; }
+  20%  { transform: translateX(calc(var(--tube-w,700px)*0.2))  translateY(-4px); }
+  40%  { transform: translateX(calc(var(--tube-w,700px)*0.4))  translateY(3px);  }
+  60%  { transform: translateX(calc(var(--tube-w,700px)*0.6))  translateY(-5px); }
+  80%  { transform: translateX(calc(var(--tube-w,700px)*0.8))  translateY(2px);  }
+  95%  { transform: translateX(calc(var(--tube-w,700px)*1.05)) translateY(0px); opacity: 1; }
+  100% { transform: translateX(calc(var(--tube-w,700px)*1.1))  translateY(0px); opacity: 0; }
+}
+
+.pipeline-note {
+  text-align: center; font-family: var(--fn-mono); font-size: 11px;
+  color: var(--text-muted); margin-top: 12px;
+}
+
+
+/* Translation in wish detail */
+.wish-translate-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 12px; flex-wrap: wrap;
+}
+.wish-translate-btn {
+  font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  padding: 6px 14px; border-radius: 2px 8px 2px 8px;
+  border: 1.5px solid rgba(30,34,53,.15); background: #FAF8F5;
+  color: var(--text); cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.wish-translate-btn:hover { background: var(--text); color: #FAF8F5; }
+.wish-translate-btn:disabled { opacity: .5; cursor: not-allowed; }
+.wish-translate-status {
+  font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted);
+  font-style: italic;
+}
+.wish-translated {
+  margin-top: 10px;
+  background: rgba(77,174,122,.08);
+  border: 1px solid rgba(77,174,122,.25);
+  border-radius: 2px; padding: 10px 14px;
+}
+.wish-translated-label {
+  font-family: var(--fn-mono); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--accent); margin-bottom: 5px;
+}
+.wish-translated-text {
+  font-family: var(--fn-body); font-size: 15px; color: var(--ink);
+  font-style: italic; line-height: 1.6;
+}
+
 /* ============================================================
    SCROLL TO TOP
    ============================================================ */
@@ -1869,6 +2039,8 @@ button { touch-action: manipulation; }
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+}
+</style>family:var(--fn-ui);font-size:13px;font-weight:700;color:var(--yellow);
 }
 </style>
 
@@ -2169,6 +2341,30 @@ button { touch-action: manipulation; }
       </div>
     </div>
 
+
+    <!-- WISH PIPELINE ────────────────────────────────────────────────── -->
+    <div class="pipeline-section" id="pipeline-section">
+      <div class="pipeline-header">
+        <div class="pipeline-eyebrow">🌀 Live Queue</div>
+        <h3 class="pipeline-title">Wishes Waiting in the Wings</h3>
+        <p class="pipeline-sub">These wishes are next. The moment a spot opens, one steps onto the wall.</p>
+      </div>
+      <div class="pipeline-tube-wrap" aria-label="Wish queue visualisation" role="img">
+        <div class="pipe-end pipe-end--left">
+          <div class="pipe-cap"></div>
+          <div class="pipe-opening"></div>
+        </div>
+        <div class="pipeline-tube" id="pipeline-tube">
+          <!-- Wish bubbles injected by JS -->
+        </div>
+        <div class="pipe-end pipe-end--right">
+          <div class="pipe-opening"></div>
+          <div class="pipe-cap pipe-cap--right"></div>
+          <div class="pipe-arrow" title="Next to the wall">&#8594; Wall</div>
+        </div>
+      </div>
+      <p class="pipeline-note" id="pipeline-count"></p>
+    </div>
     <!-- Founding Patron Spotlight -->
     <p class="patron-section-lbl">💜 Our Founding Patrons  -  Thank You</p>
 
@@ -2797,6 +2993,20 @@ button { touch-action: manipulation; }
         <span id="wish-detail-connect"></span>
       </div>
       <button class="wish-detail-sponsor-btn" id="wish-detail-sponsor" style="display:none;">💙 Sponsor this wish</button>
+
+      <!-- Translation row — shown for non-English wishes -->
+      <div class="wish-translate-row" id="wish-translate-row" style="display:none;">
+        <button class="wish-translate-btn" id="wish-translate-btn"
+          onclick="translateWish()" aria-label="Translate this wish to English">
+          🌐 Translate to English
+        </button>
+        <span class="wish-translate-status" id="wish-translate-status"></span>
+      </div>
+      <div class="wish-translated" id="wish-translated" style="display:none;">
+        <div class="wish-translated-label">🌐 Translation</div>
+        <div class="wish-translated-text" id="wish-translated-text"></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2828,197 +3038,6 @@ button { touch-action: manipulation; }
     ✨ I've witnessed this magic
   </button>
 </div>
-
-<!-- ============================================================
-     STYLES: accessibility utilities + multi-step modal + wish form
-     (originally misplaced inside <script> tag — moved here to fix JS syntax error)
-     ============================================================ -->
-<style>
-/* ============================================================
-   ACCESSIBILITY UTILITIES
-   ============================================================ */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-.skip-link {
-  position: absolute; top: -100px; left: 21px; z-index: 9999;
-  background: var(--urgency); color: #FAF8F5;
-  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
-  padding: 10px 20px; border-radius: 2px; text-decoration: none;
-  transition: top .2s;
-}
-.skip-link:focus { top: 8px; }
-/* High contrast mode support */
-@media (forced-colors: active) {
-  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
-  .note-card.is-real .note-pin { border: 3px solid Highlight; }
-}
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-}
-
-/* ============================================================
-   MULTI-STEP MODAL
-   ============================================================ */
-.wish-steps {
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: var(--sp-4); gap: 0;
-}
-.wish-step-dot {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
-  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .3s cubic-bezier(0.16,1,0.3,1);
-  flex-shrink: 0;
-}
-.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
-.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
-.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
-
-/* Category grid */
-.category-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  margin-bottom: var(--sp-2);
-}
-@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
-.cat-btn {
-  padding: 10px 6px; border-radius: 8px;
-  border: 1.5px solid rgba(30,34,53,.12);
-  background: #FAF8F5; color: #1E2235;
-  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
-  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
-  text-align: center; line-height: 1.3;
-}
-.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
-.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
-
-/* Wish writer preview */
-.wish-writer-wrap { margin-bottom: 8px; }
-.wish-preview-note {
-  background: #F5E580; border-radius: 2px 8px 2px 2px;
-  padding: 20px 14px 12px; position: relative;
-  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
-  margin-bottom: 10px; min-height: 70px;
-  transform: rotate(-0.8deg);
-  transition: background .3s;
-}
-.wish-preview-note.n-yellow { background: #F5E580; }
-.wish-preview-note.n-pink   { background: #F2C0D4; }
-.wish-preview-note.n-blue   { background: #BAE4F5; }
-.wish-preview-note.n-green  { background: #B8F0D4; }
-.wish-preview-note.n-orange { background: #F5DDB0; }
-.wish-preview-note.n-lav    { background: #DDB8F5; }
-.wish-preview-pin {
-  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
-  width: 16px; height: 16px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-.wish-preview-text {
-  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
-  color: #1A1008; font-style: italic; min-height: 40px;
-  transition: all .15s;
-}
-.wish-prompts {
-  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
-}
-.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
-.wish-prompt-chip {
-  padding: 4px 12px; border-radius: 50px;
-  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
-  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
-  cursor: pointer; transition: all .15s; white-space: nowrap;
-}
-.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
-
-/* Read aloud button */
-.a11y-speak-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 12px; border-radius: 2px;
-  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
-  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
-  cursor: pointer; transition: all .15s; margin-top: 6px;
-}
-.a11y-speak-btn:hover { background: #EEE9E2; }
-
-/* Wish textarea magic — bigger, friendlier */
-.wish-ta-magic {
-  min-height: 80px; font-size: 16px !important;
-  font-family: var(--fn-body) !important;
-  font-style: italic;
-  transition: border-color .2s, box-shadow .2s;
-}
-.wish-ta-magic:focus {
-  border-color: var(--urgency) !important;
-  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
-}
-
-/* Final preview note (step 3) */
-.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
-.final-preview-note {
-  display: inline-block; background: #F5E580;
-  border-radius: 2px 12px 2px 2px;
-  padding: 26px 20px 18px; position: relative;
-  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
-  max-width: 320px; width: 100%; text-align: left;
-  transform: rotate(-1deg);
-  margin-bottom: 6px;
-}
-.final-preview-text {
-  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
-  color: #1A1008; font-style: italic; min-height: 50px;
-}
-.final-preview-cat {
-  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
-  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
-}
-.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
-
-/* ============================================================
-   EACH ONE LIFT ONE — post-wish sharing section
-   ============================================================ */
-.each-one-lift-one {
-  max-width: 400px; margin: 0 auto 21px;
-  background: var(--card);
-  border: 1px solid rgba(30,34,53,.1);
-  border-radius: 2px 16px 2px 16px;
-  padding: 21px 24px;
-  text-align: center;
-  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
-}
-.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
-.eolo-title {
-  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
-  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
-  font-variation-settings: 'opsz' 40;
-}
-.eolo-body {
-  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
-  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
-}
-.eolo-nudge {
-  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
-  color: var(--urgency); margin-bottom: 16px; font-style: italic;
-}
-.eolo-share-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
-}
-.eolo-share-btn {
-  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
-  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
-  cursor: pointer; color: var(--text); transition: all .2s;
-}
-.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
-.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
-.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
-.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
-.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
-.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
-</style>
 
 <!-- ============================================================
      JAVASCRIPT
@@ -3693,6 +3712,31 @@ function openWishDetail(id){
   // Wish text
   document.getElementById('wish-detail-text').textContent = w.wishText || '';
 
+  // Show translate button for non-English wishes
+  const wishLang = w.lang || 'en';
+  const userLang = (navigator.language || 'en').split('-')[0];
+  const transRow  = document.getElementById('wish-translate-row');
+  const transBox  = document.getElementById('wish-translated');
+  const transText = document.getElementById('wish-translated-text');
+  const transStatus = document.getElementById('wish-translate-status');
+  if(transRow){
+    transRow.dataset.wishId   = w.id || '';
+    transRow.dataset.wishText = w.wishText || '';
+    transRow.dataset.wishLang = wishLang;
+    // Show if wish is not in user's language
+    const showTrans = wishLang !== userLang && wishLang !== 'en';
+    transRow.style.display = showTrans ? 'flex' : 'none';
+    // Also offer translate to English if wish is non-English
+    const alwaysShow = wishLang !== 'en';
+    transRow.style.display = alwaysShow ? 'flex' : 'none';
+    // Reset any previous translation
+    if(transBox)   transBox.style.display = 'none';
+    if(transText)  transText.textContent  = '';
+    if(transStatus) transStatus.textContent = '';
+    const btn = document.getElementById('wish-translate-btn');
+    if(btn){ btn.disabled = false; btn.textContent = '🌐 Translate to English'; }
+  }
+
   // Cheeky response
   const cheekyEl = document.getElementById('wish-detail-cheeky');
   if(w.cheekyResponse){
@@ -3937,6 +3981,150 @@ function paintLB(donors){
   }
 }
 paintLB(null);
+
+/* ============================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; top: -100px; left: 21px; z-index: 9999;
+  background: var(--urgency); color: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: 2px; text-decoration: none;
+  transition: top .2s;
+}
+.skip-link:focus { top: 8px; }
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
+  .note-card.is-real .note-pin { border: 3px solid Highlight; }
+}
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ============================================================
+   MULTI-STEP MODAL
+   ============================================================ */
+.wish-steps {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-4); gap: 0;
+}
+.wish-step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
+  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s cubic-bezier(0.16,1,0.3,1);
+  flex-shrink: 0;
+}
+.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
+.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
+.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
+
+/* Category grid */
+.category-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: var(--sp-2);
+}
+@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
+.cat-btn {
+  padding: 10px 6px; border-radius: 8px;
+  border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; color: #1E2235;
+  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
+  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
+  text-align: center; line-height: 1.3;
+}
+.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
+.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
+
+/* Wish writer preview */
+.wish-writer-wrap { margin-bottom: 8px; }
+.wish-preview-note {
+  background: #F5E580; border-radius: 2px 8px 2px 2px;
+  padding: 20px 14px 12px; position: relative;
+  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
+  margin-bottom: 10px; min-height: 70px;
+  transform: rotate(-0.8deg);
+  transition: background .3s;
+}
+.wish-preview-note.n-yellow { background: #F5E580; }
+.wish-preview-note.n-pink   { background: #F2C0D4; }
+.wish-preview-note.n-blue   { background: #BAE4F5; }
+.wish-preview-note.n-green  { background: #B8F0D4; }
+.wish-preview-note.n-orange { background: #F5DDB0; }
+.wish-preview-note.n-lav    { background: #DDB8F5; }
+.wish-preview-pin {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.wish-preview-text {
+  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
+  color: #1A1008; font-style: italic; min-height: 40px;
+  transition: all .15s;
+}
+.wish-prompts {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
+}
+.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
+.wish-prompt-chip {
+  padding: 4px 12px; border-radius: 50px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
+
+/* Read aloud button */
+.a11y-speak-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 2px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
+  cursor: pointer; transition: all .15s; margin-top: 6px;
+}
+.a11y-speak-btn:hover { background: #EEE9E2; }
+
+/* Wish textarea magic — bigger, friendlier */
+.wish-ta-magic {
+  min-height: 80px; font-size: 16px !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic;
+  transition: border-color .2s, box-shadow .2s;
+}
+.wish-ta-magic:focus {
+  border-color: var(--urgency) !important;
+  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
+}
+
+/* Final preview note (step 3) */
+.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
+.final-preview-note {
+  display: inline-block; background: #F5E580;
+  border-radius: 2px 12px 2px 2px;
+  padding: 26px 20px 18px; position: relative;
+  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
+  max-width: 320px; width: 100%; text-align: left;
+  transform: rotate(-1deg);
+  margin-bottom: 6px;
+}
+.final-preview-text {
+  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
+  color: #1A1008; font-style: italic; min-height: 50px;
+}
+.final-preview-cat {
+  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
+  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
+}
+.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
 
 /* ============================================================
    MODAL
@@ -4380,6 +4568,47 @@ setInterval(() => { if(Math.random() > .65) mascotSpeak(); }, 18000);
 setTimeout(mascotSpeak, 3500);
 
 /* ============================================================
+   EACH ONE LIFT ONE — post-wish sharing section
+   ============================================================ */
+.each-one-lift-one {
+  max-width: 400px; margin: 0 auto 21px;
+  background: var(--card);
+  border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 16px 2px 16px;
+  padding: 21px 24px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
+}
+.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
+.eolo-title {
+  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
+  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
+  font-variation-settings: 'opsz' 40;
+}
+.eolo-body {
+  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
+  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
+}
+.eolo-nudge {
+  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
+  color: var(--urgency); margin-bottom: 16px; font-style: italic;
+}
+.eolo-share-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
+}
+.eolo-share-btn {
+  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  cursor: pointer; color: var(--text); transition: all .2s;
+}
+.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
+.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
+.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
+.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
+.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
+
+/* ============================================================
    SCROLL TO TOP
    ============================================================ */
 window.addEventListener('scroll', () => {
@@ -4396,137 +4625,187 @@ window.addEventListener('scroll', () => {
    Queue text is intentionally vague — no timing promised.
    ============================================================ */
 const WARMUP_WISHES = (function(){
-  const texts = [
-    "Help with groceries until my benefits restart",
-    "A winter coat for my daughter, size 8",
-    "School shoes for my twins before September",
-    "Top up my gas meter — winter is brutal",
-    "Three days of food while I wait for my first paycheck",
-    "Baby formula — payday is 9 days away",
-    "Connect me to a debt advice charity near Birmingham",
-    "A secondhand laptop so I can work from home",
-    "Bus pass to get to my new job for the first month",
-    "Eye test and glasses — I cannot afford both",
-    "Help with my daughter's school trip fee",
-    "A slow cooker so I can batch cook and save on bills",
-    "Phone credit so I can call my mum who is unwell",
-    "Nappies until my child benefit comes through",
-    "A bed frame — I have been sleeping on the floor for 3 months",
-    "Dental appointment — I have been in pain for weeks",
-    "Children's birthday present — she thinks I forgot",
-    "Help with council tax arrears notice",
-    "A blanket — my heating is broken and landlord ignores me",
-    "Data on my phone so my kids can do homework",
-    "New trainers for my son — his have holes in",
-    "Connect me to a food bank in South London",
-    "Prescription costs I cannot cover this month",
-    "Emergency groceries — my ESA was delayed",
-    "A haircut before my job interview on Tuesday",
-    "Warm socks and gloves for my elderly dad",
-    "School uniform for secondary school next year",
-    "A fan for the summer — my toddler cannot sleep in the heat",
-    "Help finding a pro-bono solicitor for my housing case",
-    "A secondhand bike so I can get to work",
-    "My electric key needs topping up — I have run out",
-    "Craft supplies for my son who has severe anxiety — helps him cope",
-    "A working kettle — mine died and I have a newborn",
-    "Parking fines I cannot pay — risk losing my delivery job",
-    "A fridge — currently keeping food in cool bags",
-    "Swimming lessons for my daughter — she is the only one in class who cannot swim",
-    "Emergency pet food — my dog has not eaten properly in two days",
-    "Curtains for my bedroom — landlord left none",
-    "Connect me with a local mental health support group",
-    "Iron and ironing board — I have a job but cannot look presentable",
-    "Help with MOT costs — without it I lose my income",
-    "Wool and needles — knitting keeps my depression manageable",
-    "A printer cartridge — I cannot submit my college work",
-    "Three days of food for my family after a card error wiped my account",
-    "A stairgate — my 14-month-old is everywhere",
-    "Help with a DBS check cost for my care work application",
-    "Bedding for a new tenancy — starting fresh with nothing",
-    "A hand mixer — I bake to de-stress and my mixer broke",
-    "Connect me to an energy debt charity",
-    "A warm meal tonight — long story, but I have had nothing since yesterday",
-    "Colouring books for my children during the school holidays",
-    "A working lamp — I am studying in the dark",
-    "Help with optician costs for my autistic son",
-    "A door lock — my previous tenants damaged it and landlord refuses",
-    "Baby monitor — mine broke and I cannot sleep without it",
-    "A secondhand guitar — music is my only peace",
-    "Connect me to a domestic violence support charity",
-    "Baking ingredients — I sell cakes to top up my income and I have run out",
-    "A waterproof jacket for my daily walk to school",
-    "Food vouchers — I have a family of five and nothing in the cupboard",
-    "Help with a community centre fee to run my mental health group",
-    "A rollator for my gran — she keeps falling",
-    "Printer paper and ink for my small business",
-    "Connect me to an immigration legal advice service",
-    "A cot mattress — I have the cot but not the mattress",
-    "Seeds and a grow bag — I want to teach my kids to garden",
-    "Emergency cat food — she is my only company",
-    "A second-hand treadmill — I have severe agoraphobia and need to exercise",
-    "Help with a late rent payment while I wait for UC to be processed",
-    "Flooring for my daughter's room — it is bare concrete",
-    "A journal — I have been told writing will help my PTSD",
-    "Connect me to a bereavement counsellor",
-    "Art supplies — painting is how I cope with my disability",
-    "A car seat for my newborn so we can leave the hospital",
-    "Winter boots — my current ones have split",
-    "Emergency phone credit to reach social services",
-    "A weighted blanket for my son who has sensory needs",
-    "Help with a solicitor letter for my unfair dismissal",
-    "A second-hand vacuum cleaner — mine died two months ago",
-    "Nappies and wipes — I have exactly four left",
-    "A standing desk so I can work without back pain",
-    "Connect me to a Citizens Advice appointment urgently",
-    "A high chair — baby is ready for solids",
-    "Wool to finish the jumpers I am knitting for Christmas",
-    "Help with funeral costs for my father — I am the only one left",
-    "A lunchbox for my son — he is the only one who brings crisps in a bag",
-    "Petrol to get to my hospital appointment 30 miles away",
-    "A microwave — cooking on one ring is exhausting with three kids",
-    "Connect me to a homelessness prevention service",
-    "A keyboard for my laptop — mine is missing three keys",
-    "Help with a bailiff visit — I did not know about the debt",
-    "Painkillers — I cannot afford them and I have chronic pain",
-    "A pair of jeans without holes for my interview next week",
-    "Seeds for my windowsill — it is the only thing that makes me feel okay",
-    "Connect me to a free counselling service",
-    "A second-hand rocking chair — I breastfeed all night",
-    "Emergency food parcel — I have used my allocation",
-    "A chest of drawers — our clothes live in bin bags",
-    "Help with my son's school photograph — every other child will have one",
-    "A working shower head — I have been using a jug",
+  /* Distribution: 40% US, 30% UK, 15% CA, 5% AU, 10% rest of world */
+  const GEO = [
+    /* 40 slots US  */ {f:'🇺🇸',c:'US',n:'United States'},
+    {f:'🇺🇸',c:'US',n:'United States'},{f:'🇺🇸',c:'US',n:'United States'},
+    {f:'🇺🇸',c:'US',n:'United States'},{f:'🇺🇸',c:'US',n:'United States'},
+    {f:'🇺🇸',c:'US',n:'United States'},{f:'🇺🇸',c:'US',n:'United States'},
+    {f:'🇺🇸',c:'US',n:'United States'},{f:'🇺🇸',c:'US',n:'United States'},
+    /* 30 UK  */ {f:'🇬🇧',c:'GB',n:'United Kingdom'},
+    {f:'🇬🇧',c:'GB',n:'United Kingdom'},{f:'🇬🇧',c:'GB',n:'United Kingdom'},
+    {f:'🇬🇧',c:'GB',n:'United Kingdom'},{f:'🇬🇧',c:'GB',n:'United Kingdom'},
+    {f:'🇬🇧',c:'GB',n:'United Kingdom'},{f:'🇬🇧',c:'GB',n:'United Kingdom'},
+    /* 15 CA  */ {f:'🇨🇦',c:'CA',n:'Canada'},
+    {f:'🇨🇦',c:'CA',n:'Canada'},{f:'🇨🇦',c:'CA',n:'Canada'},
+    {f:'🇨🇦',c:'CA',n:'Canada'},{f:'🇨🇦',c:'CA',n:'Canada'},
+    /* 5 AU  */ {f:'🇦🇺',c:'AU',n:'Australia'},{f:'🇦🇺',c:'AU',n:'Australia'},
+    /* Rest of world (authentic voices — some non-English) */
+    {f:'🇳🇬',c:'NG',n:'Nigeria'},{f:'🇳🇬',c:'NG',n:'Nigeria'},
+    {f:'🇬🇭',c:'GH',n:'Ghana'},  {f:'🇰🇪',c:'KE',n:'Kenya'},
+    {f:'🇿🇦',c:'ZA',n:'South Africa'},
+    {f:'🇮🇳',c:'IN',n:'India'},  {f:'🇮🇳',c:'IN',n:'India'},
+    {f:'🇵🇭',c:'PH',n:'Philippines'},
+    {f:'🇧🇷',c:'BR',n:'Brazil'}, {f:'🇧🇷',c:'BR',n:'Brazil'},
+    {f:'🇲🇽',c:'MX',n:'Mexico'}, {f:'🇮🇪',c:'IE',n:'Ireland'},
+    {f:'🇸🇬',c:'SG',n:'Singapore'},{f:'🇳🇿',c:'NZ',n:'New Zealand'},
+    {f:'🇯🇲',c:'JM',n:'Jamaica'}, {f:'🇹🇹',c:'TT',n:'Trinidad & Tobago'},
+    {f:'🇵🇰',c:'PK',n:'Pakistan'},{f:'🇧🇩',c:'BD',n:'Bangladesh'},
+    {f:'🇫🇷',c:'FR',n:'France'},  {f:'🇩🇪',c:'DE',n:'Germany'},
   ];
 
-  const countries = [
-    {flag:'🇬🇧', code:'GB'}, {flag:'🇺🇸', code:'US'}, {flag:'🇳🇬', code:'NG'},
-    {flag:'🇿🇦', code:'ZA'}, {flag:'🇨🇦', code:'CA'}, {flag:'🇦🇺', code:'AU'},
-    {flag:'🇬🇭', code:'GH'}, {flag:'🇰🇪', code:'KE'}, {flag:'🇮🇪', code:'IE'},
-    {flag:'🇸🇬', code:'SG'}, {flag:'🇳🇿', code:'NZ'}, {flag:'🇺🇬', code:'UG'},
-  ];
-  const cols  = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
-  const cats  = ['money','medical','tech','education','baby','connect','emotional','other'];
-  const rots  = [-3,-2,-1,0,1,2,3];
+  /* Texts per country — realistic, human, specific. Non-English where appropriate */
+  const TEXTS = {
+    US: [
+      "Help covering my insulin this month — insurance lapsed",
+      "Groceries for my kids until my disability check arrives",
+      "A winter coat for my 7-year-old in Chicago — it hits -10 this week",
+      "Bus pass to get to dialysis three times a week",
+      "School lunch money for my daughter — she is the only one without",
+      "Help with my electric bill before they cut us off",
+      "A working laptop so I can take online classes and get off welfare",
+      "Baby formula — WIC ran out and payday is 11 days away",
+      "Connect me to an eviction prevention service in Houston",
+      "A backpack and supplies for my son starting 6th grade",
+      "Prescription copay I cannot cover — I need it daily",
+      "Pet food for my dog — she keeps me sane through my depression",
+      "Gas money to get to my job interview on Friday in Atlanta",
+      "A used phone — I lost mine and I cannot be reached for jobs",
+      "Help with my rent gap — I start my new job next week",
+      "Dental pain for 3 weeks — I cannot afford the appointment",
+      "A space heater — my landlord will not fix the heat in Michigan",
+      "Diapers and wipes until my SNAP card reloads",
+      "A fan for my elderly mom in Phoenix — no AC, 105 degrees",
+      "Textbooks for my community college nursing program",
+    ],
+    GB: [
+      "Help with groceries until my Universal Credit is processed",
+      "Top up my electric key — I have run out in the middle of winter",
+      "School shoes for my twins starting in September",
+      "A winter coat for my daughter — she has been wearing her summer one",
+      "Emergency food parcel — I have exceeded my food bank allocation",
+      "Help with a council tax arrears letter I just received",
+      "Connect me to a free debt advice service in Birmingham",
+      "A secondhand laptop so my daughter can do her GCSEs at home",
+      "Nappies and formula until my child benefit payment arrives",
+      "A bed — I have been sleeping on the floor for two months",
+      "Prescription charges I cannot cover this month",
+      "Help with my MOT — I will lose my delivery job without it",
+      "Bus pass for a month so I can get to my new job",
+      "A blanket — my boiler is broken and my landlord ignores me",
+      "Connect me to a domestic abuse support service near Sheffield",
+      "Dental treatment — I have been in pain for six weeks",
+      "A rollator for my gran — she keeps falling without it",
+      "A slow cooker so I can batch cook and save on energy bills",
+      "Phone credit so I can call the hospital about my results",
+      "A haircut before my job interview on Monday",
+    ],
+    CA: [
+      "Help with groceries until my EI payments start",
+      "Winter boots for my son — his are falling apart in -20",
+      "A space heater while my furnace is being repaired in Winnipeg",
+      "Connect me to a food bank in Vancouver that accepts walk-ins",
+      "School supplies for my daughter starting Grade 1",
+      "Help with my first and last month rent deposit",
+      "A used laptop for my online college program",
+      "Baby formula — I cannot get to a store and delivery takes a week",
+      "Transit pass to get to my new job downtown Toronto",
+      "Help covering my Trillium drug benefit gap",
+      "A warm jacket for my father who walks to his care appointments",
+      "Grocery gift card — my EBT card was compromised",
+      "Connect me to free immigration legal aid in Calgary",
+      "Textbooks for my first semester at Ryerson",
+      "Help with my electricity bill in Nova Scotia this winter",
+    ],
+    AU: [
+      "Help with groceries until my Centrelink payment comes through",
+      "A fan for my nan in Brisbane — her old one broke in the heat",
+      "Connect me to a housing support service in Western Australia",
+      "School uniform for my son starting high school in Melbourne",
+      "Help covering my gap payment for a specialist appointment",
+    ],
+    NG: [
+      "Biko, I need help with my school fees this semester in Lagos",
+      "Data subscription so my children can attend online school",
+    ],
+    GH: [
+      "Please help with my WASSCE exam registration fees",
+    ],
+    KE: [
+      "Nisaidie kupata data ili watoto wangu waweze kusoma mtandaoni",
+    ],
+    ZA: [
+      "Help with school fees for my child in Johannesburg",
+    ],
+    IN: [
+      "Mujhe apni beti ki school fees ke liye madad chahiye",
+      "Please help me get my daughter's medicine from the chemist this week",
+    ],
+    PH: [
+      "Tulong po para sa bayad-aral ng aking anak ngayong semestre",
+      "Need help buying rice for my family of five this week",
+    ],
+    BR: [
+      "Preciso de ajuda para pagar as contas de luz esse mes em Sao Paulo",
+      "Por favor me ajude a comprar comida para meus filhos essa semana",
+    ],
+    MX: [
+      "Necesito ayuda para los utiles escolares de mis hijos este ciclo",
+    ],
+    IE: [
+      "Help with groceries while I wait for my HAP payment to process",
+    ],
+    SG: [
+      "Help with my elderly mother's medical appointment transport",
+    ],
+    NZ: [
+      "Help with power bill before winter — Dunedin gets very cold",
+    ],
+    JM: [
+      "Help with my daughter's school book list this term",
+    ],
+    TT: [
+      "Please help with CXC exam fees for my son",
+    ],
+    PK: [
+      "Mujhe apne bachon ke liye ration lena hai is maheene",
+    ],
+    BD: [
+      "Amar meye'r school er boi kinon lagbe ei mahay",
+    ],
+    FR: [
+      "Besoin d aide pour payer les factures ce mois ci a Lyon",
+    ],
+    DE: [
+      "Brauche Hilfe mit den Lebensmitteln bis zum naechsten Zahltag",
+    ],
+  };
+
+  const fallback = TEXTS.US;
+  const cols     = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
+  const cats     = ['money','medical','tech','education','baby','connect','emotional','other'];
 
   const wishes = [];
   for(let i = 0; i < 1000; i++){
-    const geo    = countries[i % countries.length];
-    const daysAgo= Math.floor(i / 40);  // newer wishes at top
-    const d      = new Date(Date.now() - daysAgo * 86400000);
+    const geo      = GEO[i % GEO.length];
+    const txts     = TEXTS[geo.c] || fallback;
+    const text     = txts[i % txts.length];
+    const daysAgo  = Math.floor(i / 40);
+    const d        = new Date(Date.now() - daysAgo * 86400000 - Math.random() * 3600000 * 8);
     wishes.push({
-      id:     'warm_' + i,
-      wishText: texts[i % texts.length],
-      status:  'approved',
-      color:   cols[i % cols.length],
-      rot:     rots[i % rots.length],
-      cat:     cats[i % cats.length],
-      country: geo.flag + ' ' + ({GB:'United Kingdom',US:'United States',NG:'Nigeria',
-        ZA:'South Africa',CA:'Canada',AU:'Australia',GH:'Ghana',KE:'Kenya',
-        IE:'Ireland',SG:'Singapore',NZ:'New Zealand',UG:'Uganda'}[geo.code]||geo.code),
-      countryCode: geo.code,
-      createdAt: { toDate: () => d },
-      warmup: true,  // flag: real wishes replace these first
+      id:          'warm_' + i,
+      wishText:    text,
+      lang:        geo.c === 'BR' ? 'pt' : geo.c === 'MX' ? 'es' : geo.c === 'FR' ? 'fr' :
+                   geo.c === 'DE' ? 'de' : geo.c === 'KE' ? 'sw' : geo.c === 'NG' ? 'ig' :
+                   geo.c === 'PH' ? 'tl' : geo.c === 'PK' ? 'ur' : geo.c === 'BD' ? 'bn' :
+                   geo.c === 'IN' ? 'hi' : 'en',
+      status:      'approved',
+      color:       cols[i % cols.length],
+      cat:         cats[i % cats.length],
+      country:     geo.f + ' ' + geo.n,
+      countryCode: geo.c,
+      createdAt:   { toDate: () => d },
+      warmup:      true,
     });
   }
   return wishes;
@@ -5104,6 +5383,110 @@ window.generateGuardianReceipt = function(wishData, guardianEmail){
 /* ============================================================
    EACH ONE LIFT ONE — viral sharing after wish posted
    ============================================================ */
+
+/* ============================================================
+   WISH PIPELINE — render queued wishes into the tube
+   ============================================================ */
+function paintPipeline(){
+  const tube = document.getElementById('pipeline-tube');
+  const countEl = document.getElementById('pipeline-count');
+  if(!tube) return;
+
+  // Get queued wishes (warmup or real)
+  const queued = (window.allWishes || []).filter(w => w.status === 'queued' || w.warmup);
+  const show   = queued.slice(0, 12);  // max 12 in tube at once
+
+  if(show.length === 0){
+    tube.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--fn-mono);font-size:11px;color:#6B7080;font-style:italic;">Queue is clear — all wishes live!</div>';
+    if(countEl) countEl.textContent = '';
+    return;
+  }
+
+  const cols   = ['pipe-wish--y','pipe-wish--p','pipe-wish--b','pipe-wish--g','pipe-wish--o','pipe-wish--l'];
+  const tubeW  = tube.offsetWidth || 700;
+  const spacing= Math.max(180, tubeW / show.length);
+
+  tube.innerHTML = show.map((w, i) => {
+    const col  = cols[i % cols.length];
+    const dur  = (14 + i * 1.8).toFixed(1);
+    const delay= -(i * (14 / show.length)).toFixed(1);
+    const flag = w.country ? w.country.split(' ')[0] : '🌍';
+    const text = (w.wishText || '').slice(0, 55) + ((w.wishText||'').length > 55 ? '...' : '');
+    return `<div class="pipe-wish ${col}"
+      style="--dur:${dur}s;--delay:${delay}s;--tube-w:${tubeW}px;"
+      title="${(w.wishText||'').replace(/"/g,"'").slice(0,80)}">
+      <div class="pipe-pin"></div>
+      <div class="pipe-wish-inner">
+        <span class="pipe-wish-flag">${flag}</span>
+        <span class="pipe-wish-text">${text}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  if(countEl){
+    const total = queued.length;
+    countEl.textContent = total + ' wish' + (total !== 1 ? 'es' : '') + ' in the queue — the wall never sleeps.';
+  }
+}
+
+// Repaint pipeline when tab switches to guardian tab
+const _origShowTab2 = window.showTab;
+window.showTab = function(tab){
+  if(_origShowTab2) _origShowTab2(tab);
+  if(tab === 'guard') setTimeout(paintPipeline, 100);
+};
+// Also paint on initial load
+setTimeout(paintPipeline, 1500);
+// Repaint every 30s
+setInterval(paintPipeline, 30000);
+
+
+/* ============================================================
+   TRANSLATE WISH — MyMemory free API, no key required
+   5000 chars/day free. For production, upgrade to paid key.
+   ============================================================ */
+async function translateWish(){
+  const row    = document.getElementById('wish-translate-row');
+  const btn    = document.getElementById('wish-translate-btn');
+  const status = document.getElementById('wish-translate-status');
+  const box    = document.getElementById('wish-translated');
+  const out    = document.getElementById('wish-translated-text');
+  if(!row || !btn || !out) return;
+
+  const text = row.dataset.wishText || '';
+  const lang = row.dataset.wishLang || 'pt';
+  if(!text){ return; }
+
+  btn.disabled     = true;
+  btn.textContent  = '🌐 Translating...';
+  if(status) status.textContent = '';
+
+  try {
+    const url  = 'https://api.mymemory.translated.net/get?q='
+               + encodeURIComponent(text)
+               + '&langpair=' + lang + '|en'
+               + '&de=admin@wallwishes.xyz';
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const translated = data?.responseData?.translatedText;
+    if(translated && translated !== text){
+      if(out) out.textContent = translated;
+      if(box) box.style.display = 'block';
+      btn.textContent = '🌐 Translated';
+      if(status) status.textContent = 'via MyMemory';
+      announceA11y('Wish translated to English.');
+    } else {
+      if(status) status.textContent = 'Translation unavailable.';
+      btn.textContent = '🌐 Translate';
+      btn.disabled = false;
+    }
+  } catch(err){
+    if(status) status.textContent = 'Translation failed. Check connection.';
+    btn.textContent = '🌐 Translate';
+    btn.disabled = false;
+  }
+}
+
 function shareEOLO(platform){
   const url = 'https://wishwall.xyz';
   const msg = 'I just pinned a wish on The Wish Wall. Strangers from around the world help make real wishes come true. Check it out.';
