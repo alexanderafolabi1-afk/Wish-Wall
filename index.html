@@ -178,7 +178,7 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import {
     getFirestore, collection, addDoc, getDocs, doc, updateDoc,
-    onSnapshot, query, where, orderBy, serverTimestamp, getDoc
+    onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -200,7 +200,7 @@
       donors: collection(db, 'donors'),
       ledger: doc(db, 'meta', 'ledger')
     };
-    window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDoc };
+    window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, limit, getDocs, serverTimestamp, getDoc };
 
     // Real-time wish listener
     const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
@@ -2830,6 +2830,197 @@ button { touch-action: manipulation; }
 </div>
 
 <!-- ============================================================
+     STYLES: accessibility utilities + multi-step modal + wish form
+     (originally misplaced inside <script> tag — moved here to fix JS syntax error)
+     ============================================================ -->
+<style>
+/* ============================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; top: -100px; left: 21px; z-index: 9999;
+  background: var(--urgency); color: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: 2px; text-decoration: none;
+  transition: top .2s;
+}
+.skip-link:focus { top: 8px; }
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
+  .note-card.is-real .note-pin { border: 3px solid Highlight; }
+}
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ============================================================
+   MULTI-STEP MODAL
+   ============================================================ */
+.wish-steps {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: var(--sp-4); gap: 0;
+}
+.wish-step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
+  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s cubic-bezier(0.16,1,0.3,1);
+  flex-shrink: 0;
+}
+.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
+.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
+.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
+
+/* Category grid */
+.category-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: var(--sp-2);
+}
+@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
+.cat-btn {
+  padding: 10px 6px; border-radius: 8px;
+  border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; color: #1E2235;
+  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
+  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
+  text-align: center; line-height: 1.3;
+}
+.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
+.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
+
+/* Wish writer preview */
+.wish-writer-wrap { margin-bottom: 8px; }
+.wish-preview-note {
+  background: #F5E580; border-radius: 2px 8px 2px 2px;
+  padding: 20px 14px 12px; position: relative;
+  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
+  margin-bottom: 10px; min-height: 70px;
+  transform: rotate(-0.8deg);
+  transition: background .3s;
+}
+.wish-preview-note.n-yellow { background: #F5E580; }
+.wish-preview-note.n-pink   { background: #F2C0D4; }
+.wish-preview-note.n-blue   { background: #BAE4F5; }
+.wish-preview-note.n-green  { background: #B8F0D4; }
+.wish-preview-note.n-orange { background: #F5DDB0; }
+.wish-preview-note.n-lav    { background: #DDB8F5; }
+.wish-preview-pin {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.wish-preview-text {
+  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
+  color: #1A1008; font-style: italic; min-height: 40px;
+  transition: all .15s;
+}
+.wish-prompts {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
+}
+.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
+.wish-prompt-chip {
+  padding: 4px 12px; border-radius: 50px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
+
+/* Read aloud button */
+.a11y-speak-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 2px;
+  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
+  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
+  cursor: pointer; transition: all .15s; margin-top: 6px;
+}
+.a11y-speak-btn:hover { background: #EEE9E2; }
+
+/* Wish textarea magic — bigger, friendlier */
+.wish-ta-magic {
+  min-height: 80px; font-size: 16px !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic;
+  transition: border-color .2s, box-shadow .2s;
+}
+.wish-ta-magic:focus {
+  border-color: var(--urgency) !important;
+  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
+}
+
+/* Final preview note (step 3) */
+.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
+.final-preview-note {
+  display: inline-block; background: #F5E580;
+  border-radius: 2px 12px 2px 2px;
+  padding: 26px 20px 18px; position: relative;
+  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
+  max-width: 320px; width: 100%; text-align: left;
+  transform: rotate(-1deg);
+  margin-bottom: 6px;
+}
+.final-preview-text {
+  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
+  color: #1A1008; font-style: italic; min-height: 50px;
+}
+.final-preview-cat {
+  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
+  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
+}
+.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
+
+/* ============================================================
+   EACH ONE LIFT ONE — post-wish sharing section
+   ============================================================ */
+.each-one-lift-one {
+  max-width: 400px; margin: 0 auto 21px;
+  background: var(--card);
+  border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 16px 2px 16px;
+  padding: 21px 24px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
+}
+.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
+.eolo-title {
+  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
+  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
+  font-variation-settings: 'opsz' 40;
+}
+.eolo-body {
+  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
+  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
+}
+.eolo-nudge {
+  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
+  color: var(--urgency); margin-bottom: 16px; font-style: italic;
+}
+.eolo-share-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
+}
+.eolo-share-btn {
+  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  cursor: pointer; color: var(--text); transition: all .2s;
+}
+.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
+.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
+.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
+.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
+.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
+</style>
+
+<!-- ============================================================
      JAVASCRIPT
      ============================================================ -->
 <script>
@@ -3748,150 +3939,6 @@ function paintLB(donors){
 paintLB(null);
 
 /* ============================================================
-   ACCESSIBILITY UTILITIES
-   ============================================================ */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-.skip-link {
-  position: absolute; top: -100px; left: 21px; z-index: 9999;
-  background: var(--urgency); color: #FAF8F5;
-  font-family: var(--fn-mono); font-size: 13px; font-weight: 700;
-  padding: 10px 20px; border-radius: 2px; text-decoration: none;
-  transition: top .2s;
-}
-.skip-link:focus { top: 8px; }
-/* High contrast mode support */
-@media (forced-colors: active) {
-  .note-card, .pin-btn, .submit-btn { border: 2px solid ButtonText; }
-  .note-card.is-real .note-pin { border: 3px solid Highlight; }
-}
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-}
-
-/* ============================================================
-   MULTI-STEP MODAL
-   ============================================================ */
-.wish-steps {
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: var(--sp-4); gap: 0;
-}
-.wish-step-dot {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: #EEE9E2; border: 2px solid rgba(30,34,53,.15);
-  color: #6B7080; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .3s cubic-bezier(0.16,1,0.3,1);
-  flex-shrink: 0;
-}
-.wish-step-dot.active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; transform: scale(1.1); }
-.wish-step-dot.done   { background: #40D088; border-color: #40D088; color: #FAF8F5; }
-.wish-step-line { flex: 1; height: 2px; background: #EEE9E2; max-width: 60px; }
-
-/* Category grid */
-.category-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-  margin-bottom: var(--sp-2);
-}
-@media(max-width:480px){ .category-grid { grid-template-columns: repeat(2,1fr); } }
-.cat-btn {
-  padding: 10px 6px; border-radius: 8px;
-  border: 1.5px solid rgba(30,34,53,.12);
-  background: #FAF8F5; color: #1E2235;
-  font-family: var(--fn-body); font-size: 12px; font-weight: 400;
-  cursor: pointer; transition: all .2s cubic-bezier(0.16,1,0.3,1);
-  text-align: center; line-height: 1.3;
-}
-.cat-btn:hover { border-color: var(--urgency); background: #FAF4F0; transform: translateY(-2px); }
-.cat-btn--active { background: var(--urgency); border-color: var(--urgency); color: #FAF8F5; font-weight: 500; box-shadow: 3px 3px 0 rgba(212,74,30,.2); }
-
-/* Wish writer preview */
-.wish-writer-wrap { margin-bottom: 8px; }
-.wish-preview-note {
-  background: #F5E580; border-radius: 2px 8px 2px 2px;
-  padding: 20px 14px 12px; position: relative;
-  box-shadow: 3px 4px 0 rgba(30,34,53,.12);
-  margin-bottom: 10px; min-height: 70px;
-  transform: rotate(-0.8deg);
-  transition: background .3s;
-}
-.wish-preview-note.n-yellow { background: #F5E580; }
-.wish-preview-note.n-pink   { background: #F2C0D4; }
-.wish-preview-note.n-blue   { background: #BAE4F5; }
-.wish-preview-note.n-green  { background: #B8F0D4; }
-.wish-preview-note.n-orange { background: #F5DDB0; }
-.wish-preview-note.n-lav    { background: #DDB8F5; }
-.wish-preview-pin {
-  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
-  width: 16px; height: 16px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #E05025, #8B2010);
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-.wish-preview-text {
-  font-family: var(--fn-body); font-size: 14px; line-height: 1.5;
-  color: #1A1008; font-style: italic; min-height: 40px;
-  transition: all .15s;
-}
-.wish-prompts {
-  display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px;
-}
-.wish-prompt-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; margin-right: 2px; }
-.wish-prompt-chip {
-  padding: 4px 12px; border-radius: 50px;
-  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
-  font-family: var(--fn-body); font-size: 12px; color: #1E2235;
-  cursor: pointer; transition: all .15s; white-space: nowrap;
-}
-.wish-prompt-chip:hover { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
-
-/* Read aloud button */
-.a11y-speak-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 12px; border-radius: 2px;
-  border: 1px solid rgba(30,34,53,.12); background: #FAF8F5;
-  font-family: var(--fn-mono); font-size: 10px; color: #6B7080;
-  cursor: pointer; transition: all .15s; margin-top: 6px;
-}
-.a11y-speak-btn:hover { background: #EEE9E2; }
-
-/* Wish textarea magic — bigger, friendlier */
-.wish-ta-magic {
-  min-height: 80px; font-size: 16px !important;
-  font-family: var(--fn-body) !important;
-  font-style: italic;
-  transition: border-color .2s, box-shadow .2s;
-}
-.wish-ta-magic:focus {
-  border-color: var(--urgency) !important;
-  box-shadow: 0 0 0 3px rgba(212,74,30,.1) !important;
-}
-
-/* Final preview note (step 3) */
-.final-preview-wrap { text-align: center; margin-bottom: var(--sp-3); }
-.final-preview-note {
-  display: inline-block; background: #F5E580;
-  border-radius: 2px 12px 2px 2px;
-  padding: 26px 20px 18px; position: relative;
-  box-shadow: 5px 6px 0 rgba(30,34,53,.12);
-  max-width: 320px; width: 100%; text-align: left;
-  transform: rotate(-1deg);
-  margin-bottom: 6px;
-}
-.final-preview-text {
-  font-family: var(--fn-body); font-size: 16px; line-height: 1.6;
-  color: #1A1008; font-style: italic; min-height: 50px;
-}
-.final-preview-cat {
-  font-family: var(--fn-mono); font-size: 10px; color: rgba(26,16,8,.5);
-  margin-top: 10px; text-transform: uppercase; letter-spacing: .5px;
-}
-.final-preview-label { font-family: var(--fn-mono); font-size: 10px; color: #6B7080; }
-
-/* ============================================================
    MODAL
    ============================================================ */
 function openModal(){
@@ -4331,47 +4378,6 @@ function mascotSpeak(){
 }
 setInterval(() => { if(Math.random() > .65) mascotSpeak(); }, 18000);
 setTimeout(mascotSpeak, 3500);
-
-/* ============================================================
-   EACH ONE LIFT ONE — post-wish sharing section
-   ============================================================ */
-.each-one-lift-one {
-  max-width: 400px; margin: 0 auto 21px;
-  background: var(--card);
-  border: 1px solid rgba(30,34,53,.1);
-  border-radius: 2px 16px 2px 16px;
-  padding: 21px 24px;
-  text-align: center;
-  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
-}
-.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
-.eolo-title {
-  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
-  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
-  font-variation-settings: 'opsz' 40;
-}
-.eolo-body {
-  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
-  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
-}
-.eolo-nudge {
-  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
-  color: var(--urgency); margin-bottom: 16px; font-style: italic;
-}
-.eolo-share-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
-}
-.eolo-share-btn {
-  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
-  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
-  cursor: pointer; color: var(--text); transition: all .2s;
-}
-.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
-.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
-.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
-.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
-.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
-.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
 
 /* ============================================================
    SCROLL TO TOP
