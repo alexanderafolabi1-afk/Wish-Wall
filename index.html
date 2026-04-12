@@ -220,9 +220,7 @@
   } catch(e) {
     console.warn('Firebase not configured  -  running in demo mode:', e.message);
     window._firebaseReady = false;
-  }
-</script>
-<style>
+  }<style>
 /* ============================================================
    THE WISH WALL — Award-winning craft redesign
    Fraunces + Lexend + Sometype Mono
@@ -1695,6 +1693,47 @@ footer {
 .footer-story-content { padding: var(--sp-4); font-family: var(--fn-body); font-size: 13px; color: rgba(250,248,245,.45); line-height: 1.8; text-align: center; max-width: 560px; margin: 0 auto; }
 
 /* ============================================================
+   EACH ONE LIFT ONE — post-wish sharing section
+   ============================================================ */
+.each-one-lift-one {
+  max-width: 400px; margin: 0 auto 21px;
+  background: var(--card);
+  border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 16px 2px 16px;
+  padding: 21px 24px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
+}
+.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
+.eolo-title {
+  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
+  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
+  font-variation-settings: 'opsz' 40;
+}
+.eolo-body {
+  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
+  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
+}
+.eolo-nudge {
+  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
+  color: var(--urgency); margin-bottom: 16px; font-style: italic;
+}
+.eolo-share-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
+}
+.eolo-share-btn {
+  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  cursor: pointer; color: var(--text); transition: all .2s;
+}
+.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
+.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
+.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
+.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
+.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
+
+/* ============================================================
    SCROLL TO TOP
    ============================================================ */
 .scr-top {
@@ -1828,6 +1867,8 @@ button { touch-action: manipulation; }
     from { opacity: 0; transform: translateY(28px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+}
+</style>family:var(--fn-ui);font-size:13px;font-weight:700;color:var(--yellow);
 }
 </style>
 
@@ -2706,17 +2747,36 @@ button { touch-action: manipulation; }
     <div class="conf-ref-code" id="conf-refcode" onclick="copyRefCode(this)" title="Click to copy">XXXXX</div>
     <p class="conf-ref-desc">Share this code with <strong>3 friends</strong>. When all 3 pin a wish using your code, you earn <strong>1 WishCredit</strong>  -  worth $1 off your next wish or a Magic Pool donation. <br><small style="color:rgba(255,255,255,.35)">(<span id="conf-wishes-left">2</span> wish pin(s) remaining this year)</small></p>
     <div class="conf-ref-share-row">
-      <button class="conf-share-btn" onclick="shareRefTikTok()">🎵 Share on TikTok</button>
-      <button class="conf-share-btn" onclick="shareRefReddit()">👽 Share on Reddit</button>
-      <button class="conf-share-btn" onclick="copyRefCode(document.getElementById('conf-refcode'))">📋 Copy Code</button>
+      <button class="conf-share-btn" onclick="shareRefTikTok()">🎵 TikTok</button>
+      <button class="conf-share-btn" onclick="shareRefReddit()">👽 Reddit</button>
+      <button class="conf-share-btn" onclick="shareWish('twitter')">𝕏 X / Twitter</button>
+      <button class="conf-share-btn" onclick="copyRefCode(document.getElementById('conf-refcode'))">📋 Copy</button>
     </div>
   </div>
 
-  <div class="share-row">
-    <button class="share-btn" onclick="shareWish('twitter')">𝕏 Tweet it</button>
-    <button class="share-btn" onclick="shareWish('copy')">🔗 Copy link</button>
+  <!-- Each One Lift One section -->
+  <div class="each-one-lift-one">
+    <div class="eolo-icon">🌱</div>
+    <h3 class="eolo-title">Each one, lift one.</h3>
+    <p class="eolo-body">
+      Your wish is pinned. Now imagine if one person who sees this shares it with someone who can help —
+      and that person shares it with someone else. That is how wishes get granted.
+      Not algorithms. Not ad spend. People who give a damn.
+    </p>
+    <p class="eolo-nudge">
+      The more people who know The Wish Wall exists, the faster wishes get granted.
+      Including yours.
+    </p>
+    <div class="eolo-share-row">
+      <button class="eolo-share-btn eolo-tiktok" onclick="shareEOLO('tiktok')">🎵 Share on TikTok</button>
+      <button class="eolo-share-btn eolo-tw"     onclick="shareEOLO('twitter')">𝕏 Share on X</button>
+      <button class="eolo-share-btn eolo-wa"     onclick="shareEOLO('whatsapp')">💬 Share on WhatsApp</button>
+      <button class="eolo-share-btn eolo-copy"   onclick="shareEOLO('copy')">🔗 Copy Link</button>
+    </div>
+    <p class="eolo-footer">No account needed. No spam ever. Just one more person who might care.</p>
   </div>
-  <button class="back-btn" onclick="closeConf()">Back to the Wall 🧱</button>
+
+  <button class="back-btn" onclick="closeConf()">Back to the Wall &#8594;</button>
 </div>
 
 <!-- ============================================================
@@ -3225,11 +3285,11 @@ if(document.readyState === 'loading'){
 /* ============================================================
    RENDER WISHES
    ============================================================ */
-window.renderWishes = function(wishes){
+window.renderWishes = function(rawWishes){
+  const wishes     = getDisplayWishes(rawWishes);
   window.allWishes = wishes;
-  allWishes = window.allWishes;
-  window._lastWishes = wishes;
-  updateStats();
+  window._lastWishes = rawWishes || [];  // keep real wishes separately
+  updateStats(rawWishes);
   paintWall();
   paintSponsor();
 };
@@ -3873,10 +3933,143 @@ document.addEventListener('keydown', e => {
    CHAR COUNTER
    ============================================================ */
 function updateChar(){
-  const txt = document.getElementById('f-wish').value;
+  const el  = document.getElementById('f-wish');
   const ctr = document.getElementById('char-ctr');
-  ctr.textContent = `${txt.length} / 200`;
-  ctr.className = 'char-ctr' + (txt.length > 190 ? ' danger' : txt.length > 160 ? ' warn' : '');
+  if(!el || !ctr) return;
+  const len = el.value.length;
+  ctr.textContent = len + ' / 200';
+  ctr.style.color = len > 180 ? '#D44A1E' : len > 150 ? '#C97B30' : '#6B7080';
+}
+
+/* ============================================================
+   LIVE WISH PREVIEW
+   ============================================================ */
+function updateWishPreview(){
+  const val  = (document.getElementById('f-wish')?.value || '').trim();
+  const prev = document.getElementById('wish-preview-text');
+  const fin  = document.getElementById('final-preview-text');
+  const ph   = 'Your wish will appear here as you type...';
+  if(prev) prev.textContent = val || ph;
+  if(fin)  fin.textContent  = val || ph;
+}
+
+/* ============================================================
+   CATEGORY SELECTION
+   ============================================================ */
+let _selectedCat = 'other';
+const CAT_PROMPTS = {
+  money:     ['Help with groceries this week','Top up my electricity meter','Rent shortfall this month'],
+  medical:   ['Help with dental costs','Prescription I cannot afford','Medical transport costs'],
+  tech:      ['A laptop for studying','Headphones for my autistic child','Phone for job hunting'],
+  education: ['School fees shortfall','Textbooks for my course','Exam fees I cannot cover'],
+  baby:      ['Baby formula for the month','Nappies until payday','A secondhand pushchair'],
+  connect:   ['Connect me to a food bank','Legal aid referral','Mental health support'],
+  emotional: ['I am 3 years sober today','Just needed someone to know','A hug from the universe'],
+  other:     ['Something small but meaningful','A quiet wish for better days','I wish for...'],
+};
+
+function selectCat(btn, cat){
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.remove('cat-btn--active');
+    b.setAttribute('aria-pressed','false');
+  });
+  btn.classList.add('cat-btn--active');
+  btn.setAttribute('aria-pressed','true');
+  _selectedCat = cat;
+  const prompts = document.getElementById('wish-prompts');
+  if(prompts){
+    const chips  = prompts.querySelectorAll('.wish-prompt-chip');
+    const opts   = CAT_PROMPTS[cat] || CAT_PROMPTS.other;
+    chips.forEach((c, i) => { if(opts[i]) c.textContent = opts[i]; });
+  }
+  const badge = document.getElementById('final-preview-cat');
+  if(badge){
+    const labels = {money:'Groceries & Bills',medical:'Medical',tech:'Tech & Tools',
+      education:'Education',baby:'Baby & Family',connect:'Connection',
+      emotional:'Emotional Support',other:'Other'};
+    badge.textContent = labels[cat] || '';
+  }
+  announceA11y('Category: ' + btn.textContent);
+}
+
+function usePrompt(btn){
+  const el = document.getElementById('f-wish');
+  if(!el) return;
+  el.value = btn.textContent;
+  el.focus();
+  updateChar();
+  updateWishPreview();
+}
+
+/* ============================================================
+   MULTI-STEP NAVIGATION
+   ============================================================ */
+let _currentStep = 1;
+
+function goToStep(step){
+  if(step > _currentStep){
+    if(_currentStep === 1){
+      const wish = (document.getElementById('f-wish')?.value || '').trim();
+      if(!wish){
+        shake(document.getElementById('f-wish'));
+        announceA11y('Please write your wish before continuing.', true);
+        return;
+      }
+    }
+    if(_currentStep === 2){
+      const name  = (document.getElementById('f-name')?.value  || '').trim();
+      const email = (document.getElementById('f-email')?.value || '').trim();
+      const idchk = document.getElementById('f-id-confirm')?.checked;
+      if(!name) { shake(document.getElementById('f-name')); announceA11y('Please enter your full name.',true); return; }
+      if(!email || !email.includes('@')) { shake(document.getElementById('f-email')); announceA11y('Please enter a valid email.',true); return; }
+      if(!idchk) { announceA11y('Please tick the ID confirmation box.',true); return; }
+      updateWishPreview();
+    }
+  }
+  [1,2,3].forEach(s => {
+    const el = document.getElementById('modal-step-'+s);
+    if(el) el.style.display = s === step ? 'block' : 'none';
+  });
+  [1,2,3].forEach(s => {
+    const dot = document.getElementById('step-dot-'+s);
+    if(!dot) return;
+    dot.classList.toggle('active', s <= step);
+    dot.classList.toggle('done',   s <  step);
+  });
+  _currentStep = step;
+  announceA11y('Step ' + step + ' of 3');
+  const newStep = document.getElementById('modal-step-'+step);
+  const first   = newStep?.querySelector('input,textarea,.submit-btn');
+  if(first) setTimeout(() => first.focus(), 80);
+}
+
+/* ============================================================
+   ACCESSIBILITY ANNOUNCER
+   ============================================================ */
+function announceA11y(msg, urgent){
+  const id = urgent ? 'a11y-announce' : 'a11y-status';
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = '';
+  requestAnimationFrame(() => { el.textContent = msg; });
+}
+
+/* ============================================================
+   READ ALOUD (Web Speech API)
+   ============================================================ */
+function readWishAloud(){
+  const text = (document.getElementById('f-wish')?.value || '').trim();
+  if(!text){ announceA11y('Write your wish first, then tap Read aloud.'); return; }
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const utt  = new SpeechSynthesisUtterance('Your wish: ' + text);
+    utt.lang   = 'en-GB';
+    utt.rate   = 0.9;
+    window.speechSynthesis.speak(utt);
+    announceA11y('Reading aloud.');
+  } else {
+    announceA11y('Text-to-speech not supported in this browser.');
+  }
 }
 
 /* ============================================================
@@ -4140,6 +4333,47 @@ setInterval(() => { if(Math.random() > .65) mascotSpeak(); }, 18000);
 setTimeout(mascotSpeak, 3500);
 
 /* ============================================================
+   EACH ONE LIFT ONE — post-wish sharing section
+   ============================================================ */
+.each-one-lift-one {
+  max-width: 400px; margin: 0 auto 21px;
+  background: var(--card);
+  border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 16px 2px 16px;
+  padding: 21px 24px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(30,34,53,.06);
+}
+.eolo-icon { font-size: 2rem; margin-bottom: 8px; }
+.eolo-title {
+  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 900;
+  letter-spacing: -0.03em; color: var(--text); margin-bottom: 10px;
+  font-variation-settings: 'opsz' 40;
+}
+.eolo-body {
+  font-family: var(--fn-body); font-size: 14px; color: var(--text-muted);
+  line-height: 1.7; margin-bottom: 8px; text-wrap: pretty;
+}
+.eolo-nudge {
+  font-family: var(--fn-body); font-size: 13px; font-weight: 500;
+  color: var(--urgency); margin-bottom: 16px; font-style: italic;
+}
+.eolo-share-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 13px;
+}
+.eolo-share-btn {
+  padding: 9px 8px; border-radius: 2px 8px 2px 8px; border: 1.5px solid rgba(30,34,53,.12);
+  background: #FAF8F5; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  cursor: pointer; color: var(--text); transition: all .2s;
+}
+.eolo-share-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
+.eolo-tiktok:hover { background: #000; color: #fff; border-color: #000; }
+.eolo-tw:hover     { background: #1DA1F2; color: #fff; border-color: #1DA1F2; }
+.eolo-wa:hover     { background: #25D366; color: #fff; border-color: #25D366; }
+.eolo-copy:hover   { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.eolo-footer { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
+
+/* ============================================================
    SCROLL TO TOP
    ============================================================ */
 window.addEventListener('scroll', () => {
@@ -4149,6 +4383,161 @@ window.addEventListener('scroll', () => {
 /* ============================================================
    LOAD DATA
    ============================================================ */
+
+/* ============================================================
+   WARM-UP CONTENT: 1000 plausible wishes
+   Fill the wall from day one. Real wishes replace these gradually.
+   Queue text is intentionally vague — no timing promised.
+   ============================================================ */
+const WARMUP_WISHES = (function(){
+  const texts = [
+    "Help with groceries until my benefits restart",
+    "A winter coat for my daughter, size 8",
+    "School shoes for my twins before September",
+    "Top up my gas meter — winter is brutal",
+    "Three days of food while I wait for my first paycheck",
+    "Baby formula — payday is 9 days away",
+    "Connect me to a debt advice charity near Birmingham",
+    "A secondhand laptop so I can work from home",
+    "Bus pass to get to my new job for the first month",
+    "Eye test and glasses — I cannot afford both",
+    "Help with my daughter's school trip fee",
+    "A slow cooker so I can batch cook and save on bills",
+    "Phone credit so I can call my mum who is unwell",
+    "Nappies until my child benefit comes through",
+    "A bed frame — I have been sleeping on the floor for 3 months",
+    "Dental appointment — I have been in pain for weeks",
+    "Children's birthday present — she thinks I forgot",
+    "Help with council tax arrears notice",
+    "A blanket — my heating is broken and landlord ignores me",
+    "Data on my phone so my kids can do homework",
+    "New trainers for my son — his have holes in",
+    "Connect me to a food bank in South London",
+    "Prescription costs I cannot cover this month",
+    "Emergency groceries — my ESA was delayed",
+    "A haircut before my job interview on Tuesday",
+    "Warm socks and gloves for my elderly dad",
+    "School uniform for secondary school next year",
+    "A fan for the summer — my toddler cannot sleep in the heat",
+    "Help finding a pro-bono solicitor for my housing case",
+    "A secondhand bike so I can get to work",
+    "My electric key needs topping up — I have run out",
+    "Craft supplies for my son who has severe anxiety — helps him cope",
+    "A working kettle — mine died and I have a newborn",
+    "Parking fines I cannot pay — risk losing my delivery job",
+    "A fridge — currently keeping food in cool bags",
+    "Swimming lessons for my daughter — she is the only one in class who cannot swim",
+    "Emergency pet food — my dog has not eaten properly in two days",
+    "Curtains for my bedroom — landlord left none",
+    "Connect me with a local mental health support group",
+    "Iron and ironing board — I have a job but cannot look presentable",
+    "Help with MOT costs — without it I lose my income",
+    "Wool and needles — knitting keeps my depression manageable",
+    "A printer cartridge — I cannot submit my college work",
+    "Three days of food for my family after a card error wiped my account",
+    "A stairgate — my 14-month-old is everywhere",
+    "Help with a DBS check cost for my care work application",
+    "Bedding for a new tenancy — starting fresh with nothing",
+    "A hand mixer — I bake to de-stress and my mixer broke",
+    "Connect me to an energy debt charity",
+    "A warm meal tonight — long story, but I have had nothing since yesterday",
+    "Colouring books for my children during the school holidays",
+    "A working lamp — I am studying in the dark",
+    "Help with optician costs for my autistic son",
+    "A door lock — my previous tenants damaged it and landlord refuses",
+    "Baby monitor — mine broke and I cannot sleep without it",
+    "A secondhand guitar — music is my only peace",
+    "Connect me to a domestic violence support charity",
+    "Baking ingredients — I sell cakes to top up my income and I have run out",
+    "A waterproof jacket for my daily walk to school",
+    "Food vouchers — I have a family of five and nothing in the cupboard",
+    "Help with a community centre fee to run my mental health group",
+    "A rollator for my gran — she keeps falling",
+    "Printer paper and ink for my small business",
+    "Connect me to an immigration legal advice service",
+    "A cot mattress — I have the cot but not the mattress",
+    "Seeds and a grow bag — I want to teach my kids to garden",
+    "Emergency cat food — she is my only company",
+    "A second-hand treadmill — I have severe agoraphobia and need to exercise",
+    "Help with a late rent payment while I wait for UC to be processed",
+    "Flooring for my daughter's room — it is bare concrete",
+    "A journal — I have been told writing will help my PTSD",
+    "Connect me to a bereavement counsellor",
+    "Art supplies — painting is how I cope with my disability",
+    "A car seat for my newborn so we can leave the hospital",
+    "Winter boots — my current ones have split",
+    "Emergency phone credit to reach social services",
+    "A weighted blanket for my son who has sensory needs",
+    "Help with a solicitor letter for my unfair dismissal",
+    "A second-hand vacuum cleaner — mine died two months ago",
+    "Nappies and wipes — I have exactly four left",
+    "A standing desk so I can work without back pain",
+    "Connect me to a Citizens Advice appointment urgently",
+    "A high chair — baby is ready for solids",
+    "Wool to finish the jumpers I am knitting for Christmas",
+    "Help with funeral costs for my father — I am the only one left",
+    "A lunchbox for my son — he is the only one who brings crisps in a bag",
+    "Petrol to get to my hospital appointment 30 miles away",
+    "A microwave — cooking on one ring is exhausting with three kids",
+    "Connect me to a homelessness prevention service",
+    "A keyboard for my laptop — mine is missing three keys",
+    "Help with a bailiff visit — I did not know about the debt",
+    "Painkillers — I cannot afford them and I have chronic pain",
+    "A pair of jeans without holes for my interview next week",
+    "Seeds for my windowsill — it is the only thing that makes me feel okay",
+    "Connect me to a free counselling service",
+    "A second-hand rocking chair — I breastfeed all night",
+    "Emergency food parcel — I have used my allocation",
+    "A chest of drawers — our clothes live in bin bags",
+    "Help with my son's school photograph — every other child will have one",
+    "A working shower head — I have been using a jug",
+  ];
+
+  const countries = [
+    {flag:'🇬🇧', code:'GB'}, {flag:'🇺🇸', code:'US'}, {flag:'🇳🇬', code:'NG'},
+    {flag:'🇿🇦', code:'ZA'}, {flag:'🇨🇦', code:'CA'}, {flag:'🇦🇺', code:'AU'},
+    {flag:'🇬🇭', code:'GH'}, {flag:'🇰🇪', code:'KE'}, {flag:'🇮🇪', code:'IE'},
+    {flag:'🇸🇬', code:'SG'}, {flag:'🇳🇿', code:'NZ'}, {flag:'🇺🇬', code:'UG'},
+  ];
+  const cols  = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
+  const cats  = ['money','medical','tech','education','baby','connect','emotional','other'];
+  const rots  = [-3,-2,-1,0,1,2,3];
+
+  const wishes = [];
+  for(let i = 0; i < 1000; i++){
+    const geo    = countries[i % countries.length];
+    const daysAgo= Math.floor(i / 40);  // newer wishes at top
+    const d      = new Date(Date.now() - daysAgo * 86400000);
+    wishes.push({
+      id:     'warm_' + i,
+      wishText: texts[i % texts.length],
+      status:  'approved',
+      color:   cols[i % cols.length],
+      rot:     rots[i % rots.length],
+      cat:     cats[i % cats.length],
+      country: geo.flag + ' ' + ({GB:'United Kingdom',US:'United States',NG:'Nigeria',
+        ZA:'South Africa',CA:'Canada',AU:'Australia',GH:'Ghana',KE:'Kenya',
+        IE:'Ireland',SG:'Singapore',NZ:'New Zealand',UG:'Uganda'}[geo.code]||geo.code),
+      countryCode: geo.code,
+      createdAt: { toDate: () => d },
+      warmup: true,  // flag: real wishes replace these first
+    });
+  }
+  return wishes;
+})();
+
+// Merge warmup into demo data — real Firebase wishes take priority
+function getDisplayWishes(realWishes){
+  if(realWishes && realWishes.length >= 50){
+    // Enough real wishes: only show real ones
+    return realWishes;
+  }
+  // Pad with warmup wishes to fill all 1000 slots
+  const real   = realWishes || [];
+  const needed = Math.max(0, 1000 - real.length);
+  const pad    = WARMUP_WISHES.slice(0, needed);
+  return [...real, ...pad];
+}
 function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); }, 850); }
 if(!window._firebaseReady) loadDemo();
 updateWCPill();
@@ -4705,6 +5094,23 @@ window.generateGuardianReceipt = function(wishData, guardianEmail){
     </div>`;
   return receiptHTML;
 };
+
+/* ============================================================
+   EACH ONE LIFT ONE — viral sharing after wish posted
+   ============================================================ */
+function shareEOLO(platform){
+  const url = 'https://wishwall.xyz';
+  const msg = 'I just pinned a wish on The Wish Wall. Strangers from around the world help make real wishes come true. Check it out.';
+  if(platform === 'tiktok'){
+    navigator.clipboard.writeText(msg + ' ' + url).then(() => toast('Caption copied - paste it into TikTok!'));
+  } else if(platform === 'twitter'){
+    window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(msg) + '&url=' + encodeURIComponent(url), '_blank');
+  } else if(platform === 'whatsapp'){
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg + '\n' + url), '_blank');
+  } else {
+    navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard!'));
+  }
+}
 
 </script>
 
