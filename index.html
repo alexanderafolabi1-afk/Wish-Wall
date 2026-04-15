@@ -4994,15 +4994,12 @@ const WARMUP_WISHES = (function(){
  return wishes;
 })();
 
-// Merge warmup into demo data — real Firebase wishes take priority
+// Merge warmup into demo data — always pad to fill all 1000 slots
 function getDisplayWishes(realWishes){
- if(realWishes && realWishes.length >= 50){
- // Enough real wishes: only show real ones
- return realWishes;
- }
- // Pad with warmup wishes to fill all 1000 slots
  const real = realWishes || [];
  const needed = Math.max(0, 1000 - real.length);
+ if(needed === 0) return real;
+ // Pad with warmup wishes to fill all 1000 slots
  const pad = WARMUP_WISHES.slice(0, needed);
  return [...real, ...pad];
 }
