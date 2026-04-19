@@ -25,7 +25,7 @@
 <meta name="application-name" content="The Wish Wall">
 <link rel="canonical" href="https://wishwall.xyz/">
 
-<!-- hreflang: signals global intent to Google -->
+<!-- hreflang: signals global intent to Google — 30 language/region variants -->
 <link rel="alternate" hreflang="en" href="https://wishwall.xyz/">
 <link rel="alternate" hreflang="en-us" href="https://wishwall.xyz/">
 <link rel="alternate" hreflang="en-gb" href="https://wishwall.xyz/">
@@ -36,6 +36,37 @@
 <link rel="alternate" hreflang="en-in" href="https://wishwall.xyz/">
 <link rel="alternate" hreflang="en-gh" href="https://wishwall.xyz/">
 <link rel="alternate" hreflang="en-ke" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="es" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="es-mx" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="es-ar" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="es-co" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="fr" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="fr-fr" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="fr-be" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="de" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="pt" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="pt-br" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ar" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ar-sa" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ar-eg" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="hi" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="zh" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="zh-cn" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="zh-tw" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ja" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ko" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="it" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="nl" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ru" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="tr" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="pl" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="id" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="vi" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="th" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="sw" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="tl" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="ur" href="https://wishwall.xyz/">
+<link rel="alternate" hreflang="bn" href="https://wishwall.xyz/">
 <link rel="alternate" hreflang="x-default" href="https://wishwall.xyz/">
 <link rel="sitemap" type="application/xml" href="/sitemap">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -512,6 +543,47 @@ nav {
 .pin-btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 rgba(30,34,53,.22); }
 .pin-btn:hover::before { transform: translateX(100%) skewX(-12deg); }
 .pin-btn:active { transform: translate(0, 0); box-shadow: 1px 1px 0 rgba(30,34,53,.2); }
+
+/* ============================================================
+ LANGUAGE SWITCHER
+ ============================================================ */
+.lang-switcher {
+  position: relative; flex-shrink: 0;
+}
+.lang-btn {
+  font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: .5px; padding: 7px 12px;
+  border: 1.5px solid rgba(30,34,53,.15); border-radius: 6px;
+  background: transparent; cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; gap: 5px;
+  transition: all .2s; white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--urgency); color: var(--urgency); }
+.lang-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: #FAF8F5; border: 1.5px solid rgba(30,34,53,.12);
+  border-radius: 4px 12px 4px 12px;
+  box-shadow: 6px 10px 32px rgba(30,34,53,.16);
+  min-width: 200px; max-height: 320px; overflow-y: auto;
+  z-index: 200; display: none;
+  scrollbar-width: thin;
+}
+.lang-dropdown.open { display: block; animation: fadeSlideDown .18s ease; }
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lang-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer;
+  font-family: var(--fn-body); font-size: 13px; color: var(--text);
+  transition: background .15s;
+}
+.lang-opt:hover { background: var(--surface-warm); }
+.lang-opt.active { background: rgba(212,74,30,.08); color: var(--urgency); font-weight: 500; }
+.lang-opt-flag { font-size: 16px; flex-shrink: 0; }
+.lang-opt-name { flex: 1; }
+.lang-opt-native { font-size: 11px; color: var(--text-muted); }
 
 /* ============================================================
  TABS
@@ -2417,7 +2489,41 @@ button { touch-action: manipulation; }
  <div class="wishcoin-pill" id="wc-pill" title="Your WishCredits earn by referring friends" onclick="showTab('how')" style="display:none;">
  <span>🪙</span><span id="wc-count">0</span> WC
  </div>
- <button class="pin-btn" onclick="openModal()">📌 Pin a Wish</button>
+
+ <!-- Language Switcher -->
+ <div class="lang-switcher" id="lang-switcher">
+  <button class="lang-btn" onclick="toggleLangMenu()" aria-label="Change language" title="Change language">
+   <span id="lang-flag">🌐</span>
+   <span id="lang-current">EN</span>
+   <span style="font-size:9px;opacity:.6;">▼</span>
+  </button>
+  <div class="lang-dropdown" id="lang-dropdown">
+   <div class="lang-opt active" onclick="setLang('en')" data-lang="en"><span class="lang-opt-flag">🇺🇸</span><span class="lang-opt-name">English</span><span class="lang-opt-native">English</span></div>
+   <div class="lang-opt" onclick="setLang('es')" data-lang="es"><span class="lang-opt-flag">🇪🇸</span><span class="lang-opt-name">Spanish</span><span class="lang-opt-native">Español</span></div>
+   <div class="lang-opt" onclick="setLang('fr')" data-lang="fr"><span class="lang-opt-flag">🇫🇷</span><span class="lang-opt-name">French</span><span class="lang-opt-native">Français</span></div>
+   <div class="lang-opt" onclick="setLang('de')" data-lang="de"><span class="lang-opt-flag">🇩🇪</span><span class="lang-opt-name">German</span><span class="lang-opt-native">Deutsch</span></div>
+   <div class="lang-opt" onclick="setLang('pt')" data-lang="pt"><span class="lang-opt-flag">🇧🇷</span><span class="lang-opt-name">Portuguese</span><span class="lang-opt-native">Português</span></div>
+   <div class="lang-opt" onclick="setLang('ar')" data-lang="ar"><span class="lang-opt-flag">🇸🇦</span><span class="lang-opt-name">Arabic</span><span class="lang-opt-native">العربية</span></div>
+   <div class="lang-opt" onclick="setLang('hi')" data-lang="hi"><span class="lang-opt-flag">🇮🇳</span><span class="lang-opt-name">Hindi</span><span class="lang-opt-native">हिन्दी</span></div>
+   <div class="lang-opt" onclick="setLang('zh')" data-lang="zh"><span class="lang-opt-flag">🇨🇳</span><span class="lang-opt-name">Chinese</span><span class="lang-opt-native">中文</span></div>
+   <div class="lang-opt" onclick="setLang('ja')" data-lang="ja"><span class="lang-opt-flag">🇯🇵</span><span class="lang-opt-name">Japanese</span><span class="lang-opt-native">日本語</span></div>
+   <div class="lang-opt" onclick="setLang('ko')" data-lang="ko"><span class="lang-opt-flag">🇰🇷</span><span class="lang-opt-name">Korean</span><span class="lang-opt-native">한국어</span></div>
+   <div class="lang-opt" onclick="setLang('it')" data-lang="it"><span class="lang-opt-flag">🇮🇹</span><span class="lang-opt-name">Italian</span><span class="lang-opt-native">Italiano</span></div>
+   <div class="lang-opt" onclick="setLang('nl')" data-lang="nl"><span class="lang-opt-flag">🇳🇱</span><span class="lang-opt-name">Dutch</span><span class="lang-opt-native">Nederlands</span></div>
+   <div class="lang-opt" onclick="setLang('ru')" data-lang="ru"><span class="lang-opt-flag">🇷🇺</span><span class="lang-opt-name">Russian</span><span class="lang-opt-native">Русский</span></div>
+   <div class="lang-opt" onclick="setLang('tr')" data-lang="tr"><span class="lang-opt-flag">🇹🇷</span><span class="lang-opt-name">Turkish</span><span class="lang-opt-native">Türkçe</span></div>
+   <div class="lang-opt" onclick="setLang('pl')" data-lang="pl"><span class="lang-opt-flag">🇵🇱</span><span class="lang-opt-name">Polish</span><span class="lang-opt-native">Polski</span></div>
+   <div class="lang-opt" onclick="setLang('id')" data-lang="id"><span class="lang-opt-flag">🇮🇩</span><span class="lang-opt-name">Indonesian</span><span class="lang-opt-native">Bahasa Indonesia</span></div>
+   <div class="lang-opt" onclick="setLang('vi')" data-lang="vi"><span class="lang-opt-flag">🇻🇳</span><span class="lang-opt-name">Vietnamese</span><span class="lang-opt-native">Tiếng Việt</span></div>
+   <div class="lang-opt" onclick="setLang('th')" data-lang="th"><span class="lang-opt-flag">🇹🇭</span><span class="lang-opt-name">Thai</span><span class="lang-opt-native">ภาษาไทย</span></div>
+   <div class="lang-opt" onclick="setLang('sw')" data-lang="sw"><span class="lang-opt-flag">🇰🇪</span><span class="lang-opt-name">Swahili</span><span class="lang-opt-native">Kiswahili</span></div>
+   <div class="lang-opt" onclick="setLang('tl')" data-lang="tl"><span class="lang-opt-flag">🇵🇭</span><span class="lang-opt-name">Filipino</span><span class="lang-opt-native">Filipino</span></div>
+   <div class="lang-opt" onclick="setLang('ur')" data-lang="ur"><span class="lang-opt-flag">🇵🇰</span><span class="lang-opt-name">Urdu</span><span class="lang-opt-native">اردو</span></div>
+   <div class="lang-opt" onclick="setLang('bn')" data-lang="bn"><span class="lang-opt-flag">🇧🇩</span><span class="lang-opt-name">Bengali</span><span class="lang-opt-native">বাংলা</span></div>
+  </div>
+ </div>
+
+ <button class="pin-btn" onclick="openModal()">📌 <span data-i18n="nav_pin">Pin a Wish</span></button>
 </header>
 
 <!-- ============================================================
@@ -3389,8 +3495,8 @@ button { touch-action: manipulation; }
 /* ============================================================
  CONFIGURATION Replace all values before going live
  ============================================================ */
-const STRIPE_PK = 'pk_test_YOUR_PUBLISHABLE_KEY';
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+const STRIPE_PK = 'pk_live_51TNPKZRTh7hyVAFtyScgc5gnJEpeuJC6pP8HAXPKzGEGK5RKiOTBno1YIEC1WQU0W5A5hAOgLAssuhDUimpaQsWW00K6oTIHHQ';
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/14AbJ3fJTax1eTI8vY1gs00';
 
 /* ============================================================
  REGIONAL PRICING (PPP tiers per audit recommendation)
