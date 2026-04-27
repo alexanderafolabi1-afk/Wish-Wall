@@ -2977,9 +2977,9 @@ button { touch-action: manipulation; }
  <a href="#" onclick="showTab('how');return false;">How It Works</a>
  <a href="#" onclick="showTab('guard');return false;">Become a Guardian</a>
  <a href="#" onclick="showTab('impact');return false;">Our Impact</a>
- <a href="privacy.html" target="_blank">Privacy Policy</a>
- <a href="terms.html" target="_blank">Terms & Conditions</a>
- <a href="cookies.html" target="_blank">Cookie Policy</a>
+ <a href="privacy.html">Privacy Policy</a>
+ <a href="terms.html">Terms & Conditions</a>
+ <a href="cookies.html">Cookie Policy</a>
  <a href="contact.html">Contact Us</a>
  </div>
 
@@ -3029,8 +3029,8 @@ button { touch-action: manipulation; }
 <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
  <p class="cookie-txt">
  🍪 We use essential cookies to make this site work, and optional analytics cookies to improve it.
- Read our <a href="cookies.html" target="_blank">Cookie Policy</a> and
- <a href="privacy.html" target="_blank">Privacy Policy</a>.
+ Read our <a href="cookies.html">Cookie Policy</a> and
+ <a href="privacy.html">Privacy Policy</a>.
  You can withdraw consent at any time.
  </p>
  <div class="cookie-btns">
@@ -3812,6 +3812,7 @@ if(document.readyState === 'loading'){
  RENDER WISHES
  ============================================================ */
 window.renderWishes = function(rawWishes){
+ if(!rawWishes || rawWishes.length === 0) return; // never render empty
  const wishes = getDisplayWishes(rawWishes);
  window.allWishes = wishes;
  window._lastWishes = rawWishes || []; // keep real wishes separately
@@ -4323,7 +4324,7 @@ function paintLB(donors){
  items.forEach(item => item.classList.add('revealed'));
  }
 }
-paintLB(null);
+setTimeout(() => paintLB(null), 100);
 
 function openModal(){
  document.getElementById('modal-ov').classList.add('open');
@@ -5098,12 +5099,18 @@ renderGuardianTier(0);
  COOKIE CONSENT
  ============================================================ */
 function initCookies(){
+ if(localStorage.getItem('ww-cookies-accepted')){
+   const cb = document.getElementById('cookie-banner');
+   if(cb) cb.style.display = 'none';
+   return;
+ }
  const consent = localStorage.getItem('ww-cookie-consent');
  if(!consent){ setTimeout(() => document.getElementById('cookie-banner')?.classList.add('show'), 1200); }
 }
 function acceptCookies(){
+ document.getElementById('cookie-banner').style.display = 'none';
+ localStorage.setItem('ww-cookies-accepted','1');
  localStorage.setItem('ww-cookie-consent','all');
- document.getElementById('cookie-banner')?.classList.remove('show');
 }
 function rejectCookies(){
  localStorage.setItem('ww-cookie-consent','essential');
