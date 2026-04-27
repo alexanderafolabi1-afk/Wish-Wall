@@ -3909,7 +3909,7 @@ class Particle{
  this.y = initial ? Math.random() * canvas.height : canvas.height + 20;
  this.sz = Math.random() * 3.5 + 1;
  this.vy = -(Math.random() * 0.55 + 0.18);
- this.vx = (Math.random() .5) * .35;
+ this.vx = (Math.random() - .5) * .35;
  this.op = Math.random() * .45 + .1;
  this.col = ['#FFE566','#FF4D8D','#00D4FF','#00FFB3','#FF7B2C','#B44DFF'][Math.floor(Math.random()*6)];
  this.isCirc = Math.random() > .45;
@@ -5852,6 +5852,91 @@ function shareEOLO(platform){
  } else {
  navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard!'));
  }
+}
+
+/* ============================================================
+ TOAST NOTIFICATION — lightweight ephemeral message
+ ============================================================ */
+function toast(msg, duration){
+  duration = duration || 3000;
+  let el = document.getElementById('ww-toast');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'ww-toast';
+    el.style.cssText = [
+      'position:fixed','bottom:24px','left:50%','transform:translateX(-50%) translateY(80px)',
+      'background:#1a1008','color:#faf8f5','font-family:var(--fn-body)','font-size:14px',
+      'padding:12px 24px','border-radius:8px','z-index:99999','pointer-events:none',
+      'box-shadow:0 4px 20px rgba(0,0,0,.4)','transition:transform .3s cubic-bezier(.16,1,.3,1)',
+      'white-space:nowrap','max-width:90vw','text-align:center'
+    ].join(';');
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  clearTimeout(el._timer);
+  requestAnimationFrame(() => {
+    el.style.transform = 'translateX(-50%) translateY(0)';
+    el._timer = setTimeout(() => {
+      el.style.transform = 'translateX(-50%) translateY(80px)';
+    }, duration);
+  });
+}
+
+/* ============================================================
+ LANGUAGE SWITCHER
+ ============================================================ */
+const LANG_LABELS = {
+  en:'EN', es:'ES', fr:'FR', de:'DE', pt:'PT', ar:'AR',
+  hi:'HI', zh:'ZH', ja:'JA', ko:'KO', it:'IT', nl:'NL',
+  ru:'RU', tr:'TR', pl:'PL', id:'ID', vi:'VI', th:'TH',
+  sw:'SW', tl:'TL', ur:'UR', bn:'BN'
+};
+const LANG_FLAGS = {
+  en:'🇺🇸', es:'🇪🇸', fr:'🇫🇷', de:'🇩🇪', pt:'🇧🇷', ar:'🇸🇦',
+  hi:'🇮🇳', zh:'🇨🇳', ja:'🇯🇵', ko:'🇰🇷', it:'🇮🇹', nl:'🇳🇱',
+  ru:'🇷🇺', tr:'🇹🇷', pl:'🇵🇱', id:'🇮🇩', vi:'🇻🇳', th:'🇹🇭',
+  sw:'🇰🇪', tl:'🇵🇭', ur:'🇵🇰', bn:'🇧🇩'
+};
+
+function toggleLangMenu(){
+  const dd = document.getElementById('lang-dropdown');
+  if(dd) dd.classList.toggle('open');
+}
+
+function setLang(lang){
+  const flag = LANG_FLAGS[lang] || '🌐';
+  const label = LANG_LABELS[lang] || lang.toUpperCase();
+  const flagEl = document.getElementById('lang-flag');
+  const currentEl = document.getElementById('lang-current');
+  if(flagEl) flagEl.textContent = flag;
+  if(currentEl) currentEl.textContent = label;
+  // Update active state in dropdown
+  document.querySelectorAll('.lang-opt').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === lang);
+  });
+  // Close dropdown
+  const dd = document.getElementById('lang-dropdown');
+  if(dd) dd.classList.remove('open');
+  // Store preference
+  localStorage.setItem('ww-lang', lang);
+}
+
+// Close language dropdown when clicking outside, and restore saved language
+function initLangSwitcher(){
+  document.addEventListener('click', function(e){
+    const switcher = document.getElementById('lang-switcher');
+    if(switcher && !switcher.contains(e.target)){
+      const dd = document.getElementById('lang-dropdown');
+      if(dd) dd.classList.remove('open');
+    }
+  });
+  const saved = localStorage.getItem('ww-lang');
+  if(saved && saved !== 'en') setLang(saved);
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initLangSwitcher);
+} else {
+  initLangSwitcher();
 }
 
 </script>
