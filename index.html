@@ -2851,7 +2851,7 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">60</div>
+ <div class="live-num" id="live-granted">56</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  <div class="live-badge">LIVE</div>
@@ -4301,7 +4301,7 @@ function filterWishes(){
  STATS pot balance NOT publicly displayed per brief
  ============================================================ */
 function updateStats(){
- const PLATFORM = window._platformStats || { total: 150, granted: 60 };
+ const PLATFORM = window._platformStats || { total: 1000, granted: 56 };
  const total = window._firebaseReady ? allWishes.length : PLATFORM.total;
  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
  animNum('s-total', total);
@@ -5156,7 +5156,7 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // Base values replaced by live Firebase data when connected
 let liveStats = {
- granted: 60,
+ granted: 56,
  guardians: 167,
  raised: 14920,
  countries: 9,
@@ -5187,7 +5187,7 @@ function renderLiveStats(){
 
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
- const d = data || { totalFees: 300, totalDonations: 14620, totalGranted: 60, avgCost: 45 };
+ const d = data || { totalFees: 300, totalDonations: 14620, totalGranted: 56, avgCost: 45 };
  const fmt = n => Number(n ?? 0).toLocaleString('en-US');
 
  // Public ledger cards
@@ -5198,7 +5198,7 @@ window.updateLedger = function(data){
  document.getElementById('led-ts').textContent = new Date().toLocaleString('en-US');
 
  // Push to live impact counters
- liveStats.granted = d.totalGranted || 60;
+ liveStats.granted = d.totalGranted || 56;
  liveStats.raised = (d.totalFees||0) + (d.totalDonations||0);
  renderLiveStats();
 };
