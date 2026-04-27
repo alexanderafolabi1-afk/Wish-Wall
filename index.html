@@ -1014,50 +1014,7 @@ nav {
 }
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-/* Wall full */
-.wall-full-msg {
- display: none;
- text-align: center;
- padding: var(--sp-3) var(--sp-4);
- margin-bottom: var(--sp-2);
- background: rgba(201,123,48,.1);
- border: 1px solid rgba(201,123,48,.4);
- border-radius: 4px;
- font-family: var(--fn-display);
- font-size: clamp(1rem, 2.5vw, 1.3rem);
- font-weight: 700;
- color: var(--text);
- line-height: 1.55;
- word-break: break-word;
- overflow-wrap: break-word;
- animation: wallFullPop .6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.wall-full-msg.show { display: block; }
-@keyframes wallFullPop { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
-
 .wall-empty { text-align: center; padding: 60px 20px; font-family: var(--fn-body); font-size: 1.1rem; color: var(--text-muted); grid-column: 1/-1; }
-
-/* Wall full overlay */
-#wall-full-overlay {
- display: none; position: fixed; inset: 0; z-index: 9000;
- background: var(--surface); overflow: hidden;
- flex-direction: column; align-items: center; justify-content: center;
- text-align: center; padding: 40px 24px;
-}
-#wall-full-overlay.show { display: flex; }
-.wfo-heart-grid { display: grid; gap: 3px; max-width: min(98vw, 1200px); margin: 0 auto 32px; }
-.wfo-cell { aspect-ratio: 1; border-radius: 1px; opacity: 0; transition: opacity .05s; }
-.wfo-cell.lit { opacity: 1; }
-.wfo-h1 { font-family: var(--fn-display); font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; color: var(--text); margin-bottom: 12px; font-variation-settings: 'opsz' 144; }
-.wfo-sub { font-family: var(--fn-body); font-size: clamp(1rem, 3vw, 1.4rem); color: var(--text-muted); max-width: 520px; margin: 0 auto 28px; line-height: 1.65; }
-.wfo-timer-wrap { font-family: var(--fn-mono); font-size: 1rem; color: var(--text-muted); margin-bottom: 28px; }
-.wfo-timer-wrap span { color: var(--urgency); font-size: 1.3rem; }
-.wfo-close {
- background: var(--text); color: #FAF8F5; border: none; border-radius: 2px 10px 2px 10px;
- padding: 13px 36px; font-family: var(--fn-display); font-size: 1.1rem; font-weight: 700;
- cursor: pointer; box-shadow: 3px 3px 0 rgba(201,123,48,.3); transition: transform .15s;
-}
-.wfo-close:hover { transform: translate(-2px, -2px); }
 
 /* ============================================================
  WISH CALCULATOR
@@ -2534,12 +2491,6 @@ button { touch-action: manipulation; }
  <!-- Wall -->
  <div class="wall-section">
 
- <!-- FULL WALL MESSAGE -->
- <div class="wall-full-msg" id="wall-full-msg">
- <strong>The wall is full! All 1,000 spots have a wish pinned.</strong> ❤️<br>
- <span style="font-size:clamp(0.85rem,2vw,1rem);font-family:var(--fn-body);color:var(--text-muted);font-weight:400;display:block;margin-top:6px;">One thousand stories. When a wish is granted, space opens for the next one in the queue.</span>
- </div>
-
  <!-- HOW IT WORKS inline strip -->
  <div class="how-strip">
  <div class="how-step"><span class="how-step-n">1</span><span>Write your wish</span></div>
@@ -3404,28 +3355,6 @@ button { touch-action: manipulation; }
 <div class="cloud-4">☁️</div>
 
 <!-- ============================================================
- WALL FULL 1,000-SPOT EASTER EGG OVERLAY
- ============================================================ -->
-<div id="wall-full-overlay" role="dialog" aria-modal="true" aria-label="The wall is full">
- <!-- Heart grid 40x25 = 1,000 cells, JS lights them up in heart pattern -->
- <div class="wfo-heart-grid" id="wfo-grid" style="grid-template-columns:repeat(40,1fr);max-width:min(98vw,1200px);"></div>
-
- <h1 class="wfo-h1">THE WALL IS FULL ❤️</h1>
- <p class="wfo-sub">
- One thousand dreams. One thousand strangers who said<br>
- <em>"maybe someone out there gives a damn."</em><br><br>
- Turns out <strong style="color:var(--yellow)">a LOT of someones do.</strong><br>
- Every wish-lister and Guardian has been emailed. You made history.
- </p>
- <p class="wfo-timer-wrap">
- New spots open in <span id="wfo-countdown">4:00:00</span>
- </p>
- <button class="wfo-close" onclick="closeWallFullOverlay()">
- ✨ I've witnessed this magic
- </button>
-</div>
-
-<!-- ============================================================
  JAVASCRIPT
  ============================================================ -->
 <script>
@@ -3926,19 +3855,13 @@ function paintWall(){
  grid.innerHTML = src.length
  ? src.map((w,i) => noteHTML(w,i)).join('')
  : '<div class="wall-empty" style="grid-column:1/-1">✨ No wishes found matching that search.</div>';
- document.getElementById('wall-full-msg').classList.remove('show');
  return;
  }
 
  const total = allWishes.length;
  const VISIBLE = Math.min(total + 50, WALL_CAPACITY);
- const isFull = total >= WALL_CAPACITY;
-
- document.getElementById('wall-full-msg').classList.toggle('show', total >= WALL_CAPACITY);
- if(isFull) triggerWallFull();
-
  const counter = document.getElementById('spot-counter');
- if(counter) counter.textContent = `${total.toLocaleString()} wishes pinned${total >= WALL_CAPACITY ? ' FULL!' : ' (1,000 spots)'}` ;
+ if(counter) counter.textContent = `${total.toLocaleString()} wishes pinned${total >= WALL_CAPACITY ? ' (1,000 spots)'` ;
 
  // Build slot map across all 1,000 positions
  const slotMap = new Array(WALL_CAPACITY).fill(null);
@@ -5188,121 +5111,6 @@ function rejectCookies(){
 }
 initCookies();
 
-/* ============================================================
- WALL FULL 500-SPOT EASTER EGG
- 25 cols x 20 rows = 500 cells forming a heart mosaic
- ============================================================ */
-const HEART_MAP = [
- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0],
- [0,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1],
- [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
- [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
- [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
- [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
- [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
- [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
- [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
- [0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-];
-const HEART_COLS = ['#FFE566','#FF4D8D','#B44DFF','#00D4FF','#00FFB3','#FF7B2C'];
-
-let wallFullActive = false;
-let countdownTimer = null;
-
-function triggerWallFull(){
- if(wallFullActive) return;
- const storedTs = localStorage.getItem('ww-wall-full-ts');
- const now = Date.now();
- if(storedTs && (now - parseInt(storedTs)) > WALL_ROTATION_HOURS * 3600 * 1000){
- clearWallAfterFull(); return;
- }
- if(!storedTs) localStorage.setItem('ww-wall-full-ts', String(now));
- showWallFullOverlay();
-}
-
-function showWallFullOverlay(){
- wallFullActive = true;
- const overlay = document.getElementById('wall-full-overlay');
- overlay.classList.add('show');
- buildHeartGrid();
- startCountdown();
- notifyWallFull();
-}
-
-function buildHeartGrid(){
- const g = document.getElementById('wfo-grid');
- g.innerHTML = '';
- let idx = 0;
- HEART_MAP.forEach(row => {
- row.forEach(cell => {
- const el = document.createElement('div');
- el.className = 'wfo-cell';
- if(cell){
- const col = HEART_COLS[idx % HEART_COLS.length];
- el.style.background = col;
- el.style.boxShadow = `0 0 6px ${col}88`;
- setTimeout(() => el.classList.add('lit'), idx * 4);
- idx++;
- } else {
- el.style.background = 'transparent';
- el.classList.add('lit');
- }
- g.appendChild(el);
- });
- });
-}
-
-function startCountdown(){
- const storedTs = parseInt(localStorage.getItem('ww-wall-full-ts') || String(Date.now()));
- const endTime = storedTs + WALL_ROTATION_HOURS * 3600 * 1000;
-
- function tick(){
- const remaining = Math.max(endTime - Date.now(), 0);
- const h = Math.floor(remaining / 3600000);
- const m = Math.floor((remaining % 3600000) / 60000);
- const s = Math.floor((remaining % 60000) / 1000);
- const el = document.getElementById('wfo-countdown');
- if(el) el.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
- if(remaining <= 0){ clearInterval(countdownTimer); clearWallAfterFull(); }
- }
- tick();
- countdownTimer = setInterval(tick, 1000);
-}
-
-function clearWallAfterFull(){
- localStorage.removeItem('ww-wall-full-ts');
- wallFullActive = false;
- document.getElementById('wall-full-overlay').classList.remove('show');
- document.getElementById('wall-full-msg').classList.remove('show');
- // In production: Firebase query removes oldest granted wishes to free spots
- if(!window._firebaseReady){
- allWishes = allWishes.slice(0, 100);
- paintWall(); updateStats();
- }
-}
-
-function closeWallFullOverlay(){
- document.getElementById('wall-full-overlay').classList.remove('show');
-}
-
-async function notifyWallFull(){
- try {
- await fetch('/.netlify/functions/notify-wall-full', {
- method: 'POST', headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ timestamp: Date.now() })
- });
- } catch(e){ console.log('notify-wall-full: not yet configured'); }
-}
 
 /* ============================================================
  WISHCREDITS & REFERRAL SYSTEM
