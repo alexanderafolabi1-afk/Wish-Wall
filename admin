@@ -326,7 +326,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
       <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
       <div class="led-fields">
         <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="300" min="0"></div>
-        <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="12120" min="0"></div>
+        <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="14620" min="0"></div>
         <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="60" min="0"></div>
         <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="45" min="0"></div>
         <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="9720" min="0"></div>
@@ -988,7 +988,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
       <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
       <div class="led-fields">
         <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="300" min="0"></div>
-        <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="12120" min="0"></div>
+        <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="14620" min="0"></div>
         <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="60" min="0"></div>
         <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="45" min="0"></div>
         <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="9720" min="0"></div>
