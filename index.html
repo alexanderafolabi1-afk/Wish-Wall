@@ -194,8 +194,9 @@
 }
 </script>
 
-<!-- Fonts: Fraunces + Lexend + Sometype Mono -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Fonts: Fraunces + Lexend + Sometype Mono — non-render-blocking -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" rel="stylesheet"></noscript>
 <!-- Favicons -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
@@ -404,7 +405,7 @@ body::before {
  opacity: .028;
  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
  background-repeat: repeat;
- animation: grainShift 0.4s steps(1) infinite;
+ animation: grainShift 3s steps(1) infinite;
 }
 @keyframes grainShift {
  0% { background-position: 0 0; }
@@ -2530,31 +2531,6 @@ button { touch-action: manipulation; }
  ============================================================ -->
 <div id="tab-wall" class="tab-content active" style="overflow:hidden;max-width:100vw;width:100%;box-sizing:border-box;">
 
- <!-- Hero — editorial asymmetric two-column -->
- <div class="hero">
- <h1 class="hero-title">The<br><em>Wish</em><br>Wall.</h1>
-
- <div class="hero-right">
- <p class="hero-sub">Pin a wish anonymously. Let strangers from anywhere in the world make it real. One thousand spots. Real needs. Real people.</p>
- <div class="hero-stats">
- <div class="stat-pill"><span class="stat-num" id="s-total">0</span><span>pinned</span></div>
- <div class="stat-pill"><span class="stat-num" id="s-granted">0</span><span>granted</span></div>
- <div class="stat-pill"><span class="stat-num" id="s-guardians">0</span><span>guardians</span></div>
- <div class="stat-pill"><span class="stat-num" id="s-countries">0</span><span>countries</span></div>
- </div>
- <div class="milestone-wrap">
- <div class="milestone-lbl">
- <span id="ms-lbl" style="font-family:var(--fn-mono);font-size:10px;"><span id="ms-left">11</span> wishes to next milestone</span>
- <span class="milestone-badge" id="ms-badge">1,000</span>
- </div>
- <div class="milestone-track"><div class="milestone-bar" id="ms-bar" style="width:0%"></div></div>
- </div>
- <button class="pin-btn" onclick="openModal()" style="font-size:17px;padding:13px 32px;align-self:flex-start;">
- 📌 Pin Your Wish
- </button>
- </div>
- </div>
-
  <!-- Wall -->
  <div class="wall-section">
 
@@ -3035,7 +3011,7 @@ button { touch-action: manipulation; }
   <dd>Become a Guardian on The Wish Wall. Browse anonymous wishes from people across the world — grocery money, medical help, a laptop, school fees, a hug, a referral, emotional support. Choose a wish and grant it directly: send money, buy the item, make the connection. No minimum contribution, no sign-up required. We connect you to the wisher and verify the outcome.</dd>
 
   <dt>Is The Wish Wall legitimate and trustworthy?</dt>
-  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 12 countries since December 2024.</dd>
+  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 18 countries since December 2024.</dd>
 
   <dt>What is a random acts of kindness platform?</dt>
   <dd>A random acts of kindness platform like The Wish Wall connects people who need help with people who want to give — anonymously and without expectation. Unlike charity, there is no organisation in the middle taking a large cut. The community is the platform.</dd>
@@ -3058,7 +3034,7 @@ button { touch-action: manipulation; }
 
  <div class="footer-payout-strip">
  <span class="payout-badge">💳 Payouts via Bank Transfer & PayPal</span>
- <span class="payout-badge">🌍 Recipients in 12+ countries</span>
+ <span class="payout-badge">🌍 Recipients in 18+ countries</span>
  <span class="payout-badge">💵 1 WishCoin = $1 USD</span>
  </div>
 
@@ -3889,9 +3865,11 @@ class Particle{
  }
 }
 
- function initPx(){ resizeCanvas(); particles = Array.from({length:55}, () => new Particle()); }
- function animPx(){ if(!ctx) return; ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.step(); p.draw(); }); requestAnimationFrame(animPx); }
- window.addEventListener('resize', resizeCanvas);
+  function initPx(){ resizeCanvas(); particles = Array.from({length:20}, () => new Particle()); }
+  let _animPaused = false;
+  function animPx(){ if(!ctx) return; if(!_animPaused){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.step(); p.draw(); }); } requestAnimationFrame(animPx); }
+  window.addEventListener('resize', resizeCanvas);
+  document.addEventListener('visibilitychange', () => { _animPaused = document.hidden; });
  initPx(); animPx();
 } // end initParticleSystem
 
