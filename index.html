@@ -1333,19 +1333,6 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .live-pulse { position: absolute; inset: 0; border-radius: inherit; border: 1.5px solid transparent; animation: liveRing 3s ease-in-out infinite; }
 @keyframes liveRing { 0%,100%{ box-shadow: 0 0 0 0 rgba(30,34,53,0); } 50%{ box-shadow: 0 0 0 6px rgba(30,34,53,.03); } }
 
-/* Ticker */
-.live-ticker {
- display: inline-flex; align-items: center; gap: 10px;
- background: var(--card); border: 1px solid rgba(30,34,53,.1);
- border-radius: 2px; padding: 8px 18px;
- font-family: var(--fn-mono); font-size: 12px; color: var(--text-muted);
-}
-.live-ticker-dot {
- width: 7px; height: 7px; border-radius: 50%;
- background: var(--accent); flex-shrink: 0;
- animation: pulseDot 1.5s ease-in-out infinite;
-}
-@keyframes pulseDot { 0%,100%{transform:scale(1); box-shadow:0 0 0 0 rgba(77,174,122,.5);} 50%{transform:scale(1.3); box-shadow:0 0 0 5px rgba(77,174,122,0);} }
 
 /* Values section */
 .values-section { padding: var(--sp-6) var(--sp-4); background: rgba(30,34,53,.03); border-top: 1px solid rgba(30,34,53,.07); }
@@ -2838,14 +2825,14 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">56</div>
+ <div class="live-num" id="live-granted">312</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">89</div>
+ <div class="live-num" id="live-guardians">1147</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
  <div class="live-badge">LIVE</div>
@@ -2859,10 +2846,6 @@ button { touch-action: manipulation; }
  </div>
  </div>
 
- <!-- Live activity ticker -->
- <div class="live-ticker">
- <div class="live-ticker-dot"></div>
- <div class="live-ticker-text" id="live-ticker-text">✅ A wish was just granted in 🇺🇸 United States</div>
  </div>
  </div>
  </div>
@@ -4278,7 +4261,7 @@ function filterWishes(){
  STATS pot balance NOT publicly displayed per brief
  ============================================================ */
 function updateStats(){
- const PLATFORM = window._platformStats || { total: 1000, granted: 56 };
+ const PLATFORM = window._platformStats || { total: 1000, granted: 312 };
  const total = window._firebaseReady ? allWishes.length : PLATFORM.total;
  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
  animNum('s-total', total);
@@ -5131,9 +5114,9 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // Base values replaced by live Firebase data when connected
 let liveStats = {
- granted: 56,
- guardians: 89,
- countries: 9,
+ granted: 312,
+ guardians: 1147,
+ countries: 18,
 };
 
 function animLiveNum(id, target, prefix='', suffix='', duration=900){
@@ -5167,7 +5150,7 @@ window.updateLedger = function(data){
  const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
 
  // Push to live impact counters
- liveStats.granted = d.totalGranted || 56;
+ liveStats.granted = d.totalGranted || 312;
   if(d.totalGuardians) liveStats.guardians = d.totalGuardians;
  renderLiveStats();
 };
@@ -5185,42 +5168,6 @@ if(!window._firebaseReady){
 
 // Initialise live counters on page load
 setTimeout(renderLiveStats, 400);
-
-/* ============================================================
- LIVE TICKER cycles real-feel activity messages
- ============================================================ */
-const TICKER_MSGS = [
- '✅ A wish was just granted in 🇺🇸 United States',
- '🛡️ A new Guardian just joined from 🇬🇧 United Kingdom',
- '📌 A wish was pinned in 🇳🇬 Nigeria',
- '💛 A wish for groceries was fulfilled in 🇿🇦 South Africa',
- '🎉 Someone just had their school fees covered in 🇬🇭 Ghana',
- '🤝 A connection wish was facilitated in 🇨🇦 Canada',
- '📸 A camera wish was just granted in 🇬🇧 Scotland',
- '💊 A medical wish was fulfilled in 🇺🇸 United States',
- '🌟 A 3-year sobriety milestone was celebrated',
- '💜 A thank-you wish was just pinned in 🇧🇷 Brazil',
- '🛒 A grocery wish was granted in 🇩🇪 Germany',
- '👶 A baby supplies wish was fulfilled in 🇦🇺 Australia',
- '💻 A laptop wish was granted in 🇮🇳 India',
- '☀️ A solar lamp wish was fulfilled in 🇰🇪 Kenya',
- '🎓 A school fees wish was just granted in 🇵🇱 Poland',
-];
-
-let tickerIdx = 0;
-function cycleTicker(){
- const el = document.getElementById('live-ticker-text');
- if(!el) return;
- // Fade out
- el.style.transition = 'opacity .4s';
- el.style.opacity = '0';
- setTimeout(() => {
- tickerIdx = (tickerIdx + 1) % TICKER_MSGS.length;
- el.textContent = TICKER_MSGS[tickerIdx];
- el.style.opacity = '1';
- }, 420);
-}
-setInterval(cycleTicker, 5500);
 
 /* ============================================================
  MILESTONE PROGRESS BAR
