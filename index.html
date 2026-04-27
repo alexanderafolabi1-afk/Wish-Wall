@@ -5921,20 +5921,23 @@ function setLang(lang){
   localStorage.setItem('ww-lang', lang);
 }
 
-// Close language dropdown when clicking outside
-document.addEventListener('click', function(e){
-  const switcher = document.getElementById('lang-switcher');
-  if(switcher && !switcher.contains(e.target)){
-    const dd = document.getElementById('lang-dropdown');
-    if(dd) dd.classList.remove('open');
-  }
-});
-
-// Restore saved language preference
-(function(){
+// Close language dropdown when clicking outside, and restore saved language
+function initLangSwitcher(){
+  document.addEventListener('click', function(e){
+    const switcher = document.getElementById('lang-switcher');
+    if(switcher && !switcher.contains(e.target)){
+      const dd = document.getElementById('lang-dropdown');
+      if(dd) dd.classList.remove('open');
+    }
+  });
   const saved = localStorage.getItem('ww-lang');
   if(saved && saved !== 'en') setLang(saved);
-})();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initLangSwitcher);
+} else {
+  initLangSwitcher();
+}
 
 </script>
 
