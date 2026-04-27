@@ -2771,34 +2771,7 @@ button { touch-action: manipulation; }
  </div>
  </div>
 
-
- <!-- Founding Patron Spotlight -->
- <p class="patron-section-lbl">💜 Our Founding Patrons Thank You</p>
-
- <!-- RenviaIT Ltd -->
- <div class="patron-banner">
- <div class="patron-top">
- <span class="patron-badge">🌟 Founding Patron</span>
- <div class="patron-info">
- <div class="patron-name">⚡ RenviaIT Ltd</div>
- <div class="patron-tagline">Technology solutions & digital innovation building the infrastructure that powers tomorrow</div>
- </div>
- </div>
- <p class="patron-desc">
- RenviaIT Ltd believed in The Wish Wall before it had a single wish pinned. Their extraordinary founding contribution has made it possible for us to grant wishes, build this platform, and keep the magic running. RenviaIT delivers cutting-edge technology solutions from cloud infrastructure to bespoke software development for businesses that refuse to stand still. If your business needs to move faster and think bigger, they build the tools to get you there.
- </p>
- <div class="patron-footer">
- <div class="patron-tags">
- <span class="patron-tag">☁️ Cloud Infrastructure</span>
- <span class="patron-tag">💻 Software Development</span>
- <span class="patron-tag">🔐 Cybersecurity</span>
- <span class="patron-tag">⚡ Digital Innovation</span>
- </div>
- <a class="patron-link" href="https://renviait.com" target="_blank" rel="noopener">Visit RenviaIT -></a>
- </div>
- </div>
-
- <!-- Guardian Tier Banner -->
+  <!-- Guardian Tier Banner -->
  <div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
 
  <!-- Leaderboard -->
@@ -2827,21 +2800,21 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">847</div>
+ <div class="live-num" id="live-granted">312</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">412</div>
+ <div class="live-num" id="live-guardians">1200</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
  <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--blue">
  <div class="live-card-icon">🌍</div>
- <div class="live-num" id="live-countries">9</div>
+ <div class="live-num" id="live-countries">18</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Countries</div>
  <div class="live-badge">LIVE</div>
@@ -2983,7 +2956,7 @@ button { touch-action: manipulation; }
  <div class="trust-badge">📊 Radically Transparent</div>
  <div class="trust-badge">✅ GDPR Compliant</div>
  <div class="trust-badge">🌍 Global Community</div>
- <div class="trust-badge">💛 412 Guardians</div>
+ <div class="trust-badge">💛 1,200 Guardians</div>
  <div class="trust-badge">⭐ No Hidden Fees. Ever.</div>
  </div>
  </div>
@@ -3080,7 +3053,7 @@ button { touch-action: manipulation; }
  <a href="privacy.html" target="_blank">Privacy Policy</a>
  <a href="terms.html" target="_blank">Terms & Conditions</a>
  <a href="cookies.html" target="_blank">Cookie Policy</a>
- <a href="mailto:admin@wallwishes.xyz">Contact Us</a>
+ <a href="contact.html">Contact Us</a>
  </div>
 
  <div class="footer-payout-strip">
@@ -4263,7 +4236,7 @@ function filterWishes(){
  STATS pot balance NOT publicly displayed per brief
  ============================================================ */
 function updateStats(){
- const PLATFORM = window._platformStats || { total: 1000, granted: 847 };
+ const PLATFORM = window._platformStats || { total: 1000, granted: 312 };
  const total = window._firebaseReady ? allWishes.length : PLATFORM.total;
  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
  animNum('s-total', total);
@@ -4380,7 +4353,6 @@ function donatePool(){
  LEADERBOARD
  ============================================================ */
 const DEMO_LB = [
- {name:'⚡ RenviaIT Ltd', flag:'🇬🇧', amount:2800, type:'corporate'},
  {name:'💸 Pesa', flag:'🇨🇦', amount:1800, type:'corporate'},
  {name:'🌿 Verda Solutions GmbH', flag:'🇩🇪', amount:560, type:'corporate'},
  {name:'📦 Brevio AB', flag:'🇸🇪', amount:400, type:'corporate'},
@@ -5116,8 +5088,8 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // Base values replaced by live Firebase data when connected
 let liveStats = {
- granted: 847,
- guardians: 412,
+ granted: 312,
+ guardians: 1200,
  countries: 18,
 };
 
@@ -5152,7 +5124,7 @@ window.updateLedger = function(data){
  const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
 
  // Push to live impact counters
- liveStats.granted = d.totalGranted || 847;
+ liveStats.granted = d.totalGranted || 312;
   if(d.totalGuardians) liveStats.guardians = d.totalGuardians;
  renderLiveStats();
 };
