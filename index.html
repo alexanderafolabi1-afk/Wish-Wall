@@ -14,7 +14,7 @@
 <!-- PRIMARY SEO: US + UK + Global dominance -->
 <title>The Wish Wall Pin a Wish, Change a Life | Community Wish Granting</title>
 <meta name="description" content="The Wish Wall: anonymous wish-granting community. Pin your wish for $2. Strangers fund grocery money, medical bills, laptops, baby supplies, school fees. Real help. Real people. Seen on TikTok and Reddit. Available worldwide.">
-<meta name="keywords" content="wish wall, anonymous wish granting, community kindness, pay it forward, I need help with money, strangers helping strangers, grocery money help, medical bill help, laptop fund, baby supplies donation, school fees help, wish come true, community fundraiser, random acts of kindness, TikTok kindness, Reddit kindness, micro crowdfunding, wish granting community USA, wish granting community UK, help strangers online, wishwall, pin a wish, wish board, kindness economy, charity alternative, crowdfunding alternative, wish fulfilment">
+<meta name="keywords" content="wish wall, anonymous wish granting, I need help with money, need financial help online, help paying bills, I need help urgently, financial hardship help, grocery money help, medical bill help, laptop fund, baby supplies donation, school fees help, strangers helping strangers, grant a wish community, how to help strangers online, random acts of kindness platform, pay it forward website, community kindness, wish come true, micro crowdfunding, wish granting community USA, wish granting community UK, help strangers online, wishwall, pin a wish, wish board, kindness economy, charity alternative, GoFundMe alternative, crowdfunding alternative, wish fulfilment, TikTok kindness, Reddit kindness">
 <meta name="author" content="The Wish Wall">
 <meta name="copyright" content="The Wish Wall wishwall.xyz">
 <meta name="language" content="English">
@@ -199,6 +199,11 @@
 <!-- Favicons -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
+<!-- PWA manifest — enables "Add to Home Screen" on iOS & Android -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Wish Wall">
 
 <!-- =====================================================
  FIREBASE SDK (v10 modular)
@@ -797,11 +802,6 @@ nav {
 .wall-grid > * {
  min-width: 0; max-width: 100%; overflow: hidden; box-sizing: border-box;
 }
-/* content-visibility: skip rendering off-screen cards (7x perf boost) */
-.note-card:nth-child(n+81) {
- content-visibility: auto;
- contain-intrinsic-size: auto 60px;
-}
 
 /* Note spots */
 .note-spot {
@@ -819,11 +819,13 @@ nav {
 .note-spot::before { content: '·'; font-size: 8px; opacity: .2; }
 .spot-num { position: absolute; bottom: 2px; right: 3px; font-size: 5px; color: rgba(30,34,53,.15); font-family: var(--fn-mono); }
 
-/* Note cards */
+/* Note cards — content-visibility: auto skips off-screen rendering */
 .note-card {
  aspect-ratio: 1/1.1;
  position: relative; cursor: pointer;
  contain: layout style paint;
+ content-visibility: auto;
+ contain-intrinsic-size: 0 120px;
  transform: rotate(var(--rot, 0deg));
  animation: noteAppear .5s cubic-bezier(0.16, 1, 0.3, 1) both;
  transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s, z-index 0s .22s;
@@ -2547,7 +2549,8 @@ button { touch-action: manipulation; }
  <div class="hero-stats">
  <div class="stat-pill"><span class="stat-num" id="s-total">0</span><span>pinned</span></div>
  <div class="stat-pill"><span class="stat-num" id="s-granted">0</span><span>granted</span></div>
- <div class="stat-pill stat-pill--pot" title="$1 from every pin fee feeds this pool"><span class="stat-num" id="s-pot">$0</span><span>in the pool</span></div>
+ <div class="stat-pill"><span class="stat-num" id="s-guardians">0</span><span>guardians</span></div>
+ <div class="stat-pill"><span class="stat-num" id="s-countries">0</span><span>countries</span></div>
  </div>
  <div class="milestone-wrap">
  <div class="milestone-lbl">
@@ -3079,6 +3082,27 @@ button { touch-action: manipulation; }
  </div>
  </div>
 </div><!-- /tab-how -->
+
+<!-- Hidden SEO FAQ: visually invisible, semantically rich for search engines -->
+<section aria-label="Frequently Asked Questions" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+ <h2>Frequently Asked Questions</h2>
+ <dl>
+  <dt>How do I get help paying bills online?</dt>
+  <dd>The Wish Wall lets you pin an anonymous wish for just 2 WishCoins ($2). Community Guardians browse the wall and choose wishes to fund. You can request help with bills, groceries, medical costs, school fees, or any genuine financial need. Once funded your grant is sent via PayPal or bank transfer.</dd>
+
+  <dt>Is The Wish Wall a GoFundMe alternative?</dt>
+  <dd>Yes. Unlike GoFundMe, The Wish Wall is anonymous, requires no social media following, and connects wishers directly with a global community of Guardians. You pin a wish privately; strangers make it real. No campaign page, no sharing required.</dd>
+
+  <dt>How can I help strangers online?</dt>
+  <dd>Become a Guardian on The Wish Wall. Browse anonymous wishes from people across the world who need grocery money, medical help, a laptop, school fees, or emotional support. Choose any wish and contribute any amount — no minimum, no sign-up required. Every penny goes directly to the person whose wish you grant.</dd>
+
+  <dt>Is The Wish Wall legitimate and trustworthy?</dt>
+  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Every penny in and out is publicly tracked in the Magic Ledger. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 12 countries since December 2024.</dd>
+
+  <dt>What is a random acts of kindness platform?</dt>
+  <dd>A random acts of kindness platform like The Wish Wall connects people who need help with people who want to give — anonymously and without expectation. Unlike charity, there is no organisation in the middle taking a large cut. The community is the platform.</dd>
+ </dl>
+</section>
 
 <!-- ============================================================
  FOOTER
@@ -4282,11 +4306,10 @@ function updateStats(){
  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
  animNum('s-total', total);
  animNum('s-granted', granted);
- // Magic Pool counter: $1 per real wish pinned
- const realPinned = allWishes.filter(w => !w.warmup).length;
- const potEl = document.getElementById('s-pot');
- if(potEl) potEl.textContent = '$' + realPinned.toLocaleString();
- // s-pool intentionally removed pot balance is internal only
+ // Public stat pills: Guardians and Countries (sourced from liveStats, updated by Firebase ledger)
+ animNum('s-guardians', liveStats.guardians);
+ animNum('s-countries', liveStats.countries);
+ // Pot balance is internal only — not rendered to any public element
  updateMilestone(total);
 }
 
