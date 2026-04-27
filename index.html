@@ -1013,13 +1013,20 @@ nav {
 
 /* Wall full */
 .wall-full-msg {
- display: none; position: sticky; top: 70px; z-index: 30;
- text-align: center; padding: var(--sp-3) var(--sp-3); margin-bottom: var(--sp-2);
+ display: none;
+ text-align: center;
+ padding: var(--sp-3) var(--sp-4);
+ margin-bottom: var(--sp-2);
  background: rgba(201,123,48,.1);
  border: 1px solid rgba(201,123,48,.4);
- border-radius: 2px;
- font-family: var(--fn-display); font-size: 1.4rem;
- font-weight: 700; color: var(--text);
+ border-radius: 4px;
+ font-family: var(--fn-display);
+ font-size: clamp(1rem, 2.5vw, 1.3rem);
+ font-weight: 700;
+ color: var(--text);
+ line-height: 1.55;
+ word-break: break-word;
+ overflow-wrap: break-word;
  animation: wallFullPop .6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .wall-full-msg.show { display: block; }
@@ -2561,7 +2568,7 @@ button { touch-action: manipulation; }
  <!-- FULL WALL MESSAGE -->
  <div class="wall-full-msg" id="wall-full-msg">
  <strong>The wall is full! All 1,000 spots have a wish pinned.</strong> ❤️<br>
- <span style="font-size:1.1rem;font-family:var(--fn-note);color:rgba(255,255,255,.75);">One thousand stories. Thank you. Oldest granted wishes rotate out shortly.</span>
+ <span style="font-size:clamp(0.85rem,2vw,1rem);font-family:var(--fn-body);color:var(--text-muted);font-weight:400;display:block;margin-top:6px;">One thousand stories. Thank you. Oldest granted wishes rotate out shortly.</span>
  </div>
 
  <!-- HOW IT WORKS inline strip -->
