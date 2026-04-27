@@ -7,87 +7,197 @@
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://wishwall.xyz/cookies">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Quicksand',sans-serif;background:#1a0e05;color:#e8dcc8;line-height:1.75;min-height:100vh;}
-.wrap{max-width:760px;margin:0 auto;padding:60px 24px 80px;}
-header{text-align:center;margin-bottom:52px;}
-.logo{font-size:2rem;margin-bottom:8px;}
-h1{font-size:2rem;color:#FFE566;margin-bottom:6px;}
-.sub{color:rgba(255,255,255,.45);font-size:13px;}
-h2{font-size:1.15rem;color:#FF7B2C;margin:36px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08);}
-p{margin-bottom:14px;color:rgba(255,255,255,.72);}
-ul{margin:0 0 14px 20px;color:rgba(255,255,255,.72);}
-li{margin-bottom:6px;}
-a{color:#FF7B2C;text-decoration:none;}
+:root{
+  --surface:#FAF8F5; --card:#EEE9E2; --text:#1E2235;
+  --text-muted:#6B7080; --urgency:#D44A1E; --warmth:#C97B30;
+  --ink:#1A1008; --accent:#4DAE7A;
+  --fn-display:'Fraunces',Georgia,serif;
+  --fn-body:'Lexend',system-ui,sans-serif;
+  --fn-mono:'Sometype Mono','Courier New',monospace;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--fn-body); font-weight:300;
+  background:var(--surface); color:var(--text);
+  line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+.site-header{
+  position:sticky; top:0; z-index:100;
+  background:rgba(250,248,245,.94); backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(30,34,53,.08);
+  padding:0 34px; height:58px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.site-header .logo{
+  font-family:var(--fn-display); font-size:19px; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); text-decoration:none;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark{
+  width:32px; height:32px; background:var(--urgency);
+  border-radius:6px 2px 6px 2px; display:flex;
+  align-items:center; justify-content:center; font-size:16px;
+  transform:rotate(-4deg); box-shadow:2px 2px 0 rgba(30,34,53,.2);
+}
+.back-link{
+  font-family:var(--fn-mono); font-size:12px; color:var(--text-muted);
+  text-decoration:none; transition:color .2s;
+  display:flex; align-items:center; gap:5px;
+}
+.back-link:hover{color:var(--urgency);}
+.container{max-width:720px; margin:0 auto; padding:55px 24px 89px;}
+.page-hero{padding:34px 0 55px; border-bottom:1px solid rgba(30,34,53,.08); margin-bottom:55px;}
+.page-tag{
+  font-family:var(--fn-mono); font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:2px; color:var(--urgency);
+  margin-bottom:13px; display:block;
+}
+h1{
+  font-family:var(--fn-display); font-size:clamp(2.4rem,6vw,4rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:.95;
+  color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 144,'WONK' 1;
+}
+h1 em{font-style:italic; color:var(--urgency); font-variation-settings:'opsz' 144,'WONK' 0;}
+.page-meta{font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);}
+.section{margin-bottom:55px;}
+h2{
+  font-family:var(--fn-display); font-size:1.4rem; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:baseline; gap:10px;
+}
+.section-num{
+  font-family:var(--fn-mono); font-size:10px; color:var(--text-muted);
+  flex-shrink:0; margin-top:2px; letter-spacing:1px;
+}
+h3{
+  font-family:var(--fn-display); font-size:1rem; font-weight:700;
+  color:var(--warmth); margin:21px 0 10px;
+  font-variation-settings:'opsz' 40;
+}
+p{margin-bottom:13px; font-size:15px; color:var(--text-muted);}
+ul,ol{padding-left:21px; margin-bottom:13px;}
+li{margin-bottom:8px; font-size:15px; color:var(--text-muted);}
+strong{color:var(--text); font-weight:500;}
+a{color:var(--urgency); text-decoration:none;}
 a:hover{text-decoration:underline;}
-.back{display:inline-flex;align-items:center;gap:6px;margin-bottom:40px;color:#FF7B2C;font-weight:600;font-size:14px;}
-.box{background:rgba(255,229,102,.07);border:1px solid rgba(255,229,102,.18);border-radius:12px;padding:16px 20px;margin-bottom:20px;}
-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
-th,td{padding:10px 14px;text-align:left;border:1px solid rgba(255,255,255,.1);}
-th{background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);font-weight:700;text-transform:uppercase;letter-spacing:.5px;font-size:11px;}
-td{color:rgba(255,255,255,.65);}
+.callout{
+  background:var(--card); border:1px solid rgba(30,34,53,.1);
+  border-left:4px solid var(--urgency);
+  border-radius:2px 8px 2px 8px; padding:21px 24px;
+  margin:21px 0;
+}
+.callout p{margin-bottom:0; font-size:14px;}
+.callout strong{display:block; margin-bottom:5px; font-family:var(--fn-mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--urgency);}
+.info-card{
+  background:var(--card); border:1px solid rgba(30,34,53,.08);
+  border-radius:2px 12px 2px 12px; padding:21px 24px;
+  margin:21px 0; box-shadow:3px 3px 0 rgba(30,34,53,.05);
+}
+table{width:100%; border-collapse:collapse; margin-bottom:20px; font-size:13px;}
+th,td{padding:10px 14px; text-align:left; border:1px solid rgba(30,34,53,.1);}
+th{background:rgba(30,34,53,.04); color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px; font-size:11px; font-family:var(--fn-mono);}
+td{color:var(--text-muted);}
+hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
+.doc-footer{
+  margin-top:89px; padding-top:34px;
+  border-top:1px solid rgba(30,34,53,.08);
+  font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);
+  display:flex; gap:21px; flex-wrap:wrap; justify-content:space-between;
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="logo">✨</div>
-    <h1>Cookie Policy</h1>
-    <p class="sub">Last updated: March 2026 &nbsp;·&nbsp; The Wish Wall &nbsp;·&nbsp; <a href="https://wishwall.xyz">wishwall.xyz</a></p>
-  </header>
 
-  <a class="back" href="/">← Back to The Wish Wall</a>
+<header class="site-header">
+  <a href="/" class="logo">
+    <div class="logo-mark">📌</div>
+    The Wish Wall
+  </a>
+  <a href="/" class="back-link">&#8592; Back to the Wall</a>
+</header>
 
-  <div class="box">
-    <strong style="color:#FFE566;">We use minimal cookies.</strong> Essential cookies are required for the site to work. All others are optional and require your consent.
+<div class="container">
+
+  <div class="page-hero">
+    <span class="page-tag">Legal</span>
+    <h1>Cookie<br><em>Policy.</em></h1>
+    <p class="page-meta">Last updated: March 2026 &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; The Wish Wall &nbsp;·&nbsp; <a href="https://wishwall.xyz">wishwall.xyz</a></p>
   </div>
 
-  <h2>1. What Are Cookies</h2>
-  <p>Cookies are small text files stored on your device when you visit a website. They help the site remember information about your visit. We use localStorage (similar in function to cookies) as our primary storage mechanism for preferences and session data.</p>
+  <div class="callout">
+    <p><strong>Minimal Cookies</strong> Essential cookies are required for the site to work. All others are optional and require your consent.</p>
+  </div>
 
-  <h2>2. The Cookies / Local Storage We Use</h2>
+  <div class="section">
+    <h2><span class="section-num">01</span> What Are Cookies</h2>
+    <p>Cookies are small text files stored on your device when you visit a website. They help the site remember information about your visit. We use localStorage (similar in function to cookies) as our primary storage mechanism for preferences and session data.</p>
+  </div>
 
-  <h3 style="color:#FFE566;font-size:1rem;margin:20px 0 10px;">Essential (cannot be disabled)</h3>
-  <table>
-    <thead><tr><th>Key</th><th>Purpose</th><th>Duration</th></tr></thead>
-    <tbody>
-      <tr><td>ww-cookie-consent</td><td>Stores your cookie consent preference</td><td>1 year</td></tr>
-      <tr><td>ww-wishes-{year}</td><td>Tracks how many wishes you've pinned this year (max 3)</td><td>End of calendar year</td></tr>
-      <tr><td>ww-mycode</td><td>Stores your personal WishCode for the referral system</td><td>1 year</td></tr>
-      <tr><td>ww-wishcredits</td><td>Tracks your earned WishCredits balance</td><td>1 year</td></tr>
-    </tbody>
-  </table>
+  <div class="section">
+    <h2><span class="section-num">02</span> The Cookies We Use</h2>
 
-  <h3 style="color:#FFE566;font-size:1rem;margin:20px 0 10px;">Third-Party (optional, require consent)</h3>
-  <table>
-    <thead><tr><th>Provider</th><th>Purpose</th><th>Policy</th></tr></thead>
-    <tbody>
-      <tr><td>Stripe</td><td>Secure payment processing. Stripe sets its own cookies to prevent fraud and enable payment sessions.</td><td><a href="https://stripe.com/cookies-policy/legal" target="_blank" rel="noopener">stripe.com</a></td></tr>
-      <tr><td>Google Fonts</td><td>Loads typefaces from Google's CDN. Google may log IP addresses for delivery purposes.</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">google.com</a></td></tr>
-      <tr><td>Firebase/Google</td><td>Platform data storage and real-time updates. No advertising tracking.</td><td><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">firebase.google.com</a></td></tr>
-      <tr><td>ipapi.co</td><td>Anonymous IP-based country detection for displaying your flag on your wish note. No account created, no personal data stored.</td><td><a href="https://ipapi.co/privacy/" target="_blank" rel="noopener">ipapi.co</a></td></tr>
-    </tbody>
-  </table>
+    <h3>Essential (cannot be disabled)</h3>
+    <table>
+      <thead><tr><th>Key</th><th>Purpose</th><th>Duration</th></tr></thead>
+      <tbody>
+        <tr><td>ww-cookie-consent</td><td>Stores your cookie consent preference</td><td>1 year</td></tr>
+        <tr><td>ww-wishes-{year}</td><td>Tracks how many wishes you've pinned this year (max 3)</td><td>End of calendar year</td></tr>
+        <tr><td>ww-mycode</td><td>Stores your personal WishCode for the referral system</td><td>1 year</td></tr>
+        <tr><td>ww-wishcredits</td><td>Tracks your earned WishCredits balance</td><td>1 year</td></tr>
+      </tbody>
+    </table>
 
-  <h2>3. What We Don't Use</h2>
-  <ul>
-    <li>Advertising or tracking cookies of any kind</li>
-    <li>Facebook Pixel or any social media tracking</li>
-    <li>Google Analytics or similar analytics platforms (we use anonymised platform-level data only)</li>
-    <li>Any cross-site tracking technology</li>
-  </ul>
+    <h3>Third-Party (optional, require consent)</h3>
+    <table>
+      <thead><tr><th>Provider</th><th>Purpose</th><th>Policy</th></tr></thead>
+      <tbody>
+        <tr><td>Stripe</td><td>Secure payment processing. Stripe sets its own cookies to prevent fraud and enable payment sessions.</td><td><a href="https://stripe.com/cookies-policy/legal" target="_blank" rel="noopener">stripe.com</a></td></tr>
+        <tr><td>Google Fonts</td><td>Loads typefaces from Google's CDN. Google may log IP addresses for delivery purposes.</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">google.com</a></td></tr>
+        <tr><td>Firebase/Google</td><td>Platform data storage and real-time updates. No advertising tracking.</td><td><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">firebase.google.com</a></td></tr>
+        <tr><td>ipapi.co</td><td>Anonymous IP-based country detection for displaying your flag on your wish note. No account created, no personal data stored.</td><td><a href="https://ipapi.co/privacy/" target="_blank" rel="noopener">ipapi.co</a></td></tr>
+      </tbody>
+    </table>
+  </div>
 
-  <h2>4. Managing Your Preferences</h2>
-  <p>When you first visit The Wish Wall, a cookie consent banner will appear. You can choose to accept all cookies or essential cookies only. You can change your preference at any time by clearing your browser's local storage or contacting us.</p>
-  <p>To clear your preferences in most browsers: Settings → Privacy → Clear browsing data → Cookies and site data.</p>
+  <div class="section">
+    <h2><span class="section-num">03</span> What We Don't Use</h2>
+    <ul>
+      <li>Advertising or tracking cookies of any kind</li>
+      <li>Facebook Pixel or any social media tracking</li>
+      <li>Google Analytics or similar analytics platforms (we use anonymised platform-level data only)</li>
+      <li>Any cross-site tracking technology</li>
+    </ul>
+  </div>
 
-  <h2>5. More Information</h2>
-  <p>For more information about how we handle your data, see our <a href="privacy.html">Privacy Policy</a>. To contact us about cookies: <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a></p>
-  <p>For general information about cookies: <a href="https://ico.org.uk/for-the-public/online/cookies/" target="_blank" rel="noopener">ico.org.uk</a></p>
+  <div class="section">
+    <h2><span class="section-num">04</span> Managing Your Preferences</h2>
+    <p>When you first visit The Wish Wall, a cookie consent banner will appear. You can choose to accept all cookies or essential cookies only. You can change your preference at any time by clearing your browser's local storage or contacting us.</p>
+    <p>To clear your preferences in most browsers: Settings &rarr; Privacy &rarr; Clear browsing data &rarr; Cookies and site data.</p>
+  </div>
 
-  <p style="margin-top:40px;font-size:12px;color:rgba(255,255,255,.3);">© 2026 The Wish Wall · wishwall.xyz · All rights reserved.</p>
+  <div class="section">
+    <h2><span class="section-num">05</span> More Information</h2>
+    <p>For more information about how we handle your data, see our <a href="privacy.html">Privacy Policy</a>. To contact us about cookies: <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a></p>
+    <p>For general information about cookies: <a href="https://ico.org.uk/for-the-public/online/cookies/" target="_blank" rel="noopener">ico.org.uk</a></p>
+  </div>
+
+  <div class="doc-footer">
+    <span>The Wish Wall &nbsp;·&nbsp; wishwall.xyz</span>
+    <span>UK GDPR &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; March 2026</span>
+    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms &amp; Conditions</a> &nbsp;·&nbsp; <a href="contact.html">Contact Us</a></span>
+  </div>
+
 </div>
 </body>
 </html>

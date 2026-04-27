@@ -247,7 +247,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
   <div class="doc-footer">
     <span>The Wish Wall &nbsp;·&nbsp; wishwall.xyz</span>
     <span>England &amp; Wales law &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Dec 2026</span>
-    <span><a href="privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="cookies">Cookie Policy</a></span>
+    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="cookies.html">Cookie Policy</a></span>
   </div>
 
 </div>
