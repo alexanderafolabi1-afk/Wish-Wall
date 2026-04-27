@@ -1,21 +1,13 @@
 {
   "name": "The Wish Wall",
-  "short_name": "Wish Wall",
-  "description": "Pin an anonymous wish. Let strangers make it real. Community wish-granting platform.",
+  "short_name": "WishWall",
+  "description": "Pin a wish. Let strangers make it real.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAF8F5",
-  "theme_color": "#5C3D11",
-  "orientation": "portrait-primary",
+  "background_color": "#07070D",
+  "theme_color": "#F5C842",
   "icons": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["social", "lifestyle"],
-  "lang": "en",
-  "dir": "ltr"
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
 }
