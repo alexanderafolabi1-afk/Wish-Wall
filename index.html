@@ -3866,10 +3866,10 @@ class Particle{
 }
 
   function initPx(){ resizeCanvas(); particles = Array.from({length:20}, () => new Particle()); }
-  let _animPaused = false;
-  function animPx(){ if(!ctx) return; if(!_animPaused){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.step(); p.draw(); }); } requestAnimationFrame(animPx); }
+  let _animRafId = null;
+  function animPx(){ if(!ctx) return; ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.step(); p.draw(); }); _animRafId = requestAnimationFrame(animPx); }
   window.addEventListener('resize', resizeCanvas);
-  document.addEventListener('visibilitychange', () => { _animPaused = document.hidden; });
+  document.addEventListener('visibilitychange', () => { if(document.hidden){ if(_animRafId){ cancelAnimationFrame(_animRafId); _animRafId = null; } } else { if(!_animRafId) _animRafId = requestAnimationFrame(animPx); } });
  initPx(); animPx();
 } // end initParticleSystem
 
