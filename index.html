@@ -256,7 +256,7 @@
 
  <p class="guardian-terms-note">
  By continuing you agree to our
- <a href="terms" target="_blank">Terms</a>.
+ <a href="terms.html" target="_blank">Terms</a>.
  Payments via Stripe. Contributions are voluntary.
  </p>
  </div>
@@ -1790,6 +1790,9 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  COOKIE BANNER
  ============================================================ */
 .cookie-banner {
+ display: none;
+}
+.cookie-banner.show {
  position: fixed; bottom: var(--sp-2); left: var(--sp-2); right: var(--sp-2);
  max-width: 560px; margin: 0 auto;
  background: var(--text); color: #FAF8F5;
@@ -2571,7 +2574,7 @@ button { touch-action: manipulation; }
  <!-- FULL WALL MESSAGE -->
  <div class="wall-full-msg" id="wall-full-msg">
  <strong>The wall is full! All 1,000 spots have a wish pinned.</strong> ❤️<br>
- <span style="font-size:clamp(0.85rem,2vw,1rem);font-family:var(--fn-body);color:var(--text-muted);font-weight:400;display:block;margin-top:6px;">One thousand stories. Thank you. Oldest granted wishes rotate out shortly.</span>
+ <span style="font-size:clamp(0.85rem,2vw,1rem);font-family:var(--fn-body);color:var(--text-muted);font-weight:400;display:block;margin-top:6px;">One thousand stories. When a wish is granted, space opens for the next one in the queue.</span>
  </div>
 
  <!-- HOW IT WORKS inline strip -->
@@ -2842,7 +2845,7 @@ button { touch-action: manipulation; }
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">167</div>
+ <div class="live-num" id="live-guardians">89</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
  <div class="live-badge">LIVE</div>
@@ -3089,11 +3092,10 @@ button { touch-action: manipulation; }
  <a href="#" onclick="showTab('how');return false;">How It Works</a>
  <a href="#" onclick="showTab('guard');return false;">Become a Guardian</a>
  <a href="#" onclick="showTab('impact');return false;">Our Impact</a>
- <a href="privacy" target="_blank">Privacy Policy</a>
- <a href="terms" target="_blank">Terms & Conditions</a>
- <a href="cookies" target="_blank">Cookie Policy</a>
- <a href="/cdn-cgi/l/email-protection#3b5a5f5652557b4c5a57574c5248535e4815434241">Contact Us</a>
- <a href="admin">Admin</a>
+ <a href="privacy.html" target="_blank">Privacy Policy</a>
+ <a href="terms.html" target="_blank">Terms & Conditions</a>
+ <a href="cookies.html" target="_blank">Cookie Policy</a>
+ <a href="mailto:admin@wallwishes.xyz">Contact Us</a>
  </div>
 
  <div class="footer-payout-strip">
@@ -3142,13 +3144,13 @@ button { touch-action: manipulation; }
 <div id="cookie-banner" role="dialog" aria-label="Cookie consent">
  <p class="cookie-txt">
  🍪 We use essential cookies to make this site work, and optional analytics cookies to improve it.
- Read our <a href="cookies" target="_blank">Cookie Policy</a> and
- <a href="privacy" target="_blank">Privacy Policy</a>.
+ Read our <a href="cookies.html" target="_blank">Cookie Policy</a> and
+ <a href="privacy.html" target="_blank">Privacy Policy</a>.
  You can withdraw consent at any time.
  </p>
  <div class="cookie-btns">
- <button class="cookie-accept" onclick="acceptCookies()">Accept All</button>
- <button class="cookie-reject" onclick="rejectCookies()">Essential Only</button>
+ <button class="cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+ <button class="cookie-btn-reject" onclick="rejectCookies()">Essential Only</button>
  </div>
 </div>
 
@@ -3352,7 +3354,7 @@ button { touch-action: manipulation; }
  </div>
 
  <p class="form-hint" style="text-align:center;margin-top:13px;">
- By pinning, you agree to our <a href="terms" target="_blank" style="color:var(--urgency);">Terms of Service</a> and <a href="privacy" target="_blank" style="color:var(--urgency);">Privacy Policy</a>.
+ By pinning, you agree to our <a href="terms.html" target="_blank" style="color:var(--urgency);">Terms of Service</a> and <a href="privacy.html" target="_blank" style="color:var(--urgency);">Privacy Policy</a>.
  </p>
  </div>
 
@@ -3801,9 +3803,8 @@ const DEMO_RAW = [
  {id:'d77', wishText:"Groceries for the fortnight flooding hit our whole neighbourhood 🛒", status:'granted', color:'n-pink', stamp:'prayer', cat:'money', est:50, country:'🇧🇷 Brazil'},
  {id:'d78', wishText:"A camera to document community resilience stories Favela journalism matters 📷", status:'approved', color:'n-orange',stamp:'big', cat:'tech', est:200, country:'🇧🇷 Brazil'},
  {id:'d79', wishText:"Connect me to digital skills training for youth in São Paulo 🤝", status:'approved', color:'n-blue', stamp:'goals', cat:'connect', est:0, country:'🇧🇷 Brazil', isConnect:true},
- // === FRANCE ===================================================
- {id:'d80', wishText:"Help with baby supplies just arrived in Paris with nothing but hope 🍼", status:'approved', color:'n-pink', stamp:'valid', cat:'baby', est:70, country:'🇫🇷 France'},
- {id:'d81', wishText:"Laptop for my freelance work mine died, invoices are piling up 💻", status:'granted', color:'n-yellow',stamp:'valid', cat:'tech', est:300, country:'🇫🇷 France'},
+ {id:'d80', wishText:"Help with baby supplies just started this new chapter with nothing but hope 🍼", status:'approved', color:'n-pink', stamp:'valid', cat:'baby', est:70, country:'🇧🇪 Belgium'},
+ {id:'d81', wishText:"Laptop for my freelance work mine died, invoices are piling up 💻", status:'granted', color:'n-yellow',stamp:'valid', cat:'tech', est:300, country:'🇵🇹 Portugal'},
  // === GLOBAL / EMOTIONAL =======================================
  {id:'d82', wishText:"Avocados that ripen on a schedule that works for me specifically 🥑", status:'granted', color:'n-orange',stamp:'legend', cat:'funny', est:0, country:'🌍 Global'},
  {id:'d83', wishText:"Group chats get a 'seen and choosing peace' reaction 👀", status:'approved', color:'n-blue', stamp:'legend', cat:'funny', est:0, country:'🌍 Global'},
@@ -4401,7 +4402,7 @@ const DEMO_LB = [
  {name:'🔷 Nuvelo Consulting SL', flag:'🇪🇸', amount:290, type:'corporate'},
  {name:'🌐 Kairova Tech Oy', flag:'🇫🇮', amount:250, type:'corporate'},
  {name:'🏗️ Altivo Partners BV', flag:'🇳🇱', amount:220, type:'corporate'},
- {name:'💡 Lumence Studio SAS', flag:'🇫🇷', amount:150, type:'corporate'},
+ {name:'💡 Lumence Studio SAS', flag:'🇨🇭', amount:150, type:'corporate'},
  {name:'J. Hartley', flag:'🇬🇧', amount:200},
  {name:'Sophie M.', flag:'🇬🇧', amount:150},
  {name:'Anonymous', flag:'🇬🇧', amount:100},
@@ -5131,7 +5132,7 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 // Base values replaced by live Firebase data when connected
 let liveStats = {
  granted: 56,
- guardians: 167,
+ guardians: 89,
  countries: 9,
 };
 
@@ -5167,6 +5168,7 @@ window.updateLedger = function(data){
 
  // Push to live impact counters
  liveStats.granted = d.totalGranted || 56;
+  if(d.totalGuardians) liveStats.guardians = d.totalGuardians;
  renderLiveStats();
 };
 window.updateLedger(null);
@@ -5199,7 +5201,7 @@ const TICKER_MSGS = [
  '🌟 A 3-year sobriety milestone was celebrated',
  '💜 A thank-you wish was just pinned in 🇧🇷 Brazil',
  '🛒 A grocery wish was granted in 🇩🇪 Germany',
- '👶 A baby supplies wish was fulfilled in 🇫🇷 France',
+ '👶 A baby supplies wish was fulfilled in 🇦🇺 Australia',
  '💻 A laptop wish was granted in 🇮🇳 India',
  '☀️ A solar lamp wish was fulfilled in 🇰🇪 Kenya',
  '🎓 A school fees wish was just granted in 🇵🇱 Poland',
@@ -5733,7 +5735,7 @@ const PIPE_DEMO = [
  {wishText:"Dental appointment — in pain for weeks",country:"🇬🇧 United Kingdom",color:"n-blue", lang:"en"},
  {wishText:"Baby car seat to leave the hospital", country:"🇺🇸 United States", color:"n-green", lang:"en"},
  {wishText:"Gas money to get to my interview", country:"🇺🇸 United States", color:"n-lav", lang:"en"},
- {wishText:"Besoin aide pour loyer ce mois", country:"🇫🇷 France", color:"n-yellow", lang:"fr"},
+ {wishText:"Besoin aide pour loyer ce mois", country:"🇧🇪 Belgium", color:"n-yellow", lang:"fr"},
  {wishText:"A space heater — my boiler is broken", country:"🇬🇧 United Kingdom",color:"n-orange", lang:"en"},
  {wishText:"Electric bill before they cut us off", country:"🇺🇸 United States", color:"n-blue", lang:"en"},
 ];
