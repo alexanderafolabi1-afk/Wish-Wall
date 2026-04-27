@@ -160,12 +160,12 @@
  "mainEntity": [
  { "@type": "Question", "name": "How does The Wish Wall work?", "acceptedAnswer": { "@type": "Answer", "text": "Pay $2 (2 WishCoins) to pin your wish anonymously. Community Guardians browse the wall, choose wishes to sponsor, and fund them. Funds are distributed starting with the most achievable wishes." } },
  { "@type": "Question", "name": "Is The Wish Wall free to join as a Guardian?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Guardians join for free. You can donate any amount to a specific wish or to the Magic Pool. No minimum. No sign-up required." } },
- { "@type": "Question", "name": "Is The Wish Wall legitimate and safe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All payments are processed by Stripe the same payment processor used by Amazon and Google. Every penny is tracked in our public Transparency Ledger. We never share your personal details." } },
+ { "@type": "Question", "name": "Is The Wish Wall legitimate and safe?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All payments are processed by Stripe the same payment processor used by Amazon and Google. Every payment is processed by Stripe. Recipients are verified before grants are issued. We never share your personal details." } },
  { "@type": "Question", "name": "What wishes can I pin?", "acceptedAnswer": { "@type": "Answer", "text": "Any genuine need: grocery money, medical bills, a laptop, baby supplies, school fees, utility bills, rent shortfall, connections to charities, or emotional support. Up to 3 wishes per year." } },
  { "@type": "Question", "name": "Is my wish anonymous?", "acceptedAnswer": { "@type": "Answer", "text": "Your wish appears anonymously on the wall. Your name is stored privately for verification purposes only and is never displayed publicly without your explicit consent." } },
  { "@type": "Question", "name": "How quickly are wishes granted?", "acceptedAnswer": { "@type": "Answer", "text": "It varies. Small wishes are often funded within hours. Larger needs may take longer. Non-monetary connection wishes receive a human response within 48 hours." } },
  { "@type": "Question", "name": "What is a WishCredit?", "acceptedAnswer": { "@type": "Answer", "text": "WishCredits are earned by referring 3 friends who each pin a wish using your personal referral code. Each credit is worth $1 off your next wish fee." } },
- { "@type": "Question", "name": "How do I know my money reaches the wisher?", "acceptedAnswer": { "@type": "Answer", "text": "Grants are sent directly to recipients via PayPal or bank transfer after identity verification. Every transaction appears in the public Magic Ledger. We retain a disclosed 5% platform fee to cover operating costs." } }
+ { "@type": "Question", "name": "How do I know my money reaches the wisher?", "acceptedAnswer": { "@type": "Answer", "text": "Grants are sent directly to recipients via PayPal or bank transfer after identity verification. Recipients are contacted directly and grants are issued privately to protect their anonymity." } }
  ]
  },
  {
@@ -2681,7 +2681,7 @@ button { touch-action: manipulation; }
  <span class="edu-badge">🪄 Wish Ripple Calculator</span>
  <h2 class="edu-title">How far does kindness go?</h2>
  <p class="edu-sub">Drag the slider and watch the magic multiply ✨</p>
- <p class="calc-label">If the community raised...</p>
+ <p class="calc-label">If the community pitched in...</p>
  <div class="calc-amount" id="calc-amt">50 WC</div>
  <input type="range" class="wish-sl" id="wish-sl" min="2" max="500" value="50" step="2" oninput="updateCalc()">
  <div class="sl-labels"><span>2 WC</span><span>500 WC</span></div>
@@ -2694,22 +2694,7 @@ button { touch-action: manipulation; }
  </div>
  </div>
 
- <!-- Transparency Ledger pot balance intentionally omitted -->
- <div class="ledger-section">
- <div class="sec-header">
- <h2 class="sec-title" style="font-size:1.8rem;">📊 The Magic Ledger</h2>
- <p class="sec-sub">Radically transparent. Every penny, every wish, accounted for.</p>
- </div>
- <div class="ledger-grid">
- <div class="led-card"><span class="led-num" id="led-fees">$0</span><span class="led-lbl">Wish Fees Collected</span></div>
- <div class="led-card"><span class="led-num" id="led-don">$0</span><span class="led-lbl">Guardian Donations</span></div>
- <div class="led-card"><span class="led-num" id="led-gr">0</span><span class="led-lbl">Wishes Granted</span></div>
- <div class="led-card"><span class="led-num" id="led-avg">$0</span><span class="led-lbl">Avg Cost Per Wish</span></div>
- </div>
- <p class="led-note">💡 Updated: <span id="led-ts"> </span> &nbsp;&middot;&nbsp; 5% platform admin fee disclosed above</p>
- </div>
-
-</div><!-- /tab-wall -->
+ </div><!-- /tab-wall -->
 
 <!-- ============================================================
  TAB: GUARDIANS
@@ -2806,7 +2791,6 @@ button { touch-action: manipulation; }
  <div class="patron-name">⚡ RenviaIT Ltd</div>
  <div class="patron-tagline">Technology solutions & digital innovation building the infrastructure that powers tomorrow</div>
  </div>
- <div class="patron-amount">$2,800</div>
  </div>
  <p class="patron-desc">
  RenviaIT Ltd believed in The Wish Wall before it had a single wish pinned. Their extraordinary founding contribution has made it possible for us to grant wishes, build this platform, and keep the magic running. RenviaIT delivers cutting-edge technology solutions from cloud infrastructure to bespoke software development for businesses that refuse to stand still. If your business needs to move faster and think bigger, they build the tools to get you there.
@@ -2863,13 +2847,6 @@ button { touch-action: manipulation; }
  <div class="live-lbl">Guardians Worldwide</div>
  <div class="live-badge">LIVE</div>
  </div>
- <div class="live-card live-card--green">
- <div class="live-card-icon">💵</div>
- <div class="live-num" id="live-raised">$14,920</div>
- <div class="live-pulse"></div>
- <div class="live-lbl">Raised Together</div>
- <div class="live-badge">LIVE</div>
- </div>
  <div class="live-card live-card--blue">
  <div class="live-card-icon">🌍</div>
  <div class="live-num" id="live-countries">9</div>
@@ -2919,7 +2896,7 @@ button { touch-action: manipulation; }
  <div class="value-pillar vp-purple">
  <div class="vp-icon">📊</div>
  <div class="vp-name">Radical Transparency</div>
- <div class="vp-body">Every penny in, every penny out tracked publicly in the Magic Ledger. No hidden fees. No surprises. The wall runs on trust, and trust runs on truth.</div>
+ <div class="vp-body">Every wish on the wall is verified. Every grant goes directly to the person who needs it. No hidden agendas. The wall runs on trust, and trust runs on honesty.</div>
  </div>
  <div class="value-pillar vp-orange">
  <div class="vp-icon">🌍</div>
@@ -2959,7 +2936,7 @@ button { touch-action: manipulation; }
  </div>
  <div class="story-card story-green">
  <div class="story-emoji">👶</div>
- <div class="story-quote">I posted at 2am with a newborn alone. By morning three strangers had donated. I felt less alone than I had in months.</div>
+ <div class="story-quote">I posted at 2am with a newborn alone. By morning three strangers had helped. I felt less alone than I had in months.</div>
  <div class="story-meta"><span class="story-who">J., 🇬🇧 London</span><span class="story-tag granted">✅ Granted</span></div>
  </div>
  <div class="story-card story-orange">
@@ -3071,7 +3048,7 @@ button { touch-action: manipulation; }
  <div class="how-card-icon">📊</div>
  <div>
  <h3 class="how-card-title" style="color:var(--orange);">Radical Transparency</h3>
- <p class="how-card-body">Every penny is accounted for in the Magic Ledger. The 2 WishCoin fee covers platform costs. Guardian donations go directly to granting wishes. We're a community project not a corporation. Questions? Email <a href="/cdn-cgi/l/email-protection#fd9c99909493bd8a9c91918a948e95988ed3858487" style="color:var(--yellow);"><span class="__cf_email__" data-cfemail="28494c454146685f4944445f415b404d5b06505152">[email&#160;protected]</span></a></p>
+ <p class="how-card-body">Every wish is verified before a grant is issued. Guardian support goes directly to granting wishes. We're a community project not a corporation. Questions? Email <a href="/cdn-cgi/l/email-protection#fd9c99909493bd8a9c91918a948e95988ed3858487" style="color:var(--yellow);"><span class="__cf_email__" data-cfemail="28494c454146685f4944445f415b404d5b06505152">[email&#160;protected]</span></a></p>
  </div>
  </div>
 
@@ -3097,7 +3074,7 @@ button { touch-action: manipulation; }
   <dd>Become a Guardian on The Wish Wall. Browse anonymous wishes from people across the world who need grocery money, medical help, a laptop, school fees, or emotional support. Choose any wish and contribute any amount — no minimum, no sign-up required. Every penny goes directly to the person whose wish you grant.</dd>
 
   <dt>Is The Wish Wall legitimate and trustworthy?</dt>
-  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Every penny in and out is publicly tracked in the Magic Ledger. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 12 countries since December 2024.</dd>
+  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 12 countries since December 2024.</dd>
 
   <dt>What is a random acts of kindness platform?</dt>
   <dd>A random acts of kindness platform like The Wish Wall connects people who need help with people who want to give — anonymously and without expectation. Unlike charity, there is no organisation in the middle taking a large cut. The community is the platform.</dd>
@@ -3122,7 +3099,6 @@ button { touch-action: manipulation; }
  <div class="footer-payout-strip">
  <span class="payout-badge">💳 Payouts via Bank Transfer & PayPal</span>
  <span class="payout-badge">🌍 Recipients in 12+ countries</span>
- <span class="payout-badge">5% Platform Admin Fee disclosed in ledger</span>
  <span class="payout-badge">💵 1 WishCoin = $1 USD</span>
  </div>
 
@@ -3135,7 +3111,7 @@ button { touch-action: manipulation; }
  </div>
 
  <div class="footer-legal-block">
- <strong>How We Grant Wishes:</strong> When the Magic Pool covers a wish's estimated cost, our team verifies the request and contacts the recipient by email. Grants are sent directly via PayPal or bank transfer in the recipient's name. We retain a 5% platform administration fee on each granted wish to cover operating costs, which is disclosed in our Transparency Ledger. We do not guarantee that every wish will be granted grants depend on available funds and wish verification. We reserve the right to decline or remove wishes that violate our community standards.
+ <strong>How We Grant Wishes:</strong> When the Magic Pool covers a wish's estimated cost, our team verifies the request and contacts the recipient by email. Grants are sent directly via PayPal or bank transfer in the recipient's name. We do not guarantee that every wish will be granted grants depend on available funds and wish verification. We reserve the right to decline or remove wishes that violate our community standards.
  </div>
  <div class="footer-legal-block" style="margin-top:8px;">
  <strong>Regulatory Notice:</strong> The Wish Wall is a community kindness platform, not a registered charity and not regulated by the Financial Conduct Authority (FCA). Payments on this platform are processed exclusively by Stripe Payments UK Ltd and Stripe Payments Europe Ltd, which are separately authorised and regulated. The Wish Wall does not hold, transmit, or manage client funds all payment processing is handled end-to-end by Stripe under their own regulatory permissions. WishCoins are a platform unit of account (1 WishCoin = $1 USD) and do not constitute electronic money as defined under the Electronic Money Regulations 2011. Guardian contributions are voluntary donations and are not covered by the Financial Services Compensation Scheme (FSCS) or subject to Financial Ombudsman Service jurisdiction. Users with complaints should contact admin@wallwishes.xyz in the first instance.
@@ -4460,18 +4436,16 @@ function paintLB(donors){
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
  const rankExtra= ['rank-1','rank-2','rank-3'];
- const totalAmt = data.reduce((s,d) => s + d.amount, 0);
 
  list.innerHTML = `
  <div style="text-align:center;margin-bottom:20px;font-family:var(--fn-note);font-size:1rem;color:rgba(255,255,255,.5);">
- ${data.length} donors from 🇺🇸🇬🇧🇨🇦🇩🇪🇧🇷🇿🇦 and beyond &middot; $${totalAmt.toLocaleString('en-US')} raised together
+ ${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇧🇷🇿🇦🇳🇬 and beyond
  </div>` +
  data.map((d, i) => `
 <div class="lb-item ${rankExtra[i] || ''}">
  <span class="lb-rank ${rankCls[i] || ''}">${medals[i] || (i + 1)}</span>
  <span class="lb-flag">${d.flag || '🌍'}</span>
  <span class="lb-name">${esc(d.name)}${d.type === 'corporate' ? ' <span class="lb-corp-tag">Corporate</span>' : ''}</span>
- <span class="lb-amt">$${d.amount}</span>
 </div>`).join('');
 
  // Scroll-reveal: animate each row into view as user scrolls
@@ -5158,7 +5132,6 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 let liveStats = {
  granted: 56,
  guardians: 167,
- raised: 14920,
  countries: 9,
 };
 
@@ -5181,25 +5154,19 @@ function animLiveNum(id, target, prefix='', suffix='', duration=900){
 function renderLiveStats(){
  animLiveNum('live-granted', liveStats.granted, '', '');
  animLiveNum('live-guardians', liveStats.guardians, '', '');
- animLiveNum('live-raised', liveStats.raised, '$', '');
  animLiveNum('live-countries', liveStats.countries, '', '');
 }
 
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
- const d = data || { totalFees: 300, totalDonations: 14620, totalGranted: 56, avgCost: 45 };
+ const d = data || { totalGranted: 56 };
  const fmt = n => Number(n ?? 0).toLocaleString('en-US');
 
  // Public ledger cards
- document.getElementById('led-fees').textContent = `$${fmt(d.totalFees)}`;
- document.getElementById('led-don').textContent = `$${fmt(d.totalDonations)}`;
- document.getElementById('led-gr').textContent = fmt(d.totalGranted);
- document.getElementById('led-avg').textContent = `$${fmt(d.avgCost)}`;
- document.getElementById('led-ts').textContent = new Date().toLocaleString('en-US');
+ const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
 
  // Push to live impact counters
  liveStats.granted = d.totalGranted || 56;
- liveStats.raised = (d.totalFees||0) + (d.totalDonations||0);
  renderLiveStats();
 };
 window.updateLedger(null);
@@ -5211,7 +5178,6 @@ if(!window._firebaseReady){
  const r = Math.random();
  if(r < 0.4) { liveStats.granted++; animLiveNum('live-granted', liveStats.granted); }
  else if(r < 0.7) { liveStats.guardians++; animLiveNum('live-guardians', liveStats.guardians); }
- else { liveStats.raised += Math.floor(Math.random()*8+2); animLiveNum('live-raised', liveStats.raised, '$'); }
  }, 47000);
 }
 
