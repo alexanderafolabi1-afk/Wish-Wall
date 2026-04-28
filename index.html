@@ -4894,10 +4894,12 @@ const SSM_META = {
  guardian:{ icon: '💛', title: 'You made a difference',   sub: 'Share a little of that warmth with the world.' },
 };
 let _ssmActiveIdx = 0;
+let _ssmActiveType = 'wisher';
 
 function showShareModal(type){
  const meta = SSM_META[type] || SSM_META.wisher;
  const msgs = SSM_MESSAGES[type] || SSM_MESSAGES.wisher;
+ _ssmActiveType = type || 'wisher';
  document.getElementById('ssm-icon').textContent  = meta.icon;
  document.getElementById('ssm-title').textContent = meta.title;
  document.getElementById('ssm-sub').textContent   = meta.sub;
@@ -4909,7 +4911,7 @@ function showShareModal(type){
   btn.setAttribute('role', 'option');
   btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
   btn.textContent = m;
-  btn.onclick = function(){ selectShareMsg(i, type); };
+  btn.onclick = function(){ selectShareMsg(i); };
   box.appendChild(btn);
  });
  _ssmActiveIdx = 0;
@@ -4917,8 +4919,11 @@ function showShareModal(type){
  ta.value = msgs[0];
  document.getElementById('ssm-char').textContent = ta.value.length + ' / 320';
  const copyBtn = document.getElementById('ssm-copy-btn');
- if(copyBtn) copyBtn.classList.remove('copied');
- copyBtn.querySelector('span').textContent = 'Copy';
+ if(copyBtn){
+  copyBtn.classList.remove('copied');
+  const copySpan = copyBtn.querySelector('span');
+  if(copySpan) copySpan.textContent = 'Copy';
+ }
  document.getElementById('ssm-ov').classList.add('open');
  document.body.style.overflow = 'hidden';
 }
@@ -4928,9 +4933,9 @@ function closeShareModal(){
  document.body.style.overflow = '';
 }
 
-function selectShareMsg(idx, type){
+function selectShareMsg(idx){
  _ssmActiveIdx = idx;
- const msgs = SSM_MESSAGES[type] || SSM_MESSAGES.wisher;
+ const msgs = SSM_MESSAGES[_ssmActiveType] || SSM_MESSAGES.wisher;
  document.querySelectorAll('.ssm-msg').forEach(function(b, i){
   b.classList.toggle('active', i === idx);
   b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
@@ -4952,26 +4957,29 @@ function shareVia(platform){
  } else if(platform === 'linkedin'){
   window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodedUrl, '_blank', 'noopener');
  } else if(platform === 'whatsapp'){
-  const wa = text ? text + ' ' + url : url;
-  window.open('https://wa.me/?text=' + encodeURIComponent(wa), '_blank', 'noopener');
+  const whatsappText = text ? text + ' ' + url : url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(whatsappText), '_blank', 'noopener');
  } else if(platform === 'copy'){
   const copyText = text ? text + ' ' + url : url;
   const copyBtn = document.getElementById('ssm-copy-btn');
+  const copySpan = copyBtn ? copyBtn.querySelector('span') : null;
+  const markCopied = function(){
+   if(copyBtn) copyBtn.classList.add('copied');
+   if(copySpan) copySpan.textContent = 'Copied!';
+   setTimeout(function(){
+    if(copyBtn) copyBtn.classList.remove('copied');
+    if(copySpan) copySpan.textContent = 'Copy';
+   }, 2200);
+  };
   if(navigator.clipboard){
-   navigator.clipboard.writeText(copyText).then(function(){
-    copyBtn.classList.add('copied');
-    copyBtn.querySelector('span').textContent = 'Copied!';
-    setTimeout(function(){ copyBtn.classList.remove('copied'); copyBtn.querySelector('span').textContent = 'Copy'; }, 2200);
-   });
+   navigator.clipboard.writeText(copyText).then(markCopied);
   } else {
    /* Legacy fallback */
    const ta = document.createElement('textarea');
    ta.value = copyText; ta.style.position = 'fixed'; ta.style.opacity = '0';
    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
    document.body.removeChild(ta);
-   copyBtn.classList.add('copied');
-   copyBtn.querySelector('span').textContent = 'Copied!';
-   setTimeout(function(){ copyBtn.classList.remove('copied'); copyBtn.querySelector('span').textContent = 'Copy'; }, 2200);
+   markCopied();
   }
  }
 }
