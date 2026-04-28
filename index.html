@@ -263,6 +263,52 @@
  </div>
 </div>
 
+<!-- ============================================================
+  SOCIAL SHARING MODAL — post-Stripe success
+  showShareModal('wisher') or showShareModal('guardian')
+  ============================================================ -->
+<div class="ssm-ov" id="ssm-ov" onclick="if(event.target===this)closeShareModal()"
+ role="dialog" aria-modal="true" aria-label="Share this moment">
+ <div class="ssm-card" id="ssm-card">
+  <button class="ssm-close" onclick="closeShareModal()" aria-label="Close">&#215;</button>
+  <div class="ssm-header">
+   <div class="ssm-icon" id="ssm-icon">✨</div>
+   <h2 class="ssm-title" id="ssm-title">Spread a little magic</h2>
+   <p class="ssm-sub" id="ssm-sub">Choose a message, make it yours, then share.</p>
+  </div>
+  <div class="ssm-msgs" id="ssm-msgs" role="listbox" aria-label="Choose a message"></div>
+  <div class="ssm-compose">
+   <textarea class="ssm-textarea" id="ssm-textarea" rows="3" maxlength="320"
+    aria-label="Your message to share" placeholder="Your message…"
+    oninput="document.getElementById('ssm-char').textContent=this.value.length+' / 320'"></textarea>
+   <span class="ssm-char" id="ssm-char">0 / 320</span>
+  </div>
+  <div class="ssm-platforms">
+   <button class="ssm-plat ssm-x" onclick="shareVia('x')" aria-label="Share on X">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.745l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span>X</span>
+   </button>
+   <button class="ssm-plat ssm-fb" onclick="shareVia('facebook')" aria-label="Share on Facebook">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    <span>Facebook</span>
+   </button>
+   <button class="ssm-plat ssm-li" onclick="shareVia('linkedin')" aria-label="Share on LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    <span>LinkedIn</span>
+   </button>
+   <button class="ssm-plat ssm-wa" onclick="shareVia('whatsapp')" aria-label="Share on WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span>WhatsApp</span>
+   </button>
+   <button class="ssm-plat ssm-copy" onclick="shareVia('copy')" id="ssm-copy-btn" aria-label="Copy text">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+    <span>Copy</span>
+   </button>
+  </div>
+  <button class="ssm-skip" onclick="closeShareModal()">Maybe later</button>
+ </div>
+</div>
+
 <script type="module">
  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
  import {
@@ -1683,6 +1729,121 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .share-btn:hover { background: var(--text); color: #FAF8F5; }
 .back-btn { font-family: var(--fn-display); font-size: 1rem; font-weight: 700; padding: 10px 28px; border-radius: 2px 10px 2px 10px; border: 1.5px solid rgba(30,34,53,.15); background: transparent; color: var(--text-muted); cursor: pointer; transition: all .2s; }
 .back-btn:hover { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+
+/* ============================================================
+ SOCIAL SHARING MODAL (ssm)
+ ============================================================ */
+.ssm-ov {
+ position: fixed; inset: 0; z-index: 310;
+ background: rgba(30,34,53,.65);
+ backdrop-filter: blur(14px) saturate(1.3);
+ display: flex; align-items: center; justify-content: center;
+ padding: var(--sp-3);
+ opacity: 0; pointer-events: none;
+ transition: opacity .3s ease;
+}
+.ssm-ov.open { opacity: 1; pointer-events: all; }
+.ssm-card {
+ background: var(--surface);
+ border-radius: 4px 16px 4px 16px;
+ box-shadow: 8px 16px 0 rgba(30,34,53,.14), 0 32px 72px rgba(30,34,53,.28);
+ padding: var(--sp-4) var(--sp-4) var(--sp-3);
+ max-width: 500px; width: 100%; position: relative;
+ max-height: 92vh; overflow-y: auto;
+ transform: scale(.9) translateY(20px);
+ transition: transform .38s cubic-bezier(.16,1,.3,1);
+}
+.ssm-ov.open .ssm-card { transform: scale(1) translateY(0); }
+.ssm-close {
+ position: absolute; top: 14px; right: 14px;
+ width: 30px; height: 30px; border-radius: 50%;
+ background: var(--card); border: none;
+ color: var(--text-muted); font-size: 18px;
+ cursor: pointer; display: flex; align-items: center; justify-content: center;
+ transition: all .2s;
+}
+.ssm-close:hover { background: var(--text); color: #FAF8F5; }
+.ssm-header { text-align: center; margin-bottom: var(--sp-3); }
+.ssm-icon { font-size: 2rem; margin-bottom: var(--sp-1); line-height: 1; }
+.ssm-title {
+ font-family: var(--fn-display); font-size: clamp(1.4rem,4vw,1.9rem);
+ font-weight: 900; color: var(--text); letter-spacing: -.03em;
+ margin-bottom: 6px;
+}
+.ssm-sub { font-family: var(--fn-body); font-size: .92rem; color: var(--text-muted); }
+/* Message selector */
+.ssm-msgs { display: flex; flex-direction: column; gap: 8px; margin-bottom: var(--sp-2); }
+.ssm-msg {
+ padding: 11px 14px; border-radius: 2px 8px 2px 8px;
+ border: 1.5px solid rgba(30,34,53,.13);
+ background: var(--card);
+ font-family: var(--fn-body); font-size: .875rem; color: var(--text-muted);
+ cursor: pointer; text-align: left; line-height: 1.55;
+ transition: all .18s;
+}
+.ssm-msg:hover { border-color: var(--warmth); color: var(--text); background: var(--surface-warm); }
+.ssm-msg.active {
+ border-color: var(--warmth); background: rgba(201,123,48,.08);
+ color: var(--text); box-shadow: 2px 2px 0 rgba(201,123,48,.18);
+}
+/* Compose area */
+.ssm-compose { position: relative; margin-bottom: var(--sp-3); }
+.ssm-textarea {
+ width: 100%; padding: 12px 14px; border-radius: 2px 8px 2px 8px;
+ border: 1.5px solid rgba(30,34,53,.13);
+ background: var(--surface); font-family: var(--fn-body); font-size: .9rem;
+ color: var(--text); resize: vertical; min-height: 80px;
+ transition: border-color .2s;
+}
+.ssm-textarea:focus { outline: none; border-color: var(--warmth); }
+.ssm-char {
+ position: absolute; bottom: 6px; right: 10px;
+ font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted);
+ pointer-events: none;
+}
+/* Platform buttons */
+.ssm-platforms {
+ display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+ margin-bottom: var(--sp-3);
+}
+.ssm-plat {
+ display: flex; align-items: center; gap: 6px;
+ padding: 9px 16px; border-radius: 2px 8px 2px 8px;
+ border: 1.5px solid rgba(30,34,53,.13);
+ background: var(--card); cursor: pointer;
+ font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+ color: var(--text-muted);
+ transition: all .18s;
+}
+.ssm-plat svg { width: 15px; height: 15px; flex-shrink: 0; }
+.ssm-plat:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0 rgba(30,34,53,.1); }
+.ssm-x:hover { background: #000; color: #fff; border-color: #000; }
+.ssm-fb:hover { background: #1877F2; color: #fff; border-color: #1877F2; }
+.ssm-li:hover { background: #0A66C2; color: #fff; border-color: #0A66C2; }
+.ssm-wa:hover { background: #25D366; color: #fff; border-color: #25D366; }
+.ssm-copy:hover { background: var(--text); color: #FAF8F5; border-color: var(--text); }
+.ssm-copy.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
+/* Skip link */
+.ssm-skip {
+ display: block; width: 100%; text-align: center;
+ background: none; border: none;
+ font-family: var(--fn-body); font-size: .8rem; color: var(--text-muted);
+ cursor: pointer; padding: var(--sp-1) 0;
+ transition: color .2s;
+}
+.ssm-skip:hover { color: var(--text); }
+/* Share button trigger inside conf-ov */
+.conf-share-moment-btn {
+ display: flex; align-items: center; justify-content: center; gap: 8px;
+ width: 100%; max-width: 380px; margin: 0 auto var(--sp-3);
+ padding: 13px 24px; border-radius: 2px 10px 2px 10px;
+ border: 1.5px solid rgba(201,123,48,.35);
+ background: rgba(201,123,48,.08);
+ font-family: var(--fn-display); font-size: 1rem; font-weight: 700;
+ color: var(--warmth); cursor: pointer;
+ transition: all .2s;
+}
+.conf-share-moment-btn:hover { background: var(--warmth); color: #FAF8F5; border-color: var(--warmth); transform: translate(-1px,-1px); box-shadow: 3px 3px 0 rgba(201,123,48,.25); }
 
 /* ============================================================
  WISH DETAIL MODAL
@@ -3311,6 +3472,8 @@ button { touch-action: manipulation; }
  </div>
  </div>
 
+ <button class="conf-share-moment-btn" onclick="showShareModal('wisher')">✨ Share this moment</button>
+
  <button class="back-btn" onclick="closeConf()">Back to the Wall &#8594;</button>
 </div>
 
@@ -4231,6 +4394,7 @@ function proceedToGrantPayment(){
  // Save guardian email to sessionStorage so webhook can pick it up
  if(email) sessionStorage.setItem('ww-guardian-email', email);
  sessionStorage.setItem('ww-sponsor-wish-id', wishId);
+ sessionStorage.setItem('ww-pending-share', 'guardian');
 
  // Navigate to Stripe
  const base = window.STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
@@ -4666,9 +4830,17 @@ function closeConf(){
 function checkReturn(){
  const p = new URLSearchParams(window.location.search);
  if(p.get('payment') === 'success'){
- const txt = p.get('wish') || storedWishTxt || 'something wonderful...';
- showConf(decodeURIComponent(txt));
- history.replaceState({}, '', location.pathname);
+  const pendingShare = sessionStorage.getItem('ww-pending-share');
+  if(pendingShare === 'guardian'){
+   sessionStorage.removeItem('ww-pending-share');
+   history.replaceState({}, '', location.pathname);
+   launchConfetti(60);
+   showShareModal('guardian');
+  } else {
+   const txt = p.get('wish') || storedWishTxt || 'something wonderful...';
+   showConf(decodeURIComponent(txt));
+   history.replaceState({}, '', location.pathname);
+  }
  }
 }
 
@@ -4696,6 +4868,111 @@ function shareWish(plat){
  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}`, '_blank');
  } else {
  navigator.clipboard?.writeText('https://wishwall.xyz').then(() => alert('✅ Link copied!'));
+ }
+}
+
+/* ============================================================
+ SOCIAL SHARING MODAL
+ ============================================================ */
+const SSM_MESSAGES = {
+ wisher: [
+  "I just shared a heartfelt wish on WishWall. ✨ Sending it out into the universe with hope. wishwall.xyz",
+  "A quiet wish has been placed on WishWall today. Grateful for any magic that finds its way. wishwall.xyz",
+  "Posted a personal wish on WishWall. Small steps toward something beautiful. wishwall.xyz",
+  "I released a wish into the world on WishWall. May kindness find it. wishwall.xyz",
+ ],
+ guardian: [
+  "I just helped a beautiful wish move closer to reality on WishWall. Small acts create ripples. 💛 wishwall.xyz",
+  "Supported a heartfelt wish on WishWall this week. Grateful to be part of someone's hope. wishwall.xyz",
+  "Did a small good deed today — sponsored a wish on WishWall. Kindness matters. wishwall.xyz",
+  "Helped grant a little magic today by supporting a wish on WishWall. 🕊️ wishwall.xyz",
+  "One more wish just got stronger thanks to a small act of support on WishWall. wishwall.xyz",
+ ],
+};
+const SSM_META = {
+ wisher:  { icon: '✨', title: 'Share your moment',       sub: 'Your wish is out in the universe. Let the magic spread.' },
+ guardian:{ icon: '💛', title: 'You made a difference',   sub: 'Share a little of that warmth with the world.' },
+};
+let _ssmActiveIdx = 0;
+
+function showShareModal(type){
+ const meta = SSM_META[type] || SSM_META.wisher;
+ const msgs = SSM_MESSAGES[type] || SSM_MESSAGES.wisher;
+ document.getElementById('ssm-icon').textContent  = meta.icon;
+ document.getElementById('ssm-title').textContent = meta.title;
+ document.getElementById('ssm-sub').textContent   = meta.sub;
+ const box = document.getElementById('ssm-msgs');
+ box.innerHTML = '';
+ msgs.forEach(function(m, i){
+  const btn = document.createElement('button');
+  btn.className = 'ssm-msg' + (i === 0 ? ' active' : '');
+  btn.setAttribute('role', 'option');
+  btn.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+  btn.textContent = m;
+  btn.onclick = function(){ selectShareMsg(i, type); };
+  box.appendChild(btn);
+ });
+ _ssmActiveIdx = 0;
+ const ta = document.getElementById('ssm-textarea');
+ ta.value = msgs[0];
+ document.getElementById('ssm-char').textContent = ta.value.length + ' / 320';
+ const copyBtn = document.getElementById('ssm-copy-btn');
+ if(copyBtn) copyBtn.classList.remove('copied');
+ copyBtn.querySelector('span').textContent = 'Copy';
+ document.getElementById('ssm-ov').classList.add('open');
+ document.body.style.overflow = 'hidden';
+}
+
+function closeShareModal(){
+ document.getElementById('ssm-ov').classList.remove('open');
+ document.body.style.overflow = '';
+}
+
+function selectShareMsg(idx, type){
+ _ssmActiveIdx = idx;
+ const msgs = SSM_MESSAGES[type] || SSM_MESSAGES.wisher;
+ document.querySelectorAll('.ssm-msg').forEach(function(b, i){
+  b.classList.toggle('active', i === idx);
+  b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+ });
+ const ta = document.getElementById('ssm-textarea');
+ ta.value = msgs[idx];
+ document.getElementById('ssm-char').textContent = ta.value.length + ' / 320';
+}
+
+function shareVia(platform){
+ const text = (document.getElementById('ssm-textarea').value || '').trim();
+ const url = 'https://wishwall.xyz';
+ const encoded = encodeURIComponent(text);
+ const encodedUrl = encodeURIComponent(url);
+ if(platform === 'x'){
+  window.open('https://twitter.com/intent/tweet?text=' + encoded, '_blank', 'noopener');
+ } else if(platform === 'facebook'){
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl + '&quote=' + encoded, '_blank', 'noopener');
+ } else if(platform === 'linkedin'){
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodedUrl, '_blank', 'noopener');
+ } else if(platform === 'whatsapp'){
+  const wa = text ? text + ' ' + url : url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(wa), '_blank', 'noopener');
+ } else if(platform === 'copy'){
+  const copyText = text ? text + ' ' + url : url;
+  const copyBtn = document.getElementById('ssm-copy-btn');
+  if(navigator.clipboard){
+   navigator.clipboard.writeText(copyText).then(function(){
+    copyBtn.classList.add('copied');
+    copyBtn.querySelector('span').textContent = 'Copied!';
+    setTimeout(function(){ copyBtn.classList.remove('copied'); copyBtn.querySelector('span').textContent = 'Copy'; }, 2200);
+   });
+  } else {
+   /* Legacy fallback */
+   const ta = document.createElement('textarea');
+   ta.value = copyText; ta.style.position = 'fixed'; ta.style.opacity = '0';
+   document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+   document.body.removeChild(ta);
+   copyBtn.classList.add('copied');
+   copyBtn.querySelector('span').textContent = 'Copied!';
+   setTimeout(function(){ copyBtn.classList.remove('copied'); copyBtn.querySelector('span').textContent = 'Copy'; }, 2200);
+  }
  }
 }
 
