@@ -5,153 +5,252 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy Policy — The Wish Wall</title>
 <meta name="robots" content="noindex,follow">
-<link rel="canonical" href="https://thewishwall.com/privacy">
+<link rel="canonical" href="https://wishwall.xyz/privacy">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --surface:#FAF8F5; --card:#EEE9E2; --text:#1E2235;
+  --text-muted:#6B7080; --urgency:#D44A1E; --warmth:#C97B30;
+  --ink:#1A1008; --accent:#4DAE7A;
+  --fn-display:'Fraunces',Georgia,serif;
+  --fn-body:'Lexend',system-ui,sans-serif;
+  --fn-mono:'Sometype Mono','Courier New',monospace;
+}
+html{scroll-behavior:smooth;}
 body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:#07070D;
-  color:#FAFAF7;
-  line-height:1.75;
-  -webkit-font-smoothing:antialiased;
+  font-family:var(--fn-body); font-weight:300;
+  background:var(--surface); color:var(--text);
+  line-height:1.75; -webkit-font-smoothing:antialiased;
 }
-a{color:#F5C842;text-decoration:none;}
-a:hover{text-decoration:underline;}
+body::before{
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+}
 .site-header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(7,7,13,.94);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(245,200,66,.12);
-  padding:0 32px;height:58px;
-  display:flex;align-items:center;justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+  background:rgba(250,248,245,.94); backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(30,34,53,.08);
+  padding:0 34px; height:58px;
+  display:flex; align-items:center; justify-content:space-between;
 }
-.logo{
-  font-size:20px;font-weight:800;letter-spacing:-0.03em;
-  color:#F5C842;text-decoration:none;
+.site-header .logo{
+  font-family:var(--fn-display); font-size:19px; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); text-decoration:none;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark{
+  width:32px; height:32px; background:var(--urgency);
+  border-radius:6px 2px 6px 2px; display:flex;
+  align-items:center; justify-content:center; font-size:16px;
+  transform:rotate(-4deg); box-shadow:2px 2px 0 rgba(30,34,53,.2);
 }
 .back-link{
-  font-size:13px;color:rgba(250,250,247,.55);
-  text-decoration:none;transition:color .2s;
+  font-family:var(--fn-mono); font-size:12px; color:var(--text-muted);
+  text-decoration:none; transition:color .2s;
+  display:flex; align-items:center; gap:5px;
 }
-.back-link:hover{color:#F5C842;}
-.container{max-width:780px;margin:0 auto;padding:56px 24px 88px;}
-.page-hero{padding:32px 0 48px;border-bottom:1px solid rgba(245,200,66,.12);margin-bottom:48px;}
+.back-link:hover{color:var(--urgency);}
+.container{max-width:720px; margin:0 auto; padding:55px 24px 89px;}
+.page-hero{padding:34px 0 55px; border-bottom:1px solid rgba(30,34,53,.08); margin-bottom:55px;}
 .page-tag{
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:2px;color:#FF6B35;margin-bottom:12px;display:block;
+  font-family:var(--fn-mono); font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:2px; color:var(--urgency);
+  margin-bottom:13px; display:block;
 }
-h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-0.04em;line-height:1;color:#F5C842;margin-bottom:12px;}
-.page-meta{font-size:12px;color:rgba(250,250,247,.45);}
-.section{margin-bottom:48px;}
-h2{font-size:1.2rem;font-weight:700;color:#F5C842;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(245,200,66,.15);}
-p{margin-bottom:12px;font-size:15px;color:rgba(250,250,247,.8);}
-ul,ol{padding-left:20px;margin-bottom:12px;}
-li{margin-bottom:8px;font-size:15px;color:rgba(250,250,247,.8);}
-strong{color:#FAFAF7;font-weight:600;}
+h1{
+  font-family:var(--fn-display); font-size:clamp(2.4rem,6vw,4rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:.95;
+  color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 144,'WONK' 1;
+}
+h1 em{font-style:italic; color:var(--urgency); font-variation-settings:'opsz' 144,'WONK' 0;}
+.page-meta{font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);}
+.section{margin-bottom:55px;}
+h2{
+  font-family:var(--fn-display); font-size:1.4rem; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:baseline; gap:10px;
+}
+.section-num{
+  font-family:var(--fn-mono); font-size:10px; color:var(--text-muted);
+  flex-shrink:0; margin-top:2px; letter-spacing:1px;
+}
+p{margin-bottom:13px; font-size:15px; color:var(--text-muted);}
+ul,ol{padding-left:21px; margin-bottom:13px;}
+li{margin-bottom:8px; font-size:15px; color:var(--text-muted);}
+strong{color:var(--text); font-weight:500;}
+a{color:var(--urgency); text-decoration:none;}
+a:hover{text-decoration:underline;}
 .callout{
-  background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);
-  border-left:4px solid #FF6B35;
-  border-radius:4px 8px 4px 8px;padding:20px 24px;margin:24px 0;
+  background:var(--card); border:1px solid rgba(30,34,53,.1);
+  border-left:4px solid var(--urgency);
+  border-radius:2px 8px 2px 8px; padding:21px 24px;
+  margin:21px 0;
 }
-.callout p{margin-bottom:0;font-size:14px;}
-hr{border:none;border-top:1px solid rgba(245,200,66,.1);margin:32px 0;}
+.callout p{margin-bottom:0; font-size:14px;}
+.callout strong{display:block; margin-bottom:5px; font-family:var(--fn-mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--urgency);}
+.info-card{
+  background:var(--card); border:1px solid rgba(30,34,53,.08);
+  border-radius:2px 12px 2px 12px; padding:21px 24px;
+  margin:21px 0; box-shadow:3px 3px 0 rgba(30,34,53,.05);
+}
+table{width:100%; border-collapse:collapse; margin-bottom:20px; font-size:13px;}
+th,td{padding:10px 14px; text-align:left; border:1px solid rgba(30,34,53,.1);}
+th{background:rgba(30,34,53,.04); color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px; font-size:11px; font-family:var(--fn-mono);}
+td{color:var(--text-muted);}
+hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
 .doc-footer{
-  margin-top:80px;padding-top:32px;
-  border-top:1px solid rgba(245,200,66,.12);
-  font-size:12px;color:rgba(250,250,247,.4);
-  display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;
+  margin-top:89px; padding-top:34px;
+  border-top:1px solid rgba(30,34,53,.08);
+  font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);
+  display:flex; gap:21px; flex-wrap:wrap; justify-content:space-between;
 }
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <a href="index.html" class="logo">✦ The Wish Wall</a>
-  <a href="index.html" class="back-link">← Back to The Wall</a>
+  <a href="/" class="logo">
+    <div class="logo-mark">📌</div>
+    The Wish Wall
+  </a>
+  <a href="/" class="back-link">&#8592; Back to the Wall</a>
 </header>
 
 <div class="container">
 
   <div class="page-hero">
     <span class="page-tag">Legal</span>
-    <h1>Privacy Policy</h1>
-    <p class="page-meta">Last updated: 24 March 2026 · The Wish Wall · thewishwall.com</p>
+    <h1>Privacy<br><em>Policy.</em></h1>
+    <p class="page-meta">Last updated: March 2026 &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; The Wish Wall &nbsp;·&nbsp; <a href="https://wishwall.xyz">wishwall.xyz</a></p>
   </div>
 
   <div class="callout">
-    <p>We collect only what we need, keep it only as long as necessary, and never sell your data. Your email address is used only to notify you when your wish is granted.</p>
+    <p><strong>Your Privacy Matters</strong> We collect only what we need, keep it only as long as necessary, and never sell your data. Your email address is used only to notify you when your wish is granted.</p>
   </div>
 
   <div class="section">
-    <h2>1. Who we are</h2>
-    <p>The Wish Wall is operated by Lyrīon Ltd (Company No. 16825317), registered in England and Wales. Contact: <a href="mailto:hello@thewishwall.com">hello@thewishwall.com</a></p>
+    <h2><span class="section-num">01</span> Who We Are</h2>
+    <p>The Wish Wall ("we", "us", "our") operates the community wish-granting platform at <a href="https://wishwall.xyz">wishwall.xyz</a>. For data protection purposes, we are the data controller for information collected through this platform.</p>
+    <p>Contact us about privacy matters: <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a></p>
   </div>
 
   <div class="section">
-    <h2>2. What data we collect</h2>
+    <h2><span class="section-num">02</span> What Data We Collect</h2>
+    <table>
+      <thead><tr><th>Data</th><th>Why We Collect It</th><th>Legal Basis</th></tr></thead>
+      <tbody>
+        <tr><td>Email address</td><td>To notify you when your wish is granted</td><td>Contractual necessity</td></tr>
+        <tr><td>Wish text</td><td>To display on the wall and assess for granting</td><td>Contractual necessity</td></tr>
+        <tr><td>Name (optional)</td><td>For personalised correspondence only</td><td>Consent</td></tr>
+        <tr><td>Country / city (approximate)</td><td>To display the country flag on your note</td><td>Legitimate interest</td></tr>
+        <tr><td>IP address</td><td>Fraud prevention and abuse detection</td><td>Legitimate interest</td></tr>
+        <tr><td>Payment metadata</td><td>Transaction records (amount, date, Stripe ID)</td><td>Legal obligation</td></tr>
+        <tr><td>Referral code usage</td><td>To award WishCredits correctly</td><td>Contractual necessity</td></tr>
+      </tbody>
+    </table>
+    <p>We do not collect: card numbers (handled entirely by Stripe), government IDs (unless needed for grant verification), or any sensitive personal data such as health or financial records beyond what is voluntarily included in your wish text.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">03</span> How We Use Your Data</h2>
     <ul>
-      <li>Email address (when you pin a wish or contact us)</li>
-      <li>Wish text (anonymised, displayed publicly on the wall)</li>
-      <li>IP address and approximate geolocation (via ipapi.co, retained max 30 days)</li>
-      <li>Payment reference (processed entirely by Stripe — we never see card details)</li>
-      <li>Browser type and device (standard server logs, retained max 90 days)</li>
+      <li>Displaying your wish on the wall (anonymously if you chose that option)</li>
+      <li>Contacting you when your wish is granted or when we need clarification</li>
+      <li>Processing your payment via Stripe</li>
+      <li>Detecting fraud and preventing abuse</li>
+      <li>Improving the platform (anonymised analytics only)</li>
+      <li>Complying with legal obligations</li>
+    </ul>
+    <p>We do <strong>not</strong> use your data for advertising, profiling, or selling to third parties. Ever.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">04</span> Anonymity on the Wall</h2>
+    <p>If you post anonymously (the default option), your name and email address are never displayed on the wall. Your wish text and country/flag are shown. Even if you choose to post with your name, we will never display your email address publicly under any circumstances.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">05</span> Who We Share Data With</h2>
+    <ul>
+      <li><strong>Stripe</strong> — payment processing (PCI DSS Level 1 compliant). Stripe's privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></li>
+      <li><strong>Google Firebase / Firestore</strong> — secure data storage (servers in the EU or US depending on configuration)</li>
+      <li><strong>PayPal</strong> — used only to send grant disbursements to wish recipients</li>
+      <li><strong>ipapi.co</strong> — approximate country detection from IP (anonymous, no account created)</li>
+    </ul>
+    <p>We never sell, rent, or trade your personal data with any third party for marketing purposes.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">06</span> Data Retention</h2>
+    <ul>
+      <li>Wish content and associated data: retained for 2 years after the wish is removed from the wall, then deleted</li>
+      <li>Email addresses: retained until you request deletion or 3 years after your last wish, whichever comes first</li>
+      <li>Payment records: 7 years (UK legal requirement for financial records)</li>
+      <li>IP address logs: 90 days</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>3. Why we collect it</h2>
+    <h2><span class="section-num">07</span> Cookies</h2>
+    <p>We use a minimal number of cookies. See our <a href="cookies.html">Cookie Policy</a> for full details. Essential cookies cannot be disabled as they are required for the platform to function. Analytics cookies are optional and can be declined.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">08</span> Your Rights Under UK GDPR</h2>
+    <p>You have the right to:</p>
     <ul>
-      <li>To notify you when your wish is granted (email)</li>
-      <li>To display your wish on the wall (wish text)</li>
-      <li>To detect your country for display purposes (geolocation)</li>
-      <li>To prevent fraud and spam (IP address)</li>
-      <li>To process payments (Stripe handles all payment data)</li>
+      <li><strong>Access</strong> — request a copy of the data we hold about you</li>
+      <li><strong>Rectification</strong> — ask us to correct inaccurate data</li>
+      <li><strong>Erasure</strong> — ask us to delete your data (subject to legal retention requirements)</li>
+      <li><strong>Restriction</strong> — ask us to stop processing your data in certain circumstances</li>
+      <li><strong>Portability</strong> — receive your data in a machine-readable format</li>
+      <li><strong>Object</strong> — object to processing based on legitimate interests</li>
+      <li><strong>Withdraw consent</strong> — where processing is based on consent</li>
     </ul>
+    <p>To exercise any of these rights, email us at <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a>. We will respond within 30 days.</p>
+    <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong>: <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a></p>
   </div>
 
   <div class="section">
-    <h2>4. Legal basis (UK GDPR)</h2>
-    <p>We process your data under: (a) Contract performance — to deliver the service you paid for; (b) Legitimate interests — fraud prevention and platform security; (c) Consent — for marketing emails (you can opt out at any time).</p>
+    <h2><span class="section-num">09</span> Security</h2>
+    <p>We take reasonable technical and organisational measures to protect your data, including encrypted data transmission (HTTPS/TLS), Stripe's PCI DSS Level 1 payment processing, Firebase's access controls and security rules, and minimal data collection principles.</p>
+    <p>No transmission over the internet is 100% secure. If you believe your data has been compromised, contact us immediately at <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a>.</p>
   </div>
 
   <div class="section">
-    <h2>5. Who we share data with</h2>
-    <ul>
-      <li><strong>Stripe Payments UK Ltd</strong> — payment processing</li>
-      <li><strong>Google Firebase (Cloud europe-west2)</strong> — database and hosting</li>
-      <li><strong>ipapi.co</strong> — geolocation lookup (your IP is queried, no data stored by us)</li>
-      <li><strong>Resend</strong> — transactional email delivery</li>
-    </ul>
-    <p>We do not sell your data. Ever.</p>
+    <h2><span class="section-num">10</span> International Transfers</h2>
+    <p>Your data may be processed in countries outside the UK/EEA (for example, on Google Firebase servers in the US). Where this occurs, we ensure appropriate safeguards are in place, including Standard Contractual Clauses where required.</p>
   </div>
 
   <div class="section">
-    <h2>6. Data retention</h2>
-    <ul>
-      <li>Wish content: kept for the lifetime of the platform or until you request deletion</li>
-      <li>Email addresses: until you unsubscribe or request deletion</li>
-      <li>IP/geolocation logs: maximum 30 days</li>
-      <li>KYC/identity records (for grant recipients): 5 years per the Money Laundering Regulations 2017</li>
-    </ul>
+    <h2><span class="section-num">11</span> Children</h2>
+    <p>The Wish Wall is not directed at children under the age of 13. We do not knowingly collect data from children under 13. If you believe a child has submitted their data without parental consent, please contact us and we will delete it promptly.</p>
   </div>
 
   <div class="section">
-    <h2>7. Your rights (UK GDPR)</h2>
-    <p>You have the right to: access, correct, erase, restrict, port, and object to processing of your personal data. You also have the right to lodge a complaint with the ICO at <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a>. To exercise any right, email <a href="mailto:hello@thewishwall.com">hello@thewishwall.com</a>.</p>
+    <h2><span class="section-num">12</span> Changes to This Policy</h2>
+    <p>We may update this policy from time to time. Material changes will be notified on the platform. The "last updated" date at the top of this page indicates when it was last revised.</p>
   </div>
 
   <div class="section">
-    <h2>8. Cookies</h2>
-    <p>We use essential cookies only to remember your cookie preference. See our <a href="cookies.html">Cookie Policy</a> for details.</p>
-  </div>
-
-  <div class="section">
-    <h2>9. Changes</h2>
-    <p>We may update this policy. Material changes will be notified by email to registered wish-makers.</p>
+    <h2><span class="section-num">13</span> Contact</h2>
+    <div class="info-card">
+      <p><strong>The Wish Wall</strong><br>
+      Privacy queries: <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a><br>
+      Website: <a href="https://wishwall.xyz">wishwall.xyz</a></p>
+    </div>
   </div>
 
   <div class="doc-footer">
-    <span>© 2026 The Wish Wall · hello@thewishwall.com · thewishwall.com</span>
-    <span><a href="terms.html">Terms &amp; Conditions</a> · <a href="cookies.html">Cookie Policy</a></span>
+    <span>The Wish Wall &nbsp;·&nbsp; wishwall.xyz</span>
+    <span>UK GDPR &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; March 2026</span>
+    <span><a href="terms.html">Terms &amp; Conditions</a> &nbsp;·&nbsp; <a href="cookies.html">Cookie Policy</a> &nbsp;·&nbsp; <a href="contact.html">Contact Us</a></span>
   </div>
 
 </div>
