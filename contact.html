@@ -20,6 +20,9 @@
   --fn-mono:'Sometype Mono','Courier New',monospace;
 }
 html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 body{
   font-family:var(--fn-body); font-weight:300;
   background:var(--surface); color:var(--text);
@@ -122,7 +125,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
 
 <header class="site-header">
   <a href="/" class="logo">
-    <div class="logo-mark">📌</div>
+    <div class="logo-mark" aria-hidden="true">📌</div>
     The Wish Wall
   </a>
   <a href="/" class="back-link">&#8592; Back to the Wall</a>

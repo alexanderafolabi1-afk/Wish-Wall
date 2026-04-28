@@ -1457,6 +1457,7 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 }
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
+ html { scroll-behavior: auto; }
  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
@@ -2434,7 +2435,7 @@ button { touch-action: manipulation; }
  ============================================================ -->
 <header>
  <a href="#" class="logo" onclick="showTab('wall');return false;">
- <div class="logo-icon">✨</div>
+ <div class="logo-icon" aria-hidden="true">✨</div>
  <span class="logo-txt">The Wish Wall</span>
  </a>
  <nav>
