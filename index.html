@@ -439,7 +439,13 @@ body {
  position: relative;
  -webkit-font-smoothing: antialiased;
  -webkit-tap-highlight-color: transparent;
+ -webkit-overflow-scrolling: touch;
 }
+
+/* PERFORMANCE HINTS */
+* { -webkit-overflow-scrolling: touch; }
+.wall-grid { transform: translateZ(0); }
+.note-card { transform: translateZ(0); will-change: transform; }
 
 /* FILM GRAIN OVERLAY */
 body::before {
@@ -641,8 +647,9 @@ nav {
 /* ============================================================
  TABS
  ============================================================ */
-.tab-content { display: none; position: relative; z-index: 1; background: transparent; min-height: 100vh; }
+.tab-content { display: none; position: relative; z-index: 1; background: transparent; }
 .tab-content.active { display: block; }
+.tab-content:not(.active) { position: absolute !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; pointer-events: none !important; }
 
 /* ============================================================
  HERO — editorial, asymmetric, broken grid
@@ -3691,7 +3698,7 @@ async function detectUserCountry(){
  // Silently fail geolocation is enhancement only
  }
 }
-detectUserCountry();
+setTimeout(() => detectUserCountry(), 3000);
 
 /* ============================================================
  CONSTANTS
@@ -3964,7 +3971,11 @@ class Particle{
   function animPx(){ if(!ctx) return; ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.step(); p.draw(); }); _animRafId = requestAnimationFrame(animPx); }
   window.addEventListener('resize', resizeCanvas);
   document.addEventListener('visibilitychange', () => { if(document.hidden){ if(_animRafId){ cancelAnimationFrame(_animRafId); _animRafId = null; } } else { if(!_animRafId) _animRafId = requestAnimationFrame(animPx); } });
- initPx(); animPx();
+ if('requestIdleCallback' in window) {
+   requestIdleCallback(() => { initPx(); animPx(); });
+ } else {
+   setTimeout(() => { initPx(); animPx(); }, 2000);
+ }
 } // end initParticleSystem
 
 if(document.readyState === 'loading'){
