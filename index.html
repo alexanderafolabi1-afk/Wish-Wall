@@ -289,7 +289,7 @@
  donors: collection(db, 'donors'),
  ledger: doc(db, 'meta', 'ledger')
  };
- window._fb = { addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
+ window._fb = { collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
 
  // Real-time wish listener
  const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
