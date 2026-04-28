@@ -3,137 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms &amp; Conditions — The Wish Wall</title>
-<meta name="robots" content="noindex,follow">
-<link rel="canonical" href="https://thewishwall.com/terms">
+<title>Terms of Service — The Wish Wall</title>
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://wishwall.xyz/terms">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lexend:wght@300;400;500&family=Sometype+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --surface:#FAF8F5; --card:#EEE9E2; --text:#1E2235;
+  --text-muted:#6B7080; --urgency:#D44A1E; --warmth:#C97B30;
+  --ink:#1A1008; --accent:#4DAE7A;
+  --fn-display:'Fraunces',Georgia,serif;
+  --fn-body:'Lexend',system-ui,sans-serif;
+  --fn-mono:'Sometype Mono','Courier New',monospace;
+}
+html{scroll-behavior:smooth;}
 body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:#07070D;
-  color:#FAFAF7;
-  line-height:1.75;
-  -webkit-font-smoothing:antialiased;
+  font-family:var(--fn-body); font-weight:300;
+  background:var(--surface); color:var(--text);
+  line-height:1.75; -webkit-font-smoothing:antialiased;
 }
-a{color:#F5C842;text-decoration:none;}
-a:hover{text-decoration:underline;}
+/* Film grain */
+body::before{
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+/* Header */
 .site-header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(7,7,13,.94);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(245,200,66,.12);
-  padding:0 32px;height:58px;
-  display:flex;align-items:center;justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+  background:rgba(250,248,245,.94); backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(30,34,53,.08);
+  padding:0 34px; height:58px;
+  display:flex; align-items:center; justify-content:space-between;
 }
-.logo{
-  font-size:20px;font-weight:800;letter-spacing:-0.03em;
-  color:#F5C842;text-decoration:none;
+.site-header .logo{
+  font-family:var(--fn-display); font-size:19px; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); text-decoration:none;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark{
+  width:32px; height:32px; background:var(--urgency);
+  border-radius:6px 2px 6px 2px; display:flex;
+  align-items:center; justify-content:center; font-size:16px;
+  transform:rotate(-4deg); box-shadow:2px 2px 0 rgba(30,34,53,.2);
 }
 .back-link{
-  font-size:13px;color:rgba(250,250,247,.55);
-  text-decoration:none;transition:color .2s;
+  font-family:var(--fn-mono); font-size:12px; color:var(--text-muted);
+  text-decoration:none; transition:color .2s;
+  display:flex; align-items:center; gap:5px;
 }
-.back-link:hover{color:#F5C842;}
-.container{max-width:780px;margin:0 auto;padding:56px 24px 88px;}
-.page-hero{padding:32px 0 48px;border-bottom:1px solid rgba(245,200,66,.12);margin-bottom:48px;}
+.back-link:hover{color:var(--urgency);}
+/* Layout */
+.container{max-width:720px; margin:0 auto; padding:55px 24px 89px;}
+/* Page title */
+.page-hero{padding:34px 0 55px; border-bottom:1px solid rgba(30,34,53,.08); margin-bottom:55px;}
 .page-tag{
-  font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:2px;color:#FF6B35;margin-bottom:12px;display:block;
+  font-family:var(--fn-mono); font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:2px; color:var(--urgency);
+  margin-bottom:13px; display:block;
 }
-h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:-0.04em;line-height:1;color:#F5C842;margin-bottom:12px;}
-.page-meta{font-size:12px;color:rgba(250,250,247,.45);}
-.section{margin-bottom:48px;}
-h2{font-size:1.2rem;font-weight:700;color:#F5C842;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(245,200,66,.15);}
-p{margin-bottom:12px;font-size:15px;color:rgba(250,250,247,.8);}
-ul,ol{padding-left:20px;margin-bottom:12px;}
-li{margin-bottom:8px;font-size:15px;color:rgba(250,250,247,.8);}
-strong{color:#FAFAF7;font-weight:600;}
+h1{
+  font-family:var(--fn-display); font-size:clamp(2.4rem,6vw,4rem);
+  font-weight:900; letter-spacing:-0.04em; line-height:.95;
+  color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 144,'WONK' 1;
+}
+h1 em{font-style:italic; color:var(--urgency); font-variation-settings:'opsz' 144,'WONK' 0;}
+.page-meta{font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);}
+/* Sections */
+.section{margin-bottom:55px;}
+h2{
+  font-family:var(--fn-display); font-size:1.4rem; font-weight:800;
+  letter-spacing:-0.03em; color:var(--text); margin-bottom:13px;
+  font-variation-settings:'opsz' 40;
+  display:flex; align-items:baseline; gap:10px;
+}
+.section-num{
+  font-family:var(--fn-mono); font-size:10px; color:var(--text-muted);
+  flex-shrink:0; margin-top:2px; letter-spacing:1px;
+}
+p{margin-bottom:13px; font-size:15px; color:var(--text-muted);}
+ul,ol{padding-left:21px; margin-bottom:13px;}
+li{margin-bottom:8px; font-size:15px; color:var(--text-muted);}
+strong{color:var(--text); font-weight:500;}
+a{color:var(--urgency); text-decoration:none;}
+a:hover{text-decoration:underline;}
+/* Callout */
 .callout{
-  background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);
-  border-left:4px solid #FF6B35;
-  border-radius:4px 8px 4px 8px;padding:20px 24px;margin:24px 0;
+  background:var(--card); border:1px solid rgba(30,34,53,.1);
+  border-left:4px solid var(--urgency);
+  border-radius:2px 8px 2px 8px; padding:21px 24px;
+  margin:21px 0;
 }
-.callout p{margin-bottom:0;font-size:14px;}
-hr{border:none;border-top:1px solid rgba(245,200,66,.1);margin:32px 0;}
+.callout p{margin-bottom:0; font-size:14px;}
+.callout strong{display:block; margin-bottom:5px; font-family:var(--fn-mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--urgency);}
+/* Info card */
+.info-card{
+  background:var(--card); border:1px solid rgba(30,34,53,.08);
+  border-radius:2px 12px 2px 12px; padding:21px 24px;
+  margin:21px 0; box-shadow:3px 3px 0 rgba(30,34,53,.05);
+}
+/* Divider */
+hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
+/* Footer */
 .doc-footer{
-  margin-top:80px;padding-top:32px;
-  border-top:1px solid rgba(245,200,66,.12);
-  font-size:12px;color:rgba(250,250,247,.4);
-  display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;
+  margin-top:89px; padding-top:34px;
+  border-top:1px solid rgba(30,34,53,.08);
+  font-family:var(--fn-mono); font-size:11px; color:var(--text-muted);
+  display:flex; gap:21px; flex-wrap:wrap; justify-content:space-between;
 }
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <a href="index.html" class="logo">✦ The Wish Wall</a>
-  <a href="index.html" class="back-link">← Back to The Wall</a>
+  <a href="/" class="logo">
+    <div class="logo-mark">📌</div>
+    The Wish Wall
+  </a>
+  <a href="/" class="back-link">&#8592; Back to the Wall</a>
 </header>
 
 <div class="container">
 
   <div class="page-hero">
     <span class="page-tag">Legal</span>
-    <h1>Terms &amp; Conditions</h1>
-    <p class="page-meta">Last updated: 24 March 2026 · Governing law: England &amp; Wales</p>
+    <h1>Terms of<br><em>Service.</em></h1>
+    <p class="page-meta">Last updated: December 2024 &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Governing law: England &amp; Wales</p>
   </div>
 
   <div class="callout">
-    <p>The Wish Wall is a community kindness platform. It is not regulated by the Financial Conduct Authority (FCA) and is not a registered charity. All payment processing is handled exclusively by Stripe Payments UK Ltd, which holds its own regulatory authorisations.</p>
+    <p><strong>Regulatory Notice</strong>The Wish Wall is a community kindness platform. It is not regulated by the Financial Conduct Authority (FCA) and is not a registered charity. All payment processing is handled exclusively by Stripe Payments UK Ltd and Stripe Payments Europe Ltd, which hold their own regulatory authorisations. Guardian contributions are voluntary and are not protected by the Financial Services Compensation Scheme (FSCS) or covered by the Financial Ombudsman Service.</p>
   </div>
 
   <div class="section">
-    <h2>1. The platform</h2>
-    <p>The Wish Wall is a community kindness platform operated by Lyrīon Ltd (Company No. 16825317). It is not a registered charity and not regulated by the Financial Conduct Authority (FCA). All payments are processed by Stripe Payments UK Ltd, which is separately authorised and regulated by the FCA.</p>
+    <h2><span class="section-num">01</span> Who we are</h2>
+    <p>The Wish Wall ("we", "us", "the platform") is operated from the United Kingdom. Contact us at <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a>. We acknowledge complaints within 5 working days and provide a full response within 30 days.</p>
   </div>
 
   <div class="section">
-    <h2>2. WishCoins</h2>
-    <p>WishCoins are a platform unit of account (1 WishCoin = $1 USD equivalent). They are not electronic money, not a financial instrument, and carry no cash value outside the platform. WishCoin bundle purchases are non-refundable once used to pin a wish.</p>
+    <h2><span class="section-num">02</span> Acceptance</h2>
+    <p>By accessing or using The Wish Wall — whether posting a wish or sponsoring one — you accept these Terms in full. If you do not agree, stop using the platform immediately. We may update these Terms with 14 days notice for material changes. Continued use constitutes acceptance.</p>
   </div>
 
   <div class="section">
-    <h2>3. Pinning a wish</h2>
-    <p>By pinning a wish you confirm: (a) the information is truthful and accurate; (b) you are aged 18 or over; (c) the wish does not relate to illegal activity, political campaigns, hate speech, or sanctions-listed individuals or entities; (d) you accept that granting is not guaranteed and depends on Guardian availability and Magic Pool funds.</p>
+    <h2><span class="section-num">03</span> Eligibility</h2>
+    <p>You must be at least <strong>18 years of age</strong> to use this platform. We comply with the UK Children's Code. By using the platform, you confirm you are 18 or over. We may request proof of age and suspend accounts where we have reasonable grounds to believe the user is under 18.</p>
   </div>
 
   <div class="section">
-    <h2>4. Wish granting and payouts</h2>
-    <p>When a wish is selected for granting, The Wish Wall will contact you at the email address provided to verify your identity and arrange payment. Grants are disbursed via PayPal or bank transfer in the recipient's name. A 5% platform administration fee is retained on each granted wish and is disclosed in the live Transparency Ledger. We reserve the right to withhold or reverse a grant if fraud is suspected.</p>
+    <h2><span class="section-num">04</span> Our role — not a payment institution</h2>
+    <p>The Wish Wall does not receive, hold, or transmit funds. All payments are processed directly by Stripe. We operate as a community discovery layer connecting Wishers and Guardians. We do not act as a money services business or payment institution under the Payment Services Regulations 2017. WishCoins are a unit of account on this platform only and do not constitute electronic money under the Electronic Money Regulations 2011.</p>
   </div>
 
   <div class="section">
-    <h2>5. Guardian contributions</h2>
-    <p>Guardian donations and Magic Pool contributions are voluntary. They do not constitute a deposit, loan, or financial product. Guardians are not entitled to a refund once a donation is processed, except where The Wish Wall's Wish Wall Promise applies (see clause 6).</p>
+    <h2><span class="section-num">05</span> Wisher terms</h2>
+    <ul>
+      <li>You may pin up to 3 wishes per calendar year.</li>
+      <li>The pinning fee is 2 WishCoins (currently $1.99 USD, subject to regional pricing). This fee is <strong>non-refundable</strong> once your wish has been published.</li>
+      <li>Your wish text must be truthful and describe a genuine personal need.</li>
+      <li>Your full legal name is required for identity verification. It will never be displayed publicly without your consent.</li>
+      <li>We may request supporting documentation before disbursing any grant. Failure to provide documentation within 14 days may result in the grant returning to the pool.</li>
+      <li>You must not submit wishes for illegal purposes, to circumvent sanctions, for political fundraising, or on behalf of third parties without written consent.</li>
+    </ul>
   </div>
 
   <div class="section">
-    <h2>6. The Wish Wall Promise</h2>
-    <p>If a Guardian donation is processed for a wish that is subsequently found to be fraudulent, The Wish Wall will use commercially reasonable efforts to refund the Guardian within 30 days, subject to recovery of funds.</p>
+    <h2><span class="section-num">06</span> Guardian terms</h2>
+    <ul>
+      <li>Guardian contributions are voluntary donations with no right of return once processed.</li>
+      <li>We will use reasonable endeavours to apply contributions toward the wish or pool you specified, but do not guarantee fulfilment of any specific wish.</li>
+      <li>Guardian Pro subscriptions are billed monthly by Stripe Billing. Cancel anytime; cancellation takes effect at the end of your billing period with no pro-rata refund.</li>
+      <li>WishCoin bundles are non-refundable once purchased except where required by consumer law.</li>
+    </ul>
   </div>
 
   <div class="section">
-    <h2>7. Prohibited conduct</h2>
-    <p>You must not: attempt to circumvent fraud detection; create multiple accounts; submit false wishes; use the platform to launder money; use automated tools to interact with the platform. Violations will result in account suspension and may be referred to law enforcement under the Computer Misuse Act 1990, the Fraud Act 2006 (UK), and equivalent global statutes.</p>
+    <h2><span class="section-num">07</span> Prohibited conduct</h2>
+    <p>You must not use The Wish Wall to post false or fraudulent wishes, raise funds for sanctioned individuals or entities, engage in money laundering or fraud, harass other users, circumvent our verification systems, or post political campaign content. Fraudulent wishes may constitute an offence under the Fraud Act 2006. We report credible fraud to Action Fraud (UK) and equivalent agencies globally.</p>
   </div>
 
   <div class="section">
-    <h2>8. Liability limitation</h2>
-    <p>To the maximum extent permitted by law, The Wish Wall's total liability to any user is limited to the fees paid by that user in the 12 months preceding the claim. We are not liable for indirect, consequential, or punitive damages.</p>
+    <h2><span class="section-num">08</span> How grants work</h2>
+    <ul>
+      <li>Grants are distributed at our discretion. We do not guarantee any wish will be fulfilled.</li>
+      <li>We retain a disclosed <strong>5% platform administration fee</strong> on each granted wish, shown in the public Transparency Ledger.</li>
+      <li>Grants are paid via PayPal or bank transfer to the verified wish recipient only.</li>
+      <li>If a recipient cannot be verified within 30 days, funds return to the Magic Pool.</li>
+      <li>We are not responsible for how grant funds are used after verified disbursement.</li>
+    </ul>
   </div>
 
   <div class="section">
-    <h2>9. Governing law</h2>
-    <p>These terms are governed by the laws of England and Wales. Any disputes shall first be referred to our internal complaints process (email <a href="mailto:hello@thewishwall.com">hello@thewishwall.com</a>). If unresolved, disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+    <h2><span class="section-num">09</span> Wish queue &amp; wall continuity</h2>
+    <p>The Wish Wall operates a queue system to ensure the wall remains full at all times. When a wish is granted, the next eligible wish in the queue automatically promotes to the wall. Submitting a wish does not guarantee immediate placement — your wish may enter the queue and be promoted when a slot becomes available. The queue is FIFO (first in, first out) by submission date. You will be notified by email when your wish is promoted to the live wall.</p>
   </div>
 
   <div class="section">
-    <h2>10. Changes</h2>
-    <p>We may update these terms. Continued use of the platform after notification constitutes acceptance of the updated terms.</p>
+    <h2><span class="section-num">10</span> Sanctions &amp; identity screening</h2>
+    <p>We screen all payout recipients against the UK Consolidated Sanctions List, OFAC Specially Designated Nationals list, and EU Consolidated Sanctions List before disbursing any funds. We may request enhanced due diligence documentation for grants above $500. By accepting a grant, you confirm you are not a sanctioned individual or entity.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">11</span> Limitation of liability</h2>
+    <div class="info-card">
+      <p>Our total liability to you for any claim is capped at <strong>12 months of fees paid by you</strong> in the preceding 12 months. We are not liable for indirect or consequential losses, loss of profit, data loss, or losses arising from third-party services (Stripe, Firebase, Resend). Nothing excludes liability for death or personal injury caused by negligence, or fraud.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">12</span> Data protection</h2>
+    <p>We process personal data under UK GDPR and the Data Protection Act 2018. We are registered with the Information Commissioner's Office. IP geolocation data is retained for a maximum of 30 days. Identity verification records are retained for 5 years per the Money Laundering Regulations 2017. You have the right to access, rectify, erase, restrict, port, and object. Contact <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a> to exercise your rights. We respond within 30 days.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">13</span> Referral programme</h2>
+    <p>Referral credits are subject to fraud controls: 10 referrals per month, 50 lifetime per account, a 7-day maturation period before credits release, IP-based rate limiting, and device fingerprinting. We may forfeit credits where fraud is detected. The programme may be modified or discontinued with 14 days notice.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">14</span> Account termination</h2>
+    <p>We may suspend or terminate your account immediately if we reasonably believe you have breached these Terms, committed fraud, or if required by law. Pending grants may be forfeited. Unused WishCoins may be refunded at our discretion. Guardian Pro subscriptions will be cancelled without pro-rata refund.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">15</span> Governing law &amp; disputes</h2>
+    <p>Contact us at <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a> before raising formal proceedings and allow 30 days for resolution. These Terms are governed by the laws of <strong>England and Wales</strong>. Unresolved disputes shall be submitted to the exclusive jurisdiction of the courts of England and Wales.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="section-num">16</span> Contact</h2>
+    <div class="info-card">
+      <p><strong>The Wish Wall</strong><br>
+      <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a> &nbsp;·&nbsp; <a href="https://wishwall.xyz">wishwall.xyz</a><br>
+      Data protection queries: subject line "Data Protection"<br>
+      Fraud reports: subject line "Fraud Report" or Action Fraud: 0300 123 2040</p>
+    </div>
   </div>
 
   <div class="doc-footer">
-    <span>© 2026 The Wish Wall · hello@thewishwall.com · thewishwall.com</span>
-    <span><a href="privacy.html">Privacy Policy</a> · <a href="cookies.html">Cookie Policy</a></span>
+    <span>The Wish Wall &nbsp;·&nbsp; wishwall.xyz</span>
+    <span>England &amp; Wales law &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Dec 2026</span>
+    <span><a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="cookies.html">Cookie Policy</a></span>
   </div>
 
 </div>
