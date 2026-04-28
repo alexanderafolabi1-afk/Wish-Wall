@@ -267,7 +267,7 @@
  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
  import {
  getFirestore, collection, addDoc, getDocs, doc, updateDoc,
- onSnapshot, query, where, orderBy, serverTimestamp, getDoc
+ onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc
  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
  const firebaseConfig = {
@@ -289,7 +289,7 @@
  donors: collection(db, 'donors'),
  ledger: doc(db, 'meta', 'ledger')
  };
- window._fb = { addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, getDoc };
+ window._fb = { collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
 
  // Real-time wish listener
  const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
@@ -3862,7 +3862,7 @@ function paintWall(){
  const total = allWishes.length;
  const VISIBLE = Math.min(total + 50, WALL_CAPACITY);
  const counter = document.getElementById('spot-counter');
- if(counter) counter.textContent = `${total.toLocaleString()} wishes pinned${total >= WALL_CAPACITY ? ' (1,000 spots)'` ;
+ if(counter) counter.textContent = `${total.toLocaleString()} wishes pinned${total >= WALL_CAPACITY ? ' (1,000 spots)' : ''}`;
 
  // Build slot map across all 1,000 positions
  const slotMap = new Array(WALL_CAPACITY).fill(null);
