@@ -497,6 +497,7 @@ nav {
  letter-spacing: 0.02em;
  white-space: nowrap;
  position: relative;
+ text-decoration: none;
 }
 .nav-tab::after {
  content: '';
@@ -2439,10 +2440,10 @@ button { touch-action: manipulation; }
  <span class="logo-txt">The Wish Wall</span>
  </a>
  <nav>
- <button class="nav-tab active" onclick="showTab('wall')" data-tab="wall">🧱 The Wall</button>
- <button class="nav-tab" onclick="showTab('impact')" data-tab="impact">💛 Impact</button>
- <button class="nav-tab" onclick="showTab('guard')" data-tab="guard">🛡️ Guardians</button>
- <button class="nav-tab" onclick="showTab('how')" data-tab="how">✨ Magic</button>
+ <a href="#" class="nav-tab active" onclick="showTab('wall');return false;" data-tab="wall">🧱 The Wall</a>
+ <a href="#" class="nav-tab" onclick="showTab('impact');return false;" data-tab="impact">💛 Impact</a>
+ <a href="#" class="nav-tab" onclick="showTab('guard');return false;" data-tab="guard">🛡️ Guardians</a>
+ <a href="#" class="nav-tab" onclick="showTab('how');return false;" data-tab="how">✨ Magic</a>
  </nav>
  <div class="wishcoin-pill" id="wc-pill" title="Your WishCredits earn by referring friends" onclick="showTab('how')" style="display:none;">
  <span>🪙</span><span id="wc-count">0</span> WC
