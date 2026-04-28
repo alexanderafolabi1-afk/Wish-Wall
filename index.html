@@ -3834,7 +3834,12 @@ function showTab(tab) {
  const btn = document.querySelector('[data-tab="' + tab + '"]');
  if (btn) btn.classList.add('active');
 
+ const currentTab = (window.location.hash || '').replace(/^#/, '');
+ if (currentTab !== tab) {
  window.history.pushState({tab: tab}, '', '#' + tab);
+ } else {
+ window.history.replaceState({tab: tab}, '', '#' + tab);
+ }
  window.scrollTo({top: 0, behavior: 'smooth'});
 
  // Restore wall if we have data
