@@ -5513,10 +5513,43 @@ function paintMarioPipe(){
 
 /* Repaint when wall tab activates (wishes may have updated) */
 const _pipeOrigShowTab = window.showTab;
+let _suppressHistory = false;
 window.showTab = function(tab){
  if(_pipeOrigShowTab) _pipeOrigShowTab(tab);
  if(tab === 'wall') setTimeout(paintMarioPipe, 80);
+ if(!_suppressHistory){
+   history.pushState({tab: tab}, '', '#' + tab);
+ }
 };
+
+// Hash-based routing
+function routeFromHash(){
+  const hash = window.location.hash.replace('#', '');
+  const validTabs = ['wall', 'impact', 'guard', 'how'];
+  if(hash && validTabs.includes(hash)){
+    showTab(hash);
+  } else {
+    showTab('wall'); // default tab
+  }
+}
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(e){
+  const validTabs = ['wall', 'impact', 'guard', 'how'];
+  _suppressHistory = true;
+  try {
+    if(e.state && e.state.tab && validTabs.includes(e.state.tab)){
+      showTab(e.state.tab);
+    } else {
+      routeFromHash();
+    }
+  } finally {
+    _suppressHistory = false;
+  }
+});
+
+// Initialize routing on page load
+routeFromHash();
 
 /* Initial render */
 if(document.readyState === 'loading'){
