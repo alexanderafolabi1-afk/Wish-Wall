@@ -3824,13 +3824,24 @@ window.renderWishes = function(rawWishes){
 
 // Re-paint when switching back to wall tab without losing data
 const _origShowTab = window.showTab;
-function showTab(tab){
+function showTab(tab) {
  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
  document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
- const el = document.getElementById('tab-'+tab);
- if(el) el.classList.add('active');
- document.querySelectorAll(`[data-tab="${tab}"]`).forEach(b => b.classList.add('active'));
- window.scrollTo({top:0, behavior:'smooth'});
+
+ const el = document.getElementById('tab-' + tab);
+ if (el) el.classList.add('active');
+
+ const btn = document.querySelector('[data-tab="' + tab + '"]');
+ if (btn) btn.classList.add('active');
+
+ const currentTab = (window.location.hash || '').replace(/^#/, '');
+ if (currentTab !== tab) {
+ window.history.pushState({tab: tab}, '', '#' + tab);
+ } else {
+ window.history.replaceState({tab: tab}, '', '#' + tab);
+ }
+ window.scrollTo({top: 0, behavior: 'smooth'});
+
  // Restore wall if we have data
  if(tab === 'wall' && window._lastWishes && window._lastWishes.length > 0 && window.allWishes.length === 0){
  allWishes = window._lastWishes;
