@@ -2514,55 +2514,6 @@ button { touch-action: manipulation; }
  .hero-title { font-size: clamp(2.8rem, 14vw, 4rem); }
 }
 
-/* ============================================================
- WISHCOIN BUNDLES
- ============================================================ */
-.bundle-section {
- max-width: 900px; margin: 0 auto var(--sp-6); padding: 0 var(--sp-4);
-}
-.bundle-header { text-align: center; margin-bottom: var(--sp-4); }
-.bundle-eyebrow { font-family: var(--fn-mono); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--urgency); margin-bottom: 8px; }
-.bundle-title { font-family: var(--fn-display); font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; letter-spacing: -0.04em; color: var(--text); margin-bottom: 8px; font-variation-settings: 'opsz' 72; }
-.bundle-sub { font-family: var(--fn-body); font-size: .95rem; color: var(--text-muted); }
-.bundle-grid {
- display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-2);
-}
-@media(max-width:900px){ .bundle-grid { grid-template-columns: repeat(3,1fr); } }
-@media(max-width:560px){ .bundle-grid { grid-template-columns: repeat(2,1fr); } }
-.bundle-card {
- background: var(--card); border: 1px solid rgba(30,34,53,.1);
- border-radius: 2px 12px 2px 12px; padding: var(--sp-3) var(--sp-2);
- text-align: center; position: relative;
- transition: transform .22s cubic-bezier(0.16,1,0.3,1), box-shadow .22s;
-}
-.bundle-card:hover { transform: translate(-2px,-3px); box-shadow: 4px 5px 0 rgba(30,34,53,.08); }
-.bundle-card--popular {
- border-color: var(--urgency); border-width: 2px;
- background: #FAF4F0;
-}
-.bundle-popular-tag {
- position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
- background: var(--urgency); color: #FAF8F5;
- font-family: var(--fn-mono); font-size: 9px; font-weight: 700;
- padding: 2px 10px; border-radius: 2px; white-space: nowrap;
-}
-.bundle-name { font-family: var(--fn-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px; }
-.bundle-price { font-family: var(--fn-display); font-size: 1.5rem; font-weight: 900; letter-spacing: -0.03em; color: var(--text); font-variation-settings: 'opsz' 40; }
-.bundle-coins { font-family: var(--fn-display); font-size: 1.1rem; font-weight: 700; color: var(--urgency); margin: 4px 0; }
-.bundle-coin-lbl { font-family: var(--fn-mono); font-size: 9px; color: var(--text-muted); }
-.bundle-bonus { font-family: var(--fn-mono); font-size: 9px; min-height: 14px; }
-.bundle-bonus--show { color: #22A060; font-weight: 700; }
-.bundle-eff { font-family: var(--fn-mono); font-size: 9px; color: var(--text-muted); margin: 4px 0 10px; }
-.bundle-btn {
- width: 100%; padding: 8px; border-radius: 2px 6px 2px 6px; border: 1.5px solid rgba(30,34,53,.15);
- background: transparent; color: var(--text); font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
- cursor: pointer; transition: all .2s;
-}
-.bundle-btn:hover { background: var(--text); color: #FAF8F5; border-color: var(--text); }
-.bundle-btn--primary { background: var(--urgency); color: #FAF8F5; border-color: var(--urgency); }
-.bundle-btn--primary:hover { background: #B83808; border-color: #B83808; }
-.bundle-note { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); text-align: center; margin-top: var(--sp-2); }
-
 /* Free coin banner */
 .free-coin-banner {
  background: #F5EDD8; border: 1.5px solid #C88830;
@@ -2807,59 +2758,6 @@ button { touch-action: manipulation; }
  </div>
 
  <p style="text-align:center;font-family:var(--fn-mono);font-size:10px;color:var(--text-muted);margin:0 0 var(--sp-4);letter-spacing:.04em;">When you purchase items to fulfil a wish through our curated partner links, a small commission supports the wall — at no extra cost to you.</p>
-
- <!-- WISHCOIN BUNDLES -->
- <div class="bundle-section">
- <div class="bundle-header">
- <div class="bundle-eyebrow">🪙 Stock Up & Save</div>
- <h3 class="bundle-title">WishCoin Bundles</h3>
- <p class="bundle-sub">Buy more, grant more. Bonus coins on every tier above Starter.</p>
- </div>
- <div class="bundle-grid">
- <div class="bundle-card">
- <div class="bundle-name">Starter</div>
- <div class="bundle-price">$1.99</div>
- <div class="bundle-coins">2 <span class="bundle-coin-lbl">WishCoins</span></div>
- <div class="bundle-bonus"></div>
- <div class="bundle-eff">$1.00 / coin</div>
- <button class="bundle-btn" onclick="buyBundle(1.99,2)">Buy</button>
- </div>
- <div class="bundle-card">
- <div class="bundle-name">Explorer</div>
- <div class="bundle-price">$4.99</div>
- <div class="bundle-coins">7 <span class="bundle-coin-lbl">WishCoins</span></div>
- <div class="bundle-bonus bundle-bonus--show">+1 bonus</div>
- <div class="bundle-eff">$0.71 / coin</div>
- <button class="bundle-btn" onclick="buyBundle(4.99,7)">Buy</button>
- </div>
- <div class="bundle-card bundle-card--popular">
- <div class="bundle-popular-tag">Most Popular</div>
- <div class="bundle-name">Believer</div>
- <div class="bundle-price">$9.99</div>
- <div class="bundle-coins">16 <span class="bundle-coin-lbl">WishCoins</span></div>
- <div class="bundle-bonus bundle-bonus--show">+2 bonus</div>
- <div class="bundle-eff">$0.62 / coin</div>
- <button class="bundle-btn bundle-btn--primary" onclick="buyBundle(9.99,16)">Buy</button>
- </div>
- <div class="bundle-card">
- <div class="bundle-name">Champion</div>
- <div class="bundle-price">$24.99</div>
- <div class="bundle-coins">46 <span class="bundle-coin-lbl">WishCoins</span></div>
- <div class="bundle-bonus bundle-bonus--show">+8 bonus</div>
- <div class="bundle-eff">$0.54 / coin</div>
- <button class="bundle-btn" onclick="buyBundle(24.99,46)">Buy</button>
- </div>
- <div class="bundle-card">
- <div class="bundle-name">Guardian Pack</div>
- <div class="bundle-price">$49.99</div>
- <div class="bundle-coins">100 <span class="bundle-coin-lbl">WishCoins</span></div>
- <div class="bundle-bonus bundle-bonus--show">+20 bonus</div>
- <div class="bundle-eff">$0.50 / coin</div>
- <button class="bundle-btn" onclick="buyBundle(49.99,100)">Buy</button>
- </div>
- </div>
- <p class="bundle-note">WishCoins never expire. Unused coins carry forward. 1 WishCoin = $1 toward granting a wish.</p>
- </div>
 
  <!-- Wishes needing sponsors -->
  <div class="sponsor-grid" id="sp-grid">
@@ -3913,10 +3811,67 @@ const DEMO_RAW = [
  {id:'d150',wishText:"Connect me to postpartum support language barrier makes everything harder 🤝", status:'approved', color:'n-pink', stamp:'prayer', cat:'connect', est:0, country:'🇳🇱 Netherlands', isConnect:true},
 ];
 
+function expandDemoToThousand(base) {
+  const expanded = [...base];
+  const colors = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
+  const stamps = ['verified','valid','prayer','goals','big','legend','chaos','unhinged'];
+  const cats = ['money','medical','tech','education','baby','tools','experience','connect','emotional','funny','bold'];
+  const countries = [
+    '🇬🇧 UK','🇺🇸 US','🇺🇸 US','🇬🇧 UK','🇬🇧 UK',
+    '🇨🇦 Canada','🇦🇺 Australia','🇩🇪 Germany','🇫🇷 France',
+    '🇳🇱 Netherlands','🇿🇦 South Africa','🇳🇬 Nigeria','🇬🇭 Ghana',
+    '🇰🇪 Kenya','🇧🇷 Brazil','🇮🇳 India','🌍 Global'
+  ];
+  const templates = [
+    'Help with groceries this week',
+    'Need support covering rent shortfall',
+    'Laptop for studying at home',
+    'Baby supplies until payday',
+    'School fees this term',
+    'Medical appointment costs',
+    'Work tools replacement',
+    'Internet connection at home',
+    'Warm coat for winter',
+    'Medication this month',
+    'Phone for job hunting',
+    'Transport to work',
+    'Childcare gap this week',
+    'Utility bill shortfall',
+    'Debt holding me back',
+    'First month deposit to move',
+    'Camera for my course',
+    'Guitar to keep playing music',
+    'Just need someone to notice',
+    'Birthday for my child this week'
+  ];
+  let counter = 151;
+  while(expanded.length < 1000) {
+    const t = templates[counter % templates.length];
+    const c = countries[counter % countries.length];
+    const col = colors[counter % colors.length];
+    const st = stamps[counter % stamps.length];
+    const cat = cats[counter % cats.length];
+    const est = [0,20,30,40,50,60,80,100,120,150][counter % 10];
+    expanded.push({
+      id: 'g' + counter,
+      wishText: t,
+      status: counter % 7 === 0 ? 'granted' : 'approved',
+      color: col,
+      stamp: st,
+      cat: cat,
+      est: est,
+      country: c
+    });
+    counter++;
+  }
+  return expanded;
+}
+
 // Spread real wishes across all 1000 slots using deterministic seeded positions
 // so the wall always looks full and the ❤️ mosaic pattern emerges from afar
-const DEMO_POSITIONS = seededShuffle([...Array(WALL_CAPACITY).keys()], 7);
-const DEMO = DEMO_RAW.map((w, i) => ({ ...w, _slot: DEMO_POSITIONS[i] }));
+const DEMO_EXPANDED = expandDemoToThousand(DEMO_RAW);
+const DEMO_POSITIONS = seededShuffle([...Array(1000).keys()], 42);
+const DEMO = DEMO_EXPANDED.map((w, i) => ({ ...w, _slot: DEMO_POSITIONS[i] }));
 
 /* ============================================================
  STATE
