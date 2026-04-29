@@ -2534,6 +2534,162 @@ button { touch-action: manipulation; }
  to { opacity: 1; transform: translateY(0); }
  }
 }
+
+.corp-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+.corp-section-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.corp-sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.corp-card {
+  background: rgba(245, 200, 66, 0.05);
+  border: 1px solid rgba(245, 200, 66, 0.18);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.2s ease;
+}
+.corp-card:hover {
+  transform: translateY(-3px);
+}
+.corp-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.corp-logo {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.corp-info {
+  flex: 1;
+}
+.corp-name {
+  font-family: var(--fn-display);
+  font-size: 1.1rem;
+  color: #FAFAF7;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.corp-tagline {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+.corp-badge {
+  font-size: 10px;
+  background: rgba(245, 200, 66, 0.15);
+  border: 1px solid rgba(245, 200, 66, 0.3);
+  color: rgba(245, 200, 66, 0.9);
+  border-radius: 50px;
+  padding: 3px 10px;
+  font-family: var(--fn-ui);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.corp-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-family: var(--fn-ui);
+}
+.corp-stat {
+  color: rgba(255, 255, 255, 0.4);
+}
+.corp-funded {
+  color: rgba(16, 185, 129, 0.9);
+  font-weight: 700;
+}
+.corp-cta-box {
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(245, 200, 66, 0.12);
+  border-radius: 22px;
+  padding: 36px;
+  text-align: center;
+}
+.corp-cta-title {
+  font-family: var(--fn-display);
+  font-size: 1.6rem;
+  color: #FAFAF7;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.corp-cta-body {
+  font-family: var(--fn-note);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 28px;
+}
+.corp-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.corp-tier {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+.corp-tier--mid {
+  background: rgba(245, 200, 66, 0.06);
+  border-color: rgba(245, 200, 66, 0.25);
+}
+.corp-tier-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
+  font-family: var(--fn-ui);
+}
+.corp-tier-price {
+  font-family: var(--fn-display);
+  font-size: 1.4rem;
+  color: #FAFAF7;
+  margin-bottom: 8px;
+}
+.corp-tier-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.55;
+  font-family: var(--fn-ui);
+}
+.corp-cta-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #F5C842, #FF6B35);
+  color: #07070D;
+  font-family: var(--fn-ui);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(245, 200, 66, 0.35);
+  transition: all 0.2s ease;
+}
+.corp-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 36px rgba(245, 200, 66, 0.5);
+}
 </style>
 
 </head>
@@ -2775,6 +2931,37 @@ button { touch-action: manipulation; }
  <p class="lb-subtitle">The generous souls who make wishes come true</p>
  <div id="lb-list"></div>
  </div>
+
+  <!-- Corporate Sponsors -->
+  <section class="corp-section">
+   <div class="corp-section-header">
+    <h3 style="font-family:var(--fn-display);font-size:1.6rem;color:#FAFAF7;margin-bottom:8px;">🏢 Corporate Patrons</h3>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);font-family:var(--fn-ui);">Companies making a real difference — one wish at a time</p>
+   </div>
+   <div class="corp-sponsor-grid" id="corp-sponsor-grid"></div>
+   <div class="corp-cta-box">
+    <h3 class="corp-cta-title">Become a Corporate Patron</h3>
+    <p class="corp-cta-body">Partner with The Wish Wall to sponsor a category of wishes or a specific cause. Your brand powers real change — and you receive a monthly impact report showing exactly what you made real.</p>
+    <div class="corp-tiers">
+     <div class="corp-tier">
+      <div class="corp-tier-name">Patron</div>
+      <div class="corp-tier-price">$500/mo</div>
+      <div class="corp-tier-desc">Sponsor one category. Branded card on the wall. Monthly report.</div>
+     </div>
+     <div class="corp-tier corp-tier--mid">
+      <div class="corp-tier-name">Founding Patron</div>
+      <div class="corp-tier-price">$1,500/mo</div>
+      <div class="corp-tier-desc">Sponsor all categories. Featured placement. Priority impact report.</div>
+     </div>
+     <div class="corp-tier">
+      <div class="corp-tier-name">Bespoke</div>
+      <div class="corp-tier-price">Custom</div>
+      <div class="corp-tier-desc">Tailored sponsorship for specific wishes or campaigns.</div>
+     </div>
+    </div>
+    <a class="corp-cta-btn" href="mailto:corporate@wishwall.xyz">💼 Enquire About Sponsoring</a>
+   </div>
+  </section>
 
  </div>
 </div><!-- /tab-guard -->
@@ -3950,6 +4137,7 @@ window.renderWishes = function(rawWishes){
  updateStats(rawWishes);
  paintWall();
  paintSponsor();
+ paintCorpSponsors();
 };
 
 // Re-paint when switching back to wall tab without losing data
@@ -4316,6 +4504,27 @@ function paintSponsor(){
 </div>`).join('');
 }
 
+function paintCorpSponsors() {
+  const grid = document.getElementById('corp-sponsor-grid');
+  if (!grid) return;
+  grid.innerHTML = CORP_SPONSORS.map(function(s) {
+    return '<div class="corp-card">' +
+      '<div class="corp-card-top">' +
+        '<div class="corp-logo">' + s.logo + '</div>' +
+        '<div class="corp-info">' +
+          '<div class="corp-name">' + s.name + ' ' + s.country + '</div>' +
+          '<div class="corp-tagline">' + s.tagline + '</div>' +
+        '</div>' +
+        '<div class="corp-badge">' + s.badge + '</div>' +
+      '</div>' +
+      '<div class="corp-card-bottom">' +
+        '<span class="corp-stat">' + s.category + '</span>' +
+        '<span class="corp-funded">\u2713 ' + s.wishes_funded + ' wishes funded</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
 async function sponsorWish(id){
  const w = window.allWishes.find(x => x.id === id);
  if(!w) return;
@@ -4422,6 +4631,36 @@ const DEMO_LB = [
  ...Array.from({length:134}, (_,i) => ({name:'Anonymous', flag:'🌍', amount: Math.max(2, 70 - i)}))
 ];
 
+const CORP_SPONSORS = [
+  {
+    name: 'Lyriōn Ltd',
+    logo: '✨',
+    category: 'All Categories',
+    tagline: 'Luxury astrology brand powering kindness globally',
+    country: '🇬🇧',
+    wishes_funded: 12,
+    badge: 'Founding Patron'
+  },
+  {
+    name: 'Verda Solutions',
+    logo: '🌿',
+    category: 'Education',
+    tagline: 'Sponsoring school fees and learning across borders',
+    country: '🇩🇪',
+    wishes_funded: 6,
+    badge: 'Education Patron'
+  },
+  {
+    name: 'Kairova Tech',
+    logo: '🌐',
+    category: 'Tech',
+    tagline: 'Putting laptops and phones in the hands that need them',
+    country: '🇫🇮',
+    wishes_funded: 4,
+    badge: 'Tech Patron'
+  }
+];
+
 function paintLB(donors){
  const list = document.getElementById('lb-list');
  const data = (donors || DEMO_LB).slice(0, 167);
@@ -4457,6 +4696,7 @@ function paintLB(donors){
  }
 }
 setTimeout(() => paintLB(null), 100);
+setTimeout(() => paintCorpSponsors(), 100);
 
 function openModal(){
  document.getElementById('modal-ov').classList.add('open');
