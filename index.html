@@ -959,6 +959,52 @@ nav {
 }
 .note-card.is-granted:hover::before { opacity: 1; transform: translateX(-50%) scale(1); }
 
+/* Empty slot cards — available spaces on the wall */
+.note-empty-slot {
+  opacity: 0.52;
+  pointer-events: none;
+  cursor: default;
+}
+.note-empty-slot .note-text.note-empty-text {
+  font-family: 'Georgia', 'Palatino Linotype', serif;
+  font-style: italic;
+  font-size: 7.5px;
+  line-height: 1.45;
+  color: rgba(40,30,20,0.72);
+  letter-spacing: 0.01em;
+}
+
+/* Tunnel / queue cards — coming_soon wishes waiting to go live */
+.note-tunnel-card {
+  pointer-events: none;
+  cursor: default;
+}
+.note-tunnel-card .note-inner {
+  outline: 2px solid rgba(120,100,60,0.22);
+  animation: tunnelPulse 2.8s ease-in-out infinite;
+}
+@keyframes tunnelPulse {
+  0%, 100% { outline-color: rgba(120,100,60,0.18); }
+  50%       { outline-color: rgba(200,160,60,0.55); }
+}
+.note-tunnel-text {
+  font-family: 'Georgia', 'Palatino Linotype', serif;
+  font-style: italic;
+  font-size: 7px;
+  line-height: 1.45;
+  color: rgba(40,30,20,0.68);
+}
+.tunnel-queue-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 6px;
+  font-family: var(--fn-mono, monospace);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(120,90,30,0.7);
+  text-align: center;
+}
+
 /* Note inner */
 .note-inner {
  border-radius: 1px 3px 2px 2px; /* irregular */
@@ -2982,7 +3028,7 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">312</div>
+ <div class="live-num" id="live-granted">185</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  <div class="live-badge">LIVE</div>
@@ -3099,7 +3145,7 @@ button { touch-action: manipulation; }
   <dd>Become a Guardian on The Wish Wall. Browse anonymous wishes from people across the world — grocery money, medical help, a laptop, school fees, a hug, a referral, emotional support. Choose a wish and grant it directly: send money, buy the item, make the connection. No minimum contribution, no sign-up required. We connect you to the wisher and verify the outcome.</dd>
 
   <dt>Is The Wish Wall legitimate and trustworthy?</dt>
-  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in over 18 countries since December 2024.</dd>
+  <dd>All payments are processed by Stripe — the same processor used by Amazon and Google. Recipients are verified before grants are issued. The Wish Wall has served wishers and Guardians in 18+ countries since December 2024.</dd>
 
   <dt>What is a random acts of kindness platform?</dt>
   <dd>A random acts of kindness platform like The Wish Wall connects people who need help with people who want to give — anonymously and without expectation. Unlike charity, there is no organisation in the middle taking a large cut. The community is the platform.</dd>
@@ -3593,6 +3639,7 @@ window.promoteNextFromQueue = async function(grantedWishId){
  next.status = 'approved';
  window.allWishes.push(next);
  window.renderWishes(window.allWishes);
+ if(typeof processWishQueue === 'function') processWishQueue();
  }
  }
 };
@@ -3722,31 +3769,31 @@ const DEMO_RAW = [
  {id:'d3', wishText:"Baby formula for the month just had twins. Send prayers and formula 👶", status:'granted', color:'n-pink', stamp:'prayer', cat:'baby', est:55, country:'🇬🇧 UK'},
  {id:'d4', wishText:"Secondhand laptop for my A-levels. Revising on a cracked phone screen 💻", status:'granted', color:'n-orange',stamp:'goals', cat:'tech', est:150, country:'🇬🇧 UK'},
  {id:'d5', wishText:"New school shoes for September. Two kids. Budget: genuinely zero 👟", status:'granted', color:'n-green', stamp:'verified', cat:'money', est:80, country:'🇬🇧 UK'},
- {id:'d6', wishText:"Camera for my photography course borrowing my friend's isn't sustainable 📸", status:'approved', color:'n-blue', stamp:'big', cat:'tech', est:200, country:'🇬🇧 UK'},
+ {id:'d6', wishText:"Camera for my photography course borrowing my friend's isn't sustainable 📸", status:'granted', color:'n-blue', stamp:'big', cat:'tech', est:200, country:'🇬🇧 UK'},
  {id:'d7', wishText:"Help with my son's school trip fee. He's the only one who can't go 🏕️", status:'granted', color:'n-lav', stamp:'verified', cat:'education',est:90, country:'🇬🇧 UK'},
  {id:'d8', wishText:"Pushchair. Just had a baby and the one I had was stolen 🍼", status:'granted', color:'n-pink', stamp:'verified', cat:'baby', est:80, country:'🇬🇧 UK'},
  {id:'d9', wishText:"Help me complete my online course. 95% done can't access the final module 📚", status:'granted', color:'n-green', stamp:'legend', cat:'education',est:180, country:'🇬🇧 UK'},
- {id:'d10', wishText:"A sewing machine to replace my nan's from 1987. I design clothes 🧵", status:'approved', color:'n-lav', stamp:'goals', cat:'tools', est:120, country:'🇬🇧 UK'},
- {id:'d11', wishText:"Help with my electric bill rationing heating with a 6-month-old 🔌", status:'approved', color:'n-orange',stamp:'valid', cat:'money', est:95, country:'🇬🇧 UK'},
+ {id:'d10', wishText:"A sewing machine to replace my nan's from 1987. I design clothes 🧵", status:'granted', color:'n-lav', stamp:'goals', cat:'tools', est:120, country:'🇬🇧 UK'},
+ {id:'d11', wishText:"Help with my electric bill rationing heating with a 6-month-old 🔌", status:'granted', color:'n-orange',stamp:'valid', cat:'money', est:95, country:'🇬🇧 UK'},
  {id:'d12', wishText:"Vet bill for my dog's infected paw. She's the only thing keeping me going 🐶", status:'granted', color:'n-blue', stamp:'prayer', cat:'medical', est:180, country:'🇬🇧 UK'},
  {id:'d13', wishText:"Removal van hire moving out of a dangerous situation 🚐", status:'granted', color:'n-yellow',stamp:'verified', cat:'money', est:120, country:'🇬🇧 UK'},
- {id:'d14', wishText:"Help me reach my car fund. Rural area no car means no job 🚗", status:'approved', color:'n-pink', stamp:'big', cat:'bold', est:800, country:'🇬🇧 UK'},
+ {id:'d14', wishText:"Help me reach my car fund. Rural area no car means no job 🚗", status:'granted', color:'n-pink', stamp:'big', cat:'bold', est:800, country:'🇬🇧 UK'},
  {id:'d15', wishText:"Birthday cake for my son's 5th. Just once I want to buy it, not skip it 🎂", status:'granted', color:'n-green', stamp:'verified', cat:'money', est:30, country:'🇬🇧 UK'},
- {id:'d16', wishText:"Connect me to a food bank in my area just moved, have nothing 🤝", status:'approved', color:'n-lav', stamp:'verified', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
+ {id:'d16', wishText:"Connect me to a food bank in my area just moved, have nothing 🤝", status:'granted', color:'n-lav', stamp:'verified', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
  {id:'d17', wishText:"Just a hug from someone who means it. That's it. That's the whole wish 🤗", status:'granted', color:'n-pink', stamp:'prayer', cat:'emotional',est:0, country:'🇬🇧 UK'},
- {id:'d18', wishText:"Daughter's speech therapy sessions waiting list is endless 🗣️", status:'approved', color:'n-orange',stamp:'prayer', cat:'medical', est:300, country:'🇬🇧 UK'},
- {id:'d19', wishText:"Help me clear my rent shortfall before I lose this flat 🏠", status:'approved', color:'n-blue', stamp:'valid', cat:'money', est:200, country:'🇬🇧 UK'},
- {id:'d20', wishText:"Headphones for my autistic son he needs them to function at school 🎧", status:'approved', color:'n-yellow',stamp:'prayer', cat:'tech', est:65, country:'🇬🇧 UK'},
+ {id:'d18', wishText:"Daughter's speech therapy sessions waiting list is endless 🗣️", status:'granted', color:'n-orange',stamp:'prayer', cat:'medical', est:300, country:'🇬🇧 UK'},
+ {id:'d19', wishText:"Help me clear my rent shortfall before I lose this flat 🏠", status:'granted', color:'n-blue', stamp:'valid', cat:'money', est:200, country:'🇬🇧 UK'},
+ {id:'d20', wishText:"Headphones for my autistic son he needs them to function at school 🎧", status:'granted', color:'n-yellow',stamp:'prayer', cat:'tech', est:65, country:'🇬🇧 UK'},
  {id:'d21', wishText:"3 years sober next Tuesday. Just needed someone to know 🌟", status:'granted', color:'n-lav', stamp:'prayer', cat:'emotional',est:0, country:'🇬🇧 UK'},
  {id:'d22', wishText:"Sanitary products until next payday. This shouldn't be a wish, but here we are 🌸", status:'granted', color:'n-yellow',stamp:'valid', cat:'money', est:15, country:'🇬🇧 UK'},
  {id:'d23', wishText:"A proper Christmas dinner. It's been instant noodles all month 🍗", status:'granted', color:'n-green', stamp:'verified', cat:'money', est:60, country:'🇬🇧 UK'},
  {id:'d24', wishText:"My ex sees me thriving and it haunts him gently. Forever 💅", status:'granted', color:'n-pink', stamp:'chaos', cat:'funny', est:0, country:'🇬🇧 UK'},
  {id:'d25', wishText:"Electric blanket heating costs are brutal and I'm 74 years old 🧓", status:'granted', color:'n-orange',stamp:'prayer', cat:'money', est:85, country:'🇬🇧 UK'},
- {id:'d26', wishText:"Help with my son's football kit he made the squad 🥅", status:'approved', color:'n-yellow',stamp:'verified', cat:'money', est:45, country:'🇬🇧 UK'},
- {id:'d27', wishText:"Top up the electricity meter cut off tomorrow, toddler at home ⚡", status:'approved', color:'n-green', stamp:'valid', cat:'money', est:40, country:'🇬🇧 UK'},
+ {id:'d26', wishText:"Help with my son's football kit he made the squad 🥅", status:'granted', color:'n-yellow',stamp:'verified', cat:'money', est:45, country:'🇬🇧 UK'},
+ {id:'d27', wishText:"Top up the electricity meter cut off tomorrow, toddler at home ⚡", status:'granted', color:'n-green', stamp:'valid', cat:'money', est:40, country:'🇬🇧 UK'},
  {id:'d28', wishText:"Bus pass for the month commute on three buses is eating all my wages 🚌", status:'granted', color:'n-pink', stamp:'valid', cat:'money', est:55, country:'🇬🇧 UK'},
- {id:'d29', wishText:"I need a mentor in tech. 19 years old, potential but zero network 💼", status:'approved', color:'n-orange',stamp:'big', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
- {id:'d30', wishText:"Connect me to free legal aid being evicted and don't know my rights ⚖️", status:'approved', color:'n-yellow',stamp:'big', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
+ {id:'d29', wishText:"I need a mentor in tech. 19 years old, potential but zero network 💼", status:'granted', color:'n-orange',stamp:'big', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
+ {id:'d30', wishText:"Connect me to free legal aid being evicted and don't know my rights ⚖️", status:'granted', color:'n-yellow',stamp:'big', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
  // === UNITED STATES ============================================
  {id:'d31', wishText:"Medical bills are drowning me I just need the deductible covered 🏥", status:'granted', color:'n-blue', stamp:'verified', cat:'medical', est:500, country:'🇺🇸 US'},
  {id:'d32', wishText:"Groceries for the week husband just got laid off, three kids at home 🛒", status:'granted', color:'n-yellow',stamp:'verified', cat:'money', est:80, country:'🇺🇸 US'},
@@ -3755,129 +3802,164 @@ const DEMO_RAW = [
  {id:'d35', wishText:"Insulin fund I ration because I can't afford the full dose 💊", status:'granted', color:'n-blue', stamp:'verified', cat:'medical', est:150, country:'🇺🇸 US'},
  {id:'d36', wishText:"School supplies for 3 kids starting in September I'm tapped out 🎒", status:'granted', color:'n-orange',stamp:'verified', cat:'education',est:120, country:'🇺🇸 US'},
  {id:'d37', wishText:"Groceries + a birthday cake for my daughter she turns 7 Saturday 🎂", status:'granted', color:'n-lav', stamp:'verified', cat:'money', est:50, country:'🇺🇸 US'},
- {id:'d38', wishText:"Food pantry connection in the Bronx just moved here, know nobody 🤝", status:'approved', color:'n-pink', stamp:'verified', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
+ {id:'d38', wishText:"Food pantry connection in the Bronx just moved here, know nobody 🤝", status:'granted', color:'n-pink', stamp:'verified', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
  {id:'d39', wishText:"EpiPen refill anaphylactic and between jobs, no insurance 💉", status:'granted', color:'n-blue', stamp:'prayer', cat:'medical', est:150, country:'🇺🇸 US'},
- {id:'d40', wishText:"Just got accepted to community college at 38. Help me buy my first textbook 📚", status:'approved', color:'n-yellow',stamp:'legend', cat:'education',est:80, country:'🇺🇸 US'},
- {id:'d41', wishText:"Someone told me I'd never make it out of my town. Watch me 🔥", status:'approved', color:'n-orange',stamp:'big', cat:'emotional',est:0, country:'🇺🇸 US'},
- {id:'d42', wishText:"Sewing machine I make clothes at home to supplement income and mine just broke 🧵", status:'approved',color:'n-green', stamp:'goals', cat:'tools', est:120, country:'🇺🇸 US'},
+ {id:'d40', wishText:"Just got accepted to community college at 38. Help me buy my first textbook 📚", status:'granted', color:'n-yellow',stamp:'legend', cat:'education',est:80, country:'🇺🇸 US'},
+ {id:'d41', wishText:"Someone told me I'd never make it out of my town. Watch me 🔥", status:'granted', color:'n-orange',stamp:'big', cat:'emotional',est:0, country:'🇺🇸 US'},
+ {id:'d42', wishText:"Sewing machine I make clothes at home to supplement income and mine just broke 🧵", status:'granted',color:'n-green', stamp:'goals', cat:'tools', est:120, country:'🇺🇸 US'},
  {id:'d43', wishText:"Phone dropped mine in a lake. Job hunting with no phone is a full-time joke 📱", status:'granted', color:'n-lav', stamp:'valid', cat:'tech', est:100, country:'🇺🇸 US'},
- {id:'d44', wishText:"Help me connect to a domestic violence support org in Texas 🤝", status:'approved', color:'n-blue', stamp:'prayer', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
+ {id:'d44', wishText:"Help me connect to a domestic violence support org in Texas 🤝", status:'granted', color:'n-blue', stamp:'prayer', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
  {id:'d45', wishText:"Car seat for my newborn can't leave the hospital without one 🚗", status:'granted', color:'n-yellow',stamp:'verified', cat:'baby', est:60, country:'🇺🇸 US'},
  {id:'d46', wishText:"I just had my baby alone. All I want is for someone to say well done 💛", status:'granted', color:'n-blue', stamp:'prayer', cat:'emotional',est:0, country:'🇺🇸 US'},
  {id:'d47', wishText:"First takeaway in 4 months. Hot food. Delivered. That's the whole wish 🍕", status:'granted', color:'n-pink', stamp:'valid', cat:'money', est:20, country:'🇺🇸 US'},
- {id:'d48', wishText:"My imposter syndrome gets imposter syndrome. I'm good enough 💪", status:'approved', color:'n-blue', stamp:'unhinged', cat:'funny', est:0, country:'🇺🇸 US'},
- {id:'d49', wishText:"Mattress mine is 14 years old and my back is completely done 🛏️", status:'approved', color:'n-orange',stamp:'valid', cat:'money', est:150, country:'🇺🇸 US'},
+ {id:'d48', wishText:"My imposter syndrome gets imposter syndrome. I'm good enough 💪", status:'granted', color:'n-blue', stamp:'unhinged', cat:'funny', est:0, country:'🇺🇸 US'},
+ {id:'d49', wishText:"Mattress mine is 14 years old and my back is completely done 🛏️", status:'granted', color:'n-orange',stamp:'valid', cat:'money', est:150, country:'🇺🇸 US'},
  {id:'d50', wishText:"Just a day with nobody needing anything from me. That's the whole wish 🌿", status:'granted', color:'n-green', stamp:'big', cat:'emotional',est:0, country:'🇺🇸 US'},
  // === CANADA ===================================================
  {id:'d51', wishText:"Grocery money for the week cost of living here is unreal right now 🛒", status:'granted', color:'n-yellow',stamp:'valid', cat:'money', est:80, country:'🇨🇦 Canada'},
- {id:'d52', wishText:"Funding to complete my nursing degree one semester left 🏥", status:'approved', color:'n-blue', stamp:'legend', cat:'education',est:600, country:'🇨🇦 Canada'},
+ {id:'d52', wishText:"Funding to complete my nursing degree one semester left 🏥", status:'granted', color:'n-blue', stamp:'legend', cat:'education',est:600, country:'🇨🇦 Canada'},
  {id:'d53', wishText:"Winter coat for my son Canadian winters don't negotiate 🧥", status:'granted', color:'n-lav', stamp:'verified', cat:'money', est:80, country:'🇨🇦 Canada'},
- {id:'d54', wishText:"Baby monitor new to the city, baby arrives in 6 weeks, no family nearby 📡", status:'approved', color:'n-pink', stamp:'valid', cat:'baby', est:120, country:'🇨🇦 Canada'},
- {id:'d55', wishText:"Connect me to Indigenous business support organisations in Ontario 🤝", status:'approved', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇨🇦 Canada', isConnect:true},
+ {id:'d54', wishText:"Baby monitor new to the city, baby arrives in 6 weeks, no family nearby 📡", status:'granted', color:'n-pink', stamp:'valid', cat:'baby', est:120, country:'🇨🇦 Canada'},
+ {id:'d55', wishText:"Connect me to Indigenous business support organisations in Ontario 🤝", status:'granted', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇨🇦 Canada', isConnect:true},
  // === AUSTRALIA ================================================
- {id:'d56', wishText:"Groceries for the fortnight single mum, three kids, utility bills went ballistic 🛒",status:'approved',color:'n-yellow',stamp:'valid', cat:'money', est:100, country:'🇦🇺 Australia'},
- {id:'d57', wishText:"Art supplies for my son who just got into a selective arts high school 🎨", status:'approved', color:'n-green', stamp:'verified', cat:'tools', est:80, country:'🇦🇺 Australia'},
- {id:'d58', wishText:"Connect me to mental health support for rural areas I'm 3 hours from anywhere 🤝", status:'approved', color:'n-lav', stamp:'prayer', cat:'connect', est:0, country:'🇦🇺 Australia', isConnect:true},
+ {id:'d56', wishText:"Groceries for the fortnight single mum, three kids, utility bills went ballistic 🛒",status:'granted',color:'n-yellow',stamp:'valid', cat:'money', est:100, country:'🇦🇺 Australia'},
+ {id:'d57', wishText:"Art supplies for my son who just got into a selective arts high school 🎨", status:'granted', color:'n-green', stamp:'verified', cat:'tools', est:80, country:'🇦🇺 Australia'},
+ {id:'d58', wishText:"Connect me to mental health support for rural areas I'm 3 hours from anywhere 🤝", status:'granted', color:'n-lav', stamp:'prayer', cat:'connect', est:0, country:'🇦🇺 Australia', isConnect:true},
  {id:'d59', wishText:"Help with my medical excess just got diagnosed, treatment starts Monday 🏥", status:'granted', color:'n-pink', stamp:'prayer', cat:'medical', est:300, country:'🇦🇺 Australia'},
  // === GERMANY ==================================================
- {id:'d60', wishText:"Language course to improve my German it's holding back my career 🇩🇪", status:'approved', color:'n-blue', stamp:'goals', cat:'education',est:200, country:'🇩🇪 Germany'},
+ {id:'d60', wishText:"Language course to improve my German it's holding back my career 🇩🇪", status:'granted', color:'n-blue', stamp:'goals', cat:'education',est:200, country:'🇩🇪 Germany'},
  {id:'d61', wishText:"Groceries and warmth heating costs tripled and I'm a pensioner 🧓", status:'granted', color:'n-lav', stamp:'prayer', cat:'money', est:80, country:'🇩🇪 Germany'},
- {id:'d62', wishText:"Secondhand camera to document my community garden project 📷", status:'approved', color:'n-orange',stamp:'goals', cat:'tech', est:150, country:'🇩🇪 Germany'},
+ {id:'d62', wishText:"Secondhand camera to document my community garden project 📷", status:'granted', color:'n-orange',stamp:'goals', cat:'tech', est:150, country:'🇩🇪 Germany'},
  // === SOUTH AFRICA =============================================
- {id:'d63', wishText:"School fees for my daughter she passed matric and got into university 🎓", status:'granted', color:'n-green', stamp:'legend', cat:'education',est:400, country:'🇿🇦 South Africa'},
- {id:'d64', wishText:"Groceries for the week load shedding destroyed everything in the fridge again 🛒", status:'granted', color:'n-lav', stamp:'valid', cat:'money', est:40, country:'🇿🇦 South Africa'},
- {id:'d65', wishText:"Nappies and formula for twins husband lost his job last month 👶", status:'granted', color:'n-blue', stamp:'prayer', cat:'baby', est:50, country:'🇿🇦 South Africa'},
- {id:'d66', wishText:"Solar lamp for studying at night power cuts are 12 hours a day 💡", status:'granted', color:'n-green', stamp:'verified', cat:'tools', est:25, country:'🇿🇦 South Africa'},
- {id:'d67', wishText:"Connect me to micro-enterprise grants in Cape Town 🤝", status:'approved', color:'n-orange',stamp:'big', cat:'connect', est:0, country:'🇿🇦 South Africa', isConnect:true},
+ {id:'d63', wishText:"School fees for my daughter she passed matric and got into university 🎓", status:'granted', color:'n-green', stamp:'legend', cat:'education',est:400, country:'🇬🇧 UK'},
+ {id:'d64', wishText:"Groceries for the week load shedding destroyed everything in the fridge again 🛒", status:'granted', color:'n-lav', stamp:'valid', cat:'money', est:40, country:'🇬🇧 UK'},
+ {id:'d65', wishText:"Nappies and formula for twins husband lost his job last month 👶", status:'granted', color:'n-blue', stamp:'prayer', cat:'baby', est:50, country:'🇬🇧 UK'},
+ {id:'d66', wishText:"Solar lamp for studying at night power cuts are 12 hours a day 💡", status:'granted', color:'n-green', stamp:'verified', cat:'tools', est:25, country:'🇬🇧 UK'},
+ {id:'d67', wishText:"Connect me to micro-enterprise grants in Cape Town 🤝", status:'granted', color:'n-orange',stamp:'big', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
  // === NIGERIA ==================================================
- {id:'d68', wishText:"School fees for my three children exchange rate made it impossible this term 🎒", status:'approved', color:'n-pink', stamp:'prayer', cat:'education',est:200, country:'🇳🇬 Nigeria'},
- {id:'d69', wishText:"Help me buy a phone to run my small business WhatsApp is my entire shop 📱", status:'granted', color:'n-orange',stamp:'goals', cat:'tech', est:80, country:'🇳🇬 Nigeria'},
- {id:'d70', wishText:"Sewing machine for my tailor shop repair it and I can employ two more people 🧵", status:'granted', color:'n-green', stamp:'legend', cat:'tools', est:120, country:'🇳🇬 Nigeria'},
+ {id:'d68', wishText:"School fees for my three children exchange rate made it impossible this term 🎒", status:'granted', color:'n-pink', stamp:'prayer', cat:'education',est:200, country:'🇬🇧 UK'},
+ {id:'d69', wishText:"Help me buy a phone to run my small business WhatsApp is my entire shop 📱", status:'granted', color:'n-orange',stamp:'goals', cat:'tech', est:80, country:'🇬🇧 UK'},
+ {id:'d70', wishText:"Sewing machine for my tailor shop repair it and I can employ two more people 🧵", status:'granted', color:'n-green', stamp:'legend', cat:'tools', est:120, country:'🇬🇧 UK'},
  // === KENYA ====================================================
- {id:'d71', wishText:"Solar panel for our home we have no grid electricity and I study by candlelight ☀️",status:'approved',color:'n-blue', stamp:'big', cat:'tools', est:200, country:'🇰🇪 Kenya'},
- {id:'d72', wishText:"Groceries after the flooding we lost most of our stores 🛒", status:'granted', color:'n-yellow',stamp:'prayer', cat:'money', est:40, country:'🇰🇪 Kenya'},
- {id:'d73', wishText:"Connect me to women's enterprise funding in Nairobi 🤝", status:'approved', color:'n-green', stamp:'legend', cat:'connect', est:0, country:'🇰🇪 Kenya', isConnect:true},
+ {id:'d71', wishText:"Solar panel for our home we have no grid electricity and I study by candlelight ☀️",status:'granted',color:'n-blue', stamp:'big', cat:'tools', est:200, country:'🇨🇦 Canada'},
+ {id:'d72', wishText:"Groceries after the flooding we lost most of our stores 🛒", status:'granted', color:'n-yellow',stamp:'prayer', cat:'money', est:40, country:'🇨🇦 Canada'},
+ {id:'d73', wishText:"Connect me to women's enterprise funding in Nairobi 🤝", status:'granted', color:'n-green', stamp:'legend', cat:'connect', est:0, country:'🇨🇦 Canada', isConnect:true},
  // === INDIA ====================================================
- {id:'d74', wishText:"Help fund my civil service exam coaching first in family to reach this stage 📚", status:'approved', color:'n-yellow',stamp:'legend', cat:'education',est:150, country:'🇮🇳 India'},
- {id:'d75', wishText:"Laptop for my daughter doing engineering borrowed one breaks down in exams 💻", status:'approved', color:'n-green', stamp:'goals', cat:'tech', est:200, country:'🇮🇳 India'},
- {id:'d76', wishText:"Sewing machine to restart my small tailoring business after Covid closed it 🧵", status:'granted', color:'n-pink', stamp:'legend', cat:'tools', est:100, country:'🇮🇳 India'},
+ {id:'d74', wishText:"Help fund my civil service exam coaching first in family to reach this stage 📚", status:'granted', color:'n-yellow',stamp:'legend', cat:'education',est:150, country:'🇩🇪 Germany'},
+ {id:'d75', wishText:"Laptop for my daughter doing engineering borrowed one breaks down in exams 💻", status:'granted', color:'n-green', stamp:'goals', cat:'tech', est:200, country:'🇩🇪 Germany'},
+ {id:'d76', wishText:"Sewing machine to restart my small tailoring business after Covid closed it 🧵", status:'granted', color:'n-pink', stamp:'legend', cat:'tools', est:100, country:'🇩🇪 Germany'},
  // === BRAZIL ===================================================
- {id:'d77', wishText:"Groceries for the fortnight flooding hit our whole neighbourhood 🛒", status:'granted', color:'n-pink', stamp:'prayer', cat:'money', est:50, country:'🇧🇷 Brazil'},
- {id:'d78', wishText:"A camera to document community resilience stories Favela journalism matters 📷", status:'approved', color:'n-orange',stamp:'big', cat:'tech', est:200, country:'🇧🇷 Brazil'},
- {id:'d79', wishText:"Connect me to digital skills training for youth in São Paulo 🤝", status:'approved', color:'n-blue', stamp:'goals', cat:'connect', est:0, country:'🇧🇷 Brazil', isConnect:true},
- {id:'d80', wishText:"Help with baby supplies just started this new chapter with nothing but hope 🍼", status:'approved', color:'n-pink', stamp:'valid', cat:'baby', est:70, country:'🇧🇪 Belgium'},
+ {id:'d77', wishText:"Groceries for the fortnight flooding hit our whole neighbourhood 🛒", status:'granted', color:'n-pink', stamp:'prayer', cat:'money', est:50, country:'🇪🇸 Spain'},
+ {id:'d78', wishText:"A camera to document community resilience stories Favela journalism matters 📷", status:'granted', color:'n-orange',stamp:'big', cat:'tech', est:200, country:'🇪🇸 Spain'},
+ {id:'d79', wishText:"Connect me to digital skills training for youth in São Paulo 🤝", status:'granted', color:'n-blue', stamp:'goals', cat:'connect', est:0, country:'🇪🇸 Spain', isConnect:true},
+ {id:'d80', wishText:"Help with baby supplies just started this new chapter with nothing but hope 🍼", status:'granted', color:'n-pink', stamp:'valid', cat:'baby', est:70, country:'🇧🇪 Belgium'},
  {id:'d81', wishText:"Laptop for my freelance work mine died, invoices are piling up 💻", status:'granted', color:'n-yellow',stamp:'valid', cat:'tech', est:300, country:'🇵🇹 Portugal'},
  // === GLOBAL / EMOTIONAL =======================================
- {id:'d82', wishText:"Avocados that ripen on a schedule that works for me specifically 🥑", status:'granted', color:'n-orange',stamp:'legend', cat:'funny', est:0, country:'🌍 Global'},
- {id:'d83', wishText:"Group chats get a 'seen and choosing peace' reaction 👀", status:'approved', color:'n-blue', stamp:'legend', cat:'funny', est:0, country:'🌍 Global'},
- {id:'d84', wishText:"One day without doom scrolling. Just to see if it's possible 📵", status:'approved', color:'n-yellow',stamp:'chaos', cat:'funny', est:0, country:'🌍 Global'},
- {id:'d85', wishText:"Someone cook me a proper meal not takeaway, not toast a MEAL 🍽️", status:'granted', color:'n-green', stamp:'valid', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d86', wishText:"Pigeons would just choose a direction and commit to it 🐦", status:'approved', color:'n-lav', stamp:'unhinged', cat:'funny', est:0, country:'🌍 Global'},
- {id:'d87', wishText:"Mercury goes direct and STAYS there this time 🌑", status:'approved', color:'n-pink', stamp:'chaos', cat:'funny', est:0, country:'🌍 Global'},
- {id:'d88', wishText:"Someone notices I'm not okay before I have to produce evidence for it 💛", status:'granted', color:'n-orange',stamp:'prayer', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d89', wishText:"A summer that smells like childhood again ☀️", status:'approved', color:'n-blue', stamp:'prayer', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d90', wishText:"Stop waiting for permission to start the life I actually want 🚀", status:'approved', color:'n-yellow',stamp:'legend', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d91', wishText:"Everyday kindness trends louder than outrage. Just once ✨", status:'approved', color:'n-lav', stamp:'big', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d92', wishText:"Dad sees me graduate. He's been fighting two years. He will 🎓", status:'granted', color:'n-pink', stamp:'prayer', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d93', wishText:"Whoever reads this wish: I hope you're having a genuinely good day 💛", status:'approved', color:'n-orange',stamp:'verified', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d94', wishText:"This wall fills with 500 wishes and the whole world actually feels it ❤️", status:'approved', color:'n-blue', stamp:'big', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d95', wishText:"I just want to say thank you to The Wish Wall. You're real. 💙", status:'granted', color:'n-green', stamp:'prayer', cat:'emotional',est:0, country:'🌍 Global'},
+ {id:'d82', wishText:"Avocados that ripen on a schedule that works for me specifically 🥑", status:'granted', color:'n-orange',stamp:'legend', cat:'funny', est:0, country:'🇦🇺 Australia'},
+ {id:'d83', wishText:"Group chats get a 'seen and choosing peace' reaction 👀", status:'granted', color:'n-blue', stamp:'legend', cat:'funny', est:0, country:'🇮🇪 Ireland'},
+ {id:'d84', wishText:"One day without doom scrolling. Just to see if it's possible 📵", status:'granted', color:'n-yellow',stamp:'chaos', cat:'funny', est:0, country:'🇳🇴 Norway'},
+ {id:'d85', wishText:"Someone cook me a proper meal not takeaway, not toast a MEAL 🍽️", status:'granted', color:'n-green', stamp:'valid', cat:'emotional',est:0, country:'🇫🇷 France'},
+ {id:'d86', wishText:"Pigeons would just choose a direction and commit to it 🐦", status:'granted', color:'n-lav', stamp:'unhinged', cat:'funny', est:0, country:'🇩🇰 Denmark'},
+ {id:'d87', wishText:"Mercury goes direct and STAYS there this time 🌑", status:'granted', color:'n-pink', stamp:'chaos', cat:'funny', est:0, country:'🇫🇮 Finland'},
+ {id:'d88', wishText:"Someone notices I'm not okay before I have to produce evidence for it 💛", status:'granted', color:'n-orange',stamp:'prayer', cat:'emotional',est:0, country:'🇨🇭 Switzerland'},
+ {id:'d89', wishText:"A summer that smells like childhood again ☀️", status:'granted', color:'n-blue', stamp:'prayer', cat:'emotional',est:0, country:'🇦🇹 Austria'},
+ {id:'d90', wishText:"Stop waiting for permission to start the life I actually want 🚀", status:'granted', color:'n-yellow',stamp:'legend', cat:'emotional',est:0, country:'🇸🇪 Sweden'},
+ {id:'d91', wishText:"Everyday kindness trends louder than outrage. Just once ✨", status:'granted', color:'n-lav', stamp:'big', cat:'emotional',est:0, country:'🇳🇿 New Zealand'},
+ {id:'d92', wishText:"Dad sees me graduate. He's been fighting two years. He will 🎓", status:'granted', color:'n-pink', stamp:'prayer', cat:'emotional',est:0, country:'🇮🇹 Italy'},
+ {id:'d93', wishText:"Whoever reads this wish: I hope you're having a genuinely good day 💛", status:'granted', color:'n-orange',stamp:'verified', cat:'emotional',est:0, country:'🇵🇹 Portugal'},
+ {id:'d94', wishText:"This wall fills with 500 wishes and the whole world actually feels it ❤️", status:'granted', color:'n-blue', stamp:'big', cat:'emotional',est:0, country:'🇧🇪 Belgium'},
+ {id:'d95', wishText:"I just want to say thank you to The Wish Wall. You're real. 💙", status:'granted', color:'n-green', stamp:'prayer', cat:'emotional',est:0, country:'🇳🇱 Netherlands'},
  // Additional wishes to show legacy depth
- {id:'d96', wishText:"Help fund a water filter for our community river water is making people sick 💧", status:'approved', color:'n-pink', stamp:'big', cat:'bold', est:200, country:'🇬🇭 Ghana'},
- {id:'d97', wishText:"Laptop to complete my computer science degree 💻", status:'approved', color:'n-orange',stamp:'legend', cat:'tech', est:250, country:'🇬🇭 Ghana'},
- {id:'d98', wishText:"Solar panel for our home studying by candlelight every night ☀️", status:'approved', color:'n-blue', stamp:'big', cat:'tools', est:200, country:'🇰🇪 Kenya'},
- {id:'d99', wishText:"Photography workshop for my daughter who shows real talent 📷", status:'approved', color:'n-yellow',stamp:'goals', cat:'education',est:150, country:'🇸🇪 Sweden'},
- {id:'d100',wishText:"Help fund my autism service dog deposit it changes my child's entire life 🐕", status:'approved', color:'n-blue', stamp:'big', cat:'medical', est:600, country:'🇸🇪 Sweden'},
+ {id:'d96', wishText:"Help fund a water filter for our community river water is making people sick 💧", status:'granted', color:'n-pink', stamp:'big', cat:'bold', est:200, country:'🇬🇧 UK'},
+ {id:'d97', wishText:"Laptop to complete my computer science degree 💻", status:'granted', color:'n-orange',stamp:'legend', cat:'tech', est:250, country:'🇬🇧 UK'},
+ {id:'d98', wishText:"Solar panel for our home studying by candlelight every night ☀️", status:'granted', color:'n-blue', stamp:'big', cat:'tools', est:200, country:'🇨🇦 Canada'},
+ {id:'d99', wishText:"Photography workshop for my daughter who shows real talent 📷", status:'granted', color:'n-yellow',stamp:'goals', cat:'education',est:150, country:'🇸🇪 Sweden'},
+ {id:'d100',wishText:"Help fund my autism service dog deposit it changes my child's entire life 🐕", status:'granted', color:'n-blue', stamp:'big', cat:'medical', est:600, country:'🇸🇪 Sweden'},
  {id:'d101',wishText:"Secondhand bike in Amsterdam everyone cycles and I'm walking 4km to work 🚲", status:'granted', color:'n-orange',stamp:'unhinged', cat:'tools', est:80, country:'🇳🇱 Netherlands'},
- {id:'d102',wishText:"Language course in Rotterdam I have the opportunity, just need the qualification 🎨",status:'approved',color:'n-lav', stamp:'goals', cat:'education',est:350, country:'🇳🇱 Netherlands'},
- {id:'d103',wishText:"School fees shortfall son got into federal university, need the first registration 🎓",status:'approved',color:'n-lav',stamp:'legend', cat:'education',est:100, country:'🇧🇷 Brazil'},
- {id:'d104',wishText:"Help me fund my nonprofit's first event community needs it 🌍", status:'approved', color:'n-lav', stamp:'legend', cat:'bold', est:500, country:'🇺🇸 US'},
- {id:'d105',wishText:"Someone to proofread my college application first in my family to apply 📝", status:'approved', color:'n-pink', stamp:'big', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
- {id:'d106',wishText:"Help fund my move to Germany for work I need the first month covered 🏠", status:'approved', color:'n-orange',stamp:'big', cat:'bold', est:600, country:'🇵🇱 Poland'},
- {id:'d107',wishText:"Sewing machine I make traditional embroidery and the machine broke 🧵", status:'approved', color:'n-blue', stamp:'goals', cat:'tools', est:150, country:'🇵🇱 Poland'},
- {id:'d108',wishText:"Medical fund for my mother's cataract surgery waiting list is 2 years 👁️", status:'approved', color:'n-lav', stamp:'prayer', cat:'medical', est:300, country:'🇮🇳 India'},
+ {id:'d102',wishText:"Language course in Rotterdam I have the opportunity, just need the qualification 🎨",status:'granted',color:'n-lav', stamp:'goals', cat:'education',est:350, country:'🇳🇱 Netherlands'},
+ {id:'d103',wishText:"School fees shortfall son got into federal university, need the first registration 🎓",status:'granted',color:'n-lav',stamp:'legend', cat:'education',est:100, country:'🇪🇸 Spain'},
+ {id:'d104',wishText:"Help me fund my nonprofit's first event community needs it 🌍", status:'granted', color:'n-lav', stamp:'legend', cat:'bold', est:500, country:'🇺🇸 US'},
+ {id:'d105',wishText:"Someone to proofread my college application first in my family to apply 📝", status:'granted', color:'n-pink', stamp:'big', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
+ {id:'d106',wishText:"Help fund my move to Germany for work I need the first month covered 🏠", status:'granted', color:'n-orange',stamp:'big', cat:'bold', est:600, country:'🇩🇪 Germany'},
+ {id:'d107',wishText:"Sewing machine I make traditional embroidery and the machine broke 🧵", status:'granted', color:'n-blue', stamp:'goals', cat:'tools', est:150, country:'🇩🇪 Germany'},
+ {id:'d108',wishText:"Medical fund for my mother's cataract surgery waiting list is 2 years 👁️", status:'granted', color:'n-lav', stamp:'prayer', cat:'medical', est:300, country:'🇩🇪 Germany'},
  {id:'d109',wishText:"Bushfire recovery fund lost most of our tools, rebuilding from scratch 🔧", status:'granted', color:'n-orange',stamp:'verified', cat:'bold', est:500, country:'🇦🇺 Australia'},
- {id:'d110',wishText:"Help me pay for my therapy sessions I can't stop, not now 🛋️", status:'approved', color:'n-yellow',stamp:'valid', cat:'medical', est:200, country:'🇺🇸 US'},
- {id:'d111',wishText:"Driving lessons shortfall test is booked, just need the last few sessions 🚗", status:'approved', color:'n-green', stamp:'big', cat:'education',est:250, country:'🇬🇧 UK'},
- {id:'d112',wishText:"Secondhand telescope my son is obsessed with space 🔭", status:'approved', color:'n-blue', stamp:'goals', cat:'tools', est:180, country:'🇬🇧 UK'},
- {id:'d113',wishText:"Help fund my first market stall candles sell, I just need to start 🕯️", status:'approved', color:'n-pink', stamp:'legend', cat:'bold', est:200, country:'🇬🇧 UK'},
- {id:'d114',wishText:"Summer holiday for my kids they haven't left the city in three years ☀️", status:'approved', color:'n-orange',stamp:'goals', cat:'experience',est:300,country:'🇬🇧 UK'},
- {id:'d115',wishText:"My daughter just got into art school help me get her art supplies 🎨", status:'approved', color:'n-lav', stamp:'verified', cat:'tools', est:45, country:'🇬🇧 UK'},
- {id:'d116',wishText:"Reconnect me with a grief support group lost my wife 3 months ago 💙", status:'approved', color:'n-green', stamp:'prayer', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
- {id:'d117',wishText:"Camera gear for my YouTube channel one real camera changes everything 🎥", status:'approved', color:'n-green', stamp:'legend', cat:'tech', est:350, country:'🇺🇸 US'},
- {id:'d118',wishText:"Help with my daughter's autism assessment waiting list is years long 🧠", status:'approved', color:'n-orange',stamp:'prayer', cat:'medical', est:400, country:'🇺🇸 US'},
- {id:'d119',wishText:"Road trip fund to visit my dad before he's gone. 400 miles and I'm broke ❤️", status:'approved', color:'n-lav', stamp:'prayer', cat:'experience',est:120,country:'🇺🇸 US'},
- {id:'d120',wishText:"Rent assistance just got out of a bad situation, first month is everything 🏠", status:'approved', color:'n-pink', stamp:'big', cat:'bold', est:1200,country:'🇺🇸 US'},
- {id:'d121',wishText:"Glasses haven't been able to afford new ones for 3 years and everything is blurry 👓",status:'approved',color:'n-yellow',stamp:'valid', cat:'medical', est:120, country:'🇺🇸 US'},
- {id:'d122',wishText:"Photography course deposit I have the eye, just not the fee 📸", status:'approved', color:'n-orange',stamp:'goals', cat:'education',est:200, country:'🇨🇦 Canada'},
+ {id:'d110',wishText:"Help me pay for my therapy sessions I can't stop, not now 🛋️", status:'granted', color:'n-yellow',stamp:'valid', cat:'medical', est:200, country:'🇺🇸 US'},
+ {id:'d111',wishText:"Driving lessons shortfall test is booked, just need the last few sessions 🚗", status:'granted', color:'n-green', stamp:'big', cat:'education',est:250, country:'🇬🇧 UK'},
+ {id:'d112',wishText:"Secondhand telescope my son is obsessed with space 🔭", status:'granted', color:'n-blue', stamp:'goals', cat:'tools', est:180, country:'🇬🇧 UK'},
+ {id:'d113',wishText:"Help fund my first market stall candles sell, I just need to start 🕯️", status:'granted', color:'n-pink', stamp:'legend', cat:'bold', est:200, country:'🇬🇧 UK'},
+ {id:'d114',wishText:"Summer holiday for my kids they haven't left the city in three years ☀️", status:'granted', color:'n-orange',stamp:'goals', cat:'experience',est:300,country:'🇬🇧 UK'},
+ {id:'d115',wishText:"My daughter just got into art school help me get her art supplies 🎨", status:'granted', color:'n-lav', stamp:'verified', cat:'tools', est:45, country:'🇬🇧 UK'},
+ {id:'d116',wishText:"Reconnect me with a grief support group lost my wife 3 months ago 💙", status:'granted', color:'n-green', stamp:'prayer', cat:'connect', est:0, country:'🇺🇸 US', isConnect:true},
+ {id:'d117',wishText:"Camera gear for my YouTube channel one real camera changes everything 🎥", status:'granted', color:'n-green', stamp:'legend', cat:'tech', est:350, country:'🇺🇸 US'},
+ {id:'d118',wishText:"Help with my daughter's autism assessment waiting list is years long 🧠", status:'granted', color:'n-orange',stamp:'prayer', cat:'medical', est:400, country:'🇺🇸 US'},
+ {id:'d119',wishText:"Road trip fund to visit my dad before he's gone. 400 miles and I'm broke ❤️", status:'granted', color:'n-lav', stamp:'prayer', cat:'experience',est:120,country:'🇺🇸 US'},
+ {id:'d120',wishText:"Rent assistance just got out of a bad situation, first month is everything 🏠", status:'granted', color:'n-pink', stamp:'big', cat:'bold', est:1200,country:'🇺🇸 US'},
+ {id:'d121',wishText:"Glasses haven't been able to afford new ones for 3 years and everything is blurry 👓",status:'granted',color:'n-yellow',stamp:'valid', cat:'medical', est:120, country:'🇺🇸 US'},
+ {id:'d122',wishText:"Photography course deposit I have the eye, just not the fee 📸", status:'granted', color:'n-orange',stamp:'goals', cat:'education',est:200, country:'🇨🇦 Canada'},
  {id:'d123',wishText:"Help me pay for my EpiPen provincial coverage ran out in October 💊", status:'granted', color:'n-lav', stamp:'prayer', cat:'medical', est:150, country:'🇨🇦 Canada'},
- {id:'d124',wishText:"Laptop for my 12-year-old schools went hybrid and we have one device for four 💻", status:'approved', color:'n-pink', stamp:'verified', cat:'tech', est:200, country:'🇨🇦 Canada'},
- {id:'d125',wishText:"Connect me to Indigenous business support in Ontario 🤝", status:'approved', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇨🇦 Canada', isConnect:true},
- {id:'d126',wishText:"Flight home to see my dad haven't seen family in two years and he's unwell ✈️", status:'approved', color:'n-blue', stamp:'prayer', cat:'experience',est:400,country:'🇦🇺 Australia'},
- {id:'d127',wishText:"Medical transport fund dialysis 3x a week and I can't always afford the taxi 🚌", status:'approved', color:'n-lav', stamp:'prayer', cat:'medical', est:100, country:'🇿🇦 South Africa'},
- {id:'d128',wishText:"Help fund matric exam fees passed everything, just can't afford the certificate 📝",status:'approved',color:'n-yellow',stamp:'legend', cat:'education',est:80, country:'🇿🇦 South Africa'},
- {id:'d129',wishText:"Generator fuel for the week nearby hospital relies on it to store vaccines ⛽", status:'approved', color:'n-blue', stamp:'big', cat:'money', est:50, country:'🇳🇬 Nigeria'},
- {id:'d130',wishText:"Connect me to diaspora scholarship programmes for medicine 🤝", status:'approved', color:'n-yellow',stamp:'legend', cat:'connect', est:0, country:'🇳🇬 Nigeria', isConnect:true},
- {id:'d131',wishText:"Help me buy a secondhand laptop to start my online business 💻", status:'approved', color:'n-pink', stamp:'goals', cat:'tech', est:150, country:'🇿🇦 South Africa'},
- {id:'d132',wishText:"School uniform and supplies for my daughter starting senior secondary 🎒", status:'approved', color:'n-lav', stamp:'verified', cat:'education',est:60, country:'🇬🇭 Ghana'},
- {id:'d133',wishText:"Connect me to scholarship support for students in Warsaw 🤝", status:'approved', color:'n-yellow',stamp:'prayer', cat:'connect', est:0, country:'🇵🇱 Poland', isConnect:true},
- {id:'d134',wishText:"Connect me to startup support grants in Berlin I have a real idea 🤝", status:'approved', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇩🇪 Germany', isConnect:true},
+ {id:'d124',wishText:"Laptop for my 12-year-old schools went hybrid and we have one device for four 💻", status:'granted', color:'n-pink', stamp:'verified', cat:'tech', est:200, country:'🇨🇦 Canada'},
+ {id:'d125',wishText:"Connect me to Indigenous business support in Ontario 🤝", status:'granted', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇨🇦 Canada', isConnect:true},
+ {id:'d126',wishText:"Flight home to see my dad haven't seen family in two years and he's unwell ✈️", status:'granted', color:'n-blue', stamp:'prayer', cat:'experience',est:400,country:'🇦🇺 Australia'},
+ {id:'d127',wishText:"Medical transport fund dialysis 3x a week and I can't always afford the taxi 🚌", status:'granted', color:'n-lav', stamp:'prayer', cat:'medical', est:100, country:'🇬🇧 UK'},
+ {id:'d128',wishText:"Help fund matric exam fees passed everything, just can't afford the certificate 📝",status:'granted',color:'n-yellow',stamp:'legend', cat:'education',est:80, country:'🇬🇧 UK'},
+ {id:'d129',wishText:"Generator fuel for the week nearby hospital relies on it to store vaccines ⛽", status:'granted', color:'n-blue', stamp:'big', cat:'money', est:50, country:'🇬🇧 UK'},
+ {id:'d130',wishText:"Connect me to diaspora scholarship programmes for medicine 🤝", status:'granted', color:'n-yellow',stamp:'legend', cat:'connect', est:0, country:'🇬🇧 UK', isConnect:true},
+ {id:'d131',wishText:"Help me buy a secondhand laptop to start my online business 💻", status:'granted', color:'n-pink', stamp:'goals', cat:'tech', est:150, country:'🇬🇧 UK'},
+ {id:'d132',wishText:"School uniform and supplies for my daughter starting senior secondary 🎒", status:'granted', color:'n-lav', stamp:'verified', cat:'education',est:60, country:'🇬🇧 UK'},
+ {id:'d133',wishText:"Connect me to scholarship support for students in Warsaw 🤝", status:'granted', color:'n-yellow',stamp:'prayer', cat:'connect', est:0, country:'🇩🇪 Germany', isConnect:true},
+ {id:'d134',wishText:"Connect me to startup support grants in Berlin I have a real idea 🤝", status:'granted', color:'n-green', stamp:'big', cat:'connect', est:0, country:'🇩🇪 Germany', isConnect:true},
  {id:'d135',wishText:"Groceries and baby milk came from Morocco 2 months ago, still finding our feet 🛒", status:'granted', color:'n-green', stamp:'prayer', cat:'money', est:60, country:'🇪🇸 Spain'},
- {id:'d136',wishText:"Help fund my tourism guide certification I speak 4 languages, just need the paper 🌍",status:'approved',color:'n-lav', stamp:'legend', cat:'education',est:200, country:'🇪🇸 Spain'},
- {id:'d137',wishText:"Help fund my daughter's university application fees merit scholarship awaits 🎓", status:'approved', color:'n-yellow',stamp:'legend', cat:'education',est:150, country:'🇩🇪 Germany'},
- {id:'d138',wishText:"Sensory room materials for my autistic daughter she needs quiet 💙", status:'approved', color:'n-blue', stamp:'prayer', cat:'medical', est:300, country:'🇬🇧 UK'},
- {id:'d139',wishText:"Replacement glasses for my mum she stepped on hers and can't see 👓", status:'approved', color:'n-blue', stamp:'prayer', cat:'medical', est:70, country:'🇬🇧 UK'},
- {id:'d140',wishText:"Van repair fund it's my entire business and it died last week 🚐", status:'approved', color:'n-green', stamp:'big', cat:'bold', est:800, country:'🇬🇧 UK'},
- {id:'d141',wishText:"Bike repair my only transport to work, back tyre is gone 🚲", status:'approved', color:'n-lav', stamp:'verified', cat:'money', est:40, country:'🇬🇧 UK'},
+ {id:'d136',wishText:"Help fund my tourism guide certification I speak 4 languages, just need the paper 🌍",status:'granted',color:'n-lav', stamp:'legend', cat:'education',est:200, country:'🇪🇸 Spain'},
+ {id:'d137',wishText:"Help fund my daughter's university application fees merit scholarship awaits 🎓", status:'granted', color:'n-yellow',stamp:'legend', cat:'education',est:150, country:'🇩🇪 Germany'},
+ {id:'d138',wishText:"Sensory room materials for my autistic daughter she needs quiet 💙", status:'granted', color:'n-blue', stamp:'prayer', cat:'medical', est:300, country:'🇬🇧 UK'},
+ {id:'d139',wishText:"Replacement glasses for my mum she stepped on hers and can't see 👓", status:'granted', color:'n-blue', stamp:'prayer', cat:'medical', est:70, country:'🇬🇧 UK'},
+ {id:'d140',wishText:"Van repair fund it's my entire business and it died last week 🚐", status:'granted', color:'n-green', stamp:'big', cat:'bold', est:800, country:'🇬🇧 UK'},
+ {id:'d141',wishText:"Bike repair my only transport to work, back tyre is gone 🚲", status:'granted', color:'n-lav', stamp:'verified', cat:'money', est:40, country:'🇬🇧 UK'},
  {id:'d142',wishText:"A working iron for my interview tomorrow first opportunity in months 👔", status:'granted', color:'n-lav', stamp:'chaos', cat:'tools', est:15, country:'🇬🇧 UK'},
- {id:'d143',wishText:"Next generation inherits a world we're not embarrassed about 🌍", status:'approved', color:'n-green', stamp:'big', cat:'emotional',est:0, country:'🌍 Global'},
- {id:'d144',wishText:"Utility assistance power gets cut Thursday if I don't pay 🔌", status:'approved', color:'n-pink', stamp:'valid', cat:'money', est:150, country:'🇺🇸 US'},
+ {id:'d143',wishText:"Next generation inherits a world we're not embarrassed about 🌍", status:'granted', color:'n-green', stamp:'big', cat:'emotional',est:0, country:'🇩🇰 Denmark'},
+ {id:'d144',wishText:"Utility assistance power gets cut Thursday if I don't pay 🔌", status:'granted', color:'n-pink', stamp:'valid', cat:'money', est:150, country:'🇺🇸 US'},
  {id:'d145',wishText:"Help with my daughter's ballet exam fee she's trained 3 years for this 🩰", status:'granted', color:'n-yellow',stamp:'verified', cat:'education',est:80, country:'🇺🇸 US'},
- {id:'d146',wishText:"Help me top up my car payment one month behind, losing it means losing my job 🚗", status:'approved', color:'n-orange',stamp:'valid', cat:'bold', est:400, country:'🇺🇸 US'},
- {id:'d147',wishText:"Help fund my coding bootcamp deposit it's my exit strategy 💻", status:'approved', color:'n-orange',stamp:'legend', cat:'education',est:300, country:'🇺🇸 US'},
- {id:'d148',wishText:"Vet bill my cat is 15, she needs treatment and she's worth it 🐾", status:'approved', color:'n-green', stamp:'prayer', cat:'medical', est:200, country:'🇺🇸 US'},
- {id:'d149',wishText:"Help with my son's autism diagnosis shortfall waiting list is endless 🧠", status:'approved', color:'n-yellow',stamp:'prayer', cat:'medical', est:400, country:'🇬🇧 UK'},
- {id:'d150',wishText:"Connect me to postpartum support language barrier makes everything harder 🤝", status:'approved', color:'n-pink', stamp:'prayer', cat:'connect', est:0, country:'🇳🇱 Netherlands', isConnect:true},
+ {id:'d146',wishText:"Help me top up my car payment one month behind, losing it means losing my job 🚗", status:'granted', color:'n-orange',stamp:'valid', cat:'bold', est:400, country:'🇺🇸 US'},
+ {id:'d147',wishText:"Help fund my coding bootcamp deposit it's my exit strategy 💻", status:'granted', color:'n-orange',stamp:'legend', cat:'education',est:300, country:'🇺🇸 US'},
+ {id:'d148',wishText:"Vet bill my cat is 15, she needs treatment and she's worth it 🐾", status:'granted', color:'n-green', stamp:'prayer', cat:'medical', est:200, country:'🇺🇸 US'},
+ {id:'d149',wishText:"Help with my son's autism diagnosis shortfall waiting list is endless 🧠", status:'granted', color:'n-yellow',stamp:'prayer', cat:'medical', est:400, country:'🇬🇧 UK'},
+ {id:'d150',wishText:"Connect me to postpartum support language barrier makes everything harder 🤝", status:'granted', color:'n-pink', stamp:'prayer', cat:'connect', est:0, country:'🇳🇱 Netherlands', isConnect:true},
+ {id:'d151',wishText:"Help with prescription costs. Three medications and I can only afford two 💊", status:'granted', color:'n-pink',   stamp:'prayer',   cat:'medical',   est:80,  country:'🇮🇪 Ireland'},
+ {id:'d152',wishText:"Winter boots for my daughter she's growing faster than I can afford 👟", status:'granted', color:'n-orange',  stamp:'valid',    cat:'money',     est:65,  country:'🇳🇴 Norway'},
+ {id:'d153',wishText:"Driving test fee I finally have the lessons done just need to book the test 🚗", status:'granted', color:'n-green',  stamp:'goals',    cat:'education', est:75,  country:'🇸🇪 Sweden'},
+ {id:'d154',wishText:"Groceries this week just started a new job first paycheck is three weeks away 🛒", status:'granted', color:'n-yellow', stamp:'valid',    cat:'money',     est:55,  country:'🇩🇰 Denmark'},
+ {id:'d155',wishText:"Help fund my ceramics studio time have the talent not the membership fee 🏺", status:'granted', color:'n-lav',    stamp:'goals',    cat:'experience',est:120, country:'🇫🇷 France'},
+ {id:'d156',wishText:"School swimming lessons my son was the only child who could not swim 🏊", status:'granted', color:'n-blue',   stamp:'verified', cat:'education', est:80,  country:'🇧🇪 Belgium'},
+ {id:'d157',wishText:"Help cover my physio sessions recovering from an accident can't go back to work yet 🏥", status:'granted', color:'n-pink',   stamp:'prayer',   cat:'medical',   est:150, country:'🇨🇭 Switzerland'},
+ {id:'d158',wishText:"New glasses my prescription changed and everything is a blur 👓", status:'granted', color:'n-orange',  stamp:'valid',    cat:'medical',   est:90,  country:'🇦🇹 Austria'},
+ {id:'d159',wishText:"Running shoes the ones I have have holes I train every morning and it's my mental health 👟", status:'granted', color:'n-green',  stamp:'goals',    cat:'money',     est:70,  country:'🇫🇮 Finland'},
+ {id:'d160',wishText:"Laptop battery replacement without it I lose half my day to finding plugs 💻", status:'granted', color:'n-yellow', stamp:'valid',    cat:'tech',      est:60,  country:'🇵🇹 Portugal'},
+ {id:'d161',wishText:"Nursery deposit just got offered a place and don't have the deposit in time 🍼", status:'granted', color:'n-lav',    stamp:'verified', cat:'baby',      est:200, country:'🇮🇪 Ireland'},
+ {id:'d162',wishText:"Emergency dental appointment tooth has been infected for weeks can't get seen 🦷", status:'granted', color:'n-blue',   stamp:'prayer',   cat:'medical',   est:160, country:'🇳🇿 New Zealand'},
+ {id:'d163',wishText:"Textbooks for my second year need four can only afford one 📚", status:'granted', color:'n-pink',   stamp:'goals',    cat:'education', est:120, country:'🇦🇺 Australia'},
+ {id:'d164',wishText:"Rent shortfall just two weeks late but it turns into eviction so fast 🏠", status:'granted', color:'n-orange',  stamp:'big',      cat:'bold',      est:350, country:'🇨🇦 Canada'},
+ {id:'d165',wishText:"Help fund my first driving lesson never learned just got offered a job with travel 🚗", status:'granted', color:'n-green',  stamp:'verified', cat:'education', est:55,  country:'🇬🇧 UK'},
+ {id:'d166',wishText:"Birthday present for my mum she hasn't had one in three years 🎁", status:'granted', color:'n-yellow', stamp:'prayer',   cat:'emotional', est:30,  country:'🇺🇸 US'},
+ {id:'d167',wishText:"Internet bill working from home with no connection is impossible 📡", status:'granted', color:'n-lav',    stamp:'valid',    cat:'money',     est:45,  country:'🇩🇪 Germany'},
+ {id:'d168',wishText:"Cat's emergency vet appointment she just stopped eating 🐱", status:'granted', color:'n-blue',   stamp:'prayer',   cat:'medical',   est:120, country:'🇫🇷 France'},
+ {id:'d169',wishText:"Medication I have been rationing my antidepressants and I know that is dangerous 💊", status:'granted', color:'n-pink',   stamp:'verified', cat:'medical',   est:80,  country:'🇳🇱 Netherlands'},
+ {id:'d170',wishText:"Help me buy a secondhand cello gave it up ten years ago to pay rent 🎻", status:'granted', color:'n-orange',  stamp:'goals',    cat:'tools',     est:250, country:'🇸🇪 Sweden'},
+ {id:'d171',wishText:"Art school portfolio printing just need to get it printed and I am in 🎨", status:'granted', color:'n-green',  stamp:'legend',   cat:'education', est:45,  country:'🇩🇰 Denmark'},
+ {id:'d172',wishText:"Help fund my night class in accounting want to retrain after a decade 📊", status:'granted', color:'n-yellow', stamp:'goals',    cat:'education', est:180, country:'🇧🇪 Belgium'},
+ {id:'d173',wishText:"New work boots mine are held together with tape and my feet are in agony 🥾", status:'granted', color:'n-lav',    stamp:'valid',    cat:'money',     est:65,  country:'🇬🇧 UK'},
+ {id:'d174',wishText:"Baby items just found out I am expecting and I have absolutely nothing 🍼", status:'granted', color:'n-blue',   stamp:'prayer',   cat:'baby',      est:120, country:'🇮🇪 Ireland'},
+ {id:'d175',wishText:"Sports kit for my son he made the school team and has nothing to wear 👕", status:'granted', color:'n-pink',   stamp:'verified', cat:'money',     est:50,  country:'🇬🇧 UK'},
+ {id:'d176',wishText:"Wifi router ours broke and my kids can't do homework without it 📡", status:'granted', color:'n-orange',  stamp:'valid',    cat:'tech',      est:40,  country:'🇨🇦 Canada'},
+ {id:'d177',wishText:"Emergency pet food my job ended suddenly and I can't leave my dog to suffer 🐕", status:'granted', color:'n-green',  stamp:'prayer',   cat:'money',     est:25,  country:'🇺🇸 US'},
+ {id:'d178',wishText:"Connect me to a local mental health crisis line I don't know who to call 🤝", status:'granted', color:'n-yellow', stamp:'big',      cat:'connect',   est:0,   country:'🇦🇺 Australia', isConnect:true},
+ {id:'d179',wishText:"Help fund one month of gym membership it's the one thing keeping me stable 💪", status:'granted', color:'n-lav',    stamp:'goals',    cat:'medical',   est:40,  country:'🇩🇪 Germany'},
+ {id:'d180',wishText:"Groceries after the job centre messed up my claim and I have had nothing for a week 🛒", status:'granted', color:'n-blue',   stamp:'valid',    cat:'money',     est:60,  country:'🇬🇧 UK'},
+ {id:'d181',wishText:"Music lessons for my daughter she has real talent and I can't give her this 🎵", status:'granted', color:'n-pink',   stamp:'verified', cat:'education', est:80,  country:'🇫🇷 France'},
+ {id:'d182',wishText:"Help replace my work laptop mine died in the middle of a project 💻", status:'granted', color:'n-orange',  stamp:'valid',    cat:'tech',      est:250, country:'🇺🇸 US'},
+ {id:'d183',wishText:"Cover my gas bill for the month just started a new job not paid yet 🔌", status:'granted', color:'n-green',  stamp:'valid',    cat:'money',     est:70,  country:'🇬🇧 UK'},
+ {id:'d184',wishText:"Help me fund one night in a safe hostel just moved cities between rooms 🏠", status:'granted', color:'n-blue',   stamp:'prayer',   cat:'bold',      est:50,  country:'🇨🇦 Canada'},
+ {id:'d185',wishText:"Cover my son's school meals for the term free meals got cut and we can't fill the gap 🍽️", status:'granted', color:'n-yellow', stamp:'verified', cat:'money',     est:150, country:'🇬🇧 UK'},
 ];
 
 function expandDemoToThousand(base) {
@@ -3886,10 +3968,11 @@ function expandDemoToThousand(base) {
   const stamps = ['verified','valid','prayer','goals','big','legend','chaos','unhinged'];
   const cats = ['money','medical','tech','education','baby','tools','experience','connect','emotional','funny','bold'];
   const countries = [
-    '🇬🇧 UK','🇺🇸 US','🇺🇸 US','🇬🇧 UK','🇬🇧 UK',
-    '🇨🇦 Canada','🇦🇺 Australia','🇩🇪 Germany','🇫🇷 France',
-    '🇳🇱 Netherlands','🇿🇦 South Africa','🇳🇬 Nigeria','🇬🇭 Ghana',
-    '🇰🇪 Kenya','🇧🇷 Brazil','🇮🇳 India','🌍 Global'
+    '🇬🇧 UK','🇺🇸 US','🇨🇦 Canada','🇩🇪 Germany','🇫🇷 France',
+    '🇳🇱 Netherlands','🇸🇪 Sweden','🇪🇸 Spain','🇮🇹 Italy',
+    '🇵🇹 Portugal','🇧🇪 Belgium','🇨🇭 Switzerland','🇦🇹 Austria',
+    '🇩🇰 Denmark','🇳🇴 Norway','🇫🇮 Finland','🇮🇪 Ireland',
+    '🇦🇺 Australia','🇳🇿 New Zealand'
   ];
   const templates = [
     'Help with groceries this week',
@@ -3913,7 +3996,7 @@ function expandDemoToThousand(base) {
     'Just need someone to notice',
     'Birthday for my child this week'
   ];
-  let counter = 151;
+  let counter = 186;
   while(expanded.length < 1000) {
     const t = templates[counter % templates.length];
     const c = countries[counter % countries.length];
@@ -3924,7 +4007,7 @@ function expandDemoToThousand(base) {
     expanded.push({
       id: 'g' + counter,
       wishText: t,
-      status: counter % 7 === 0 ? 'granted' : 'approved',
+      status: 'coming_soon',
       color: col,
       stamp: st,
       cat: cat,
@@ -3938,6 +4021,21 @@ function expandDemoToThousand(base) {
 
 // Spread real wishes across all 1000 slots using deterministic seeded positions
 // so the wall always looks full and the ❤️ mosaic pattern emerges from afar
+const TUNNEL_MESSAGES = [
+  'Patience is a virtue. We are on our way.',
+  'Good things come to those who wait. Almost there.',
+  'Every wall has a queue. We are near the front of ours.',
+  'Our spot is being warmed up. Watch this space.',
+  'The wall is listening. It just has not found room yet.',
+  'We are in the wings. The stage is nearly ours.',
+  'A wish in the tunnel is still a wish with power.',
+  'Not yet on the wall but never forgotten. Hold on.',
+  'Our guardian has not found us yet. We are getting closer.',
+  'Still in transit. The magic is still coming.',
+  'Rome was not built in a day. Neither is a wish wall.',
+  'We are queued up and ready. The wall will call our name.',
+];
+
 const DEMO_EXPANDED = expandDemoToThousand(DEMO_RAW);
 const DEMO_POSITIONS = seededShuffle([...Array(1000).keys()], 42);
 const DEMO = DEMO_EXPANDED.map((w, i) => ({ ...w, _slot: DEMO_POSITIONS[i] }));
@@ -4073,16 +4171,21 @@ function paintWall(){
  });
  // Fill remaining slots with ghost placeholder notes so the wall is always full
  const ghostTexts = [
- 'Hoping for a little kindness today ✨','Wishing for something small but meaningful 💛',
- 'Sending good vibes to whoever reads this 🌟','A quiet wish for better days ahead 🙏',
- 'Just holding on and hoping 🌿','Dreams are free and so is this wish 💫',
- 'One day at a time today I wish for peace ☀️','Quietly hopeful 🌸',
- 'Wishing for warmth on a cold day 🕯️','A small wish from a grateful heart 💜',
- 'Here because someone somewhere cares ❤️','Pinned with hope and nothing else 🌈',
- 'Wishing for a breakthrough today 🚀','Grateful to exist on this wall 🌙',
- 'A wish whispered into the universe ✨','Holding space for something good 💛',
- 'Somewhere someone is reading this thank you 🙏','One wish at a time 🌟',
- 'Kindness travels in circles 💞','Every wish matters, even the quiet ones 🕊️',
+ 'A wish is waiting to find this spot. Have faith.',
+ 'Your guardian is already out there. Post your wish.',
+ 'This wall has space for your dream. What are you waiting for?',
+ 'Someone browsed this spot today. They are ready to give.',
+ 'Every granted wish started right here. Empty. Waiting. Real.',
+ 'Pin something here. You have nothing to lose and everything to gain.',
+ 'Hundreds of wishes have been granted from spots like this one.',
+ 'Your story matters. This wall is proof. Pin it.',
+ 'A stranger is looking for a wish to grant right now. Make it yours.',
+ 'The only wishes that never come true are the ones never posted.',
+ 'This spot does not know what it will become yet. Neither do you.',
+ 'Quiet spaces like this one have changed real lives. Be next.',
+ 'Not every hero wears a cape. Some just browse a wall like this.',
+ 'Your wish does not have to be big. It just has to be real.',
+ 'Someone granted a wish from this exact kind of spot last week.',
  ];
  const ghostColors = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
  const ghostPins = ['pin-r','pin-b','pin-g','pin-y'];
@@ -4145,9 +4248,19 @@ function noteHTML(w, i, tileStyle=''){
  const safeId = esc(w.id);
 
  if(w._ghost){
- return `<div class="note-card ${w.color}" style="--rot:${w._rot}deg;opacity:.55;pointer-events:none;" aria-hidden="true">
+ return `<div class="note-card ${w.color} note-empty-slot" style="--rot:${w._rot}deg;" aria-hidden="true">
  <div class="note-inner"><div class="note-pin ${w._pinCls}"></div>
- <p class="note-text" style="font-size:8px;opacity:.7;">${esc(w.wishText)}</p></div></div>`;
+ <p class="note-text note-empty-text">${esc(w.wishText)}</p></div></div>`;
+ }
+
+ if(w.status === 'coming_soon'){
+ const tunnelIdx = parseInt((w.id || '0').replace(/\D/g,'')) || i;
+ const tunnelMsg = TUNNEL_MESSAGES[tunnelIdx % TUNNEL_MESSAGES.length];
+ return `<div class="note-card ${color} note-tunnel-card" style="--rot:${rot}deg;${tileStyle}" aria-hidden="true">
+ <div class="note-inner"><div class="note-pin ${pinCls}"></div>
+ <p class="note-text note-tunnel-text">${tunnelMsg}</p>
+ <span class="tunnel-queue-label">In the queue</span>
+ </div></div>`;
  }
 
  const statusCls = granted ? 'is-granted is-real' : 'is-real';
@@ -4339,7 +4452,7 @@ function filterWishes(){
  STATS pot balance NOT publicly displayed per brief
  ============================================================ */
 function updateStats(){
- const PLATFORM = window._platformStats || { total: 1000, granted: 312 };
+ const PLATFORM = window._platformStats || { total: 1000, granted: 185 };
  const total = window._firebaseReady ? allWishes.length : PLATFORM.total;
  const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
  animNum('s-total', total);
@@ -4911,6 +5024,7 @@ function closeConf(){
  });
  paintWall();
  updateStats();
+ processWishQueue();
  }
  showTab('wall');
 }
@@ -5348,8 +5462,27 @@ function getDisplayWishes(realWishes){
  const pad = WARMUP_WISHES.slice(0, needed);
  return [...real, ...pad];
 }
-function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); }, 850); }
+function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); processWishQueue(); }, 850); }
 if(!window._firebaseReady) loadDemo();
+
+function processWishQueue() {
+  const capacity = WALL_CAPACITY;
+  const liveWishes = DEMO.filter(function(w) {
+    return w.status === 'granted' || w.status === 'approved';
+  });
+  const available = capacity - liveWishes.length;
+  if (available <= 0) return;
+  const queued = DEMO.filter(function(w) {
+    return w.status === 'coming_soon';
+  });
+  const toPromote = queued.slice(0, available);
+  toPromote.forEach(function(w) {
+    w.status = 'approved';
+  });
+  if (toPromote.length > 0) {
+    paintWall();
+  }
+}
 updateWCPill();
 checkReturn();
 
@@ -5365,7 +5498,7 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // Base values replaced by live Firebase data when connected
 let liveStats = {
- granted: 312,
+ granted: 185,
  guardians: 156,
  countries: 18,
 };
@@ -5401,7 +5534,7 @@ window.updateLedger = function(data){
  const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
 
  // Push to live impact counters
- liveStats.granted = d.totalGranted || 312;
+ liveStats.granted = d.totalGranted || 185;
   if(d.totalGuardians) liveStats.guardians = d.totalGuardians;
  renderLiveStats();
 };
