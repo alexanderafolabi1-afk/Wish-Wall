@@ -4593,13 +4593,6 @@ function donatePool(){
  LEADERBOARD
  ============================================================ */
 const DEMO_LB = [
- {name:'💸 Pesa', flag:'🇨🇦', amount:1800, type:'corporate'},
- {name:'🌿 Verda Solutions GmbH', flag:'🇩🇪', amount:560, type:'corporate'},
- {name:'📦 Brevio AB', flag:'🇸🇪', amount:400, type:'corporate'},
- {name:'🔷 Nuvelo Consulting SL', flag:'🇪🇸', amount:290, type:'corporate'},
- {name:'🌐 Kairova Tech Oy', flag:'🇫🇮', amount:250, type:'corporate'},
- {name:'🏗️ Altivo Partners BV', flag:'🇳🇱', amount:220, type:'corporate'},
- {name:'💡 Lumence Studio SAS', flag:'🇨🇭', amount:150, type:'corporate'},
  {name:'J. Hartley', flag:'🇬🇧', amount:200},
  {name:'Sophie M.', flag:'🇬🇧', amount:150},
  {name:'Anonymous', flag:'🇬🇧', amount:100},
@@ -4613,31 +4606,23 @@ const DEMO_LB = [
  {name:'G. Tremblay', flag:'🇨🇦', amount:100},
  {name:'F. Müller', flag:'🇩🇪', amount:120},
  {name:'Anonymous', flag:'🇩🇪', amount:100},
- {name:'R. Oliveira', flag:'🇧🇷', amount:110},
- {name:'Anonymous', flag:'🇧🇷', amount:90},
- {name:'K. Wiśniewska', flag:'🇵🇱', amount:100},
- {name:'Anonymous', flag:'🇵🇱', amount:80},
+ {name:'R. Oliveira', flag:'🇵🇹', amount:110},
+ {name:'K. Wiśniewska', flag:'🇩🇪', amount:100},
  {name:'C. Walsh', flag:'🇬🇧', amount:75},
  {name:'Anonymous', flag:'🇬🇧', amount:60},
  {name:'R. Summers', flag:'🇬🇧', amount:50},
  {name:'Anonymous', flag:'🇺🇸', amount:80},
  {name:'L. Park', flag:'🇺🇸', amount:75},
  {name:'N. Achebe', flag:'🇨🇦', amount:75},
- {name:'C. Santos', flag:'🇧🇷', amount:75},
- // fill to 167
- ...Array.from({length:134}, (_,i) => ({name:'Anonymous', flag:'🌍', amount: Math.max(2, 70 - i)}))
+ {name:'C. Santos', flag:'🇪🇸', amount:75},
+ // fill to 156 (22 named + 134 anonymous)
+ ...Array.from({length:134}, (_,i) => {
+   const flags = ['🇺🇸','🇬🇧','🇨🇦','🇩🇪','🇫🇷','🇳🇱','🇮🇪','🇳🇴','🇦🇺','🇳🇿'];
+   return {name:'Anonymous', flag: flags[i % flags.length], amount: Math.max(2, 70 - i)};
+ })
 ];
 
 const CORP_SPONSORS = [
-  {
-    name: 'Lyriōn Ltd',
-    logo: '✨',
-    category: 'All Categories',
-    tagline: 'Luxury astrology brand powering kindness globally',
-    country: '🇬🇧',
-    wishes_funded: 12,
-    badge: 'Founding Patron'
-  },
   {
     name: 'Verda Solutions',
     logo: '🌿',
@@ -4660,14 +4645,14 @@ const CORP_SPONSORS = [
 
 function paintLB(donors){
  const list = document.getElementById('lb-list');
- const data = (donors || DEMO_LB).slice(0, 167);
+ const data = (donors || DEMO_LB).slice(0, 156);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
  const rankExtra= ['rank-1','rank-2','rank-3'];
 
  list.innerHTML = `
  <div style="text-align:center;margin-bottom:20px;font-family:var(--fn-note);font-size:1rem;color:rgba(255,255,255,.5);">
- ${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇧🇷🇿🇦🇳🇬 and beyond
+ ${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond
  </div>` +
  data.map((d, i) => `
 <div class="lb-item ${rankExtra[i] || ''}">
@@ -5529,7 +5514,7 @@ function renderLiveStats(){
 
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
- const d = data || { totalGranted: 56 };
+ const d = data || { totalGranted: 185 };
  const fmt = n => Number(n ?? 0).toLocaleString('en-US');
 
  // Public ledger cards
@@ -5944,18 +5929,18 @@ async function translateWish(){
 const PIPE_DEMO = [
  {wishText:"Help with groceries until payday", country:"🇺🇸 United States", color:"n-yellow", lang:"en"},
  {wishText:"School shoes for my son starting Year 7",country:"🇬🇧 United Kingdom",color:"n-blue", lang:"en"},
- {wishText:"Bebe formula — payday 10 dias longe", country:"🇧🇷 Brazil", color:"n-pink", lang:"pt"},
+ {wishText:"Bebe formula — payday 10 dias longe", country:"🇪🇸 Spain", color:"n-pink", lang:"pt"},
  {wishText:"Winter boots for my daughter in Calgary",country:"🇨🇦 Canada", color:"n-green", lang:"en"},
  {wishText:"Connect me to a food bank in Glasgow", country:"🇬🇧 United Kingdom",color:"n-lav", lang:"en"},
- {wishText:"Ayuda con la factura de luz este mes", country:"🇲🇽 Mexico", color:"n-orange", lang:"es"},
+ {wishText:"Ayuda con la factura de luz este mes", country:"🇪🇸 Spain", color:"n-orange", lang:"es"},
  {wishText:"A laptop for my college applications", country:"🇺🇸 United States", color:"n-yellow", lang:"en"},
  {wishText:"Emergency nappies — 3 left in the house",country:"🇬🇧 United Kingdom",color:"n-pink", lang:"en"},
- {wishText:"Nisaidie na nauli ya hospitali ya mama", country:"🇰🇪 Kenya", color:"n-blue", lang:"sw"},
+ {wishText:"Nisaidie na nauli ya hospitali ya mama", country:"🇨🇦 Canada", color:"n-blue", lang:"sw"},
  {wishText:"Prescription costs I cannot cover", country:"🇦🇺 Australia", color:"n-green", lang:"en"},
- {wishText:"Meri beti ki school fees chahiye", country:"🇮🇳 India", color:"n-lav", lang:"hi"},
+ {wishText:"Meri beti ki school fees chahiye", country:"🇩🇪 Germany", color:"n-lav", lang:"hi"},
  {wishText:"Bus pass to get to dialysis each week", country:"🇺🇸 United States", color:"n-yellow", lang:"en"},
  {wishText:"A warm meal tonight — long story", country:"🇨🇦 Canada", color:"n-orange", lang:"en"},
- {wishText:"Tulong sa bayad-aral ng anak ko", country:"🇵🇭 Philippines", color:"n-pink", lang:"tl"},
+ {wishText:"Tulong sa bayad-aral ng anak ko", country:"🇵🇹 Portugal", color:"n-pink", lang:"tl"},
  {wishText:"Dental appointment — in pain for weeks",country:"🇬🇧 United Kingdom",color:"n-blue", lang:"en"},
  {wishText:"Baby car seat to leave the hospital", country:"🇺🇸 United States", color:"n-green", lang:"en"},
  {wishText:"Gas money to get to my interview", country:"🇺🇸 United States", color:"n-lav", lang:"en"},
@@ -5977,7 +5962,7 @@ function paintMarioPipe(){
  if(!wrap) return;
 
  // Use real queued wishes if available, else PIPE_DEMO
- const real = (window.allWishes||[]).filter(w => w.status === 'queued' && !w.warmup);
+ const real = (window.allWishes||[]).filter(w => (w.status === 'queued' || w.status === 'coming_soon') && !w.warmup);
  const source = real.length > 0 ? real.slice(0,20) : PIPE_DEMO;
 
  const tubeEl = document.getElementById('mario-tube');
