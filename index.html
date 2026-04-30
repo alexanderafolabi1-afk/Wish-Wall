@@ -4161,11 +4161,13 @@ function paintWall(){
  const total = allWishes.length;
  const VISIBLE = Math.min(total + 50, WALL_CAPACITY);
  const counter = document.getElementById('spot-counter');
- if(counter) counter.textContent = `${total.toLocaleString()} wishes pinned${total >= WALL_CAPACITY ? ' (1,000 spots)' : ''}`;
+ const wallWishes = allWishes.filter(w => w.status === 'granted' || w.status === 'approved');
+ if(counter) counter.textContent = `${wallWishes.length.toLocaleString()} wishes pinned${wallWishes.length >= WALL_CAPACITY ? ' (1,000 spots)' : ''}`;
 
- // Build slot map across all 1,000 positions
+ // Build slot map — only granted/approved wishes appear on the wall;
+ // coming_soon wishes stay in the queue, leaving ghost slots visible
  const slotMap = new Array(WALL_CAPACITY).fill(null);
- allWishes.forEach((w, i) => {
+ wallWishes.forEach((w, i) => {
  const slot = (w._slot !== undefined && w._slot < WALL_CAPACITY) ? w._slot : i % WALL_CAPACITY;
  if(!slotMap[slot]) slotMap[slot] = w;
  });
@@ -5462,7 +5464,7 @@ function getDisplayWishes(realWishes){
  const pad = WARMUP_WISHES.slice(0, needed);
  return [...real, ...pad];
 }
-function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); processWishQueue(); }, 850); }
+function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); }, 850); }
 if(!window._firebaseReady) loadDemo();
 
 function processWishQueue() {
