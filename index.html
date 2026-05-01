@@ -1288,40 +1288,39 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .tier-next { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); margin-top: 4px; }
 
 /* Leaderboard */
-.leaderboard { max-width: 600px; margin: var(--sp-4) auto 0; }
+.leaderboard { max-width: 1100px; margin: var(--sp-4) auto 0; }
 .lb-title { font-family: var(--fn-display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); text-align: center; margin-bottom: 6px; font-variation-settings: 'opsz' 40; }
 .lb-subtitle { text-align: center; font-family: var(--fn-body); font-size: .9rem; color: var(--text-muted); margin-bottom: var(--sp-3); }
-.lb-item {
- display: flex; align-items: center; gap: 10px;
+.lb-summary { text-align:center; margin-bottom:20px; font-family:var(--fn-note); font-size:1rem; color:rgba(255,255,255,.5); }
+.lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.lb-card {
+ display: flex; align-items: center; gap: 8px;
  background: var(--card); border: 1px solid rgba(30,34,53,.08);
- border-radius: 2px; padding: 12px 16px; margin-bottom: 8px;
- opacity: 0; transform: translateY(24px);
- transition: opacity .5s ease, transform .5s ease, background .2s, border-color .2s;
+ border-radius: 2px; padding: 10px 14px;
+ opacity: 0; transform: translateY(16px);
+ transition: opacity .4s ease, transform .4s ease, background .2s, border-color .2s;
  box-shadow: 2px 2px 0 rgba(30,34,53,.04);
 }
-.lb-item.revealed { opacity: 1; transform: translateY(0); }
-.lb-item:hover { background: rgba(30,34,53,.04); border-color: rgba(30,34,53,.18); transform: translateY(-2px) !important; box-shadow: 4px 6px 0 rgba(30,34,53,.08); }
-.lb-item.rank-1 { background: rgba(245,226,117,.12); border-color: rgba(245,226,117,.3); }
-.lb-item.rank-2 { background: rgba(192,194,204,.12); border-color: rgba(192,194,204,.2); }
-.lb-item.rank-3 { background: rgba(184,144,48,.12); border-color: rgba(184,144,48,.2); }
-.lb-rank { font-family: var(--fn-display); font-size: 1.2rem; font-weight: 800; width: 28px; text-align: center; flex-shrink: 0; letter-spacing: -0.02em; }
-.lb-rank.gold { color: #C8A020; }
-.lb-rank.silver { color: #888A94; }
-.lb-rank.bronze { color: #AA7820; }
-.lb-flag { font-size: 1.1rem; flex-shrink: 0; }
-.lb-name { flex: 1; font-weight: 500; color: var(--text); font-size: 13px; font-family: var(--fn-body); }
-.lb-amt { font-family: var(--fn-display); font-size: 1rem; font-weight: 800; color: var(--urgency); flex-shrink: 0; letter-spacing: -0.02em; }
-.lb-corp-tag {
- display: inline-block; background: rgba(153,51,224,.12);
- border: 1px solid rgba(153,51,224,.3); border-radius: 2px;
- font-size: 8px; padding: 1px 6px; color: #7722C0;
- font-family: var(--fn-mono); font-weight: 700; vertical-align: middle; margin-left: 5px;
+.lb-card.revealed { opacity: 1; transform: translateY(0); }
+.lb-card:hover { background: rgba(30,34,53,.04); border-color: rgba(30,34,53,.18); transform: translateY(-2px) !important; box-shadow: 4px 6px 0 rgba(30,34,53,.08); }
+.lb-card--top.lb-card:nth-child(1) { background: rgba(245,226,117,.12); border-color: rgba(245,226,117,.3); }
+.lb-card--top.lb-card:nth-child(2) { background: rgba(192,194,204,.12); border-color: rgba(192,194,204,.2); }
+.lb-card--top.lb-card:nth-child(3) { background: rgba(184,144,48,.12); border-color: rgba(184,144,48,.2); }
+.lb-card--hidden { display: none; }
+.lb-card-rank { font-family: var(--fn-display); font-size: 1rem; font-weight: 800; width: 24px; text-align: center; flex-shrink: 0; letter-spacing: -0.02em; }
+.lb-card-rank.gold { color: #C8A020; }
+.lb-card-rank.silver { color: #888A94; }
+.lb-card-rank.bronze { color: #AA7820; }
+.lb-card-flag { font-size: 1rem; flex-shrink: 0; }
+.lb-card-name { flex: 1; font-weight: 500; color: var(--text); font-size: 12px; font-family: var(--fn-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-expand-wrap { text-align: center; margin-top: 20px; }
+.lb-expand-btn {
+ font-family: var(--fn-display); font-size: .85rem; font-weight: 700;
+ background: transparent; border: 1px solid rgba(30,34,53,.2);
+ border-radius: 2px; padding: 10px 28px; cursor: pointer; color: var(--text-muted);
+ transition: all .2s; letter-spacing: .02em;
 }
-.lb-item:nth-child(1){transition-delay:.05s;} .lb-item:nth-child(2){transition-delay:.10s;}
-.lb-item:nth-child(3){transition-delay:.15s;} .lb-item:nth-child(4){transition-delay:.20s;}
-.lb-item:nth-child(5){transition-delay:.25s;} .lb-item:nth-child(6){transition-delay:.30s;}
-.lb-item:nth-child(7){transition-delay:.35s;} .lb-item:nth-child(8){transition-delay:.40s;}
-.lb-item:nth-child(n+9){transition-delay:.45s;}
+.lb-expand-btn:hover { background: var(--card); border-color: rgba(30,34,53,.35); color: var(--text); }
 
 /* ============================================================
  IMPACT TAB — editorial, colour-rich
@@ -2959,15 +2958,6 @@ button { touch-action: manipulation; }
  <button class="sp-btn" onclick="donatePool()" style="max-width:260px;margin:0 auto;display:block;">💜 Add to the Pool</button>
  </div>
 
- <p style="text-align:center;font-family:var(--fn-mono);font-size:10px;color:var(--text-muted);margin:0 0 var(--sp-4);letter-spacing:.04em;">When you purchase items to fulfil a wish through our curated partner links, a small commission supports the wall — at no extra cost to you.</p>
-
- <!-- Wishes needing sponsors -->
- <div class="sponsor-grid" id="sp-grid">
- <div style="text-align:center;color:rgba(255,255,255,.4);padding:40px;grid-column:1/-1;font-family:var(--fn-note);font-size:1.1rem;">
- Loading wishes that need your sparkle... ✨
- </div>
- </div>
-
   <!-- Guardian Tier Banner -->
  <div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
 
@@ -4116,7 +4106,6 @@ window.renderWishes = function(rawWishes){
  window._lastWishes = rawWishes || []; // keep real wishes separately
  updateStats(rawWishes);
  paintWall();
- paintSponsor();
  paintCorpSponsors();
 };
 
@@ -4483,23 +4472,6 @@ function animNum(id, target){
 /* ============================================================
  SPONSOR WISHES
  ============================================================ */
-function paintSponsor(){
- const grid = document.getElementById('sp-grid');
- const src = allWishes.filter(w => w.status !== 'granted').slice(0,9);
- if(!src.length){
- grid.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,.4);padding:40px;grid-column:1/-1;font-family:var(--fn-note);font-size:1.1rem;">All wishes have guardians! Donate to the pool to keep the magic going ✨</div>';
- return;
- }
- grid.innerHTML = src.map(w => `
-<div class="sp-card">
- <p class="sp-wish-txt">"${esc(w.wishText)}"</p>
- <div class="sp-cost">
- <span class="sp-cost-est">Estimated cost</span>
- <span class="sp-cost-amt">${w.est ? '$'+w.est : 'Open amount'}</span>
- </div>
- <button class="sp-btn" onclick="sponsorWish('${esc(w.id)}')">💙 Sponsor this wish</button>
-</div>`).join('');
-}
 
 function paintCorpSponsors() {
   const grid = document.getElementById('corp-sponsor-grid');
@@ -4648,33 +4620,54 @@ function paintLB(donors){
  const data = (donors || DEMO_LB).slice(0, 156);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
- const rankExtra= ['rank-1','rank-2','rank-3'];
+ const COLLAPSED = 12;
 
- list.innerHTML = `
- <div style="text-align:center;margin-bottom:20px;font-family:var(--fn-note);font-size:1rem;color:rgba(255,255,255,.5);">
- ${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond
- </div>` +
- data.map((d, i) => `
-<div class="lb-item ${rankExtra[i] || ''}">
- <span class="lb-rank ${rankCls[i] || ''}">${medals[i] || (i + 1)}</span>
- <span class="lb-flag">${d.flag || '🌍'}</span>
- <span class="lb-name">${esc(d.name)}${d.type === 'corporate' ? ' <span class="lb-corp-tag">Corporate</span>' : ''}</span>
+ const cardHTML = data.map((d, i) => `
+<div class="lb-card${i < 3 ? ' lb-card--top' : ''}${i >= COLLAPSED ? ' lb-card--hidden' : ''}">
+ <span class="lb-card-rank ${rankCls[i] || ''}">${medals[i] || (i + 1)}</span>
+ <span class="lb-card-flag">${d.flag || '🌍'}</span>
+ <span class="lb-card-name">${esc(d.name)}</span>
 </div>`).join('');
 
- // Scroll-reveal: animate each row into view as user scrolls
- const items = list.querySelectorAll('.lb-item');
+ list.innerHTML =
+  `<div class="lb-summary">${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond</div>` +
+  `<div class="lb-grid" id="lb-grid">${cardHTML}</div>` +
+  (data.length > COLLAPSED ? `<div class="lb-expand-wrap"><button class="lb-expand-btn" id="lb-expand-btn" onclick="toggleLbExpand()">Show all ${data.length} Guardians ↓</button></div>` : '');
+
+ const visible = list.querySelectorAll('.lb-card:not(.lb-card--hidden)');
  if('IntersectionObserver' in window){
- const io = new IntersectionObserver((entries) => {
- entries.forEach(entry => {
- if(entry.isIntersecting){
- entry.target.classList.add('revealed');
- io.unobserve(entry.target);
- }
- });
- }, { threshold: 0.12, rootMargin: '0px 0px -20px 0px' });
- items.forEach(item => io.observe(item));
+  const io = new IntersectionObserver(entries => {
+   entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -10px 0px' });
+  visible.forEach(c => io.observe(c));
  } else {
- items.forEach(item => item.classList.add('revealed'));
+  visible.forEach(c => c.classList.add('revealed'));
+ }
+}
+
+function toggleLbExpand(){
+ const grid = document.getElementById('lb-grid');
+ const btn = document.getElementById('lb-expand-btn');
+ if(!grid || !btn) return;
+ const hidden = grid.querySelectorAll('.lb-card--hidden');
+ if(hidden.length > 0){
+  hidden.forEach(c => { c.classList.remove('lb-card--hidden'); c.removeAttribute('aria-hidden'); });
+  btn.textContent = 'Show fewer ↑';
+  if('IntersectionObserver' in window){
+   const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); } });
+   }, { threshold: 0.05 });
+   grid.querySelectorAll('.lb-card:not(.revealed)').forEach(c => io.observe(c));
+  } else {
+   grid.querySelectorAll('.lb-card:not(.revealed)').forEach(c => c.classList.add('revealed'));
+  }
+ } else {
+  const cards = grid.querySelectorAll('.lb-card');
+  cards.forEach((c, i) => {
+   if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
+  });
+  btn.textContent = `Show all 156 Guardians ↓`;
+  document.getElementById('lb-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
  }
 }
 setTimeout(() => paintLB(null), 100);
@@ -5962,7 +5955,7 @@ function paintMarioPipe(){
  if(!wrap) return;
 
  // Use real queued wishes if available, else PIPE_DEMO
- const real = (window.allWishes||[]).filter(w => (w.status === 'queued' || w.status === 'coming_soon') && !w.warmup);
+ const real = (window.allWishes||[]).filter(w => w.status === 'queued' && !w.warmup);
  const source = real.length > 0 ? real.slice(0,20) : PIPE_DEMO;
 
  const tubeEl = document.getElementById('mario-tube');
