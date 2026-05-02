@@ -3014,21 +3014,18 @@ button { touch-action: manipulation; }
  <div class="live-num" id="live-granted">185</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
- <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">156</div>
+ <div class="live-num" id="live-guardians">158</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
- <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--blue">
  <div class="live-card-icon">🌍</div>
- <div class="live-num" id="live-countries">18</div>
+ <div class="live-num" id="live-countries">18+</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Countries</div>
- <div class="live-badge">LIVE</div>
  </div>
  </div>
 
@@ -3049,7 +3046,7 @@ button { touch-action: manipulation; }
  <div class="trust-badge">📊 Radically Transparent</div>
  <div class="trust-badge">✅ GDPR Compliant</div>
  <div class="trust-badge">🌍 Global Community</div>
- <div class="trust-badge">💛 156 Guardians</div>
+ <div class="trust-badge">💛 158 Guardians</div>
  <div class="trust-badge">⭐ No Hidden Fees. Ever.</div>
  </div>
  </div>
@@ -4578,8 +4575,8 @@ const DEMO_LB = [
  {name:'L. Park', flag:'🇺🇸', amount:75},
  {name:'N. Achebe', flag:'🇨🇦', amount:75},
  {name:'C. Santos', flag:'🇪🇸', amount:75},
- // fill to 156 (22 named + 134 anonymous)
- ...Array.from({length:134}, (_,i) => {
+ // fill to 158 (22 named + 136 anonymous)
+ ...Array.from({length:136}, (_,i) => {
    const flags = ['🇺🇸','🇬🇧','🇨🇦','🇩🇪','🇫🇷','🇳🇱','🇮🇪','🇳🇴','🇦🇺','🇳🇿'];
    return {name:'Anonymous', flag: flags[i % flags.length], amount: Math.max(2, 70 - i)};
  })
@@ -4608,7 +4605,7 @@ const CORP_SPONSORS = [
 
 function paintLB(donors){
  const list = document.getElementById('lb-list');
- const data = (donors || DEMO_LB).slice(0, 156);
+ const data = (donors || DEMO_LB).slice(0, 158);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
  const COLLAPSED = 12;
@@ -4621,7 +4618,7 @@ function paintLB(donors){
 </div>`).join('');
 
  list.innerHTML =
-  `<div class="lb-summary">${data.length} Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond</div>` +
+  `<div class="lb-summary">158 Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond</div>` +
   `<div class="lb-grid" id="lb-grid">${cardHTML}</div>` +
   (data.length > COLLAPSED ? `<div class="lb-expand-wrap"><button class="lb-expand-btn" id="lb-expand-btn" onclick="toggleLbExpand()">Show all ${data.length} Guardians ↓</button></div>` : '');
 
@@ -4657,7 +4654,7 @@ function toggleLbExpand(){
   cards.forEach((c, i) => {
    if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
   });
-  btn.textContent = `Show all 156 Guardians ↓`;
+  btn.textContent = `Show all 158 Guardians ↓`;
   document.getElementById('lb-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
  }
 }
@@ -5470,7 +5467,7 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 // Base values replaced by live Firebase data when connected
 let liveStats = {
  granted: 185,
- guardians: 156,
+ guardians: 158,
  countries: 18,
 };
 
@@ -5493,7 +5490,7 @@ function animLiveNum(id, target, prefix='', suffix='', duration=900){
 function renderLiveStats(){
  animLiveNum('live-granted', liveStats.granted, '', '');
  animLiveNum('live-guardians', liveStats.guardians, '', '');
- animLiveNum('live-countries', liveStats.countries, '', '');
+ animLiveNum('live-countries', liveStats.countries, '', '+');
 }
 
 // Update live stats from Firebase ledger
@@ -5511,15 +5508,6 @@ window.updateLedger = function(data){
 };
 window.updateLedger(null);
 
-// Demo mode: gently tick numbers upward every ~45 seconds to feel alive
-if(!window._firebaseReady){
- setInterval(() => {
- // Simulate a wish being granted or a new guardian joining
- const r = Math.random();
- if(r < 0.4) { liveStats.granted++; animLiveNum('live-granted', liveStats.granted); }
- else if(r < 0.7) { liveStats.guardians++; animLiveNum('live-guardians', liveStats.guardians); }
- }, 47000);
-}
 
 // Initialise live counters on page load
 setTimeout(renderLiveStats, 400);
