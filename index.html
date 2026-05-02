@@ -275,7 +275,7 @@
 
   <div class="sponsor-modal-badge">&#x1F4BC; Corporate Patronage</div>
   <h2 class="sponsor-modal-title" id="sponsor-modal-heading">Let's make something<br>real together.</h2>
-  <p class="sponsor-modal-sub">Tell us a little about your company and what you have in mind. No pressure, no pitch decks &mdash; just a conversation starter. &#x2728;</p>
+  <p class="sponsor-modal-sub">Tell us a little about your company and what you have in mind. No pressure, no pitch decks, just a conversation starter. &#x2728;</p>
 
   <form id="sponsor-enquiry-form" onsubmit="submitSponsorEnquiry(event)" novalidate>
 
@@ -305,10 +305,10 @@
     <label class="sponsor-label" for="sp-tier">Tier of Interest *</label>
     <select class="sponsor-select" id="sp-tier" required>
      <option value="" disabled selected>Choose a tier…</option>
-     <option value="Patron ($500/mo)">Patron &mdash; $500/mo &middot; One category, branded card &amp; monthly report</option>
-     <option value="Founding Patron ($1,500/mo)">Founding Patron &mdash; $1,500/mo &middot; All categories, featured placement</option>
-     <option value="Bespoke (Custom)">Bespoke &mdash; Custom &middot; Tailored sponsorship for a specific cause</option>
-     <option value="Just exploring">Just exploring &mdash; not sure yet</option>
+     <option value="Patron ($500/mo)">Patron: $500/mo &middot; One category, branded card &amp; monthly report</option>
+     <option value="Founding Patron ($1,500/mo)">Founding Patron: $1,500/mo &middot; All categories, featured placement</option>
+     <option value="Bespoke (Custom)">Bespoke: Custom &middot; Tailored sponsorship for a specific cause</option>
+     <option value="Just exploring">Just exploring, not sure yet</option>
     </select>
    </div>
 
@@ -319,7 +319,7 @@
 
    <div class="sponsor-24hr">
     <span class="sponsor-24hr-icon">&#x26A1;</span>
-    <span><strong>We reply within 24 hours.</strong> Every enquiry is read by a human &mdash; no bots, no auto-rejections. We love a good conversation.</span>
+    <span><strong>We reply within 24 hours.</strong> Every enquiry is read by a human, no bots, no auto-rejections. We love a good conversation.</span>
    </div>
 
    <button type="submit" class="sponsor-submit-btn" id="sponsor-submit-btn">
@@ -4768,7 +4768,7 @@ function submitSponsorEnquiry(e){
   message ? '\nMessage:\n' + message : null,
  ].filter(Boolean).join('\n');
 
- const subject = encodeURIComponent('Corporate Patronage Enquiry — ' + company);
+ const subject = encodeURIComponent('Corporate Patronage Enquiry: ' + company);
  const bodyEnc = encodeURIComponent(body);
  window.location.href = 'mailto:corporate@wishwall.xyz?subject=' + subject + '&body=' + bodyEnc;
 
