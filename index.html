@@ -264,6 +264,77 @@
 </div>
 
 <!-- ============================================================
+  SPONSOR ENQUIRY MODAL
+  openSponsorModal() / closeSponsorModal()
+  ============================================================ -->
+<div class="sponsor-modal-overlay" id="sponsor-modal-ov"
+ onclick="if(event.target===this)closeSponsorModal()"
+ role="dialog" aria-modal="true" aria-labelledby="sponsor-modal-heading">
+ <div class="sponsor-modal">
+  <button class="sponsor-modal-close" onclick="closeSponsorModal()" aria-label="Close">&#215;</button>
+
+  <div class="sponsor-modal-badge">&#x1F4BC; Corporate Patronage</div>
+  <h2 class="sponsor-modal-title" id="sponsor-modal-heading">Let's make something<br>real together.</h2>
+  <p class="sponsor-modal-sub">Tell us a little about your company and what you have in mind. No pressure, no pitch decks &mdash; just a conversation starter. &#x2728;</p>
+
+  <form id="sponsor-enquiry-form" onsubmit="submitSponsorEnquiry(event)" novalidate>
+
+   <div class="sponsor-2col">
+    <div class="sponsor-form-row">
+     <label class="sponsor-label" for="sp-company">Company / Organisation *</label>
+     <input class="sponsor-input" id="sp-company" type="text" placeholder="Acme Corp" autocomplete="organization" required>
+    </div>
+    <div class="sponsor-form-row">
+     <label class="sponsor-label" for="sp-name">Your Name *</label>
+     <input class="sponsor-input" id="sp-name" type="text" placeholder="Jane Smith" autocomplete="name" required>
+    </div>
+   </div>
+
+   <div class="sponsor-2col">
+    <div class="sponsor-form-row">
+     <label class="sponsor-label" for="sp-email">Work Email *</label>
+     <input class="sponsor-input" id="sp-email" type="email" placeholder="jane@acmecorp.com" autocomplete="email" required>
+    </div>
+    <div class="sponsor-form-row">
+     <label class="sponsor-label" for="sp-phone">Phone <span style="opacity:.5;font-size:10px;">(optional)</span></label>
+     <input class="sponsor-input" id="sp-phone" type="tel" placeholder="+1 555 000 0000" autocomplete="tel">
+    </div>
+   </div>
+
+   <div class="sponsor-form-row">
+    <label class="sponsor-label" for="sp-tier">Tier of Interest *</label>
+    <select class="sponsor-select" id="sp-tier" required>
+     <option value="" disabled selected>Choose a tier…</option>
+     <option value="Patron ($500/mo)">Patron &mdash; $500/mo &middot; One category, branded card &amp; monthly report</option>
+     <option value="Founding Patron ($1,500/mo)">Founding Patron &mdash; $1,500/mo &middot; All categories, featured placement</option>
+     <option value="Bespoke (Custom)">Bespoke &mdash; Custom &middot; Tailored sponsorship for a specific cause</option>
+     <option value="Just exploring">Just exploring &mdash; not sure yet</option>
+    </select>
+   </div>
+
+   <div class="sponsor-form-row">
+    <label class="sponsor-label" for="sp-message">Anything else? <span style="opacity:.5;font-size:10px;">(optional)</span></label>
+    <textarea class="sponsor-textarea" id="sp-message" placeholder="Tell us about a cause you care about, a campaign idea, or just say hi &#x1F44B;"></textarea>
+   </div>
+
+   <div class="sponsor-24hr">
+    <span class="sponsor-24hr-icon">&#x26A1;</span>
+    <span><strong>We reply within 24 hours.</strong> Every enquiry is read by a human &mdash; no bots, no auto-rejections. We love a good conversation.</span>
+   </div>
+
+   <button type="submit" class="sponsor-submit-btn" id="sponsor-submit-btn">
+    &#x1F4BC; Send Enquiry &rarr;
+   </button>
+
+  </form>
+
+  <p class="sponsor-privacy-note">
+   Your details are used only to respond to your enquiry. See our <a href="privacy.html" target="_blank">Privacy Policy</a>.
+  </p>
+ </div>
+</div>
+
+<!-- ============================================================
   SOCIAL SHARING MODAL, post-Stripe success
   showShareModal('wisher') or showShareModal('guardian')
   ============================================================ -->
@@ -2726,10 +2797,142 @@ button { touch-action: manipulation; }
   text-decoration: none;
   box-shadow: 0 4px 24px rgba(245, 200, 66, 0.35);
   transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
 }
 .corp-cta-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 36px rgba(245, 200, 66, 0.5);
+}
+
+/* ══ SPONSOR ENQUIRY MODAL ══════════════════════════════════════ */
+.sponsor-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(7, 7, 13, 0.78);
+  backdrop-filter: blur(20px) saturate(1.5);
+  z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .28s cubic-bezier(0.16,1,0.3,1);
+}
+.sponsor-modal-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+.sponsor-modal {
+  background: #FAF8F5;
+  border: 1px solid rgba(30,34,53,.1);
+  border-radius: 2px 24px 2px 24px;
+  padding: 44px 40px 36px;
+  max-width: 520px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  position: relative;
+  box-shadow: 8px 12px 0 rgba(30,34,53,.12), 0 40px 80px rgba(30,34,53,.22);
+  transform: translateY(28px) scale(.96);
+  transition: transform .32s cubic-bezier(0.16,1,0.3,1);
+}
+.sponsor-modal-overlay.open .sponsor-modal {
+  transform: translateY(0) scale(1);
+}
+.sponsor-modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(30,34,53,.07);
+  border: 1px solid rgba(30,34,53,.12);
+  color: #1E2235; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.sponsor-modal-close:hover { background: rgba(30,34,53,.14); }
+.sponsor-modal-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #F5C842, #FF6B35);
+  color: #07070D;
+  font-family: 'Sometype Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 4px 12px; border-radius: 50px;
+  margin-bottom: 18px;
+}
+.sponsor-modal-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.65rem; font-weight: 900;
+  letter-spacing: -0.04em; color: #1E2235;
+  margin-bottom: 8px;
+  font-variation-settings: 'opsz' 40;
+  line-height: 1.2;
+}
+.sponsor-modal-sub {
+  font-family: 'Lexend', sans-serif;
+  font-size: .9rem; color: #6B7080;
+  margin-bottom: 28px; line-height: 1.65;
+}
+.sponsor-form-row { margin-bottom: 16px; }
+.sponsor-form-row + .sponsor-form-row { margin-top: 0; }
+.sponsor-label {
+  display: block;
+  font-family: 'Sometype Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: #6B7080; margin-bottom: 6px;
+}
+.sponsor-input,
+.sponsor-select,
+.sponsor-textarea {
+  width: 100%; padding: 12px 16px;
+  border-radius: 2px;
+  border: 1.5px solid rgba(30,34,53,.12);
+  background: #EEE9E2; color: #1E2235;
+  font-family: 'Lexend', sans-serif; font-size: 14px;
+  outline: none; transition: border-color .2s;
+  box-sizing: border-box;
+}
+.sponsor-input:focus,
+.sponsor-select:focus,
+.sponsor-textarea:focus { border-color: #F5C842; }
+.sponsor-textarea { resize: vertical; min-height: 90px; }
+.sponsor-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.sponsor-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sponsor-24hr {
+  display: flex; align-items: center; gap: 10px;
+  background: #EEE9E2;
+  border-radius: 2px 10px 2px 10px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  font-family: 'Lexend', sans-serif;
+  font-size: 13px; color: #6B7080; line-height: 1.5;
+}
+.sponsor-24hr-icon { font-size: 1.3rem; flex-shrink: 0; }
+.sponsor-24hr strong { color: #1E2235; }
+.sponsor-submit-btn {
+  width: 100%; padding: 15px;
+  border-radius: 2px 10px 2px 10px; border: none;
+  background: #1E2235; color: #FAF8F5;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.05rem; font-weight: 800;
+  letter-spacing: -0.02em; cursor: pointer;
+  transition: all .22s cubic-bezier(0.16,1,0.3,1);
+  box-shadow: 3px 3px 0 rgba(30,34,53,.2);
+  font-variation-settings: 'opsz' 40;
+  margin-bottom: 12px;
+}
+.sponsor-submit-btn:hover {
+  transform: translate(-2px,-2px);
+  box-shadow: 5px 5px 0 rgba(30,34,53,.22);
+}
+.sponsor-privacy-note {
+  font-family: 'Sometype Mono', monospace;
+  font-size: 10px; color: #6B7080;
+  text-align: center; line-height: 1.6;
+}
+.sponsor-privacy-note a { color: #D44A1E; text-decoration: none; }
+@media(max-width: 540px){
+  .sponsor-modal { padding: 36px 22px 28px; border-radius: 2px 18px 2px 18px; }
+  .sponsor-2col { grid-template-columns: 1fr; }
 }
 </style>
 
@@ -2989,7 +3192,7 @@ button { touch-action: manipulation; }
       <div class="corp-tier-desc">Tailored sponsorship for specific wishes or campaigns.</div>
      </div>
     </div>
-    <a class="corp-cta-btn" href="mailto:corporate@wishwall.xyz">💼 Enquire About Sponsoring</a>
+    <button class="corp-cta-btn" onclick="openSponsorModal()">💼 Enquire About Sponsoring</button>
    </div>
   </section>
 
@@ -4410,7 +4613,7 @@ function handleDetailOvClick(e){
 
 // Also close on Escape (alongside modal)
 document.addEventListener('keydown', e => {
- if(e.key === 'Escape'){ closeModal(); closeWishDetail(); }
+ if(e.key === 'Escape'){ closeModal(); closeWishDetail(); closeSponsorModal(); }
  if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openModal(); }
 });
 
@@ -4515,6 +4718,64 @@ async function sponsorWish(id){
 function closeGuardianModal(){
  document.getElementById('guardian-modal-ov').classList.remove('open');
  document.body.style.overflow = '';
+}
+
+/* ============================================================
+ SPONSOR ENQUIRY MODAL
+ ============================================================ */
+function openSponsorModal(){
+ const ov = document.getElementById('sponsor-modal-ov');
+ if(!ov) return;
+ // Reset form
+ const form = document.getElementById('sponsor-enquiry-form');
+ if(form) form.reset();
+ const btn = document.getElementById('sponsor-submit-btn');
+ if(btn){ btn.disabled = false; btn.textContent = '\u{1F4BC} Send Enquiry \u2192'; }
+ ov.classList.add('open');
+ document.body.style.overflow = 'hidden';
+ setTimeout(() => document.getElementById('sp-company')?.focus(), 120);
+ announceA11y('Sponsor enquiry form opened.');
+}
+
+function closeSponsorModal(){
+ document.getElementById('sponsor-modal-ov').classList.remove('open');
+ document.body.style.overflow = '';
+}
+
+function submitSponsorEnquiry(e){
+ e.preventDefault();
+ const company = (document.getElementById('sp-company')?.value || '').trim();
+ const name    = (document.getElementById('sp-name')?.value || '').trim();
+ const email   = (document.getElementById('sp-email')?.value || '').trim();
+ const phone   = (document.getElementById('sp-phone')?.value || '').trim();
+ const tier    = (document.getElementById('sp-tier')?.value || '').trim();
+ const message = (document.getElementById('sp-message')?.value || '').trim();
+
+ // Basic validation
+ if(!company){ document.getElementById('sp-company').focus(); announceA11y('Please enter your company name.'); return; }
+ if(!name)   { document.getElementById('sp-name').focus();    announceA11y('Please enter your name.'); return; }
+ if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+  document.getElementById('sp-email').focus(); announceA11y('Please enter a valid email address.'); return;
+ }
+ if(!tier)   { document.getElementById('sp-tier').focus();    announceA11y('Please select a tier of interest.'); return; }
+
+ const body = [
+  'Company: ' + company,
+  'Contact: ' + name,
+  'Email:   ' + email,
+  phone ? 'Phone:   ' + phone : null,
+  'Tier:    ' + tier,
+  message ? '\nMessage:\n' + message : null,
+ ].filter(Boolean).join('\n');
+
+ const subject = encodeURIComponent('Corporate Patronage Enquiry — ' + company);
+ const bodyEnc = encodeURIComponent(body);
+ window.location.href = 'mailto:corporate@wishwall.xyz?subject=' + subject + '&body=' + bodyEnc;
+
+ const btn = document.getElementById('sponsor-submit-btn');
+ if(btn){ btn.disabled = true; btn.textContent = '\u2714 Enquiry sent!'; }
+ announceA11y('Enquiry submitted! Your email client should open shortly. We will reply within 24 hours.');
+ setTimeout(closeSponsorModal, 1800);
 }
 
 function proceedToGrantPayment(){
