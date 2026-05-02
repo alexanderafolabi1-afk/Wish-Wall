@@ -175,7 +175,7 @@
  "totalTime": "PT3M",
  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "1.99" },
  "step": [
- { "@type": "HowToStep", "position": 1, "name": "Write your wish", "text": "Describe your wish in up to 200 characters. Be specific and honest. Grocery money, medical bills, a laptop, school fees, emotional support all welcome." },
+ { "@type": "HowToStep", "position": 1, "name": "Write your wish", "text": "Describe your wish in up to 350 characters. Be specific and honest. Grocery money, medical bills, a laptop, school fees, emotional support all welcome." },
  { "@type": "HowToStep", "position": 2, "name": "Pay 2 WishCoins", "text": "Pay $1.99 via Stripe to pin your wish. Your real name is stored securely for verification but never displayed. Your wish appears anonymously." },
  { "@type": "HowToStep", "position": 3, "name": "Community Guardians see your wish", "text": "Your wish joins 1,000 others on the wall. Guardians browse and choose which wishes to sponsor. No social following required." },
  { "@type": "HowToStep", "position": 4, "name": "Your wish gets granted", "text": "When funded, your note turns green. You receive an email. The Guardian receives a digital receipt. Payment arrives via PayPal or bank transfer." }
@@ -1678,6 +1678,26 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .chk-wrap { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
 .chk-wrap input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; margin-top: 1px; accent-color: var(--urgency); }
 .chk-lbl { font-family: var(--fn-body); font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+/* Anon toggle buttons */
+.anon-toggle-row { display: flex; gap: 10px; }
+.anon-toggle-btn {
+ flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+ padding: 14px 10px; cursor: pointer;
+ background: #F5EDD8; border: 2px solid rgba(30,34,53,.12);
+ border-radius: 2px 12px 2px 12px;
+ font-family: var(--fn-body); color: var(--text-muted);
+ transition: all .18s cubic-bezier(0.16,1,0.3,1);
+}
+.anon-toggle-btn:hover { border-color: rgba(212,74,30,.4); transform: translateY(-1px); }
+.anon-toggle-btn--active {
+ border-color: var(--urgency); color: var(--text);
+ box-shadow: 3px 3px 0 rgba(212,74,30,.15);
+ transform: translateY(-2px);
+}
+.anon-toggle-icon { font-size: 22px; line-height: 1; }
+.anon-toggle-title { font-family: var(--fn-display); font-size: 13px; font-weight: 700; letter-spacing: -0.02em; font-variation-settings: 'opsz' 20; }
+.anon-toggle-sub { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
 .price-note {
  display: flex; align-items: flex-start; gap: 12px;
  padding: var(--sp-2) var(--sp-3);
@@ -3029,7 +3049,7 @@ button { touch-action: manipulation; }
  <div class="how-card-icon">📌</div>
  <div>
  <h3 class="how-card-title" style="color:var(--yellow);">Step 1 Pin a Wish</h3>
- <p class="how-card-body">Write your wish (max 200 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
+ <p class="how-card-body">Write your wish (max 350 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
  </div>
  </div>
 
@@ -3226,15 +3246,15 @@ button { touch-action: manipulation; }
  <button type="button" class="wish-prompt-chip" onclick="usePrompt(this)">Connect me to a food bank</button>
  </div>
  </div>
- <textarea class="form-ta wish-ta-magic" id="f-wish" rows="3" maxlength="200"
+ <textarea class="form-ta wish-ta-magic" id="f-wish" rows="3" maxlength="350"
  placeholder="I wish for..."
  oninput="updateChar(); updateWishPreview();"
  aria-describedby="char-ctr wish-hint"
  aria-required="true"
  autocomplete="off"
  spellcheck="true"></textarea>
- <div class="char-ctr" id="char-ctr" aria-live="polite" aria-atomic="true">0 / 200</div>
- <div id="wish-hint" class="form-hint">Up to 200 characters. Be specific — specific wishes get granted faster.</div>
+ <div class="char-ctr" id="char-ctr" aria-live="polite" aria-atomic="true">0 / 350</div>
+ <div id="wish-hint" class="form-hint">Up to 350 characters. Be specific — specific wishes get granted faster.</div>
 
  <!-- Accessibility: read-aloud button -->
  <button type="button" class="a11y-speak-btn" onclick="readWishAloud()" aria-label="Read your wish aloud" title="Read aloud (accessibility)">
@@ -3263,8 +3283,9 @@ button { touch-action: manipulation; }
  <label class="form-label" for="f-name">Your Full Name <span class="form-req" aria-label="required">required</span></label>
  <input class="form-inp" type="text" id="f-name" placeholder="Jane Doe" required
  autocomplete="name" aria-required="true"
+ oninput="updateAnonPreview()"
  aria-describedby="name-hint">
- <p class="form-hint" id="name-hint">Required for verification. Never shown publicly without your consent.</p>
+ <p class="form-hint" id="name-hint">🔒 For ID verification only — never shown publicly unless you choose "Show My Name" below.</p>
  </div>
 
  <div class="form-field">
@@ -3275,12 +3296,25 @@ button { touch-action: manipulation; }
  <p class="form-hint" id="email-hint">We email you when your wish is granted. Never shared. Ever.</p>
  </div>
 
+ <!-- Anon toggle -->
  <div class="form-field">
- <label class="chk-wrap">
- <input type="checkbox" id="f-anon" checked aria-describedby="anon-hint">
- <span class="chk-lbl">Post anonymously on the wall</span>
- </label>
- <p class="form-hint" id="anon-hint">Your name is stored securely but only shown on the wall with your consent.</p>
+ <label class="form-label">How should your wish appear?</label>
+ <div class="anon-toggle-row">
+  <button type="button" class="anon-toggle-btn anon-toggle-btn--active" id="anon-btn-yes"
+   onclick="setAnon(true)" aria-pressed="true">
+   <span class="anon-toggle-icon">🕵️</span>
+   <span class="anon-toggle-title">Anonymous</span>
+   <span class="anon-toggle-sub">No name shown</span>
+  </button>
+  <button type="button" class="anon-toggle-btn" id="anon-btn-no"
+   onclick="setAnon(false)" aria-pressed="false">
+   <span class="anon-toggle-icon">👤</span>
+   <span class="anon-toggle-title">Show My Name</span>
+   <span class="anon-toggle-sub" id="anon-name-preview">First name only</span>
+  </button>
+ </div>
+ <input type="checkbox" id="f-anon" checked style="display:none;" aria-hidden="true">
+ <p class="form-hint" id="anon-hint" style="margin-top:8px;">Your full name is stored securely and only used for verification.</p>
  </div>
 
  <div class="form-field">
@@ -4496,13 +4530,28 @@ function handleOvClick(e){
 /* ============================================================
  CHAR COUNTER
  ============================================================ */
+function setAnon(isAnon){
+ const cb = document.getElementById('f-anon');
+ const btnYes = document.getElementById('anon-btn-yes');
+ const btnNo  = document.getElementById('anon-btn-no');
+ if(cb) cb.checked = isAnon;
+ if(btnYes){ btnYes.classList.toggle('anon-toggle-btn--active', isAnon); btnYes.setAttribute('aria-pressed', isAnon); }
+ if(btnNo){  btnNo.classList.toggle('anon-toggle-btn--active', !isAnon); btnNo.setAttribute('aria-pressed', !isAnon); }
+}
+function updateAnonPreview(){
+ const nameEl = document.getElementById('f-name');
+ const preview = document.getElementById('anon-name-preview');
+ if(!nameEl || !preview) return;
+ const first = (nameEl.value.trim().split(' ')[0] || '').trim();
+ preview.textContent = first ? first + ' (first name only)' : 'First name only';
+}
 function updateChar(){
  const el = document.getElementById('f-wish');
  const ctr = document.getElementById('char-ctr');
  if(!el || !ctr) return;
  const len = el.value.length;
- ctr.textContent = len + ' / 200';
- ctr.style.color = len > 180 ? '#D44A1E' : len > 150 ? '#C97B30' : '#6B7080';
+ ctr.textContent = len + ' / 350';
+ ctr.style.color = len > 320 ? '#D44A1E' : len > 250 ? '#C97B30' : '#6B7080';
 }
 
 /* ============================================================
@@ -4655,7 +4704,7 @@ async function submitWish(){
  const refCode = (document.getElementById('f-refcode')?.value || '').trim().toUpperCase();
 
  if(!wishTxt){ shake(document.getElementById('f-wish')); return alert('✨ Please write your wish!'); }
- if(wishTxt.length > 200){ return alert('Keep your wish under 200 characters!'); }
+ if(wishTxt.length > 350){ return alert('Keep your wish under 350 characters!'); }
  if(!name){ shake(document.getElementById('f-name')); return alert('Your full name is required it stays private and is used for verification only.'); }
  if(!email || !email.includes('@')){ shake(document.getElementById('f-email')); return alert('We need a valid email to notify you when your wish is granted 💌'); }
  if(!idConfirm){ return alert('Please confirm that your name matches your government-issued ID to continue. This protects everyone on the wall.'); }
@@ -5853,6 +5902,242 @@ function shareEOLO(platform){
  navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard!'));
  }
 }
+
+/* ============================================================
+ I18N — 22-LANGUAGE TRANSLATION SYSTEM
+ ============================================================ */
+const I18N = {
+ en: {
+  nav_wall:'🧱 The Wall', nav_impact:'💛 Impact', nav_guard:'🛡️ Guardians', nav_how:'✨ Magic', nav_pin:'Pin a Wish',
+  hero_title:'The Wish Wall.', hero_sub:'Pin a wish anonymously. Let strangers from anywhere in the world make it real.',
+  how_1:'Write your wish', how_2:'Pay 2 WishCoins ($1.99)', how_3:'Community sponsors it', how_4:'Your wish comes true',
+  guard_title:'🛡️ Become a Guardian', guard_sub:'These wishes need a hero. Could that be you?',
+  pool_title:'💜 The Magic Pool', pool_sub:'Toss coins into the wishing well. Every penny helps grant a dream.',
+  impact_title:'Real Wishes. Real People.', pin_btn:'📌 Pin a Wish',
+  cookie_txt:'🍪 We use essential cookies to make this site work, and optional analytics cookies to improve it.',
+  cookie_accept:'Accept All', cookie_reject:'Essential Only',
+  footer_how:'How It Works', footer_guard:'Become a Guardian', footer_impact:'Our Impact',
+  footer_privacy:'Privacy Policy', footer_terms:'Terms & Conditions', footer_cookies:'Cookie Policy',
+  footer_about:'About Us', footer_contact:'Contact Us', footer_corporate:'Corporate',
+ },
+ es: {
+  nav_wall:'🧱 El Muro', nav_impact:'💛 Impacto', nav_guard:'🛡️ Guardianes', nav_how:'✨ Magia', nav_pin:'Colgar Deseo',
+  hero_title:'El Muro de Deseos.', hero_sub:'Cuelga un deseo de forma anónima. Deja que extraños de todo el mundo lo hagan realidad.',
+  how_1:'Escribe tu deseo', how_2:'Paga 2 WishCoins ($1.99)', how_3:'La comunidad lo patrocina', how_4:'Tu deseo se hace realidad',
+  guard_title:'🛡️ Conviértete en Guardián', guard_sub:'Estos deseos necesitan un héroe. ¿Podrías ser tú?',
+  pool_title:'💜 El Pozo Mágico', pool_sub:'Lanza monedas al pozo de los deseos. Cada céntimo ayuda a hacer realidad un sueño.',
+  impact_title:'Deseos Reales. Personas Reales.', pin_btn:'📌 Colgar Deseo',
+  cookie_txt:'🍪 Usamos cookies esenciales para que este sitio funcione y cookies analíticas opcionales para mejorarlo.',
+  cookie_accept:'Aceptar Todo', cookie_reject:'Solo Esenciales',
+  footer_how:'Cómo Funciona', footer_guard:'Ser Guardián', footer_impact:'Nuestro Impacto',
+  footer_privacy:'Política de Privacidad', footer_terms:'Términos y Condiciones', footer_cookies:'Política de Cookies',
+  footer_about:'Sobre Nosotros', footer_contact:'Contacto', footer_corporate:'Empresas',
+ },
+ fr: {
+  nav_wall:'🧱 Le Mur', nav_impact:'💛 Impact', nav_guard:'🛡️ Gardiens', nav_how:'✨ Magie', nav_pin:'Épingler un Vœu',
+  hero_title:'Le Mur des Vœux.', hero_sub:'Épinglez un vœu anonymement. Laissez des inconnus du monde entier le réaliser.',
+  how_1:'Écrivez votre vœu', how_2:'Payez 2 WishCoins (1,99 $)', how_3:'La communauté le parraine', how_4:'Votre vœu se réalise',
+  guard_title:'🛡️ Devenez Gardien', guard_sub:'Ces vœux ont besoin d\'un héros. Pourquoi pas vous ?',
+  pool_title:'💜 La Fontaine Magique', pool_sub:'Jetez des pièces dans le puits aux souhaits. Chaque centime aide à réaliser un rêve.',
+  impact_title:'Vrais Vœux. Vraies Personnes.', pin_btn:'📌 Épingler un Vœu',
+  cookie_txt:'🍪 Nous utilisons des cookies essentiels pour faire fonctionner ce site et des cookies analytiques optionnels pour l\'améliorer.',
+  cookie_accept:'Tout Accepter', cookie_reject:'Essentiels Seulement',
+  footer_how:'Comment Ça Marche', footer_guard:'Devenir Gardien', footer_impact:'Notre Impact',
+  footer_privacy:'Politique de Confidentialité', footer_terms:'Conditions Générales', footer_cookies:'Politique de Cookies',
+  footer_about:'À Propos', footer_contact:'Contact', footer_corporate:'Entreprises',
+ },
+ de: {
+  nav_wall:'🧱 Die Wand', nav_impact:'💛 Wirkung', nav_guard:'🛡️ Hüter', nav_how:'✨ Magie', nav_pin:'Wunsch pinnen',
+  hero_title:'Die Wunschwand.', hero_sub:'Pinne anonym einen Wunsch. Lass Fremde aus aller Welt ihn wahr werden lassen.',
+  how_1:'Schreibe deinen Wunsch', how_2:'Zahle 2 WishCoins (1,99 $)', how_3:'Die Community finanziert ihn', how_4:'Dein Wunsch wird wahr',
+  guard_title:'🛡️ Werde ein Hüter', guard_sub:'Diese Wünsche brauchen einen Helden. Könntest du das sein?',
+  pool_title:'💜 Der Magische Pool', pool_sub:'Wirf Münzen in den Wunschbrunnen. Jeder Cent hilft, einen Traum zu erfüllen.',
+  impact_title:'Echte Wünsche. Echte Menschen.', pin_btn:'📌 Wunsch pinnen',
+  cookie_txt:'🍪 Wir verwenden essentielle Cookies und optionale Analyse-Cookies.',
+  cookie_accept:'Alle Akzeptieren', cookie_reject:'Nur Notwendige',
+  footer_how:'Wie es funktioniert', footer_guard:'Hüter werden', footer_impact:'Unsere Wirkung',
+  footer_privacy:'Datenschutzrichtlinie', footer_terms:'Nutzungsbedingungen', footer_cookies:'Cookie-Richtlinie',
+  footer_about:'Über Uns', footer_contact:'Kontakt', footer_corporate:'Unternehmen',
+ },
+ pt: {
+  nav_wall:'🧱 O Mural', nav_impact:'💛 Impacto', nav_guard:'🛡️ Guardiões', nav_how:'✨ Magia', nav_pin:'Fixar Desejo',
+  hero_title:'O Mural dos Desejos.', hero_sub:'Fixe um desejo anonimamente. Deixe estranhos de todo o mundo torná-lo real.',
+  how_1:'Escreva seu desejo', how_2:'Pague 2 WishCoins ($1,99)', how_3:'A comunidade patrocina', how_4:'Seu desejo se realiza',
+  guard_title:'🛡️ Torne-se um Guardião', guard_sub:'Esses desejos precisam de um herói. Pode ser você?',
+  pool_title:'💜 A Piscina Mágica', pool_sub:'Jogue moedas no poço dos desejos. Cada centavo ajuda a realizar um sonho.',
+  impact_title:'Desejos Reais. Pessoas Reais.', pin_btn:'📌 Fixar Desejo',
+  cookie_txt:'🍪 Usamos cookies essenciais e cookies analíticos opcionais para melhorar o site.',
+  cookie_accept:'Aceitar Tudo', cookie_reject:'Somente Essenciais',
+  footer_how:'Como Funciona', footer_guard:'Ser Guardião', footer_impact:'Nosso Impacto',
+  footer_privacy:'Política de Privacidade', footer_terms:'Termos e Condições', footer_cookies:'Política de Cookies',
+  footer_about:'Sobre Nós', footer_contact:'Contato', footer_corporate:'Empresas',
+ },
+ ar: {
+  nav_wall:'🧱 الجدار', nav_impact:'💛 التأثير', nav_guard:'🛡️ الحراس', nav_how:'✨ السحر', nav_pin:'علّق أمنية',
+  hero_title:'جدار الأمنيات.', hero_sub:'علّق أمنيتك بشكل مجهول. دع غرباء من حول العالم يجعلونها حقيقة.',
+  how_1:'اكتب أمنيتك', how_2:'ادفع 2 WishCoins ($1.99)', how_3:'المجتمع يرعاها', how_4:'تتحقق أمنيتك',
+  guard_title:'🛡️ كن حارساً', guard_sub:'هذه الأمنيات تحتاج بطلاً. هل يمكن أن تكون أنت؟',
+  pool_title:'💜 المجمع السحري', pool_sub:'اقذف عملات في بئر الأمنيات. كل قرش يساعد في تحقيق حلم.',
+  impact_title:'أمنيات حقيقية. أشخاص حقيقيون.', pin_btn:'📌 علّق أمنية',
+  cookie_txt:'🍪 نستخدم ملفات تعريف الارتباط الأساسية وملفات التحليل الاختيارية.',
+  cookie_accept:'قبول الكل', cookie_reject:'الأساسية فقط',
+  footer_how:'كيف يعمل', footer_guard:'كن حارساً', footer_impact:'تأثيرنا',
+  footer_privacy:'سياسة الخصوصية', footer_terms:'الشروط والأحكام', footer_cookies:'سياسة الكوكيز',
+  footer_about:'من نحن', footer_contact:'اتصل بنا', footer_corporate:'الشركات',
+ },
+ hi: {
+  nav_wall:'🧱 दीवार', nav_impact:'💛 प्रभाव', nav_guard:'🛡️ रक्षक', nav_how:'✨ जादू', nav_pin:'इच्छा लगाएं',
+  hero_title:'इच्छा दीवार।', hero_sub:'गुमनाम रूप से इच्छा लगाएं। दुनिया भर के अजनबियों को इसे पूरा करने दें।',
+  how_1:'अपनी इच्छा लिखें', how_2:'2 WishCoins ($1.99) दें', how_3:'समुदाय प्रायोजित करता है', how_4:'आपकी इच्छा पूरी होती है',
+  guard_title:'🛡️ रक्षक बनें', guard_sub:'इन इच्छाओं को एक नायक की जरूरत है। क्या आप हो सकते हैं?',
+  pool_title:'💜 जादुई पूल', pool_sub:'कुएं में सिक्के डालें। हर पैसा एक सपने को पूरा करने में मदद करता है।',
+  impact_title:'असली इच्छाएं। असली लोग।', pin_btn:'📌 इच्छा लगाएं',
+  cookie_txt:'🍪 हम आवश्यक कुकीज़ और वैकल्पिक विश्लेषण कुकीज़ का उपयोग करते हैं।',
+  cookie_accept:'सभी स्वीकार करें', cookie_reject:'केवल आवश्यक',
+  footer_how:'यह कैसे काम करता है', footer_guard:'रक्षक बनें', footer_impact:'हमारा प्रभाव',
+  footer_privacy:'गोपनीयता नीति', footer_terms:'नियम और शर्तें', footer_cookies:'कुकी नीति',
+  footer_about:'हमारे बारे में', footer_contact:'संपर्क करें', footer_corporate:'कॉर्पोरेट',
+ },
+ zh: {
+  nav_wall:'🧱 愿望墙', nav_impact:'💛 影响', nav_guard:'🛡️ 守护者', nav_how:'✨ 魔法', nav_pin:'固定愿望',
+  hero_title:'愿望墙。', hero_sub:'匿名固定愿望。让世界各地的陌生人帮助实现它。',
+  how_1:'写下你的愿望', how_2:'支付 2 WishCoins ($1.99)', how_3:'社区赞助', how_4:'愿望成真',
+  guard_title:'🛡️ 成为守护者', guard_sub:'这些愿望需要英雄。那个人能是你吗？',
+  pool_title:'💜 魔法池', pool_sub:'向许愿井投入硬币。每一分钱都有助于实现梦想。',
+  impact_title:'真实愿望。真实的人。', pin_btn:'📌 固定愿望',
+  cookie_txt:'🍪 我们使用必要的Cookie和可选的分析Cookie来改善网站。',
+  cookie_accept:'全部接受', cookie_reject:'仅必要',
+  footer_how:'工作原理', footer_guard:'成为守护者', footer_impact:'我们的影响',
+  footer_privacy:'隐私政策', footer_terms:'条款和条件', footer_cookies:'Cookie政策',
+  footer_about:'关于我们', footer_contact:'联系我们', footer_corporate:'企业合作',
+ },
+ ja: {
+  nav_wall:'🧱 ウォール', nav_impact:'💛 インパクト', nav_guard:'🛡️ ガーディアン', nav_how:'✨ マジック', nav_pin:'願いを固定',
+  hero_title:'ウィッシュウォール。', hero_sub:'匿名で願いを固定。世界中の見知らぬ人々がそれを実現させます。',
+  how_1:'願いを書く', how_2:'2 WishCoins ($1.99) 支払う', how_3:'コミュニティがスポンサー', how_4:'願いが叶う',
+  guard_title:'🛡️ ガーディアンになる', guard_sub:'これらの願いにはヒーローが必要です。あなたがなれますか？',
+  pool_title:'💜 マジックプール', pool_sub:'願い井戸にコインを投げ入れましょう。すべてのペニーが夢の実現を助けます。',
+  impact_title:'本物の願い。本物の人々。', pin_btn:'📌 願いを固定',
+  cookie_txt:'🍪 必須クッキーとオプションの分析クッキーを使用しています。',
+  cookie_accept:'すべて承認', cookie_reject:'必須のみ',
+  footer_how:'仕組み', footer_guard:'ガーディアンになる', footer_impact:'私たちの影響',
+  footer_privacy:'プライバシーポリシー', footer_terms:'利用規約', footer_cookies:'クッキーポリシー',
+  footer_about:'私たちについて', footer_contact:'お問い合わせ', footer_corporate:'法人向け',
+ },
+ ko: {
+  nav_wall:'🧱 소원 벽', nav_impact:'💛 임팩트', nav_guard:'🛡️ 가디언', nav_how:'✨ 마법', nav_pin:'소원 고정',
+  hero_title:'소원 벽.', hero_sub:'익명으로 소원을 고정하세요. 전 세계 낯선 사람들이 이를 실현시킵니다.',
+  how_1:'소원을 쓰세요', how_2:'2 WishCoins ($1.99) 지불', how_3:'커뮤니티가 후원', how_4:'소원이 이루어집니다',
+  guard_title:'🛡️ 가디언이 되세요', guard_sub:'이 소원들에는 영웅이 필요합니다. 당신이 될 수 있나요?',
+  pool_title:'💜 마법 풀', pool_sub:'소원 우물에 동전을 던지세요. 모든 페니가 꿈을 이루는 데 도움이 됩니다.',
+  impact_title:'진짜 소원. 진짜 사람들.', pin_btn:'📌 소원 고정',
+  cookie_txt:'🍪 필수 쿠키와 선택적 분석 쿠키를 사용합니다.',
+  cookie_accept:'모두 수락', cookie_reject:'필수만',
+  footer_how:'작동 방식', footer_guard:'가디언 되기', footer_impact:'우리의 영향',
+  footer_privacy:'개인정보 정책', footer_terms:'이용약관', footer_cookies:'쿠키 정책',
+  footer_about:'회사 소개', footer_contact:'문의하기', footer_corporate:'기업 파트너십',
+ },
+ it: {
+  nav_wall:'🧱 Il Muro', nav_impact:'💛 Impatto', nav_guard:'🛡️ Guardiani', nav_how:'✨ Magia', nav_pin:'Appunta Desiderio',
+  hero_title:'Il Muro dei Desideri.', hero_sub:'Appunta un desiderio anonimamente. Lascia che estranei da tutto il mondo lo realizzino.',
+  how_1:'Scrivi il tuo desiderio', how_2:'Paga 2 WishCoins ($1.99)', how_3:'La community lo sponsorizza', how_4:'Il tuo desiderio si avvera',
+  guard_title:'🛡️ Diventa un Guardiano', guard_sub:'Questi desideri hanno bisogno di un eroe. Potresti essere tu?',
+  pool_title:'💜 Il Pozzo Magico', pool_sub:'Lancia monete nel pozzo dei desideri. Ogni centesimo aiuta a realizzare un sogno.',
+  impact_title:'Veri Desideri. Vere Persone.', pin_btn:'📌 Appunta Desiderio',
+  cookie_txt:'🍪 Utilizziamo cookie essenziali e cookie analitici opzionali.',
+  cookie_accept:'Accetta Tutto', cookie_reject:'Solo Essenziali',
+  footer_how:'Come Funziona', footer_guard:'Diventa Guardiano', footer_impact:'Il Nostro Impatto',
+  footer_privacy:'Informativa Privacy', footer_terms:'Termini e Condizioni', footer_cookies:'Informativa Cookie',
+  footer_about:'Chi Siamo', footer_contact:'Contattaci', footer_corporate:'Aziende',
+ },
+ sw: {
+  nav_wall:'🧱 Ukuta', nav_impact:'💛 Athari', nav_guard:'🛡️ Walinda', nav_how:'✨ Uchawi', nav_pin:'Weka Tamaa',
+  hero_title:'Ukuta wa Matakwa.', hero_sub:'Weka tamaa yako bila kutajwa jina. Acha wageni kutoka kote ulimwenguni kuifanikisha.',
+  how_1:'Andika tamaa yako', how_2:'Lipa WishCoins 2 ($1.99)', how_3:'Jamii inaisaidia', how_4:'Tamaa yako inatimia',
+  guard_title:'🛡️ Kuwa Mlinda', guard_sub:'Matakwa haya yanahitaji shujaa. Je, unaweza kuwa wewe?',
+  pool_title:'💜 Bwawa la Uchawi', pool_sub:'Tupa sarafu kwenye kisima cha matakwa. Kila senti husaidia kutimiza ndoto.',
+  impact_title:'Matakwa Halisi. Watu Halisi.', pin_btn:'📌 Weka Tamaa',
+  cookie_txt:'🍪 Tunatumia vidakuzi vya msingi na vidakuzi vya uchanganuzi vya hiari.',
+  cookie_accept:'Kubali Yote', cookie_reject:'Muhimu Tu',
+  footer_how:'Jinsi Inavyofanya Kazi', footer_guard:'Kuwa Mlinda', footer_impact:'Athari Yetu',
+  footer_privacy:'Sera ya Faragha', footer_terms:'Masharti na Hali', footer_cookies:'Sera ya Vidakuzi',
+  footer_about:'Kuhusu Sisi', footer_contact:'Wasiliana Nasi', footer_corporate:'Makampuni',
+ },
+ tl: {
+  nav_wall:'🧱 Ang Pader', nav_impact:'💛 Epekto', nav_guard:'🛡️ Mga Bantay', nav_how:'✨ Mahika', nav_pin:'I-pin ang Wish',
+  hero_title:'Ang Pader ng mga Wish.', hero_sub:'Mag-pin ng wish nang hindi kilala. Hayaan ang mga estranghero mula sa buong mundo na gawin itong totoo.',
+  how_1:'Isulat ang iyong wish', how_2:'Magbayad ng 2 WishCoins ($1.99)', how_3:'Sinusuportahan ng komunidad', how_4:'Natutupad ang iyong wish',
+  guard_title:'🛡️ Maging Bantay', guard_sub:'Ang mga wish na ito ay nangangailangan ng bayani. Maaari ba itong ikaw?',
+  pool_title:'💜 Ang Magic Pool', pool_sub:'Magtapon ng barya sa balon ng mga wish. Bawat sentimo ay tumutulong sa isang pangarap.',
+  impact_title:'Tunay na mga Wish. Tunay na mga Tao.', pin_btn:'📌 I-pin ang Wish',
+  cookie_txt:'🍪 Gumagamit kami ng mga mahahalagang cookie at opsyonal na analytics cookies.',
+  cookie_accept:'Tanggapin Lahat', cookie_reject:'Mahahalaga Lang',
+  footer_how:'Paano Gumagana', footer_guard:'Maging Bantay', footer_impact:'Ang Aming Epekto',
+  footer_privacy:'Patakaran sa Privacy', footer_terms:'Mga Tuntunin at Kondisyon', footer_cookies:'Patakaran sa Cookie',
+  footer_about:'Tungkol sa Amin', footer_contact:'Makipag-ugnayan', footer_corporate:'Korporasyon',
+ },
+};
+
+const LANG_META = {
+ en:{flag:'🇺🇸',label:'EN',dir:'ltr'}, es:{flag:'🇪🇸',label:'ES',dir:'ltr'},
+ fr:{flag:'🇫🇷',label:'FR',dir:'ltr'}, de:{flag:'🇩🇪',label:'DE',dir:'ltr'},
+ pt:{flag:'🇧🇷',label:'PT',dir:'ltr'}, ar:{flag:'🇸🇦',label:'AR',dir:'rtl'},
+ hi:{flag:'🇮🇳',label:'HI',dir:'ltr'}, zh:{flag:'🇨🇳',label:'ZH',dir:'ltr'},
+ ja:{flag:'🇯🇵',label:'JA',dir:'ltr'}, ko:{flag:'🇰🇷',label:'KO',dir:'ltr'},
+ it:{flag:'🇮🇹',label:'IT',dir:'ltr'}, nl:{flag:'🇳🇱',label:'NL',dir:'ltr'},
+ ru:{flag:'🇷🇺',label:'RU',dir:'ltr'}, tr:{flag:'🇹🇷',label:'TR',dir:'ltr'},
+ pl:{flag:'🇵🇱',label:'PL',dir:'ltr'}, id:{flag:'🇮🇩',label:'ID',dir:'ltr'},
+ vi:{flag:'🇻🇳',label:'VI',dir:'ltr'}, th:{flag:'🇹🇭',label:'TH',dir:'ltr'},
+ sw:{flag:'🇰🇪',label:'SW',dir:'ltr'}, tl:{flag:'🇵🇭',label:'TL',dir:'ltr'},
+ ur:{flag:'🇵🇰',label:'UR',dir:'rtl'}, bn:{flag:'🇧🇩',label:'BN',dir:'ltr'},
+};
+
+function applyLang(lang){
+ const t = I18N[lang] || I18N.en;
+ const meta = LANG_META[lang] || LANG_META.en;
+ document.documentElement.lang = lang;
+ document.documentElement.dir = meta.dir;
+ document.querySelectorAll('[data-i18n]').forEach(el => {
+  const key = el.getAttribute('data-i18n');
+  if(t[key]) el.textContent = t[key];
+ });
+ const flag = document.getElementById('lang-flag');
+ const cur = document.getElementById('lang-current');
+ if(flag) flag.textContent = meta.flag;
+ if(cur) cur.textContent = meta.label;
+ document.querySelectorAll('.lang-opt').forEach(opt => {
+  opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+ });
+ if(meta.dir === 'rtl') document.body.style.textAlign = 'right';
+ else document.body.style.textAlign = '';
+}
+
+function setLang(lang){
+ localStorage.setItem('ww-lang', lang);
+ applyLang(lang);
+ const dd = document.getElementById('lang-dropdown');
+ if(dd) dd.classList.remove('open');
+}
+
+function toggleLangMenu(){
+ const dd = document.getElementById('lang-dropdown');
+ if(dd) dd.classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+ if(!e.target.closest('#lang-switcher')){
+  const dd = document.getElementById('lang-dropdown');
+  if(dd) dd.classList.remove('open');
+ }
+});
+
+(function initLang(){
+ const saved = localStorage.getItem('ww-lang');
+ const browser = (navigator.language || 'en').split('-')[0].toLowerCase();
+ const lang = saved || (I18N[browser] ? browser : 'en');
+ applyLang(lang);
+})();
+
 
 </script>
 
