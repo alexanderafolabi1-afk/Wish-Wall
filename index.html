@@ -229,8 +229,8 @@
  <div class="guardian-wish-from" id="guardian-wish-from"></div>
  </div>
 
- <h2 class="guardian-modal-title">You are about to make a wish real.</h2>
- <p class="guardian-modal-sub">Leave your email, we'll connect you with the wisher and send a beautiful receipt confirming exactly what you made real.</p>
+ <h2 class="guardian-modal-title" data-i18n="guardian_title">You are about to make a wish real.</h2>
+ <p class="guardian-modal-sub" data-i18n="guardian_sub">Leave your email, we'll connect you with the wisher and send a beautiful receipt confirming exactly what you made real.</p>
 
  <div class="guardian-email-field">
  <label class="guardian-email-label" for="guardian-email-inp">
@@ -2959,10 +2959,10 @@ button { touch-action: manipulation; }
  <span class="logo-txt">The Wish Wall</span>
  </a>
  <nav>
- <a href="#" class="nav-tab active" onclick="showTab('wall');return false;" data-tab="wall">🧱 The Wall</a>
- <a href="#" class="nav-tab" onclick="showTab('impact');return false;" data-tab="impact">💛 Impact</a>
- <a href="#" class="nav-tab" onclick="showTab('guard');return false;" data-tab="guard">🛡️ Guardians</a>
- <a href="#" class="nav-tab" onclick="showTab('how');return false;" data-tab="how">✨ Magic</a>
+ <a href="#" class="nav-tab active" onclick="showTab('wall');return false;" data-tab="wall"><span data-i18n="nav_wall">🧱 The Wall</span></a>
+ <a href="#" class="nav-tab" onclick="showTab('impact');return false;" data-tab="impact"><span data-i18n="nav_impact">💛 Impact</span></a>
+ <a href="#" class="nav-tab" onclick="showTab('guard');return false;" data-tab="guard"><span data-i18n="nav_guard">🛡️ Guardians</span></a>
+ <a href="#" class="nav-tab" onclick="showTab('how');return false;" data-tab="how"><span data-i18n="nav_how">✨ Magic</span></a>
  </nav>
  <div class="wishcoin-pill" id="wc-pill" title="Your WishCredits earn by referring friends" onclick="showTab('how')" style="display:none;">
  <span>🪙</span><span id="wc-count">0</span> WC
@@ -3014,20 +3014,20 @@ button { touch-action: manipulation; }
 
  <!-- HOW IT WORKS inline strip -->
  <div class="how-strip">
- <div class="how-step"><span class="how-step-n">1</span><span>Write your wish</span></div>
+ <div class="how-step"><span class="how-step-n">1</span><span data-i18n="how_step1">Write your wish</span></div>
  <div class="how-arrow">-></div>
- <div class="how-step"><span class="how-step-n">2</span><span>Pay 2 WishCoins ($1.99) to pin it</span></div>
+ <div class="how-step"><span class="how-step-n">2</span><span data-i18n="how_step2">Pay 2 WishCoins ($1.99) to pin it</span></div>
  <div class="how-arrow">-></div>
- <div class="how-step"><span class="how-step-n">3</span><span>Community sponsors it</span></div>
+ <div class="how-step"><span class="how-step-n">3</span><span data-i18n="how_step3">Community sponsors it</span></div>
  <div class="how-arrow">-></div>
- <div class="how-step"><span class="how-step-n">4</span><span>Wish gets granted ✨</span></div>
+ <div class="how-step"><span class="how-step-n">4</span><span data-i18n="how_step4">Wish gets granted ✨</span></div>
  </div>
 
  <div class="wall-toolbar">
- <input class="search-inp" type="text" id="srch-inp" placeholder="🔍 Search wishes..." oninput="filterWishes()">
- <button class="fil-btn active" onclick="setFilter('all',this)">All</button>
- <button class="fil-btn" onclick="setFilter('live',this)">🌟 Live</button>
- <button class="fil-btn" onclick="setFilter('granted',this)">✅ Granted</button>
+ <input class="search-inp" type="text" id="srch-inp" placeholder="🔍 Search wishes..." oninput="filterWishes()" data-i18n-ph="search_ph">
+ <button class="fil-btn active" onclick="setFilter('all',this)" data-i18n="filter_all">All</button>
+ <button class="fil-btn" onclick="setFilter('live',this)" data-i18n="filter_live">🌟 Live</button>
+ <button class="fil-btn" onclick="setFilter('granted',this)" data-i18n="filter_granted">✅ Granted</button>
  </div>
 
  <!--
@@ -3401,8 +3401,8 @@ button { touch-action: manipulation; }
  You can withdraw consent at any time.
  </p>
  <div class="cookie-btns">
- <button class="cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
- <button class="cookie-btn-reject" onclick="rejectCookies()">Essential Only</button>
+ <button class="cookie-btn-accept" onclick="acceptCookies()" data-i18n="cookie_accept">Accept All</button>
+ <button class="cookie-btn-reject" onclick="rejectCookies()" data-i18n="cookie_reject">Essential Only</button>
  </div>
 </div>
 
@@ -3451,8 +3451,8 @@ button { touch-action: manipulation; }
 
  <!-- STEP 1: Category + Wish Text -->
  <div id="modal-step-1">
- <h2 class="modal-title">What do you wish for?</h2>
- <p class="modal-sub">Be honest. Be specific. Be brave. The wall is listening.</p>
+ <h2 class="modal-title" data-i18n="modal_title">What do you wish for?</h2>
+ <p class="modal-sub" data-i18n="modal_sub">Be honest. Be specific. Be brave. The wall is listening.</p>
  <div class="modal-geo" id="modal-user-country" aria-live="polite">🌍 Detecting your location...</div>
 
  <!-- Category picker -->
@@ -3882,6 +3882,11 @@ async function detectUserCountry(){
  };
  // Set regional pricing based on detected country
  window._pricingTier = getRegionalTier(data.country);
+ // Auto-switch UI language based on country (only if user has no saved preference)
+ if(!localStorage.getItem('ww-lang') && typeof COUNTRY_LANG_MAP !== 'undefined'){
+   const geoLang = COUNTRY_LANG_MAP[data.country];
+   if(geoLang && typeof setLang === 'function') setLang(geoLang);
+ }
  // Update price displays
  document.querySelectorAll('.dynamic-price').forEach(el => {
  el.textContent = window._pricingTier.display;
@@ -6354,7 +6359,7 @@ function toast(msg, duration){
 }
 
 /* ============================================================
- LANGUAGE SWITCHER
+ LANGUAGE SWITCHER + GEO-LANGUAGE DETECTION
  ============================================================ */
 const LANG_LABELS = {
   en:'EN', es:'ES', fr:'FR', de:'DE', pt:'PT', ar:'AR',
@@ -6369,9 +6374,324 @@ const LANG_FLAGS = {
   sw:'🇰🇪', tl:'🇵🇭', ur:'🇵🇰', bn:'🇧🇩'
 };
 
+/* RTL languages */
+const RTL_LANGS = new Set(['ar', 'ur']);
+
+/* Country-code → UI language mapping used after IP geo-detection */
+const COUNTRY_LANG_MAP = {
+  ES:'es',MX:'es',AR:'es',CO:'es',CL:'es',PE:'es',VE:'es',EC:'es',BO:'es',
+  UY:'es',PY:'es',CR:'es',PA:'es',DO:'es',HN:'es',SV:'es',GT:'es',NI:'es',CU:'es',
+  FR:'fr',BE:'fr',CD:'fr',CI:'fr',SN:'fr',ML:'fr',MG:'fr',CM:'fr',
+  DE:'de',AT:'de',LI:'de',
+  BR:'pt',PT:'pt',AO:'pt',MZ:'pt',CV:'pt',
+  SA:'ar',AE:'ar',EG:'ar',MA:'ar',DZ:'ar',TN:'ar',LY:'ar',IQ:'ar',SY:'ar',
+  JO:'ar',LB:'ar',KW:'ar',QA:'ar',BH:'ar',OM:'ar',YE:'ar',SD:'ar',
+  IN:'hi',
+  CN:'zh',TW:'zh',HK:'zh',
+  JP:'ja',
+  KR:'ko',
+  IT:'it',
+  NL:'nl',
+  RU:'ru',BY:'ru',KZ:'ru',
+  TR:'tr',
+  PL:'pl',
+  ID:'id',
+  VN:'vi',
+  TH:'th',
+  KE:'sw',TZ:'sw',UG:'sw',
+  PH:'tl',
+  PK:'ur',
+  BD:'bn',
+};
+
+/* Translation strings for all supported languages */
+const TRANSLATIONS = {
+  en:{
+    nav_wall:'🧱 The Wall',nav_impact:'💛 Impact',nav_guard:'🛡️ Guardians',nav_how:'✨ Magic',
+    nav_pin:'Pin a Wish',how_step1:'Write your wish',how_step2:'Pay 2 WishCoins ($1.99) to pin it',
+    how_step3:'Community sponsors it',how_step4:'Wish gets granted ✨',filter_all:'All',
+    filter_live:'🌟 Live',filter_granted:'✅ Granted',search_ph:'🔍 Search wishes...',
+    modal_title:'What do you wish for?',modal_sub:'Be honest. Be specific. Be brave. The wall is listening.',
+    geo_detecting:'🌍 Detecting your location...',
+    guardian_title:'You are about to make a wish real.',
+    guardian_sub:"Leave your email, we'll connect you with the wisher and send a beautiful receipt confirming exactly what you made real.",
+    cookie_accept:'Accept All',cookie_reject:'Essential Only',
+    nav_pin_full:'📌 Pin a Wish',become_guardian:'🛡️ Become a Guardian',
+  },
+  es:{
+    nav_wall:'🧱 El Muro',nav_impact:'💛 Impacto',nav_guard:'🛡️ Guardianes',nav_how:'✨ Magia',
+    nav_pin:'Fijar un Deseo',how_step1:'Escribe tu deseo',how_step2:'Paga 2 WishCoins ($1.99) para fijarlo',
+    how_step3:'La comunidad lo patrocina',how_step4:'El deseo se cumple ✨',filter_all:'Todos',
+    filter_live:'🌟 En Vivo',filter_granted:'✅ Cumplidos',search_ph:'🔍 Buscar deseos...',
+    modal_title:'¿Qué deseas?',modal_sub:'Sé honesto. Sé específico. Sé valiente. El muro escucha.',
+    geo_detecting:'🌍 Detectando tu ubicación...',
+    guardian_title:'Estás a punto de hacer realidad un deseo.',
+    guardian_sub:'Deja tu correo y te conectaremos con el deseante enviando un recibo.',
+    cookie_accept:'Aceptar Todo',cookie_reject:'Solo Esenciales',
+    nav_pin_full:'📌 Fijar un Deseo',become_guardian:'🛡️ Ser Guardián',
+  },
+  fr:{
+    nav_wall:'🧱 Le Mur',nav_impact:'💛 Impact',nav_guard:'🛡️ Gardiens',nav_how:'✨ Magie',
+    nav_pin:'Épingler un Vœu',how_step1:'Écris ton vœu',how_step2:"Paye 2 WishCoins ($1.99) pour l'épingler",
+    how_step3:'La communauté le sponsorise',how_step4:'Le vœu est exaucé ✨',filter_all:'Tous',
+    filter_live:'🌟 En Direct',filter_granted:'✅ Exaucés',search_ph:'🔍 Rechercher des vœux...',
+    modal_title:'Que souhaitez-vous ?',modal_sub:'Soyez honnête. Précis. Courageux. Le mur écoute.',
+    geo_detecting:'🌍 Détection de votre emplacement...',
+    guardian_title:'Vous êtes sur le point de réaliser un vœu.',
+    guardian_sub:"Laissez votre email, nous vous mettrons en contact avec le souhaiteur et enverrons un reçu.",
+    cookie_accept:'Tout Accepter',cookie_reject:'Essentiels Seulement',
+    nav_pin_full:'📌 Épingler un Vœu',become_guardian:'🛡️ Devenir Gardien',
+  },
+  de:{
+    nav_wall:'🧱 Die Wand',nav_impact:'💛 Wirkung',nav_guard:'🛡️ Hüter',nav_how:'✨ Magie',
+    nav_pin:'Wunsch anheften',how_step1:'Schreib deinen Wunsch',how_step2:'Zahle 2 WishCoins ($1.99) zum Anheften',
+    how_step3:'Community unterstützt ihn',how_step4:'Wunsch wird erfüllt ✨',filter_all:'Alle',
+    filter_live:'🌟 Live',filter_granted:'✅ Erfüllt',search_ph:'🔍 Wünsche suchen...',
+    modal_title:'Was wünschst du dir?',modal_sub:'Sei ehrlich. Sei konkret. Sei mutig. Die Wand hört zu.',
+    geo_detecting:'🌍 Standort wird ermittelt...',
+    guardian_title:'Du bist dabei, einen Wunsch wahr zu machen.',
+    guardian_sub:'Hinterlasse deine E-Mail, wir verbinden dich mit dem Wünschenden und senden eine Quittung.',
+    cookie_accept:'Alle akzeptieren',cookie_reject:'Nur Essentielle',
+    nav_pin_full:'📌 Wunsch anheften',become_guardian:'🛡️ Hüter werden',
+  },
+  pt:{
+    nav_wall:'🧱 O Mural',nav_impact:'💛 Impacto',nav_guard:'🛡️ Guardiões',nav_how:'✨ Magia',
+    nav_pin:'Fixar um Desejo',how_step1:'Escreva seu desejo',how_step2:'Pague 2 WishCoins ($1,99) para fixar',
+    how_step3:'Comunidade patrocina',how_step4:'Desejo realizado ✨',filter_all:'Todos',
+    filter_live:'🌟 Ao Vivo',filter_granted:'✅ Realizados',search_ph:'🔍 Pesquisar desejos...',
+    modal_title:'O que você deseja?',modal_sub:'Seja honesto. Seja específico. Seja corajoso. O mural está ouvindo.',
+    geo_detecting:'🌍 Detectando sua localização...',
+    guardian_title:'Você está prestes a tornar um desejo real.',
+    guardian_sub:'Deixe seu email, vamos conectá-lo com o desejante e enviar um recibo.',
+    cookie_accept:'Aceitar Tudo',cookie_reject:'Apenas Essenciais',
+    nav_pin_full:'📌 Fixar um Desejo',become_guardian:'🛡️ Ser Guardião',
+  },
+  ar:{
+    nav_wall:'🧱 الجدار',nav_impact:'💛 الأثر',nav_guard:'🛡️ الحُرّاس',nav_how:'✨ السحر',
+    nav_pin:'تثبيت أمنية',how_step1:'اكتب أمنيتك',how_step2:'ادفع 2 WishCoins ($1.99) لتثبيتها',
+    how_step3:'يدعمها المجتمع',how_step4:'تتحقق الأمنية ✨',filter_all:'الكل',
+    filter_live:'🌟 مباشر',filter_granted:'✅ محقّقة',search_ph:'🔍 ابحث عن الأمنيات...',
+    modal_title:'ماذا تتمنى؟',modal_sub:'كن صادقاً. كن محدداً. كن شجاعاً. الجدار يسمعك.',
+    geo_detecting:'🌍 جارٍ تحديد موقعك...',
+    guardian_title:'أنت على وشك تحقيق أمنية.',
+    guardian_sub:'اترك بريدك الإلكتروني وسنربطك بصاحب الأمنية ونرسل إيصالاً.',
+    cookie_accept:'قبول الكل',cookie_reject:'الضرورية فقط',
+    nav_pin_full:'📌 تثبيت أمنية',become_guardian:'🛡️ كن حارساً',
+  },
+  hi:{
+    nav_wall:'🧱 दीवार',nav_impact:'💛 प्रभाव',nav_guard:'🛡️ संरक्षक',nav_how:'✨ जादू',
+    nav_pin:'इच्छा पिन करें',how_step1:'अपनी इच्छा लिखें',how_step2:'2 WishCoins ($1.99) दें और पिन करें',
+    how_step3:'समुदाय प्रायोजित करता है',how_step4:'इच्छा पूरी होती है ✨',filter_all:'सभी',
+    filter_live:'🌟 लाइव',filter_granted:'✅ पूरी हुई',search_ph:'🔍 इच्छाएँ खोजें...',
+    modal_title:'आप क्या चाहते हैं?',modal_sub:'ईमानदार रहें। विशिष्ट रहें। साहसी रहें। दीवार सुन रही है।',
+    geo_detecting:'🌍 आपका स्थान पता लगाया जा रहा है...',
+    guardian_title:'आप एक इच्छा को सच करने वाले हैं।',
+    guardian_sub:'अपना ईमेल छोड़ें, हम आपको इच्छाधारी से जोड़ेंगे और रसीद भेजेंगे।',
+    cookie_accept:'सभी स्वीकार करें',cookie_reject:'केवल आवश्यक',
+    nav_pin_full:'📌 इच्छा पिन करें',become_guardian:'🛡️ संरक्षक बनें',
+  },
+  zh:{
+    nav_wall:'🧱 心愿墙',nav_impact:'💛 影响力',nav_guard:'🛡️ 守护者',nav_how:'✨ 魔法',
+    nav_pin:'发布心愿',how_step1:'写下你的心愿',how_step2:'支付 2 WishCoins（$1.99）发布',
+    how_step3:'社区赞助',how_step4:'心愿实现 ✨',filter_all:'全部',
+    filter_live:'🌟 进行中',filter_granted:'✅ 已实现',search_ph:'🔍 搜索心愿...',
+    modal_title:'你有什么心愿？',modal_sub:'诚实。具体。勇敢。心愿墙在倾听。',
+    geo_detecting:'🌍 正在检测您的位置...',
+    guardian_title:'您即将让一个心愿成真。',
+    guardian_sub:'留下您的邮箱，我们将联系您与许愿者并发送确认收据。',
+    cookie_accept:'全部接受',cookie_reject:'仅必要',
+    nav_pin_full:'📌 发布心愿',become_guardian:'🛡️ 成为守护者',
+  },
+  ja:{
+    nav_wall:'🧱 ウォール',nav_impact:'💛 インパクト',nav_guard:'🛡️ ガーディアン',nav_how:'✨ マジック',
+    nav_pin:'願いをピン',how_step1:'願いを書く',how_step2:'2 WishCoins（$1.99）でピン留め',
+    how_step3:'コミュニティがサポート',how_step4:'願いが叶う ✨',filter_all:'すべて',
+    filter_live:'🌟 ライブ',filter_granted:'✅ 叶った',search_ph:'🔍 願いを検索...',
+    modal_title:'何を願いますか？',modal_sub:'正直に。具体的に。勇気を持って。ウォールが聴いています。',
+    geo_detecting:'🌍 位置を検出中...',
+    guardian_title:'願いを叶えようとしています。',
+    guardian_sub:'メールアドレスを残してください。願い主とつなぎ、領収書をお送りします。',
+    cookie_accept:'すべて承認',cookie_reject:'必須のみ',
+    nav_pin_full:'📌 願いをピン',become_guardian:'🛡️ ガーディアンになる',
+  },
+  ko:{
+    nav_wall:'🧱 소원 벽',nav_impact:'💛 임팩트',nav_guard:'🛡️ 가디언',nav_how:'✨ 마법',
+    nav_pin:'소원 핀하기',how_step1:'소원을 작성하세요',how_step2:'2 WishCoins ($1.99)로 핀 고정',
+    how_step3:'커뮤니티가 후원합니다',how_step4:'소원이 이루어집니다 ✨',filter_all:'전체',
+    filter_live:'🌟 진행 중',filter_granted:'✅ 이루어짐',search_ph:'🔍 소원 검색...',
+    modal_title:'무엇을 바라시나요?',modal_sub:'솔직하게. 구체적으로. 용감하게. 벽이 듣고 있습니다.',
+    geo_detecting:'🌍 위치 감지 중...',
+    guardian_title:'소원을 이루어 드리려고 합니다.',
+    guardian_sub:'이메일을 남겨주세요. 소원을 빈 사람과 연결하고 영수증을 보내드립니다.',
+    cookie_accept:'모두 수락',cookie_reject:'필수만',
+    nav_pin_full:'📌 소원 핀하기',become_guardian:'🛡️ 가디언 되기',
+  },
+  it:{
+    nav_wall:'🧱 Il Muro',nav_impact:'💛 Impatto',nav_guard:'🛡️ Guardiani',nav_how:'✨ Magia',
+    nav_pin:'Appunta un Desiderio',how_step1:'Scrivi il tuo desiderio',how_step2:'Paga 2 WishCoins ($1,99) per appuntarlo',
+    how_step3:'La comunità lo sponsorizza',how_step4:'Il desiderio si avvera ✨',filter_all:'Tutti',
+    filter_live:'🌟 In Diretta',filter_granted:'✅ Realizzati',search_ph:'🔍 Cerca desideri...',
+    modal_title:'Cosa desideri?',modal_sub:'Sii onesto. Sii specifico. Sii coraggioso. Il muro ascolta.',
+    geo_detecting:'🌍 Rilevamento posizione...',
+    guardian_title:'Stai per realizzare un desiderio.',
+    guardian_sub:'Lascia la tua email, ti metteremo in contatto con chi ha espresso il desiderio.',
+    cookie_accept:'Accetta Tutto',cookie_reject:'Solo Essenziali',
+    nav_pin_full:'📌 Appunta un Desiderio',become_guardian:'🛡️ Diventa Guardiano',
+  },
+  nl:{
+    nav_wall:'🧱 De Muur',nav_impact:'💛 Impact',nav_guard:'🛡️ Wachters',nav_how:'✨ Magie',
+    nav_pin:'Wens Vastprikken',how_step1:'Schrijf je wens',how_step2:'Betaal 2 WishCoins ($1,99) om te pinnen',
+    how_step3:'Community sponsort het',how_step4:'Wens wordt vervuld ✨',filter_all:'Alles',
+    filter_live:'🌟 Live',filter_granted:'✅ Vervuld',search_ph:'🔍 Wensen zoeken...',
+    modal_title:'Wat wens je?',modal_sub:'Wees eerlijk. Wees specifiek. Wees moedig. De muur luistert.',
+    geo_detecting:'🌍 Locatie detecteren...',
+    guardian_title:'Je staat op het punt een wens te vervullen.',
+    guardian_sub:'Laat je email achter, we verbinden je met de wenser en sturen een bevestiging.',
+    cookie_accept:'Alles Accepteren',cookie_reject:'Alleen Essentieel',
+    nav_pin_full:'📌 Wens Vastprikken',become_guardian:'🛡️ Word Wachter',
+  },
+  ru:{
+    nav_wall:'🧱 Стена',nav_impact:'💛 Влияние',nav_guard:'🛡️ Хранители',nav_how:'✨ Магия',
+    nav_pin:'Загадать желание',how_step1:'Напишите желание',how_step2:'Заплатите 2 WishCoins ($1.99) для публикации',
+    how_step3:'Сообщество поддерживает',how_step4:'Желание исполняется ✨',filter_all:'Все',
+    filter_live:'🌟 Активные',filter_granted:'✅ Исполненные',search_ph:'🔍 Поиск желаний...',
+    modal_title:'О чём вы мечтаете?',modal_sub:'Будьте честны. Будьте конкретны. Будьте смелы. Стена слушает.',
+    geo_detecting:'🌍 Определение местоположения...',
+    guardian_title:'Вы готовы исполнить желание.',
+    guardian_sub:'Оставьте email, мы свяжем вас с желающим и отправим подтверждение.',
+    cookie_accept:'Принять все',cookie_reject:'Только обязательные',
+    nav_pin_full:'📌 Загадать желание',become_guardian:'🛡️ Стать хранителем',
+  },
+  tr:{
+    nav_wall:'🧱 Duvar',nav_impact:'💛 Etki',nav_guard:'🛡️ Koruyucular',nav_how:'✨ Sihir',
+    nav_pin:'Dilek Sabitle',how_step1:'Dileğini yaz',how_step2:'2 WishCoins ($1.99) öde ve sabitle',
+    how_step3:'Topluluk destekler',how_step4:'Dilek gerçekleşir ✨',filter_all:'Tümü',
+    filter_live:'🌟 Canlı',filter_granted:'✅ Gerçekleşti',search_ph:'🔍 Dilekleri ara...',
+    modal_title:'Ne dilemek istiyorsun?',modal_sub:'Dürüst ol. Spesifik ol. Cesur ol. Duvar dinliyor.',
+    geo_detecting:'🌍 Konum tespit ediliyor...',
+    guardian_title:'Bir dileği gerçekleştirmek üzeresiniz.',
+    guardian_sub:'Email bırakın, dilekçiyle bağlantı kuralım ve makbuz gönderelim.',
+    cookie_accept:'Tümünü Kabul Et',cookie_reject:'Yalnızca Temel',
+    nav_pin_full:'📌 Dilek Sabitle',become_guardian:'🛡️ Koruyucu Ol',
+  },
+  pl:{
+    nav_wall:'🧱 Ściana',nav_impact:'💛 Wpływ',nav_guard:'🛡️ Strażnicy',nav_how:'✨ Magia',
+    nav_pin:'Przypnij życzenie',how_step1:'Napisz swoje życzenie',how_step2:'Zapłać 2 WishCoins ($1.99) by przypiąć',
+    how_step3:'Społeczność sponsoruje',how_step4:'Życzenie spełnione ✨',filter_all:'Wszystkie',
+    filter_live:'🌟 Na żywo',filter_granted:'✅ Spełnione',search_ph:'🔍 Szukaj życzeń...',
+    modal_title:'O czym marzysz?',modal_sub:'Bądź szczery. Bądź konkretny. Bądź odważny. Ściana słucha.',
+    geo_detecting:'🌍 Wykrywanie lokalizacji...',
+    guardian_title:'Zaraz spełnisz czyjeś życzenie.',
+    guardian_sub:'Zostaw email, skontaktujemy cię z życzącym i wyślemy potwierdzenie.',
+    cookie_accept:'Akceptuj wszystkie',cookie_reject:'Tylko niezbędne',
+    nav_pin_full:'📌 Przypnij życzenie',become_guardian:'🛡️ Zostań Strażnikiem',
+  },
+  id:{
+    nav_wall:'🧱 Tembok',nav_impact:'💛 Dampak',nav_guard:'🛡️ Penjaga',nav_how:'✨ Keajaiban',
+    nav_pin:'Pasang Keinginan',how_step1:'Tulis keinginanmu',how_step2:'Bayar 2 WishCoins ($1.99) untuk memasang',
+    how_step3:'Komunitas mendukungnya',how_step4:'Keinginan terkabul ✨',filter_all:'Semua',
+    filter_live:'🌟 Langsung',filter_granted:'✅ Terkabul',search_ph:'🔍 Cari keinginan...',
+    modal_title:'Apa yang kamu inginkan?',modal_sub:'Jujurlah. Spesifik. Berani. Tembok mendengarmu.',
+    geo_detecting:'🌍 Mendeteksi lokasimu...',
+    guardian_title:'Kamu akan mewujudkan keinginan seseorang.',
+    guardian_sub:'Tinggalkan emailmu, kami akan menghubungkanmu dan mengirim kwitansi.',
+    cookie_accept:'Terima Semua',cookie_reject:'Esensial Saja',
+    nav_pin_full:'📌 Pasang Keinginan',become_guardian:'🛡️ Jadi Penjaga',
+  },
+  vi:{
+    nav_wall:'🧱 Bức Tường',nav_impact:'💛 Tác Động',nav_guard:'🛡️ Người Bảo Hộ',nav_how:'✨ Phép Màu',
+    nav_pin:'Ghim Điều Ước',how_step1:'Viết điều ước của bạn',how_step2:'Trả 2 WishCoins ($1.99) để ghim',
+    how_step3:'Cộng đồng tài trợ',how_step4:'Điều ước được thực hiện ✨',filter_all:'Tất cả',
+    filter_live:'🌟 Đang chờ',filter_granted:'✅ Đã thực hiện',search_ph:'🔍 Tìm kiếm điều ước...',
+    modal_title:'Bạn mong muốn điều gì?',modal_sub:'Thành thật. Cụ thể. Dũng cảm. Bức tường đang lắng nghe.',
+    geo_detecting:'🌍 Đang phát hiện vị trí của bạn...',
+    guardian_title:'Bạn sắp hiện thực hóa một điều ước.',
+    guardian_sub:'Để lại email, chúng tôi sẽ kết nối bạn và gửi biên lai.',
+    cookie_accept:'Chấp nhận tất cả',cookie_reject:'Chỉ cần thiết',
+    nav_pin_full:'📌 Ghim Điều Ước',become_guardian:'🛡️ Trở Thành Người Bảo Hộ',
+  },
+  th:{
+    nav_wall:'🧱 กำแพง',nav_impact:'💛 ผลกระทบ',nav_guard:'🛡️ ผู้พิทักษ์',nav_how:'✨ เวทมนตร์',
+    nav_pin:'ปักความปรารถนา',how_step1:'เขียนความปรารถนาของคุณ',how_step2:'จ่าย 2 WishCoins ($1.99) เพื่อปัก',
+    how_step3:'ชุมชนสนับสนุน',how_step4:'ความปรารถนาเป็นจริง ✨',filter_all:'ทั้งหมด',
+    filter_live:'🌟 กำลังดำเนินการ',filter_granted:'✅ สำเร็จแล้ว',search_ph:'🔍 ค้นหาความปรารถนา...',
+    modal_title:'คุณปรารถนาอะไร?',modal_sub:'ซื่อสัตย์ ระบุให้ชัดเจน กล้าหาญ กำแพงกำลังฟัง',
+    geo_detecting:'🌍 กำลังตรวจหาตำแหน่งของคุณ...',
+    guardian_title:'คุณกำลังจะทำให้ความปรารถนาเป็นจริง',
+    guardian_sub:'ทิ้งอีเมลไว้ เราจะเชื่อมต่อคุณและส่งใบเสร็จ',
+    cookie_accept:'ยอมรับทั้งหมด',cookie_reject:'เฉพาะที่จำเป็น',
+    nav_pin_full:'📌 ปักความปรารถนา',become_guardian:'🛡️ เป็นผู้พิทักษ์',
+  },
+  sw:{
+    nav_wall:'🧱 Ukuta',nav_impact:'💛 Athari',nav_guard:'🛡️ Walinzi',nav_how:'✨ Uchawi',
+    nav_pin:'Banda Tamaa',how_step1:'Andika tamaa yako',how_step2:'Lipa WishCoins 2 ($1.99) kuipiga pini',
+    how_step3:'Jamii inasponsor',how_step4:'Tamaa inatimizwa ✨',filter_all:'Zote',
+    filter_live:'🌟 Hai',filter_granted:'✅ Zilizotimizwa',search_ph:'🔍 Tafuta tamaa...',
+    modal_title:'Unatamani nini?',modal_sub:'Kuwa mkweli. Kuwa mwazi. Kuwa jasiri. Ukuta unasikia.',
+    geo_detecting:'🌍 Kugunduwa eneo lako...',
+    guardian_title:'Uko karibu kutimiza tamaa.',
+    guardian_sub:'Acha barua pepe yako, tutakuunganisha na aliyetamani na kutuma risiti.',
+    cookie_accept:'Kubali Zote',cookie_reject:'Muhimu Tu',
+    nav_pin_full:'📌 Banda Tamaa',become_guardian:'🛡️ Kuwa Mlinzi',
+  },
+  tl:{
+    nav_wall:'🧱 Ang Pader',nav_impact:'💛 Epekto',nav_guard:'🛡️ Mga Tagapagtanggol',nav_how:'✨ Mahika',
+    nav_pin:'I-pin ang Kagustuhan',how_step1:'Isulat ang iyong kagustuhan',how_step2:'Magbayad ng 2 WishCoins ($1.99) para i-pin',
+    how_step3:'Sinusuportahan ng komunidad',how_step4:'Natutupad ang kagustuhan ✨',filter_all:'Lahat',
+    filter_live:'🌟 Buhay',filter_granted:'✅ Natupad',search_ph:'🔍 Maghanap ng kagustuhan...',
+    modal_title:'Ano ang iyong kagustuhan?',modal_sub:'Maging tapat. Maging tiyak. Maging matapang. Nakikinig ang pader.',
+    geo_detecting:'🌍 Nide-detect ang iyong lokasyon...',
+    guardian_title:'Malapit ka nang gawing totoo ang isang kagustuhan.',
+    guardian_sub:'Mag-iwan ng email, ikokonekta ka namin at magpapadala ng resibo.',
+    cookie_accept:'Tanggapin Lahat',cookie_reject:'Mahahalaga Lang',
+    nav_pin_full:'📌 I-pin ang Kagustuhan',become_guardian:'🛡️ Maging Tagapagtanggol',
+  },
+  ur:{
+    nav_wall:'🧱 دیوار',nav_impact:'💛 اثر',nav_guard:'🛡️ محافظ',nav_how:'✨ جادو',
+    nav_pin:'خواہش لگائیں',how_step1:'اپنی خواہش لکھیں',how_step2:'2 WishCoins ($1.99) ادا کریں',
+    how_step3:'کمیونٹی اسپانسر کرتی ہے',how_step4:'خواہش پوری ہوتی ہے ✨',filter_all:'سب',
+    filter_live:'🌟 لائیو',filter_granted:'✅ پوری ہوئی',search_ph:'🔍 خواہشات تلاش کریں...',
+    modal_title:'آپ کیا چاہتے ہیں؟',modal_sub:'ایمانداری سے۔ مخصوص بنائیں۔ دلیر رہیں۔ دیوار سن رہی ہے۔',
+    geo_detecting:'🌍 آپ کا مقام معلوم ہو رہا ہے...',
+    guardian_title:'آپ ایک خواہش پوری کرنے والے ہیں۔',
+    guardian_sub:'اپنا ای میل چھوڑیں، ہم آپ کو خواہش مند سے جوڑیں گے اور رسید بھیجیں گے۔',
+    cookie_accept:'سب قبول کریں',cookie_reject:'صرف ضروری',
+    nav_pin_full:'📌 خواہش لگائیں',become_guardian:'🛡️ محافظ بنیں',
+  },
+  bn:{
+    nav_wall:'🧱 দেয়াল',nav_impact:'💛 প্রভাব',nav_guard:'🛡️ অভিভাবক',nav_how:'✨ জাদু',
+    nav_pin:'ইচ্ছা পিন করুন',how_step1:'আপনার ইচ্ছা লিখুন',how_step2:'2 WishCoins ($1.99) পরিশোধ করুন',
+    how_step3:'সম্প্রদায় স্পনসর করে',how_step4:'ইচ্ছা পূর্ণ হয় ✨',filter_all:'সব',
+    filter_live:'🌟 লাইভ',filter_granted:'✅ পূর্ণ হয়েছে',search_ph:'🔍 ইচ্ছা খুঁজুন...',
+    modal_title:'আপনি কী চান?',modal_sub:'সৎ থাকুন। নির্দিষ্ট হন। সাহসী হন। দেয়াল শুনছে।',
+    geo_detecting:'🌍 আপনার অবস্থান সনাক্ত করা হচ্ছে...',
+    guardian_title:'আপনি একটি ইচ্ছা পূরণ করতে যাচ্ছেন।',
+    guardian_sub:'আপনার ইমেইল রাখুন, আমরা আপনাকে ইচ্ছাকারীর সাথে সংযুক্ত করব।',
+    cookie_accept:'সব গ্রহণ করুন',cookie_reject:'শুধু প্রয়োজনীয়',
+    nav_pin_full:'📌 ইচ্ছা পিন করুন',become_guardian:'🛡️ অভিভাবক হন',
+  },
+};
+
 function toggleLangMenu(){
   const dd = document.getElementById('lang-dropdown');
   if(dd) dd.classList.toggle('open');
+}
+
+function applyTranslations(lang){
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  /* text content nodes */
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(t[key] !== undefined) el.textContent = t[key];
+  });
+  /* placeholder attributes */
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if(t[key] !== undefined) el.setAttribute('placeholder', t[key]);
+  });
+  /* html lang + dir for RTL support */
+  document.documentElement.lang = lang;
+  document.documentElement.dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
 }
 
 function setLang(lang){
@@ -6381,18 +6701,27 @@ function setLang(lang){
   const currentEl = document.getElementById('lang-current');
   if(flagEl) flagEl.textContent = flag;
   if(currentEl) currentEl.textContent = label;
-  // Update active state in dropdown
   document.querySelectorAll('.lang-opt').forEach(opt => {
     opt.classList.toggle('active', opt.dataset.lang === lang);
   });
-  // Close dropdown
   const dd = document.getElementById('lang-dropdown');
   if(dd) dd.classList.remove('open');
-  // Store preference
   localStorage.setItem('ww-lang', lang);
+  applyTranslations(lang);
 }
 
-// Close language dropdown when clicking outside, and restore saved language
+/* Resolve browser language to a supported lang code, or null */
+function resolveBrowserLang(){
+  const supported = Object.keys(TRANSLATIONS);
+  const prefs = navigator.languages ? Array.from(navigator.languages) : [navigator.language || 'en'];
+  for(const pref of prefs){
+    const base = pref.split('-')[0].toLowerCase();
+    if(supported.includes(base) && base !== 'en') return base;
+  }
+  return null;
+}
+
+/* Close language dropdown when clicking outside; auto-detect language on load */
 function initLangSwitcher(){
   document.addEventListener('click', function(e){
     const switcher = document.getElementById('lang-switcher');
@@ -6401,8 +6730,15 @@ function initLangSwitcher(){
       if(dd) dd.classList.remove('open');
     }
   });
+  /* Priority: 1) user saved pref  2) browser language  3) English default */
   const saved = localStorage.getItem('ww-lang');
-  if(saved && saved !== 'en') setLang(saved);
+  if(saved && TRANSLATIONS[saved]){
+    setLang(saved);
+  } else {
+    const browserLang = resolveBrowserLang();
+    if(browserLang) setLang(browserLang);
+    /* else stay at English – applyTranslations('en') not needed (page already in English) */
+  }
 }
 if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', initLangSwitcher);
