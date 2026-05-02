@@ -3882,10 +3882,14 @@ async function detectUserCountry(){
  };
  // Set regional pricing based on detected country
  window._pricingTier = getRegionalTier(data.country);
- // Auto-switch UI language based on country (only if user has no saved preference)
+ // Auto-switch UI language based on country.
+ // This runs 3 s after page load (see setTimeout at bottom of file).
+ // initLangSwitcher() fires at DOMContentLoaded and saves any browser-language
+ // match to localStorage BEFORE this code runs, so priority order is:
+ //   1) user's saved preference  2) browser language  3) IP geo  4) English
  if(!localStorage.getItem('ww-lang')){
    const geoLang = COUNTRY_LANG_MAP[data.country];
-   if(geoLang) setLang(geoLang);
+   if(geoLang && typeof setLang === 'function') setLang(geoLang);
  }
  // Update price displays
  document.querySelectorAll('.dynamic-price').forEach(el => {
