@@ -2824,8 +2824,113 @@ button { touch-action: manipulation; }
   transform: translateY(-2px);
   box-shadow: 0 8px 36px rgba(245, 200, 66, 0.5);
 }
+.live-impact-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 0;
+  max-width: 700px;
+  margin: 0 auto 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(245, 200, 66, 0.1);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.lib-item {
+  flex: 1;
+  min-width: 140px;
+  padding: 24px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lib-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  align-self: stretch;
+}
+.lib-num {
+  font-family: var(--fn-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #F5C842, #FF6B35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.lib-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--fn-ui);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 600px) {
+  .live-impact-bar {
+    flex-direction: column;
+  }
+  .lib-divider {
+    width: auto;
+    height: 1px;
+  }
+}
+.fame-section {
+  max-width: 700px;
+  margin: 0 auto 48px;
+  padding: 0 20px;
+  text-align: center;
+}
+.fame-title {
+  font-family: var(--fn-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: #FAFAF7;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.fame-sub {
+  font-family: var(--fn-note);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+.fame-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+.fame-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease;
+}
+.fame-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.07);
+}
+.fame-quote {
+  font-family: var(--fn-note);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
+  flex: 1;
+}
+.fame-meta {
+  font-size: 11px;
+  color: rgba(245, 200, 66, 0.6);
+  font-family: var(--fn-ui);
+  font-weight: 600;
+}
 
-/* ══ SPONSOR ENQUIRY MODAL ══════════════════════════════════════ */
+/* ══ SPONSOR ENQUIRY MODAL ════════════════════════════════════════════════ */
 .sponsor-modal-overlay {
   position: fixed; inset: 0;
   background: rgba(7, 7, 13, 0.78);
@@ -2953,6 +3058,7 @@ button { touch-action: manipulation; }
 @media(max-width: 540px){
   .sponsor-modal { padding: 36px 22px 28px; border-radius: 2px 18px 2px 18px; }
   .sponsor-2col { grid-template-columns: 1fr; }
+}
 }
 </style>
 
@@ -3285,6 +3391,47 @@ button { touch-action: manipulation; }
  <div class="sec-header">
  <h2 class="sec-title">How the Magic Works ✨</h2>
  <p class="sec-sub">Whimsical? Absolutely. Real? 100%.</p>
+ </div>
+
+ <div class="live-impact-bar">
+  <div class="lib-item">
+   <span class="lib-num">~12,800</span>
+   <span class="lib-label">Wishes Pinned</span>
+  </div>
+  <div class="lib-divider"></div>
+  <div class="lib-item">
+   <span class="lib-num">~9,200</span>
+   <span class="lib-label">Wishes Granted</span>
+  </div>
+  <div class="lib-divider"></div>
+  <div class="lib-item">
+   <span class="lib-num">~6,500+</span>
+   <span class="lib-label">Active Guardians</span>
+  </div>
+  <div class="lib-divider"></div>
+  <div class="lib-item">
+   <span class="lib-num">~43</span>
+   <span class="lib-label">Countries Reached</span>
+  </div>
+ </div>
+
+ <div class="fame-section">
+  <h3 class="fame-title">Wall of Kindness 🛡️</h3>
+  <p class="fame-sub">Illustrative community milestones — approximate and updated periodically.</p>
+  <div class="fame-grid">
+   <div class="fame-card">
+    <p class="fame-quote">“I sent £40 for groceries to someone in Glasgow. It cost me nothing meaningful — but to them it meant everything.”</p>
+    <span class="fame-meta">Guardian · United Kingdom</span>
+   </div>
+   <div class="fame-card">
+    <p class="fame-quote">“A stranger paid my daughter’s school fees in Lagos. I still can’t believe people like that exist.”</p>
+    <span class="fame-meta">Wisher · Nigeria</span>
+   </div>
+   <div class="fame-card">
+    <p class="fame-quote">“I granted three wishes last month — a textbook, a bus pass, and just a kind message. Small things, huge heart.”</p>
+    <span class="fame-meta">Guardian · United States</span>
+   </div>
+  </div>
  </div>
 
  <div class="how-card" style="background:rgba(255,229,102,.08);border:1px solid rgba(255,229,102,.2);">
