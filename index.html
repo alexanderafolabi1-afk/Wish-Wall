@@ -340,7 +340,7 @@
  // Real-time wish listener
  const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
  onSnapshot(q, snap => {
- const wishes = snap.docs.map(d => ({ id: d.id...d.data() }));
+ const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
  window.renderWishes(wishes);
  });
 
@@ -3551,9 +3551,9 @@ const REGIONAL_PRICING = {
 };
 function getRegionalTier(countryCode){
  for(const [tier, data] of Object.entries(REGIONAL_PRICING)){
- if(data.countries.includes(countryCode)) return { tier...data };
+ if(data.countries.includes(countryCode)) return { tier, ...data };
  }
- return { tier:'TIER_1'...REGIONAL_PRICING.TIER_1 };
+ return { tier:'TIER_1', ...REGIONAL_PRICING.TIER_1 };
 }
 window._pricingTier = getRegionalTier('US'); // updated after geo detection
 
@@ -5429,7 +5429,7 @@ function getDisplayWishes(realWishes){
  if(needed === 0) return real;
  // Pad with warmup wishes to fill all 1000 slots
  const pad = WARMUP_WISHES.slice(0, needed);
- return [...real...pad];
+ return [...real, ...pad];
 }
 function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); }, 850); }
 if(!window._firebaseReady) loadDemo();
