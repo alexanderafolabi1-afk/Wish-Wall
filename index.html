@@ -2911,7 +2911,6 @@ button { touch-action: manipulation; }
 
  </div>
 
- <p class="mario-pipe-count" id="mario-pipe-count"></p>
  </div>
 
  <!-- Wish Calculator Widget -->
@@ -5951,12 +5950,11 @@ const PIN_COLORS_PIPE = [
 
 function paintMarioPipe(){
  const wrap = document.getElementById('mario-wishes');
- const countEl= document.getElementById('mario-pipe-count');
  if(!wrap) return;
 
  // Use real queued wishes if available, else PIPE_DEMO
  const real = (window.allWishes||[]).filter(w => w.status === 'queued' && !w.warmup);
- const source = real.length > 0 ? real.slice(0,20) : PIPE_DEMO;
+ const source = real.length > 0 ? real : PIPE_DEMO;
 
  const tubeEl = document.getElementById('mario-tube');
  const tubeW = (tubeEl ? tubeEl.offsetWidth : 800);
@@ -5994,10 +5992,6 @@ function paintMarioPipe(){
  </div>`;
  }).join('');
 
- if(countEl){
- const n = real.length > 0 ? real.length : PIPE_DEMO.length;
- countEl.textContent = n + ' wish' + (n!==1?'es':'') + ' queued — the wall never sleeps. ✨';
- }
 }
 
 /* Repaint when wall tab activates (wishes may have updated) */
