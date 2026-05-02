@@ -3883,9 +3883,9 @@ async function detectUserCountry(){
  // Set regional pricing based on detected country
  window._pricingTier = getRegionalTier(data.country);
  // Auto-switch UI language based on country (only if user has no saved preference)
- if(!localStorage.getItem('ww-lang') && typeof COUNTRY_LANG_MAP !== 'undefined'){
+ if(!localStorage.getItem('ww-lang')){
    const geoLang = COUNTRY_LANG_MAP[data.country];
-   if(geoLang && typeof setLang === 'function') setLang(geoLang);
+   if(geoLang) setLang(geoLang);
  }
  // Update price displays
  document.querySelectorAll('.dynamic-price').forEach(el => {
@@ -6713,7 +6713,7 @@ function setLang(lang){
 /* Resolve browser language to a supported lang code, or null */
 function resolveBrowserLang(){
   const supported = Object.keys(TRANSLATIONS);
-  const prefs = navigator.languages ? Array.from(navigator.languages) : [navigator.language || 'en'];
+  const prefs = navigator.languages ? [...navigator.languages] : [navigator.language || 'en'];
   for(const pref of prefs){
     const base = pref.split('-')[0].toLowerCase();
     if(supported.includes(base) && base !== 'en') return base;
@@ -6735,6 +6735,7 @@ function initLangSwitcher(){
   if(saved && TRANSLATIONS[saved]){
     setLang(saved);
   } else {
+    if(saved) localStorage.removeItem('ww-lang');
     const browserLang = resolveBrowserLang();
     if(browserLang) setLang(browserLang);
     /* else stay at English – applyTranslations('en') not needed (page already in English) */
