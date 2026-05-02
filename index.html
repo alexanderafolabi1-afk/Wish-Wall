@@ -6368,7 +6368,9 @@ async function submitWish(){
  queuedAt: new Date().toISOString(),
  };
  // If wall has space, promote directly to approved (skip queue)
- const activeCount = window.allWishes.filter(w =>
+ // Use _lastWishes (raw Firebase data) to avoid counting warmup/padding wishes
+ const realWishes = window._lastWishes || window.allWishes.filter(w => !w.warmup);
+ const activeCount = realWishes.filter(w =>
  w.status === 'approved' || w.status === 'granted'
  ).length;
  if(activeCount < WALL_CAPACITY){
@@ -6386,6 +6388,12 @@ async function submitWish(){
  localStorage.setItem('ww-mycode', myCode);
  // Send wisher confirmation email
  sendWisherConfirmationEmail(email, wishTxt, myCode);
+ // Persist wish text across the Stripe redirect so checkReturn() can display it
+ sessionStorage.setItem('ww-pending-wish', wishTxt);
+ sessionStorage.setItem('ww-pending-refcode', myCode);
+ // NOTE: configure your Stripe Payment Link's "After payment" redirect to:
+ //   https://wishwall.xyz/?payment=success
+ // in the Stripe Dashboard → Payment Links → (your link) → Settings → After payment → Redirect to URL
  window.location.href = `${STRIPE_PAYMENT_LINK}?client_reference_id=${wishId}&prefilled_email=${encodeURIComponent(email)}`;
  } else {
  // Demo mode skip payment
@@ -6495,9 +6503,17 @@ function checkReturn(){
    showTab('guard');
    setTimeout(() => openGuardianBadge(wishText), 350);
   } else {
-   const txt = p.get('wish') || storedWishTxt || 'something wonderful...';
-   showConf(decodeURIComponent(txt));
+   // Retrieve wish text saved before Stripe redirect; fall back gracefully
+   const pendingWish = sessionStorage.getItem('ww-pending-wish') || '';
+   const pendingCode  = sessionStorage.getItem('ww-pending-refcode') || '';
+   sessionStorage.removeItem('ww-pending-wish');
+   sessionStorage.removeItem('ww-pending-refcode');
+   if(pendingCode) localStorage.setItem('ww-mycode', pendingCode);
+   const urlWish = p.get('wish');
+   const txt = urlWish ? decodeURIComponent(urlWish) : (pendingWish || storedWishTxt || 'something wonderful...');
    history.replaceState({}, '', location.pathname);
+   showTab('wall');
+   showConf(txt, pendingCode || localStorage.getItem('ww-mycode'));
   }
  }
 }
