@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://js.stripe.com">
+<link rel="preconnect" href="https://cdn.emailjs.com">
+<!-- EmailJS — configure EMAILJS_PUBLIC_KEY + EMAILJS_SERVICE_ID as window vars before this -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
 <link rel="preconnect" href="https://www.gstatic.com">
 
 <!-- PRIMARY SEO: US + UK + Global dominance -->
@@ -250,6 +253,28 @@
  <span class="guardian-amount-val" id="guardian-amount-val">, </span>
  </div>
 
+ <!-- Anonymous / Named toggle -->
+ <div class="guardian-anon-section">
+  <span class="guardian-anon-label">How should you appear?</span>
+  <div class="anon-toggle-row">
+   <button type="button" class="anon-toggle-btn" id="gm-anon-yes"
+    onclick="setGuardianModalAnon(true)" aria-pressed="false">
+    <span class="anon-toggle-icon">🕵️</span>
+    <span class="anon-toggle-title">Anonymous</span>
+    <span class="anon-toggle-sub">Your name stays hidden</span>
+   </button>
+   <button type="button" class="anon-toggle-btn anon-toggle-btn--active" id="gm-anon-no"
+    onclick="setGuardianModalAnon(false)" aria-pressed="true">
+    <span class="anon-toggle-icon">✨</span>
+    <span class="anon-toggle-title">Show My Name</span>
+    <span class="anon-toggle-sub">Inspire others to give</span>
+   </button>
+  </div>
+  <input class="guardian-name-inp" id="guardian-name-inp" type="text"
+   placeholder="Your first name (optional)" autocomplete="given-name"
+   aria-label="Your first name for the leaderboard">
+ </div>
+
  <button class="guardian-modal-btn" id="guardian-modal-btn"
  onclick="proceedToGrantPayment()">
  💙 Grant this wish &#8594;
@@ -260,6 +285,51 @@
  <a href="terms.html" target="_blank">Terms</a>.
  Payments via Stripe. Grants are direct and voluntary.
  </p>
+ </div>
+</div>
+
+<!-- ============================================================
+ GUARDIAN BADGE POPUP — shown after successful grant payment
+ ============================================================ -->
+<div class="gb-overlay" id="gb-overlay"
+ onclick="if(event.target===this)closeGuardianBadge()"
+ role="dialog" aria-modal="true" aria-label="You are a Guardian!">
+ <div class="gb-panel">
+  <button class="gb-close" onclick="closeGuardianBadge()" aria-label="Close">&#215;</button>
+  <div class="gb-badge-ring">
+   <span class="gb-badge-emoji">🛡️</span>
+  </div>
+  <div class="gb-rank-chip" id="gb-rank-chip">First-Time Guardian</div>
+  <h2 class="gb-title">You are a Guardian!</h2>
+  <p class="gb-subtitle" id="gb-subtitle">Thank you so much. Because of you, someone's wish just moved one giant step closer to becoming real. The world is better because you showed up.</p>
+  <div class="gb-wish-box" id="gb-wish-box" style="display:none;">
+   <div class="gb-wish-label">The wish you are granting</div>
+   <div class="gb-wish-text" id="gb-wish-text"></div>
+  </div>
+  <div class="gb-actions">
+   <button class="gb-btn-primary" onclick="sponsorAnotherWish()">✨ Sponsor Another Wish</button>
+   <button class="gb-btn-secondary" onclick="openShareFromBadge()">💛 Share your kindness</button>
+  </div>
+  <!-- Guardian Rewards opt-in -->
+  <div class="gb-rewards-section">
+   <h3 class="gb-rewards-title">🎁 Let us thank you properly</h3>
+   <p class="gb-rewards-sub">As Wish Wall grows, we want to send thank-you gifts to our Guardians. Leave your details and you'll be first on our list.</p>
+   <div id="gb-rewards-form-wrap">
+    <div class="gb-rewards-form">
+     <input class="gb-rewards-inp" id="gb-r-name" type="text" placeholder="Your first name" autocomplete="given-name">
+     <input class="gb-rewards-inp" id="gb-r-country" type="text" placeholder="Your country (e.g. United Kingdom)" autocomplete="country-name">
+     <input class="gb-rewards-inp" id="gb-r-address" type="text" placeholder="Mailing address (optional — for gifts)" autocomplete="street-address">
+     <div class="gb-hope-row">
+      <input type="checkbox" id="gb-r-hope" checked>
+      <label class="gb-hope-text" for="gb-r-hope">
+       <strong>Send me inspiration.</strong> I'd love to receive stories of wishes that have been granted and reminders when I could be someone's Guardian again.
+      </label>
+     </div>
+     <button class="gb-rewards-submit" onclick="saveGuardianRewards()">🌟 Save my details</button>
+    </div>
+    <div class="gb-rewards-saved" id="gb-rewards-saved">✅ Saved! You're on our thank-you list. We'll be in touch. 💛</div>
+   </div>
+  </div>
  </div>
 </div>
 
@@ -2535,6 +2605,365 @@ footer {
 }
 .guardian-terms-note a { color: #D44A1E; text-decoration: none; }
 
+/* ══ GUARDIAN ANON TOGGLE (inside guardian modal) ════════════ */
+.guardian-anon-section { margin: 18px 0 10px; }
+.guardian-anon-label { font-family: var(--fn-ui); font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; display: block; }
+.guardian-name-inp {
+  width: 100%; box-sizing: border-box;
+  background: rgba(250,248,245,.06); border: 1px solid rgba(250,248,245,.15);
+  border-radius: 6px; padding: 10px 14px;
+  font-family: var(--fn-ui); font-size: 14px; color: var(--text);
+  margin-top: 10px; transition: border-color .2s;
+}
+.guardian-name-inp:focus { outline: none; border-color: #B44DFF; }
+.guardian-name-inp::placeholder { color: rgba(250,248,245,.35); }
+
+/* ══ GUARDIAN WHEEL EXPERIENCE ═══════════════════════════════ */
+.gw-hero {
+  background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 50%, #1a1f3a 100%);
+  border-radius: 20px; padding: 48px 24px 40px;
+  text-align: center; position: relative; overflow: hidden;
+  margin-bottom: 32px; border: 1px solid rgba(180,77,255,.25);
+}
+.gw-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(180,77,255,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.gw-sparkles {
+  font-size: 22px; letter-spacing: 4px; margin-bottom: 16px;
+  animation: gwSpark 3s ease-in-out infinite alternate;
+}
+@keyframes gwSpark { from { opacity: .5; transform: scale(.97); } to { opacity: 1; transform: scale(1.03); } }
+.gw-hero-title {
+  font-family: var(--fn-display); font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 900;
+  color: var(--text); line-height: 1.15; margin-bottom: 14px;
+  font-variation-settings: 'opsz' 72;
+}
+.gw-hero-accent { color: #FFE566; }
+.gw-hero-sub {
+  font-family: var(--fn-ui); font-size: 15px; color: rgba(250,248,245,.75);
+  max-width: 440px; margin: 0 auto 28px; line-height: 1.6;
+}
+.gw-hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, #B44DFF, #7c2fc0);
+  color: #fff; font-family: var(--fn-display); font-size: 17px; font-weight: 800;
+  padding: 16px 36px; border-radius: 50px; border: none; cursor: pointer;
+  box-shadow: 0 4px 24px rgba(180,77,255,.45); transition: all .2s;
+  font-variation-settings: 'opsz' 20;
+}
+.gw-hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(180,77,255,.6); }
+.gw-step {
+  background: var(--card); border-radius: 18px; padding: 32px 24px;
+  margin-bottom: 24px; border: 1px solid rgba(250,248,245,.06);
+  transition: opacity .3s, transform .3s;
+}
+.gw-step-title {
+  font-family: var(--fn-display); font-size: 1.4rem; font-weight: 800;
+  color: var(--text); margin-bottom: 8px; font-variation-settings: 'opsz' 36;
+}
+.gw-step-sub {
+  font-family: var(--fn-ui); font-size: 14px; color: var(--text-muted);
+  line-height: 1.6; margin-bottom: 24px;
+}
+.gw-budget-presets {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 18px;
+}
+.gw-preset {
+  background: rgba(250,248,245,.07); border: 2px solid rgba(250,248,245,.12);
+  border-radius: 12px; padding: 12px 20px;
+  font-family: var(--fn-display); font-size: 1rem; font-weight: 700; color: var(--text);
+  cursor: pointer; transition: all .15s; font-variation-settings: 'opsz' 20;
+}
+.gw-preset:hover { border-color: #B44DFF; background: rgba(180,77,255,.12); transform: translateY(-2px); }
+.gw-preset--active { border-color: #B44DFF; background: rgba(180,77,255,.22); color: #e8b4ff; }
+.gw-preset--pop {
+  border-color: #FFE566; background: rgba(255,229,102,.1); color: #FFE566;
+  position: relative;
+}
+.gw-preset--pop.gw-preset--active { background: rgba(255,229,102,.22); }
+.gw-custom-wrap {
+  display: flex; align-items: center; gap: 0;
+  max-width: 220px; margin: 0 auto 20px;
+  background: rgba(250,248,245,.07); border: 2px solid rgba(250,248,245,.12);
+  border-radius: 12px; overflow: hidden;
+}
+.gw-custom-prefix {
+  padding: 10px 12px; font-family: var(--fn-display); font-size: 1.1rem;
+  font-weight: 700; color: #FFE566; background: rgba(255,229,102,.1);
+}
+.gw-custom-inp {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: var(--fn-display); font-size: 1.1rem; font-weight: 700;
+  color: var(--text); padding: 10px 12px 10px 6px;
+}
+.gw-custom-inp::placeholder { color: rgba(250,248,245,.3); }
+.gw-budget-display {
+  text-align: center; margin-bottom: 20px;
+  animation: fadeIn .3s ease;
+}
+.gw-budget-label { font-family: var(--fn-mono); font-size: 12px; color: var(--text-muted); margin-right: 8px; }
+.gw-budget-val {
+  font-family: var(--fn-display); font-size: 2rem; font-weight: 900;
+  color: #FFE566; font-variation-settings: 'opsz' 72;
+}
+.gw-find-btn {
+  display: block; width: 100%; max-width: 320px; margin: 0 auto;
+  background: linear-gradient(135deg, #FFE566, #FF7B2C);
+  color: #1E2235; font-family: var(--fn-display); font-size: 1.1rem;
+  font-weight: 900; padding: 18px 32px; border: none; border-radius: 50px;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(255,229,102,.35);
+  transition: all .2s; font-variation-settings: 'opsz' 20;
+  animation: gwPulse 2.5s ease-in-out infinite;
+}
+.gw-find-btn:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(255,229,102,.5); }
+@keyframes gwPulse { 0%,100%{ box-shadow:0 4px 20px rgba(255,229,102,.35); } 50%{ box-shadow:0 4px 32px rgba(255,229,102,.6); } }
+/* Step 2: wishes + wheel */
+.gw-found-header { text-align: center; margin-bottom: 24px; }
+.gw-wish-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px; margin-bottom: 28px;
+}
+.gw-wish-card {
+  border-radius: 14px; padding: 16px 14px 14px;
+  position: relative; overflow: hidden; cursor: default;
+  border: 2px solid transparent; transition: transform .15s;
+}
+.gw-wish-card--highlight { border-color: #FFE566; transform: scale(1.03); }
+.gw-wish-card-num {
+  font-family: var(--fn-mono); font-size: 10px; opacity: .6; margin-bottom: 6px;
+}
+.gw-wish-card-text {
+  font-family: var(--fn-ui); font-size: 13px; line-height: 1.5;
+  color: rgba(20,16,10,.9); font-weight: 600; margin-bottom: 8px;
+}
+.gw-wish-card-meta {
+  font-family: var(--fn-mono); font-size: 10px; opacity: .65;
+  display: flex; justify-content: space-between;
+}
+/* Wheel */
+.gw-wheel-wrap {
+  position: relative; width: 340px; max-width: 100%;
+  margin: 0 auto 24px; user-select: none;
+}
+.gw-wheel-pointer {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  font-size: 26px; z-index: 2; filter: drop-shadow(0 2px 8px rgba(255,229,102,.8));
+  animation: pointerBounce 1s ease-in-out infinite;
+}
+@keyframes pointerBounce { 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(-4px); } }
+.gw-wheel-canvas { border-radius: 50%; box-shadow: 0 0 0 6px rgba(180,77,255,.3), 0 8px 40px rgba(0,0,0,.4); display: block; width: 100%; height: auto; }
+.gw-spin-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; max-width: 280px; margin: 0 auto 16px;
+  background: linear-gradient(135deg, #B44DFF, #FF4D8D);
+  color: #fff; font-family: var(--fn-display); font-size: 1.2rem; font-weight: 900;
+  padding: 20px 32px; border: none; border-radius: 50px; cursor: pointer;
+  box-shadow: 0 4px 24px rgba(180,77,255,.5); transition: all .2s;
+  letter-spacing: 0.04em; font-variation-settings: 'opsz' 20;
+}
+.gw-spin-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 8px 32px rgba(180,77,255,.7); }
+.gw-spin-btn:disabled { opacity: .6; cursor: not-allowed; }
+.gw-spin-icon { font-size: 1.4rem; display: inline-block; }
+.gw-spin-btn:not(:disabled):hover .gw-spin-icon { animation: spinIcon .4s linear; }
+@keyframes spinIcon { to { transform: rotate(360deg); } }
+.gw-spin-hint {
+  text-align: center; font-family: var(--fn-mono); font-size: 11px;
+  color: var(--text-muted); margin-bottom: 16px;
+}
+.gw-back-link { text-align: center; }
+.gw-back-link a { font-family: var(--fn-mono); font-size: 12px; color: var(--text-muted); text-decoration: none; }
+.gw-back-link a:hover { color: var(--text); }
+/* Step 3: result */
+.gw-step--result { text-align: center; }
+.gw-result-celebration {
+  font-size: 28px; letter-spacing: 6px; margin-bottom: 12px;
+  animation: gwSpark 1.5s ease-in-out infinite alternate;
+}
+.gw-result-title {
+  font-family: var(--fn-display); font-size: 1.6rem; font-weight: 900;
+  color: #FFE566; margin-bottom: 20px; font-variation-settings: 'opsz' 48;
+}
+.gw-selected-wish {
+  background: linear-gradient(135deg, #2d1b4e, #1a2040);
+  border-radius: 16px; padding: 24px 20px; margin-bottom: 20px;
+  border: 2px solid rgba(180,77,255,.35); position: relative;
+}
+.gw-selected-wish-text {
+  font-family: var(--fn-ui); font-size: 16px; line-height: 1.6;
+  color: var(--text); font-weight: 600; margin-bottom: 10px; font-style: italic;
+}
+.gw-selected-wish-meta {
+  font-family: var(--fn-mono); font-size: 11px; color: var(--text-muted);
+}
+.gw-result-sub {
+  font-family: var(--fn-ui); font-size: 14px; color: var(--text-muted);
+  margin-bottom: 22px; line-height: 1.6;
+}
+.gw-anon-row { margin-bottom: 22px; }
+.gw-anon-label {
+  font-family: var(--fn-ui); font-size: 13px; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 12px;
+}
+.gw-name-inp {
+  width: 100%; max-width: 280px; box-sizing: border-box;
+  background: rgba(250,248,245,.08); border: 1.5px solid rgba(250,248,245,.15);
+  border-radius: 10px; padding: 11px 14px; margin: 12px auto 0; display: block;
+  font-family: var(--fn-ui); font-size: 14px; color: var(--text);
+  transition: border-color .2s;
+}
+.gw-name-inp:focus { outline: none; border-color: #B44DFF; }
+.gw-name-inp::placeholder { color: rgba(250,248,245,.3); }
+.gw-grant-btn {
+  display: block; width: 100%; max-width: 300px; margin: 0 auto 14px;
+  background: linear-gradient(135deg, #00D4FF, #B44DFF);
+  color: #fff; font-family: var(--fn-display); font-size: 1.15rem; font-weight: 900;
+  padding: 18px 32px; border: none; border-radius: 50px; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,212,255,.3); transition: all .2s;
+  font-variation-settings: 'opsz' 20;
+}
+.gw-grant-btn:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,212,255,.5); }
+.gw-spin-again a {
+  font-family: var(--fn-mono); font-size: 12px; color: var(--text-muted);
+  text-decoration: none; display: inline-block; margin-top: 6px;
+}
+.gw-spin-again a:hover { color: #B44DFF; }
+/* Wish card color palette */
+.gwc-yellow { background: linear-gradient(135deg,#FFE566,#FFD04D); }
+.gwc-pink   { background: linear-gradient(135deg,#FF4D8D,#FF7BAC); }
+.gwc-blue   { background: linear-gradient(135deg,#00D4FF,#4DE8FF); }
+.gwc-green  { background: linear-gradient(135deg,#00FFB3,#4DFFD0); }
+.gwc-orange { background: linear-gradient(135deg,#FF7B2C,#FFA06A); }
+.gwc-lav    { background: linear-gradient(135deg,#B44DFF,#CC80FF); }
+
+/* ══ GUARDIAN BADGE POPUP ════════════════════════════════════ */
+.gb-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+  padding: 16px;
+}
+.gb-overlay.open { opacity: 1; pointer-events: all; }
+.gb-panel {
+  background: linear-gradient(145deg, #1E2235, #2d1b4e);
+  border-radius: 24px; padding: 40px 32px 32px;
+  max-width: 480px; width: 100%; text-align: center;
+  border: 2px solid rgba(180,77,255,.4);
+  box-shadow: 0 0 60px rgba(180,77,255,.25), 0 20px 60px rgba(0,0,0,.5);
+  transform: scale(.85) translateY(30px); transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  position: relative; overflow: hidden; max-height: 92vh; overflow-y: auto;
+}
+.gb-overlay.open .gb-panel { transform: scale(1) translateY(0); }
+.gb-panel::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(180,77,255,.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+.gb-close {
+  position: absolute; top: 14px; right: 16px;
+  background: rgba(250,248,245,.08); border: none; border-radius: 50%;
+  width: 32px; height: 32px; font-size: 18px; color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.gb-close:hover { background: rgba(250,248,245,.16); }
+.gb-badge-ring {
+  width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
+  background: linear-gradient(135deg, #B44DFF, #FFE566, #FF4D8D);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 8px rgba(180,77,255,.2), 0 0 40px rgba(180,77,255,.4);
+  animation: gbRing 2s ease-in-out infinite alternate;
+  position: relative;
+}
+@keyframes gbRing {
+  from { box-shadow: 0 0 0 8px rgba(180,77,255,.2), 0 0 40px rgba(180,77,255,.4); }
+  to   { box-shadow: 0 0 0 14px rgba(180,77,255,.1), 0 0 60px rgba(180,77,255,.6); }
+}
+.gb-badge-emoji { font-size: 64px; line-height: 1; }
+.gb-rank-chip {
+  display: inline-block; background: linear-gradient(135deg,#FFE566,#FF7B2C);
+  color: #1E2235; font-family: var(--fn-mono); font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 20px; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.gb-title {
+  font-family: var(--fn-display); font-size: 1.8rem; font-weight: 900;
+  color: #FFE566; margin-bottom: 8px; font-variation-settings: 'opsz' 48;
+}
+.gb-subtitle {
+  font-family: var(--fn-ui); font-size: 15px; color: rgba(250,248,245,.8);
+  line-height: 1.6; margin-bottom: 20px;
+}
+.gb-wish-box {
+  background: rgba(250,248,245,.06); border-radius: 12px; padding: 16px 18px;
+  margin-bottom: 22px; border: 1px solid rgba(250,248,245,.1);
+}
+.gb-wish-label {
+  font-family: var(--fn-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--text-muted); margin-bottom: 6px;
+}
+.gb-wish-text {
+  font-family: var(--fn-ui); font-size: 14px; line-height: 1.6;
+  color: var(--text); font-style: italic;
+}
+.gb-actions { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+.gb-btn-primary {
+  background: linear-gradient(135deg, #B44DFF, #FF4D8D);
+  color: #fff; font-family: var(--fn-display); font-size: 1rem; font-weight: 800;
+  padding: 16px 24px; border: none; border-radius: 50px; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(180,77,255,.4); transition: all .2s;
+  font-variation-settings: 'opsz' 20;
+}
+.gb-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(180,77,255,.6); }
+.gb-btn-secondary {
+  background: rgba(250,248,245,.07); color: var(--text);
+  font-family: var(--fn-ui); font-size: 14px; font-weight: 600;
+  padding: 13px 20px; border: 1.5px solid rgba(250,248,245,.15);
+  border-radius: 50px; cursor: pointer; transition: all .2s;
+}
+.gb-btn-secondary:hover { border-color: rgba(250,248,245,.35); background: rgba(250,248,245,.1); }
+/* Rewards opt-in section */
+.gb-rewards-section {
+  border-top: 1px solid rgba(250,248,245,.08); padding-top: 20px; margin-top: 4px;
+}
+.gb-rewards-title {
+  font-family: var(--fn-display); font-size: 1.05rem; font-weight: 800;
+  color: var(--text); margin-bottom: 6px; font-variation-settings: 'opsz' 24;
+}
+.gb-rewards-sub {
+  font-family: var(--fn-ui); font-size: 13px; color: var(--text-muted);
+  line-height: 1.5; margin-bottom: 16px;
+}
+.gb-rewards-form { display: flex; flex-direction: column; gap: 10px; }
+.gb-rewards-inp {
+  background: rgba(250,248,245,.07); border: 1.5px solid rgba(250,248,245,.12);
+  border-radius: 10px; padding: 11px 14px; font-family: var(--fn-ui);
+  font-size: 14px; color: var(--text); transition: border-color .2s;
+}
+.gb-rewards-inp:focus { outline: none; border-color: #B44DFF; }
+.gb-rewards-inp::placeholder { color: rgba(250,248,245,.3); }
+.gb-rewards-submit {
+  background: linear-gradient(135deg,#00D4FF,#B44DFF); color:#fff;
+  font-family: var(--fn-display); font-size:.95rem; font-weight:800;
+  padding:13px 20px; border:none; border-radius:50px; cursor:pointer;
+  transition: all .2s; font-variation-settings:'opsz' 20;
+}
+.gb-rewards-submit:hover { transform: translateY(-2px); opacity: .9; }
+.gb-rewards-saved {
+  font-family: var(--fn-mono); font-size: 12px; color: #00FFB3;
+  text-align: center; padding: 10px; display: none;
+}
+/* Email hope opt-in */
+.gb-hope-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(255,229,102,.07); border-radius: 10px;
+  padding: 14px; border: 1px solid rgba(255,229,102,.15); margin-bottom: 16px;
+}
+.gb-hope-row input[type=checkbox] { margin-top: 2px; flex-shrink: 0; accent-color: #FFE566; }
+.gb-hope-text { font-family: var(--fn-ui); font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.gb-hope-text strong { color: var(--text); }
 
 /* Stay updated email opt-in */
 .stay-updated-wrap {
@@ -3267,6 +3696,94 @@ button { touch-action: manipulation; }
  <h2 class="sec-title">🛡️ Become a Guardian</h2>
  <p class="sec-sub">These wishes need a hero. Could that be you?</p>
  </div>
+
+ <!-- ✨ GUARDIAN WHEEL EXPERIENCE ✨ -->
+ <div class="gw-hero">
+  <div class="gw-sparkles" aria-hidden="true">✨💛🌟💜💙🧡💚❤️</div>
+  <h2 class="gw-hero-title">Pick a budget.<br>Spin the wheel.<br><span class="gw-hero-accent">Change a life.</span></h2>
+  <p class="gw-hero-sub">Every spin matches you with the oldest wish that fits your budget. One spin. One life touched. Pure magic.</p>
+ </div>
+
+ <!-- STEP 1: Budget -->
+ <div class="gw-step" id="gw-step-budget">
+  <h3 class="gw-step-title">💰 What's your budget today?</h3>
+  <p class="gw-step-sub">Choose how much you'd like to grant. Even $10 can be life-changing for someone waiting on this wall.</p>
+  <div class="gw-budget-presets">
+   <button class="gw-preset" onclick="setGuardianBudget(10,this)">$10</button>
+   <button class="gw-preset" onclick="setGuardianBudget(25,this)">$25</button>
+   <button class="gw-preset gw-preset--pop" onclick="setGuardianBudget(50,this)">$50 ⭐</button>
+   <button class="gw-preset" onclick="setGuardianBudget(100,this)">$100</button>
+   <button class="gw-preset" onclick="setGuardianBudget(200,this)">$200</button>
+   <button class="gw-preset" onclick="setGuardianBudget(500,this)">$500+</button>
+  </div>
+  <div class="gw-custom-wrap">
+   <span class="gw-custom-prefix">$</span>
+   <input class="gw-custom-inp" id="gw-custom-inp" type="number" min="5" max="9999" placeholder="Your own amount" oninput="onGuardianBudgetInput(this)" aria-label="Custom budget amount">
+  </div>
+  <div class="gw-budget-display" id="gw-budget-display" style="display:none;">
+   <span class="gw-budget-label">Your budget:</span>
+   <span class="gw-budget-val" id="gw-budget-val">$50</span>
+  </div>
+  <button class="gw-find-btn" id="gw-find-btn" onclick="findWishesForGuardian()" style="display:none;" aria-label="Find wishes matching your budget">
+   🔍 Find wishes I can grant ✨
+  </button>
+ </div>
+
+ <!-- STEP 2: Spin Wheel -->
+ <div class="gw-step" id="gw-step-wheel" style="display:none;">
+  <div class="gw-found-header">
+   <h3 class="gw-step-title" id="gw-found-title">✨ Found wishes waiting for you!</h3>
+   <p class="gw-step-sub">These are the <strong>oldest</strong> wishes that fit your budget — the ones that have been waiting longest. Spin to discover which one you're meant to grant.</p>
+  </div>
+  <div class="gw-wish-cards" id="gw-wish-cards" aria-label="Eligible wishes" aria-live="polite"></div>
+  <div class="gw-wheel-wrap">
+   <div class="gw-wheel-pointer" aria-hidden="true">▼</div>
+   <canvas class="gw-wheel-canvas" id="gw-wheel-canvas" width="340" height="340"
+    role="img" aria-label="Spin wheel with eligible wishes"></canvas>
+  </div>
+  <button class="gw-spin-btn" id="gw-spin-btn" onclick="spinGuardianWheel()" aria-label="Spin the wheel">
+   <span class="gw-spin-icon" aria-hidden="true">🎰</span> SPIN THE WHEEL
+  </button>
+  <p class="gw-spin-hint" id="gw-spin-hint" aria-live="polite">The universe will pick which wish you're meant to grant. ✨</p>
+  <div class="gw-back-link"><a href="#" onclick="resetGuardianWheel();return false;">← Change budget</a></div>
+ </div>
+
+ <!-- STEP 3: Result -->
+ <div class="gw-step gw-step--result" id="gw-step-result" style="display:none;">
+  <div class="gw-result-celebration" id="gw-result-celebration" aria-hidden="true">🎉✨🌟💛🎊💜🎯</div>
+  <h3 class="gw-result-title">The universe has spoken!</h3>
+  <div class="gw-selected-wish" id="gw-selected-wish">
+   <div class="gw-selected-wish-text" id="gw-selected-wish-text"></div>
+   <div class="gw-selected-wish-meta" id="gw-selected-wish-meta"></div>
+  </div>
+  <p class="gw-result-sub">This wish has been waiting <strong id="gw-waiting-days">—</strong> for a Guardian like you.</p>
+  <div class="gw-anon-row">
+   <p class="gw-anon-label">How would you like to appear?</p>
+   <div class="anon-toggle-row" style="justify-content:center;margin-bottom:12px;">
+    <button type="button" class="anon-toggle-btn" id="gw-anon-yes"
+     onclick="setGuardianAnon(true)" aria-pressed="false">
+     <span class="anon-toggle-icon">🕵️</span>
+     <span class="anon-toggle-title">Anonymous</span>
+     <span class="anon-toggle-sub">No name shown</span>
+    </button>
+    <button type="button" class="anon-toggle-btn anon-toggle-btn--active" id="gw-anon-no"
+     onclick="setGuardianAnon(false)" aria-pressed="true">
+     <span class="anon-toggle-icon">✨</span>
+     <span class="anon-toggle-title">Show My Name</span>
+     <span class="anon-toggle-sub">Inspire others to give</span>
+    </button>
+   </div>
+   <input type="text" class="gw-name-inp" id="gw-name-inp"
+    placeholder="Your first name (so we can celebrate you)" autocomplete="given-name"
+    aria-label="Your first name for the leaderboard"
+    oninput="updateGuardianNamePreview()">
+  </div>
+  <button class="gw-grant-btn" id="gw-grant-btn" onclick="proceedFromWheel()">
+   💙 Grant this wish →
+  </button>
+  <p class="gw-spin-again"><a href="#" onclick="reSpinWheel();return false;">Not feeling it? Spin again →</a></p>
+ </div>
+ <!-- /GUARDIAN WHEEL EXPERIENCE -->
 
  <!-- General pool -->
  <div class="pool-card">
@@ -4910,9 +5427,490 @@ function closeGuardianModal(){
  document.body.style.overflow = '';
 }
 
-/* ============================================================
- SPONSOR ENQUIRY MODAL
- ============================================================ */
+/* ══ GUARDIAN MODAL: ANON TOGGLE ══════════════════════════════ */
+function setGuardianModalAnon(isAnon){
+ document.getElementById('gm-anon-yes').classList.toggle('anon-toggle-btn--active', isAnon);
+ document.getElementById('gm-anon-no').classList.toggle('anon-toggle-btn--active', !isAnon);
+ document.getElementById('gm-anon-yes').setAttribute('aria-pressed', String(isAnon));
+ document.getElementById('gm-anon-no').setAttribute('aria-pressed', String(!isAnon));
+ const nameInp = document.getElementById('guardian-name-inp');
+ if(nameInp) nameInp.style.display = isAnon ? 'none' : 'block';
+ sessionStorage.setItem('ww-guardian-anon', isAnon ? '1' : '0');
+}
+
+/* ══════════════════════════════════════════════════════════════
+ GUARDIAN WHEEL EXPERIENCE
+ ══════════════════════════════════════════════════════════════ */
+let _gwBudget = 0;
+let _gwWishes = [];
+let _gwSelectedWish = null;
+let _gwSpinning = false;
+let _gwAngle = 0;
+let _gwSpinAngle = 0;
+let _gwAnimId = null;
+let _gwAnon = false;
+
+// Wheel segment colors (vivid, alternating)
+const GW_COLORS = [
+ ['#FFE566','#1E2235'], ['#FF4D8D','#fff'], ['#00D4FF','#1E2235'],
+ ['#B44DFF','#fff'],    ['#FF7B2C','#fff'], ['#00FFB3','#1E2235'],
+ ['#FF3366','#fff'],    ['#7c2fc0','#fff'],
+];
+// Card color classes
+const GW_CARD_COLS = ['gwc-yellow','gwc-pink','gwc-blue','gwc-green','gwc-orange','gwc-lav'];
+
+function setGuardianBudget(amount, btn){
+ _gwBudget = amount;
+ document.querySelectorAll('.gw-preset').forEach(b => b.classList.remove('gw-preset--active'));
+ if(btn) btn.classList.add('gw-preset--active');
+ const customInp = document.getElementById('gw-custom-inp');
+ if(customInp) customInp.value = '';
+ _showBudgetAndFindBtn(amount);
+}
+
+function onGuardianBudgetInput(inp){
+ const val = parseInt(inp.value, 10);
+ if(val >= 5){
+  _gwBudget = val;
+  document.querySelectorAll('.gw-preset').forEach(b => b.classList.remove('gw-preset--active'));
+  _showBudgetAndFindBtn(val);
+ } else {
+  document.getElementById('gw-budget-display').style.display = 'none';
+  document.getElementById('gw-find-btn').style.display = 'none';
+ }
+}
+
+function _showBudgetAndFindBtn(amount){
+ const disp = document.getElementById('gw-budget-display');
+ const val  = document.getElementById('gw-budget-val');
+ const btn  = document.getElementById('gw-find-btn');
+ if(disp) { disp.style.display = 'block'; }
+ if(val)  { val.textContent = amount >= 500 ? '$500+' : '$' + amount; }
+ if(btn)  { btn.style.display = 'block'; }
+}
+
+function findWishesForGuardian(){
+ if(!_gwBudget || _gwBudget < 5){
+  return alert('Please choose a budget first!');
+ }
+ // Get eligible wishes: approved, non-granted, est <= budget, sorted by oldest first
+ const pool = (window.allWishes || []).filter(w =>
+  (w.status === 'approved' || w.status === 'queued') &&
+  w.est && w.est > 0 && w.est <= _gwBudget
+ ).sort((a, b) => {
+  // Sort by oldest first: use queuedAt/createdAt if available, else default order
+  const da = a.queuedAt ? new Date(a.queuedAt).getTime() : (a.id || '').localeCompare(b.id || '');
+  const db_ = b.queuedAt ? new Date(b.queuedAt).getTime() : 0;
+  return da - db_;
+ });
+
+ // Take up to 8 for the wheel; if fewer than 2, use demo data
+ let picks = pool.slice(0, 8);
+ if(picks.length < 2){
+  // Fallback: pick from demo wishes with est <= budget
+  const demo = (window.allWishes || []).filter(w => w.est && w.est <= _gwBudget && w.est > 0);
+  picks = demo.sort(() => Math.random() - .5).slice(0, 6);
+ }
+ // Absolute fallback: generic placeholders
+ if(picks.length < 2){
+  picks = [
+   {id:'fw1', wishText:'Help with groceries this week — two kids, empty fridge 🛒', est: Math.min(_gwBudget, 60), country:'🌍 Global', cat:'money', color:'n-yellow'},
+   {id:'fw2', wishText:'Electric meter top-up — cut off tomorrow with a toddler at home ⚡', est: Math.min(_gwBudget, 40), country:'🌍 Global', cat:'money', color:'n-orange'},
+   {id:'fw3', wishText:'School supplies for my daughter — she starts Monday 📚', est: Math.min(_gwBudget, 35), country:'🌍 Global', cat:'education', color:'n-blue'},
+   {id:'fw4', wishText:'Bus pass for the month — three buses to get to work 🚌', est: Math.min(_gwBudget, 55), country:'🌍 Global', cat:'money', color:'n-pink'},
+  ].filter(w => w.est <= _gwBudget);
+ }
+
+ _gwWishes = picks;
+
+ // Render wish cards
+ const cardsEl = document.getElementById('gw-wish-cards');
+ if(cardsEl){
+  cardsEl.innerHTML = _gwWishes.map((w, i) => {
+   const col = GW_CARD_COLS[i % GW_CARD_COLS.length];
+   const age = w.queuedAt ? _gwDaysAgo(w.queuedAt) : null;
+   return `<div class="gw-wish-card ${col}" data-idx="${i}">
+    <div class="gw-wish-card-num">#${i+1}</div>
+    <div class="gw-wish-card-text">"${_gwTrunc(w.wishText, 90)}"</div>
+    <div class="gw-wish-card-meta">
+     <span>${w.country || '🌍 Global'}</span>
+     <span>${age ? age + 'd waiting' : w.cat || ''}</span>
+    </div>
+   </div>`;
+  }).join('');
+ }
+
+ const foundTitle = document.getElementById('gw-found-title');
+ if(foundTitle) foundTitle.textContent = `✨ Found ${_gwWishes.length} wish${_gwWishes.length!==1?'es':''} waiting for you!`;
+
+ // Build wheel
+ _gwBuildWheel();
+
+ // Show wheel step
+ document.getElementById('gw-step-budget').style.display = 'none';
+ document.getElementById('gw-step-wheel').style.display = 'block';
+ document.getElementById('gw-step-result').style.display = 'none';
+ announceA11y(_gwWishes.length + ' wishes found. Spin the wheel to discover yours!');
+}
+
+function _gwTrunc(txt, max){
+ if(!txt) return '';
+ return txt.length > max ? txt.slice(0, max).trim() + '…' : txt;
+}
+
+function _gwDaysAgo(dateStr){
+ try {
+  const d = new Date(dateStr);
+  const diff = Math.floor((Date.now() - d.getTime()) / 86400000);
+  return diff;
+ } catch(e){ return null; }
+}
+
+function _gwBuildWheel(){
+ const canvas = document.getElementById('gw-wheel-canvas');
+ if(!canvas) return;
+ const n = _gwWishes.length;
+ if(n < 1) return;
+ _gwAngle = 0;
+ _gwDrawWheel(canvas, _gwAngle);
+}
+
+function _gwDrawWheel(canvas, angle){
+ const ctx = canvas.getContext('2d');
+ const W = canvas.width, H = canvas.height;
+ const cx = W/2, cy = H/2, r = W/2 - 6;
+ const n = _gwWishes.length;
+ const seg = (2 * Math.PI) / n;
+ ctx.clearRect(0, 0, W, H);
+
+ for(let i = 0; i < n; i++){
+  const start = angle + i * seg - Math.PI/2;
+  const end   = start + seg;
+  const [bg, fg] = GW_COLORS[i % GW_COLORS.length];
+  // Segment
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, start, end);
+  ctx.closePath();
+  ctx.fillStyle = bg;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,.25)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // Label (wish number + short text)
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(start + seg/2);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = fg;
+  ctx.font = `bold ${Math.max(10, Math.min(14, 280/n))}px sans-serif`;
+  const label = '#' + (i+1) + ' ' + _gwTrunc(_gwWishes[i].wishText, Math.floor(20 - n));
+  ctx.fillText(label, r - 10, 4);
+  ctx.restore();
+ }
+ // Center circle
+ ctx.beginPath();
+ ctx.arc(cx, cy, 22, 0, 2*Math.PI);
+ ctx.fillStyle = '#1E2235';
+ ctx.fill();
+ ctx.strokeStyle = 'rgba(180,77,255,.6)';
+ ctx.lineWidth = 3;
+ ctx.stroke();
+ // Center emoji
+ ctx.font = '18px serif';
+ ctx.textAlign = 'center';
+ ctx.textBaseline = 'middle';
+ ctx.fillText('🛡️', cx, cy);
+ ctx.textBaseline = 'alphabetic';
+}
+
+function spinGuardianWheel(){
+ if(_gwSpinning || _gwWishes.length < 1) return;
+ _gwSpinning = true;
+ const btn = document.getElementById('gw-spin-btn');
+ const hint = document.getElementById('gw-spin-hint');
+ if(btn){ btn.disabled = true; btn.textContent = '🎰 Spinning…'; }
+ if(hint){ hint.textContent = 'The wheel is choosing your destiny… ✨'; }
+
+ // Highlight cards to show anticipation
+ document.querySelectorAll('.gw-wish-card').forEach(c => c.classList.remove('gw-wish-card--highlight'));
+
+ const canvas = document.getElementById('gw-wheel-canvas');
+ const n = _gwWishes.length;
+ const totalSpin = (Math.PI * 2 * (5 + Math.floor(Math.random() * 5)))
+                 + (Math.random() * Math.PI * 2); // 5-10 full rotations + random offset
+ const duration = 4500; // ms
+ const startTime = performance.now();
+ const startAngle = _gwAngle;
+
+ function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+
+ function frame(now){
+  const elapsed = now - startTime;
+  const t = Math.min(elapsed / duration, 1);
+  const eased = easeOut(t);
+  _gwAngle = startAngle + totalSpin * eased;
+  _gwDrawWheel(canvas, _gwAngle);
+  if(t < 1){
+   _gwAnimId = requestAnimationFrame(frame);
+  } else {
+   _gwSpinning = false;
+   _onWheelDone(canvas);
+  }
+ }
+ _gwAnimId = requestAnimationFrame(frame);
+ announceA11y('Wheel spinning! Get ready…');
+}
+
+function _onWheelDone(canvas){
+ // Determine which segment is at the top (where pointer is)
+ const n = _gwWishes.length;
+ const seg = (2 * Math.PI) / n;
+ // Normalise angle so pointer (top = -π/2) maps to segment
+ const normalised = ((-_gwAngle - Math.PI/2) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+ const idx = Math.floor(normalised / seg) % n;
+ _gwSelectedWish = _gwWishes[idx];
+
+ // Highlight winning card
+ document.querySelectorAll('.gw-wish-card').forEach((c, i) => {
+  c.classList.toggle('gw-wish-card--highlight', i === idx);
+ });
+
+ const btn = document.getElementById('gw-spin-btn');
+ const hint = document.getElementById('gw-spin-hint');
+ if(btn){ btn.disabled = false; btn.innerHTML = '<span class="gw-spin-icon" aria-hidden="true">🎰</span> SPIN THE WHEEL'; }
+ if(hint){ hint.textContent = ''; }
+
+ announceA11y('The wheel has chosen wish #' + (idx+1) + '. Prepare to make it real!');
+
+ // Transition to result step after brief pause
+ setTimeout(() => _gwShowResult(), 700);
+}
+
+function _gwShowResult(){
+ if(!_gwSelectedWish) return;
+ const w = _gwSelectedWish;
+ // Populate result fields
+ const textEl = document.getElementById('gw-selected-wish-text');
+ const metaEl = document.getElementById('gw-selected-wish-meta');
+ const waitEl = document.getElementById('gw-waiting-days');
+ if(textEl) textEl.textContent = '"' + w.wishText + '"';
+ if(metaEl) metaEl.textContent = (w.country || '🌍 Global') + (w.cat ? ' · ' + w.cat : '') + (w.est ? ' · up to $' + w.est : '');
+ if(waitEl){
+  const days = w.queuedAt ? _gwDaysAgo(w.queuedAt) : null;
+  waitEl.textContent = days !== null ? days + ' day' + (days !== 1 ? 's' : '') : 'a while';
+ }
+ // Show step
+ document.getElementById('gw-step-wheel').style.display = 'none';
+ document.getElementById('gw-step-result').style.display = 'block';
+ // Scroll to result
+ document.getElementById('gw-step-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+ launchConfetti(40);
+ announceA11y('Wish selected! You can now grant it or spin again.');
+}
+
+function setGuardianAnon(isAnon){
+ _gwAnon = isAnon;
+ document.getElementById('gw-anon-yes').classList.toggle('anon-toggle-btn--active', isAnon);
+ document.getElementById('gw-anon-no').classList.toggle('anon-toggle-btn--active', !isAnon);
+ document.getElementById('gw-anon-yes').setAttribute('aria-pressed', String(isAnon));
+ document.getElementById('gw-anon-no').setAttribute('aria-pressed', String(!isAnon));
+ const nameInp = document.getElementById('gw-name-inp');
+ if(nameInp) nameInp.style.display = isAnon ? 'none' : 'block';
+}
+
+function updateGuardianNamePreview(){
+ // Nothing to update visually for now — placeholder shows
+}
+
+function proceedFromWheel(){
+ if(!_gwSelectedWish) return;
+ const nameVal = (document.getElementById('gw-name-inp')?.value || '').trim();
+ // Store state for guardian modal + badge
+ sessionStorage.setItem('ww-guardian-anon', _gwAnon ? '1' : '0');
+ if(nameVal) sessionStorage.setItem('ww-guardian-name', nameVal);
+ sessionStorage.setItem('ww-wheel-wish-text', _gwSelectedWish.wishText || '');
+ // Use sponsorWish to open the guardian confirm modal
+ sponsorWish(_gwSelectedWish.id);
+}
+
+function reSpinWheel(){
+ _gwSelectedWish = null;
+ document.getElementById('gw-step-result').style.display = 'none';
+ document.getElementById('gw-step-wheel').style.display = 'block';
+ const btn = document.getElementById('gw-spin-btn');
+ if(btn){ btn.disabled = false; btn.innerHTML = '<span class="gw-spin-icon" aria-hidden="true">🎰</span> SPIN THE WHEEL'; }
+ document.querySelectorAll('.gw-wish-card').forEach(c => c.classList.remove('gw-wish-card--highlight'));
+ // Rebuild wheel clean
+ _gwBuildWheel();
+ document.getElementById('gw-step-wheel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetGuardianWheel(){
+ _gwBudget = 0;
+ _gwWishes = [];
+ _gwSelectedWish = null;
+ document.querySelectorAll('.gw-preset').forEach(b => b.classList.remove('gw-preset--active'));
+ const customInp = document.getElementById('gw-custom-inp');
+ if(customInp) customInp.value = '';
+ document.getElementById('gw-budget-display').style.display = 'none';
+ document.getElementById('gw-find-btn').style.display = 'none';
+ document.getElementById('gw-step-wheel').style.display = 'none';
+ document.getElementById('gw-step-result').style.display = 'none';
+ document.getElementById('gw-step-budget').style.display = 'block';
+ document.getElementById('gw-step-budget').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ══ GUARDIAN BADGE POPUP ════════════════════════════════════ */
+function openGuardianBadge(wishText){
+ // Determine rank based on localStorage grant history
+ const grantKey = 'ww-grants-done';
+ const grants = JSON.parse(localStorage.getItem(grantKey) || '[]');
+ grants.push({ date: Date.now(), wishText: wishText || '' });
+ localStorage.setItem(grantKey, JSON.stringify(grants));
+ const count = grants.length;
+ let rank = 'First-Time Guardian';
+ let rankEmoji = '🌟';
+ if(count >= 10){ rank = 'Legend Guardian'; rankEmoji = '🏆'; }
+ else if(count >= 5){ rank = 'Champion Guardian'; rankEmoji = '🌟'; }
+ else if(count >= 2){ rank = 'Returning Guardian'; rankEmoji = '💛'; }
+
+ const chipEl = document.getElementById('gb-rank-chip');
+ if(chipEl) chipEl.textContent = rankEmoji + ' ' + rank;
+
+ const subtitleEl = document.getElementById('gb-subtitle');
+ if(subtitleEl){
+  if(count === 1){
+   subtitleEl.textContent = 'Thank you so much. Because of you, someone\'s wish just moved one giant step closer to becoming real. The world is better because you showed up.';
+  } else {
+   subtitleEl.textContent = 'You\'ve now granted ' + count + ' wish' + (count!==1?'es':'') + '. You are not a one-time hero — you are a true Guardian. We see you. 💛';
+  }
+ }
+ // Show wish text if available
+ const wishBox = document.getElementById('gb-wish-box');
+ const wishTxtEl = document.getElementById('gb-wish-text');
+ if(wishText && wishBox && wishTxtEl){
+  wishTxtEl.textContent = '"' + wishText + '"';
+  wishBox.style.display = 'block';
+ } else if(wishBox){
+  wishBox.style.display = 'none';
+ }
+ // Pre-fill name from sessionStorage
+ const savedName = sessionStorage.getItem('ww-guardian-name') || '';
+ const nameInp = document.getElementById('gb-r-name');
+ if(nameInp && savedName) nameInp.value = savedName;
+
+ // Open overlay
+ const ov = document.getElementById('gb-overlay');
+ if(ov){ ov.classList.add('open'); document.body.style.overflow = 'hidden'; }
+ setTimeout(() => document.getElementById('gb-btn-primary-ref')?.focus?.(), 150);
+ announceA11y('Guardian badge unlocked! You are a Guardian. ' + rank);
+}
+
+function closeGuardianBadge(){
+ const ov = document.getElementById('gb-overlay');
+ if(ov){ ov.classList.remove('open'); document.body.style.overflow = ''; }
+}
+
+function sponsorAnotherWish(){
+ closeGuardianBadge();
+ resetGuardianWheel();
+ showTab('guard');
+ document.getElementById('gw-step-budget')?.scrollIntoView({ behavior:'smooth', block:'start' });
+ announceA11y('Budget picker ready. Choose your next grant!');
+}
+
+function openShareFromBadge(){
+ closeGuardianBadge();
+ const wishText = sessionStorage.getItem('ww-wheel-wish-text') || '';
+ showShareModal('guardian');
+}
+
+function saveGuardianRewards(){
+ const name    = (document.getElementById('gb-r-name')?.value    || '').trim();
+ const country = (document.getElementById('gb-r-country')?.value || '').trim();
+ const address = (document.getElementById('gb-r-address')?.value || '').trim();
+ const hope    = document.getElementById('gb-r-hope')?.checked ?? true;
+ const email   = sessionStorage.getItem('ww-guardian-email') || '';
+ if(!name && !country){ alert('Please enter at least your name so we know who to thank! 💛'); return; }
+
+ const rewardData = {
+  name, country, address, email,
+  hopeEmails: hope,
+  anon: sessionStorage.getItem('ww-guardian-anon') === '1',
+  grantCount: JSON.parse(localStorage.getItem('ww-grants-done') || '[]').length,
+  savedAt: new Date().toISOString(),
+ };
+
+ // Save to Firestore if available
+ if(window._firebaseReady && window._db && window._fb){
+  const db = window._db;
+  const { doc, setDoc, serverTimestamp } = window._fb;
+  if(db && doc && setDoc){
+   const key = email ? email.replace(/[^a-zA-Z0-9]/g,'_') : ('anon_' + Date.now());
+   setDoc(doc(db, 'guardians', key), { ...rewardData, updatedAt: serverTimestamp() }, { merge: true })
+    .catch(err => console.warn('Guardian save:', err));
+  }
+ } else {
+  // Fallback: localStorage
+  const existing = JSON.parse(localStorage.getItem('ww-guardian-profile') || '{}');
+  localStorage.setItem('ww-guardian-profile', JSON.stringify({ ...existing, ...rewardData }));
+ }
+
+ // Send a thank-you email via EmailJS if configured
+ _gwSendEmail('guardian_rewards', {
+  to_name: name || 'Guardian',
+  to_email: email,
+  guardian_name: name,
+  guardian_country: country,
+ });
+
+ // Show success state
+ const form = document.getElementById('gb-rewards-form-wrap');
+ const saved = document.getElementById('gb-rewards-saved');
+ if(form) form.querySelector('.gb-rewards-form').style.display = 'none';
+ if(saved) saved.style.display = 'block';
+ announceA11y('Details saved! Thank you so much. You are on our thank-you list.');
+}
+
+/* ══ EMAILJS WRAPPER ════════════════════════════════════════ */
+// Configure EmailJS in your Netlify env or inline:
+// window.EMAILJS_PUBLIC_KEY = 'your_key'
+// window.EMAILJS_SERVICE_ID = 'your_service'
+function _gwSendEmail(templateId, params){
+ // Graceful no-op if EmailJS is not configured
+ try {
+  const key = window.EMAILJS_PUBLIC_KEY;
+  const svc = window.EMAILJS_SERVICE_ID;
+  if(!key || !svc || !params.to_email) return;
+  if(typeof emailjs === 'undefined') return;
+  emailjs.send(svc, templateId, params).catch(e => console.warn('EmailJS:', e));
+ } catch(e){ /* silent */ }
+}
+
+// Send wisher confirmation email (call from submitWish after save)
+function sendWisherConfirmationEmail(email, wishText, wishCode){
+ _gwSendEmail('wisher_pinned', {
+  to_email: email,
+  to_name: email.split('@')[0],
+  wish_text: wishText,
+  wish_code: wishCode || '',
+  wall_url: 'https://wishwall.xyz',
+ });
+}
+
+// Send guardian receipt email (call from checkReturn)
+function sendGuardianReceiptEmail(email, guardianName, wishText){
+ _gwSendEmail('guardian_receipt', {
+  to_email: email,
+  to_name: guardianName || 'Guardian',
+  wish_text: wishText || 'a heartfelt wish',
+  wall_url: 'https://wishwall.xyz',
+  receipt_ref: 'WW-' + Date.now().toString(36).toUpperCase(),
+ });
+}
+
+/* ══ SPONSOR ENQUIRY MODAL */
 function openSponsorModal(){
  const ov = document.getElementById('sponsor-modal-ov');
  if(!ov) return;
@@ -4971,14 +5969,24 @@ function submitSponsorEnquiry(e){
 function proceedToGrantPayment(){
  const modal = document.getElementById('guardian-modal-ov');
  const emailInp = document.getElementById('guardian-email-inp');
+ const nameInp  = document.getElementById('guardian-name-inp');
  const wishId = modal.dataset.wishId;
  const est = parseFloat(modal.dataset.wishEst) || 10;
  const email = (emailInp?.value || '').trim();
+ const name  = (nameInp?.value  || '').trim();
+ const anon  = sessionStorage.getItem('ww-guardian-anon') === '1'
+   || (!document.getElementById('gm-anon-no')?.classList.contains('anon-toggle-btn--active'));
 
- // Save guardian email to sessionStorage so webhook can pick it up
+ // Save guardian info to sessionStorage
  if(email) sessionStorage.setItem('ww-guardian-email', email);
+ if(name)  sessionStorage.setItem('ww-guardian-name', name);
+ sessionStorage.setItem('ww-guardian-anon', anon ? '1' : '0');
  sessionStorage.setItem('ww-sponsor-wish-id', wishId);
  sessionStorage.setItem('ww-pending-share', 'guardian');
+
+ // Save wish text for badge popup
+ const wishTxtEl = document.getElementById('guardian-wish-text');
+ if(wishTxtEl?.textContent) sessionStorage.setItem('ww-sponsor-wish-text', wishTxtEl.textContent);
 
  // Navigate to Stripe
  const base = window.STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
@@ -5375,6 +6383,8 @@ async function submitWish(){
  localStorage.setItem(yearKey, JSON.stringify(thisYear));
  const myCode = generateRefCode(email);
  localStorage.setItem('ww-mycode', myCode);
+ // Send wisher confirmation email
+ sendWisherConfirmationEmail(email, wishTxt, myCode);
  window.location.href = `${STRIPE_PAYMENT_LINK}?client_reference_id=${wishId}&prefilled_email=${encodeURIComponent(email)}`;
  } else {
  // Demo mode skip payment
@@ -5471,8 +6481,18 @@ function checkReturn(){
   if(pendingShare === 'guardian'){
    sessionStorage.removeItem('ww-pending-share');
    history.replaceState({}, '', location.pathname);
-   launchConfetti(60);
-   showShareModal('guardian');
+   launchConfetti(80);
+   // Show the Guardian Badge popup
+   const wishText = sessionStorage.getItem('ww-wheel-wish-text')
+    || sessionStorage.getItem('ww-sponsor-wish-text')
+    || '';
+   const guardianEmail = sessionStorage.getItem('ww-guardian-email') || '';
+   const guardianName  = sessionStorage.getItem('ww-guardian-name')  || '';
+   // Send receipt email
+   if(guardianEmail) sendGuardianReceiptEmail(guardianEmail, guardianName, wishText);
+   // Show Guardian tab then badge
+   showTab('guard');
+   setTimeout(() => openGuardianBadge(wishText), 350);
   } else {
    const txt = p.get('wish') || storedWishTxt || 'something wonderful...';
    showConf(decodeURIComponent(txt));
