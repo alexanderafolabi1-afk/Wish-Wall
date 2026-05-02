@@ -269,12 +269,12 @@
   ============================================================ -->
 <div class="sponsor-modal-overlay" id="sponsor-modal-ov"
  onclick="if(event.target===this)closeSponsorModal()"
- role="dialog" aria-modal="true" aria-label="Enquire about sponsoring">
+ role="dialog" aria-modal="true" aria-labelledby="sponsor-modal-heading">
  <div class="sponsor-modal">
   <button class="sponsor-modal-close" onclick="closeSponsorModal()" aria-label="Close">&#215;</button>
 
   <div class="sponsor-modal-badge">&#x1F4BC; Corporate Patronage</div>
-  <h2 class="sponsor-modal-title">Let's make something<br>real together.</h2>
+  <h2 class="sponsor-modal-title" id="sponsor-modal-heading">Let's make something<br>real together.</h2>
   <p class="sponsor-modal-sub">Tell us a little about your company and what you have in mind. No pressure, no pitch decks &mdash; just a conversation starter. &#x2728;</p>
 
   <form id="sponsor-enquiry-form" onsubmit="submitSponsorEnquiry(event)" novalidate>
@@ -4752,12 +4752,12 @@ function submitSponsorEnquiry(e){
  const message = (document.getElementById('sp-message')?.value || '').trim();
 
  // Basic validation
- if(!company){ document.getElementById('sp-company').focus(); return; }
- if(!name)   { document.getElementById('sp-name').focus();    return; }
+ if(!company){ document.getElementById('sp-company').focus(); announceA11y('Please enter your company name.'); return; }
+ if(!name)   { document.getElementById('sp-name').focus();    announceA11y('Please enter your name.'); return; }
  if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
-  document.getElementById('sp-email').focus(); return;
+  document.getElementById('sp-email').focus(); announceA11y('Please enter a valid email address.'); return;
  }
- if(!tier)   { document.getElementById('sp-tier').focus();    return; }
+ if(!tier)   { document.getElementById('sp-tier').focus();    announceA11y('Please select a tier of interest.'); return; }
 
  const body = [
   'Company: ' + company,
@@ -4774,7 +4774,7 @@ function submitSponsorEnquiry(e){
 
  const btn = document.getElementById('sponsor-submit-btn');
  if(btn){ btn.disabled = true; btn.textContent = '\u2714 Enquiry sent!'; }
- announceA11y('Sponsor enquiry form submitted.');
+ announceA11y('Enquiry submitted! Your email client should open shortly. We will reply within 24 hours.');
  setTimeout(closeSponsorModal, 1800);
 }
 
