@@ -5972,7 +5972,9 @@ function paintMarioPipe(){
  const col = cols[i % cols.length];
  const pin = pinCols[i % pinCols.length];
  const flag = (w.country||'').split(' ')[0] || '🌍';
- const txt = (w.wishText||'').slice(0,55) + ((w.wishText||'').length>55?'…':'');
+ const rawTxt = real.length > 0
+   ? (w.wishText||'').slice(0,55) + ((w.wishText||'').length>55?'…':'')
+   : TUNNEL_MESSAGES[i % TUNNEL_MESSAGES.length];
  /* stagger: each note starts offset from the last */
  const delay = -(i * (cycleT / total)).toFixed(2);
  const dur = (cycleT + (i%3)*1.5).toFixed(1);
@@ -5988,7 +5990,7 @@ function paintMarioPipe(){
  ">
  <div class="mario-note-pin" style="background:${pin};"></div>
  <span class="mario-note-flag">${flag}</span>
- <span class="mario-note-text">${txt}</span>
+ <span class="mario-note-text">${rawTxt}</span>
  </div>`;
  }).join('');
 
