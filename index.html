@@ -1286,7 +1286,7 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .leaderboard { max-width: 1100px; margin: var(--sp-4) auto 0; }
 .lb-title { font-family: var(--fn-display); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); text-align: center; margin-bottom: 6px; font-variation-settings: 'opsz' 40; }
 .lb-subtitle { text-align: center; font-family: var(--fn-body); font-size: .9rem; color: var(--text-muted); margin-bottom: var(--sp-3); }
-.lb-summary { text-align:center; margin-bottom:20px; font-family:var(--fn-note); font-size:1rem; color:rgba(255,255,255,.5); }
+.lb-summary { text-align:center; margin-bottom:20px; font-family:var(--fn-note); font-size:1rem; color:var(--text-muted); }
 .lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
 .lb-card {
  display: flex; align-items: center; gap: 8px;
@@ -2591,17 +2591,18 @@ button { touch-action: manipulation; }
   margin-bottom: 32px;
 }
 .corp-card {
-  background: rgba(245, 200, 66, 0.05);
-  border: 1px solid rgba(245, 200, 66, 0.18);
+  background: #1E2235;
+  border: 1px solid rgba(245, 200, 66, 0.22);
   border-radius: 18px;
   padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .corp-card:hover {
   transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(30,34,53,0.18);
 }
 .corp-card-top {
   display: flex;
@@ -2624,14 +2625,14 @@ button { touch-action: manipulation; }
 }
 .corp-tagline {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
   line-height: 1.5;
 }
 .corp-badge {
   font-size: 10px;
-  background: rgba(245, 200, 66, 0.15);
-  border: 1px solid rgba(245, 200, 66, 0.3);
-  color: rgba(245, 200, 66, 0.9);
+  background: rgba(245, 200, 66, 0.18);
+  border: 1px solid rgba(245, 200, 66, 0.4);
+  color: #F5C842;
   border-radius: 50px;
   padding: 3px 10px;
   font-family: var(--fn-ui);
@@ -2647,10 +2648,10 @@ button { touch-action: manipulation; }
   font-family: var(--fn-ui);
 }
 .corp-stat {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
 }
 .corp-funded {
-  color: rgba(16, 185, 129, 0.9);
+  color: #34d399;
   font-weight: 700;
 }
 .corp-cta-box {
@@ -2964,8 +2965,8 @@ button { touch-action: manipulation; }
   <!-- Corporate Sponsors -->
   <section class="corp-section">
    <div class="corp-section-header">
-    <h3 style="font-family:var(--fn-display);font-size:1.6rem;color:#FAFAF7;margin-bottom:8px;">🏢 Corporate Patrons</h3>
-    <p style="font-size:14px;color:rgba(255,255,255,0.5);font-family:var(--fn-ui);">Companies making a real difference — one wish at a time</p>
+    <h3 style="font-family:var(--fn-display);font-size:1.6rem;color:var(--text);margin-bottom:8px;">🏢 Corporate Patrons</h3>
+    <p style="font-size:14px;color:var(--text-muted);font-family:var(--fn-ui);">Companies making a real difference — one wish at a time</p>
    </div>
    <div class="corp-sponsor-grid" id="corp-sponsor-grid"></div>
    <div class="corp-cta-box">
@@ -5536,11 +5537,11 @@ function updateMilestone(total){
  GUARDIAN TIER SYSTEM
  ============================================================ */
 const TIERS = [
- { name:'Seedling', icon:'🌱', min:0, max:9, desc:'Just getting started every wish counts!', color:'#00FFB3' },
- { name:'Spark', icon:'⚡', min:10, max:49, desc:'You\'ve ignited something. Keep it burning!', color:'#FFE566' },
- { name:'Luminary', icon:'✨', min:50, max:199, desc:'Your light is lifting people you\'ll never meet.', color:'#FF7B2C' },
- { name:'Guardian', icon:'🛡️',min:200, max:999, desc:'A true keeper of dreams. The wall thanks you.', color:'#B44DFF' },
- { name:'Mythkeeper', icon:'🔮', min:1000, max:Infinity, desc:'Legendary. Wishes bend toward you.', color:'#FF4D8D' },
+ { name:'Seedling', icon:'🌱', min:0, max:9, desc:'Just getting started every wish counts!', color:'#0f7a52' },
+ { name:'Spark', icon:'⚡', min:10, max:49, desc:'You\'ve ignited something. Keep it burning!', color:'#92620a' },
+ { name:'Luminary', icon:'✨', min:50, max:199, desc:'Your light is lifting people you\'ll never meet.', color:'#c45a0c' },
+ { name:'Guardian', icon:'🛡️',min:200, max:999, desc:'A true keeper of dreams. The wall thanks you.', color:'#7c2fc0' },
+ { name:'Mythkeeper', icon:'🔮', min:1000, max:Infinity, desc:'Legendary. Wishes bend toward you.', color:'#c0185e' },
 ];
 
 function getTier(totalDonated){ return TIERS.slice().reverse().find(t => totalDonated >= t.min) || TIERS[0]; }
