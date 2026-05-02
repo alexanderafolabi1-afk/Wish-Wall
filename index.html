@@ -175,7 +175,7 @@
  "totalTime": "PT3M",
  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "1.99" },
  "step": [
- { "@type": "HowToStep", "position": 1, "name": "Write your wish", "text": "Describe your wish in up to 200 characters. Be specific and honest. Grocery money, medical bills, a laptop, school fees, emotional support all welcome." },
+ { "@type": "HowToStep", "position": 1, "name": "Write your wish", "text": "Describe your wish in up to 350 characters. Be specific and honest. Grocery money, medical bills, a laptop, school fees, emotional support all welcome." },
  { "@type": "HowToStep", "position": 2, "name": "Pay 2 WishCoins", "text": "Pay $1.99 via Stripe to pin your wish. Your real name is stored securely for verification but never displayed. Your wish appears anonymously." },
  { "@type": "HowToStep", "position": 3, "name": "Community Guardians see your wish", "text": "Your wish joins 1,000 others on the wall. Guardians browse and choose which wish to grant. No social following or public campaign required." },
  { "@type": "HowToStep", "position": 4, "name": "Your wish gets granted", "text": "The Guardian fulfils the wish directly and we verify it. Your note turns green. You receive a private confirmation. The Guardian receives a digital receipt confirming the wish they made real." }
@@ -1798,6 +1798,26 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .chk-wrap { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
 .chk-wrap input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; margin-top: 1px; accent-color: var(--urgency); }
 .chk-lbl { font-family: var(--fn-body); font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+/* Anon toggle buttons */
+.anon-toggle-row { display: flex; gap: 10px; }
+.anon-toggle-btn {
+ flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+ padding: 14px 10px; cursor: pointer;
+ background: #F5EDD8; border: 2px solid rgba(30,34,53,.12);
+ border-radius: 2px 12px 2px 12px;
+ font-family: var(--fn-body); color: var(--text-muted);
+ transition: all .18s cubic-bezier(0.16,1,0.3,1);
+}
+.anon-toggle-btn:hover { border-color: rgba(212,74,30,.4); transform: translateY(-1px); }
+.anon-toggle-btn--active {
+ border-color: var(--urgency); color: var(--text);
+ box-shadow: 3px 3px 0 rgba(212,74,30,.15);
+ transform: translateY(-2px);
+}
+.anon-toggle-icon { font-size: 22px; line-height: 1; }
+.anon-toggle-title { font-family: var(--fn-display); font-size: 13px; font-weight: 700; letter-spacing: -0.02em; font-variation-settings: 'opsz' 20; }
+.anon-toggle-sub { font-family: var(--fn-mono); font-size: 10px; color: var(--text-muted); }
 .price-note {
  display: flex; align-items: flex-start; gap: 12px;
  padding: var(--sp-2) var(--sp-3);
@@ -3271,7 +3291,7 @@ button { touch-action: manipulation; }
  <div class="how-card-icon">📌</div>
  <div>
  <h3 class="how-card-title" style="color:var(--yellow);">Step 1 Pin a Wish</h3>
- <p class="how-card-body">Write your wish (max 200 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
+ <p class="how-card-body">Write your wish (max 350 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
  </div>
  </div>
 
@@ -3487,15 +3507,15 @@ button { touch-action: manipulation; }
  <button type="button" class="wish-prompt-chip" onclick="usePrompt(this)">Connect me to a food bank</button>
  </div>
  </div>
- <textarea class="form-ta wish-ta-magic" id="f-wish" rows="3" maxlength="200"
+ <textarea class="form-ta wish-ta-magic" id="f-wish" rows="3" maxlength="350"
  placeholder="I wish for..."
  oninput="updateChar(); updateWishPreview();"
  aria-describedby="char-ctr wish-hint"
  aria-required="true"
  autocomplete="off"
  spellcheck="true"></textarea>
- <div class="char-ctr" id="char-ctr" aria-live="polite" aria-atomic="true">0 / 200</div>
- <div id="wish-hint" class="form-hint">Up to 200 characters. Be specific, specific wishes get granted faster.</div>
+ <div class="char-ctr" id="char-ctr" aria-live="polite" aria-atomic="true">0 / 350</div>
+ <div id="wish-hint" class="form-hint">Up to 350 characters. Be specific — specific wishes get granted faster.</div>
 
  <!-- Accessibility: read-aloud button -->
  <button type="button" class="a11y-speak-btn" onclick="readWishAloud()" aria-label="Read your wish aloud" title="Read aloud (accessibility)">
@@ -3524,8 +3544,9 @@ button { touch-action: manipulation; }
  <label class="form-label" for="f-name">Your Full Name <span class="form-req" aria-label="required">required</span></label>
  <input class="form-inp" type="text" id="f-name" placeholder="Jane Doe" required
  autocomplete="name" aria-required="true"
+ oninput="updateAnonPreview()"
  aria-describedby="name-hint">
- <p class="form-hint" id="name-hint">Required for verification. Never shown publicly without your consent.</p>
+ <p class="form-hint" id="name-hint">🔒 For ID verification only — never shown publicly unless you choose "Show My Name" below.</p>
  </div>
 
  <div class="form-field">
@@ -3536,12 +3557,25 @@ button { touch-action: manipulation; }
  <p class="form-hint" id="email-hint">We email you when your wish is granted. Never shared. Ever.</p>
  </div>
 
+ <!-- Anon toggle -->
  <div class="form-field">
- <label class="chk-wrap">
- <input type="checkbox" id="f-anon" checked aria-describedby="anon-hint">
- <span class="chk-lbl">Post anonymously on the wall</span>
- </label>
- <p class="form-hint" id="anon-hint">Your name is stored securely but only shown on the wall with your consent.</p>
+ <label class="form-label">How should your wish appear?</label>
+ <div class="anon-toggle-row">
+  <button type="button" class="anon-toggle-btn anon-toggle-btn--active" id="anon-btn-yes"
+   onclick="setAnon(true)" aria-pressed="true">
+   <span class="anon-toggle-icon">🕵️</span>
+   <span class="anon-toggle-title">Anonymous</span>
+   <span class="anon-toggle-sub">No name shown</span>
+  </button>
+  <button type="button" class="anon-toggle-btn" id="anon-btn-no"
+   onclick="setAnon(false)" aria-pressed="false">
+   <span class="anon-toggle-icon">👤</span>
+   <span class="anon-toggle-title">Show My Name</span>
+   <span class="anon-toggle-sub" id="anon-name-preview">First name only</span>
+  </button>
+ </div>
+ <input type="checkbox" id="f-anon" checked style="display:none;" aria-hidden="true">
+ <p class="form-hint" id="anon-hint" style="margin-top:8px;">Your full name is stored securely and only used for verification.</p>
  </div>
 
  <div class="form-field">
@@ -4966,13 +5000,28 @@ function handleOvClick(e){
 /* ============================================================
  CHAR COUNTER
  ============================================================ */
+function setAnon(isAnon){
+ const cb = document.getElementById('f-anon');
+ const btnYes = document.getElementById('anon-btn-yes');
+ const btnNo  = document.getElementById('anon-btn-no');
+ if(cb) cb.checked = isAnon;
+ if(btnYes){ btnYes.classList.toggle('anon-toggle-btn--active', isAnon); btnYes.setAttribute('aria-pressed', isAnon); }
+ if(btnNo){  btnNo.classList.toggle('anon-toggle-btn--active', !isAnon); btnNo.setAttribute('aria-pressed', !isAnon); }
+}
+function updateAnonPreview(){
+ const nameEl = document.getElementById('f-name');
+ const preview = document.getElementById('anon-name-preview');
+ if(!nameEl || !preview) return;
+ const first = (nameEl.value.trim().split(' ')[0] || '').trim();
+ preview.textContent = first ? first + ' (first name only)' : 'First name only';
+}
 function updateChar(){
  const el = document.getElementById('f-wish');
  const ctr = document.getElementById('char-ctr');
  if(!el || !ctr) return;
  const len = el.value.length;
- ctr.textContent = len + ' / 200';
- ctr.style.color = len > 180 ? '#D44A1E' : len > 150 ? '#C97B30' : '#6B7080';
+ ctr.textContent = len + ' / 350';
+ ctr.style.color = len > 320 ? '#D44A1E' : len > 250 ? '#C97B30' : '#6B7080';
 }
 
 /* ============================================================
@@ -5125,7 +5174,7 @@ async function submitWish(){
  const refCode = (document.getElementById('f-refcode')?.value || '').trim().toUpperCase();
 
  if(!wishTxt){ shake(document.getElementById('f-wish')); return alert('✨ Please write your wish!'); }
- if(wishTxt.length > 200){ return alert('Keep your wish under 200 characters!'); }
+ if(wishTxt.length > 350){ return alert('Keep your wish under 350 characters!'); }
  if(!name){ shake(document.getElementById('f-name')); return alert('Your full name is required it stays private and is used for verification only.'); }
  if(!email || !email.includes('@')){ shake(document.getElementById('f-email')); return alert('We need a valid email to notify you when your wish is granted 💌'); }
  if(!idConfirm){ return alert('Please confirm that your name matches your government-issued ID to continue. This protects everyone on the wall.'); }
@@ -6750,7 +6799,6 @@ if(document.readyState === 'loading'){
 } else {
   initLangSwitcher();
 }
-
 </script>
 
 </body>
