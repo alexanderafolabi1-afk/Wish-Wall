@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy — The Wish Wall</title>
+<title>Privacy Policy, The Wish Wall</title>
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://wishwall.xyz/privacy">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,10 +178,10 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
   <div class="section">
     <h2><span class="section-num">05</span> Who We Share Data With</h2>
     <ul>
-      <li><strong>Stripe</strong> — payment processing (PCI DSS Level 1 compliant). Stripe's privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></li>
-      <li><strong>Google Firebase / Firestore</strong> — secure data storage (servers in the EU or US depending on configuration)</li>
-      <li><strong>PayPal</strong> — used only to send grant disbursements to wish recipients</li>
-      <li><strong>ipapi.co</strong> — approximate country detection from IP (anonymous, no account created)</li>
+      <li><strong>Stripe</strong>: payment processing (PCI DSS Level 1 compliant). Stripe's privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></li>
+      <li><strong>Google Firebase / Firestore</strong>: secure data storage (servers in the EU or US depending on configuration)</li>
+      <li><strong>PayPal</strong>: used only to send grant disbursements to wish recipients</li>
+      <li><strong>ipapi.co</strong>: approximate country detection from IP (anonymous, no account created)</li>
     </ul>
     <p>We never sell, rent, or trade your personal data with any third party for marketing purposes.</p>
   </div>
@@ -205,13 +205,13 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
     <h2><span class="section-num">08</span> Your Rights Under UK GDPR</h2>
     <p>You have the right to:</p>
     <ul>
-      <li><strong>Access</strong> — request a copy of the data we hold about you</li>
-      <li><strong>Rectification</strong> — ask us to correct inaccurate data</li>
-      <li><strong>Erasure</strong> — ask us to delete your data (subject to legal retention requirements)</li>
-      <li><strong>Restriction</strong> — ask us to stop processing your data in certain circumstances</li>
-      <li><strong>Portability</strong> — receive your data in a machine-readable format</li>
-      <li><strong>Object</strong> — object to processing based on legitimate interests</li>
-      <li><strong>Withdraw consent</strong> — where processing is based on consent</li>
+      <li><strong>Access</strong>: request a copy of the data we hold about you</li>
+      <li><strong>Rectification</strong>: ask us to correct inaccurate data</li>
+      <li><strong>Erasure</strong>: ask us to delete your data (subject to legal retention requirements)</li>
+      <li><strong>Restriction</strong>: ask us to stop processing your data in certain circumstances</li>
+      <li><strong>Portability</strong>: receive your data in a machine-readable format</li>
+      <li><strong>Object</strong>: object to processing based on legitimate interests</li>
+      <li><strong>Withdraw consent</strong>: where processing is based on consent</li>
     </ul>
     <p>To exercise any of these rights, email us at <a href="mailto:admin@wallwishes.xyz">admin@wallwishes.xyz</a>. We will respond within 30 days.</p>
     <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong>: <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a></p>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms of Service — The Wish Wall</title>
+<title>Terms of Service, The Wish Wall</title>
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://wishwall.xyz/terms">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,7 +146,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
 
   <div class="section">
     <h2><span class="section-num">02</span> Acceptance</h2>
-    <p>By accessing or using The Wish Wall — whether posting a wish or sponsoring one — you accept these Terms in full. If you do not agree, stop using the platform immediately. We may update these Terms with 14 days notice for material changes. Continued use constitutes acceptance.</p>
+    <p>By accessing or using The Wish Wall, whether posting a wish or sponsoring one, you accept these Terms in full. If you do not agree, stop using the platform immediately. We may update these Terms with 14 days notice for material changes. Continued use constitutes acceptance.</p>
   </div>
 
   <div class="section">
@@ -155,7 +155,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
   </div>
 
   <div class="section">
-    <h2><span class="section-num">04</span> Our role — not a payment institution</h2>
+    <h2><span class="section-num">04</span> Our role: not a payment institution</h2>
     <p>The Wish Wall does not receive, hold, or transmit funds. All payments are processed directly by Stripe. We operate as a community discovery layer connecting Wishers and Guardians. We do not act as a money services business or payment institution under the Payment Services Regulations 2017. WishCoins are a unit of account on this platform only and do not constitute electronic money under the Electronic Money Regulations 2011.</p>
   </div>
 
@@ -199,7 +199,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
 
   <div class="section">
     <h2><span class="section-num">09</span> Wish queue &amp; wall continuity</h2>
-    <p>The Wish Wall operates a queue system to ensure the wall remains full at all times. When a wish is granted, the next eligible wish in the queue automatically promotes to the wall. Submitting a wish does not guarantee immediate placement — your wish may enter the queue and be promoted when a slot becomes available. The queue is FIFO (first in, first out) by submission date. You will be notified by email when your wish is promoted to the live wall.</p>
+    <p>The Wish Wall operates a queue system to ensure the wall remains full at all times. When a wish is granted, the next eligible wish in the queue automatically promotes to the wall. Submitting a wish does not guarantee immediate placement; your wish may enter the queue and be promoted when a slot becomes available. The queue is FIFO (first in, first out) by submission date. You will be notified by email when your wish is promoted to the live wall.</p>
   </div>
 
   <div class="section">
