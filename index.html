@@ -5500,8 +5500,8 @@ function findWishesForGuardian(){
  ).sort((a, b) => {
   // Sort by oldest first: use queuedAt/createdAt if available, else default order
   const da = a.queuedAt ? new Date(a.queuedAt).getTime() : (a.id || '').localeCompare(b.id || '');
-  const db_ = b.queuedAt ? new Date(b.queuedAt).getTime() : 0;
-  return da - db_;
+  const db2 = b.queuedAt ? new Date(b.queuedAt).getTime() : 0;
+  return da - db2;
  });
 
  // Take up to 8 for the wheel; if fewer than 2, use demo data
@@ -5604,7 +5604,7 @@ function _gwDrawWheel(canvas, angle){
   ctx.textAlign = 'right';
   ctx.fillStyle = fg;
   ctx.font = `bold ${Math.max(10, Math.min(14, 280/n))}px sans-serif`;
-  const label = '#' + (i+1) + ' ' + _gwTrunc(_gwWishes[i].wishText, Math.floor(20 - n));
+  const label = '#' + (i+1) + ' ' + _gwTrunc(_gwWishes[i].wishText, Math.max(5, Math.floor(20 - n)));
   ctx.fillText(label, r - 10, 4);
   ctx.restore();
  }
@@ -5832,7 +5832,7 @@ function saveGuardianRewards(){
  const address = (document.getElementById('gb-r-address')?.value || '').trim();
  const hope    = document.getElementById('gb-r-hope')?.checked ?? true;
  const email   = sessionStorage.getItem('ww-guardian-email') || '';
- if(!name && !country){ alert('Please enter at least your name so we know who to thank! 💛'); return; }
+ if(!name && !country){ alert('Please enter your name or country so we know who to thank! 💛'); return; }
 
  const rewardData = {
   name, country, address, email,
@@ -5847,7 +5847,8 @@ function saveGuardianRewards(){
   const db = window._db;
   const { doc, setDoc, serverTimestamp } = window._fb;
   if(db && doc && setDoc){
-   const key = email ? email.replace(/[^a-zA-Z0-9]/g,'_') : ('anon_' + Date.now());
+   // Use a hashed/opaque key rather than the raw email to avoid exposing PII in doc IDs
+   const key = email ? ('g_' + btoa(email).replace(/[^a-zA-Z0-9]/g,'').slice(0,20)) : ('anon_' + Date.now());
    setDoc(doc(db, 'guardians', key), { ...rewardData, updatedAt: serverTimestamp() }, { merge: true })
     .catch(err => console.warn('Guardian save:', err));
   }
@@ -5906,7 +5907,7 @@ function sendGuardianReceiptEmail(email, guardianName, wishText){
   to_name: guardianName || 'Guardian',
   wish_text: wishText || 'a heartfelt wish',
   wall_url: 'https://wishwall.xyz',
-  receipt_ref: 'WW-' + Date.now().toString(36).toUpperCase(),
+  receipt_ref: 'WW-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase(),
  });
 }
 
