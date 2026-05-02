@@ -20,6 +20,9 @@
   --fn-mono:'Sometype Mono','Courier New',monospace;
 }
 html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 body{
   font-family:var(--fn-body); font-weight:300;
   background:var(--surface); color:var(--text);
@@ -116,7 +119,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
 
 <header class="site-header">
   <a href="/" class="logo">
-    <div class="logo-mark">📌</div>
+    <div class="logo-mark" aria-hidden="true">📌</div>
     The Wish Wall
   </a>
   <a href="/" class="back-link">&#8592; Back to the Wall</a>
@@ -178,6 +181,7 @@ hr{border:none; border-top:1px solid rgba(30,34,53,.08); margin:34px 0;}
   <div class="section">
     <h2><span class="section-num">05</span> Who We Share Data With</h2>
     <ul>
+      <li><strong>Google Fonts</strong>: web fonts served via fonts.googleapis.com and fonts.gstatic.com. Loading these fonts causes your browser to send standard request metadata (e.g., IP address, User-Agent) to Google. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a></li>
       <li><strong>Stripe</strong>: payment processing (PCI DSS Level 1 compliant). Stripe's privacy policy: <a href="https://stripe.com/privacy" target="_blank" rel="noopener">stripe.com/privacy</a></li>
       <li><strong>Google Firebase / Firestore</strong>: secure data storage (servers in the EU or US depending on configuration)</li>
       <li><strong>PayPal</strong>: used only to send grant disbursements to wish recipients</li>
