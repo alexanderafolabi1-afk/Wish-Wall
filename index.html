@@ -811,11 +811,6 @@ nav {
  font-size: 10px; font-weight: 700; flex-shrink: 0;
 }
 .how-arrow { color: rgba(30,34,53,.25); font-size: 12px; padding: 0 2px; font-family: var(--fn-mono); }
-.spot-counter {
- margin-left: auto; font-size: 10px;
- color: var(--text-muted); font-family: var(--fn-mono);
- white-space: nowrap;
-}
 
 /* Toolbar */
 .wall-toolbar {
@@ -2829,7 +2824,6 @@ button { touch-action: manipulation; }
  <button class="fil-btn active" onclick="setFilter('all',this)">All</button>
  <button class="fil-btn" onclick="setFilter('live',this)">🌟 Live</button>
  <button class="fil-btn" onclick="setFilter('granted',this)">✅ Granted</button>
- <span class="spot-counter" id="spot-counter">0 / 1,000 spots filled</span>
  </div>
 
  <!--
@@ -4148,9 +4142,7 @@ function paintWall(){
 
  const total = allWishes.length;
  const VISIBLE = Math.min(total + 50, WALL_CAPACITY);
- const counter = document.getElementById('spot-counter');
  const wallWishes = allWishes.filter(w => w.status === 'granted' || w.status === 'approved');
- if(counter) counter.textContent = `${wallWishes.length.toLocaleString()} wishes pinned${wallWishes.length >= WALL_CAPACITY ? ' (1,000 spots)' : ''}`;
 
  // Build slot map — only granted/approved wishes appear on the wall;
  // coming_soon wishes stay in the queue, leaving ghost slots visible
