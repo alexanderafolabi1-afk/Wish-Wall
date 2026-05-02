@@ -3570,8 +3570,9 @@ button { touch-action: manipulation; }
   .wish-detail-text { font-size: 18px; }
 
   /* ── Mascot + scroll-to-top: safe-area bottom spacing ── */
-  .mascot-wrap { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); right: 14px; }
-  .scr-top     { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); right: 14px; }
+  --bottom-safe-offset: calc(80px + env(safe-area-inset-bottom, 0px));
+  .mascot-wrap { bottom: var(--bottom-safe-offset); right: 14px; }
+  .scr-top     { bottom: var(--bottom-safe-offset); right: 14px; }
 }
 
 /* ── Cookie banner: safe-area bottom on notched devices ── */
