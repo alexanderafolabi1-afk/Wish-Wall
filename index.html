@@ -3488,6 +3488,99 @@ button { touch-action: manipulation; }
   .sponsor-modal { padding: 36px 22px 28px; border-radius: 2px 18px 2px 18px; }
   .sponsor-2col { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   MOBILE OPTIMISATION  ≤ 480px
+   ============================================================ */
+@media(max-width: 480px){
+
+  /* ── Prevent iOS Safari auto-zoom on focused inputs (font-size < 16px) ── */
+  .form-inp,
+  .form-ta,
+  .wish-ta-magic,
+  .search-inp,
+  .stay-updated-inp,
+  .guardian-email-inp,
+  .gw-custom-inp,
+  .gw-name-inp,
+  .gb-rewards-inp,
+  .guardian-name-inp,
+  .sponsor-input,
+  .sponsor-select,
+  .sponsor-textarea,
+  .ssm-textarea {
+    font-size: 16px !important;
+  }
+
+  /* ── Modal: reduce padding so content fits on narrow screens ── */
+  .modal-overlay { padding: 10px; }
+  .modal { padding: var(--sp-3); }
+
+  /* ── Guardian modal ── */
+  .guardian-modal {
+    padding: 30px 20px 24px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  /* ── Guardian badge popup ── */
+  .gb-panel {
+    padding: 30px 18px 24px;
+  }
+  .gb-badge-ring { width: 90px; height: 90px; }
+  .gb-badge-emoji { font-size: 46px; }
+
+  /* ── Confirmation overlay ── */
+  .confirm-ov { padding: var(--sp-3); }
+  .conf-ref-code { font-size: 1.4rem; letter-spacing: 4px; }
+
+  /* ── Stay-updated: stack input + button vertically ── */
+  .stay-updated-row { flex-direction: column; }
+  .stay-updated-btn { width: 100%; }
+
+  /* ── Corp CTA box: tighter padding ── */
+  .corp-cta-box { padding: 22px 16px; border-radius: 14px; }
+
+  /* ── Hero section: reduce top/bottom padding ── */
+  .hero {
+    padding-top: var(--sp-3);
+    padding-bottom: var(--sp-2);
+  }
+
+  /* ── Ensure all primary interactive buttons meet 44 px touch target ── */
+  .pin-btn,
+  .submit-btn,
+  .gw-find-btn,
+  .gw-spin-btn,
+  .gw-grant-btn {
+    min-height: 44px;
+  }
+
+  /* ── Hide decorative arrows in how-strip on very narrow screens ── */
+  .how-arrow { display: none; }
+
+  /* ── Wall toolbar: tighter gap ── */
+  .wall-toolbar { gap: var(--sp-1); }
+
+  /* ── Wall toolbar search: full width on its own row ── */
+  .search-inp { flex-basis: 100%; }
+
+  /* ── Wish detail inner: tighter side padding ── */
+  .wish-detail-inner { padding: 36px 16px 22px; }
+  .wish-detail-text { font-size: 18px; }
+
+  /* ── Mascot + scroll-to-top: safe-area bottom spacing ── */
+  --bottom-safe-offset: calc(80px + env(safe-area-inset-bottom, 0px));
+  .mascot-wrap { bottom: var(--bottom-safe-offset); right: 14px; }
+  .scr-top     { bottom: var(--bottom-safe-offset); right: 14px; }
+}
+
+/* ── Cookie banner: safe-area bottom on notched devices ── */
+@supports(padding: max(0px)){
+  .cookie-banner.show {
+    bottom: max(var(--sp-2), env(safe-area-inset-bottom));
+    padding-bottom: max(var(--sp-3), calc(var(--sp-3) + env(safe-area-inset-bottom)));
+  }
 }
 </style>
 
