@@ -1557,17 +1557,9 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  background: rgba(255,255,255,.45); padding: 2px 8px; border-radius: 2px;
  margin-top: 6px;
 }
-.b1-right { text-align: right; flex-shrink: 0; }
-.b1-headline {
- font-family: var(--fn-display); font-size: .95rem; font-weight: 800;
- color: #6A3D00; letter-spacing: -0.03em; line-height: 1.2;
- font-variation-settings: 'opsz' 20;
-}
-.b1-equation {
- font-family: var(--fn-mono); font-size: 9px; color: #9A6000;
- margin-top: 5px; line-height: 1.5;
-}
-.b1-stars { font-size: 1.1rem; display: block; margin-top: 5px; letter-spacing: 3px; }
+.b1-right { flex-shrink: 0; display: flex; align-items: center; justify-content: flex-end; }
+.b1-egg { display: block; opacity: .85; transition: opacity .3s; }
+.budget-preset--one:hover .b1-egg { opacity: 1; }
 .b1-footnote {
  font-family: var(--fn-mono); font-size: 9.5px; color: var(--text-muted);
  text-align: center; margin-top: -6px; margin-bottom: var(--sp-2); line-height: 1.6;
@@ -4152,12 +4144,24 @@ button { touch-action: manipulation; }
      <span class="b1-tag">⭐ Community Pot</span>
     </div>
     <div class="b1-right">
-     <div class="b1-headline">Every dollar<br>counts here.</div>
-     <div class="b1-equation">1,000,000 donors<br>= $1,000,000</div>
-     <span class="b1-stars">✨ ✨ ✨</span>
+     <svg class="b1-egg" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="31" cy="31" r="4.5" fill="#7A4800"/>
+      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.6" fill="none">
+       <animate attributeName="r" values="7;30" dur="2.4s" begin="0s" repeatCount="indefinite"/>
+       <animate attributeName="opacity" values="0.72;0" dur="2.4s" begin="0s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.1" fill="none">
+       <animate attributeName="r" values="7;30" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+       <animate attributeName="opacity" values="0.48;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="0.7" fill="none">
+       <animate attributeName="r" values="7;30" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+       <animate attributeName="opacity" values="0.28;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
+      </circle>
+     </svg>
     </div>
    </button>
-   <p class="b1-footnote">* $1 goes straight to the Community Pot to fund wishes over time. No spin needed — just instant magic.</p>
+   <p class="b1-footnote">* Joins the Community Pot · No spin needed</p>
 
    <div class="budget-presets">
     <button class="budget-preset" onclick="selectBudget(5,this)">$5</button>
