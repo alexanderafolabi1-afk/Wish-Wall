@@ -512,9 +512,12 @@
  --text: #1E2235;
  --text-muted: #6B7080;
  --trust: #3D5A9A;
- --warmth: #C97B30;
- --urgency: #D44A1E;
- --accent: #4DAE7A;
+ --warmth: #E8920A;
+ --urgency: #E8533A;
+ --gold: #F5B942;
+ --gold-text: #7A4800;
+ --electric: #7C3AED;
+ --accent: #12C97E;
  --card: #EEE9E2;
  --ink: #1A1008;
 
@@ -541,9 +544,9 @@
  --blue: #28AAEE;
  --green: #40D088;
  --green-dk: #18A060;
- --orange: #C88830;
+ --orange: #E8920A;
  --purple: #9933E0;
- --red: #CC3A10;
+ --red: #E8533A;
  --cream: #FAF8F5;
  --cork: #A8956A;
  --ink: #1A1008;
@@ -1400,19 +1403,21 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 }
 .budget-preset {
  padding: 11px 22px; border-radius: 2px 12px 2px 12px;
- border: 2px solid rgba(30,34,53,.15); background: #F5EDD8;
+ border: 2px solid rgba(30,34,53,.22); background: var(--surface);
  color: var(--text); font-family: var(--fn-display); font-size: 1.1rem;
  font-weight: 800; cursor: pointer; letter-spacing: -0.02em;
  transition: all .18s cubic-bezier(0.16,1,0.3,1);
  font-variation-settings: 'opsz' 20;
+ box-shadow: 2px 2px 0 rgba(30,34,53,.07);
 }
-.budget-preset:hover { border-color: var(--urgency); transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(30,34,53,.1); }
-.budget-preset.sel { border-color: var(--urgency); background: var(--urgency); color: #FAF8F5; box-shadow: 3px 3px 0 rgba(212,74,30,.2); transform: translateY(-2px); }
+.budget-preset:hover { border-color: var(--urgency); transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(232,83,58,.18); }
+.budget-preset.sel { border-color: var(--urgency); background: var(--urgency); color: #FAF8F5; box-shadow: 3px 3px 0 rgba(232,83,58,.3); transform: translateY(-2px); }
 .budget-custom-wrap {
  display: flex; align-items: center; gap: 6px;
  max-width: 200px; margin: var(--sp-2) auto var(--sp-3);
- background: #FAF8F5; border: 1.5px solid rgba(30,34,53,.15);
+ background: var(--surface); border: 2px solid rgba(30,34,53,.22);
  border-radius: 2px 8px 2px 8px; padding: 0 12px;
+ box-shadow: 2px 2px 0 rgba(30,34,53,.07);
 }
 .budget-currency { font-family: var(--fn-display); font-size: 1.2rem; font-weight: 800; color: var(--text-muted); }
 .budget-custom-inp {
@@ -1452,14 +1457,6 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .wheel-canvas-wrap {
  position: relative; display: inline-block;
  margin-bottom: var(--sp-3);
-}
-.wheel-canvas-wrap::after {
- content: '';
- position: absolute; top: 50%; right: -14px;
- transform: translateY(-50%);
- border-top: 14px solid transparent;
- border-bottom: 14px solid transparent;
- border-right: 22px solid var(--urgency);
 }
 #spin-canvas { display: block; border-radius: 50%; box-shadow: 6px 6px 0 rgba(30,34,53,.12); cursor: pointer; }
 .spin-btn {
@@ -1506,6 +1503,84 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .respin-link { font-family: var(--fn-mono); font-size: 11px; color: var(--text-muted); cursor: pointer; text-decoration: underline; margin-top: 8px; display: block; }
 .respin-link:hover { color: var(--urgency); }
 
+/* $1 Community Pot Gold Button */
+@keyframes goldGlow {
+ 0%,100% { box-shadow: 0 0 22px rgba(245,185,66,.28), 5px 5px 0 rgba(150,80,0,.22); }
+ 50%      { box-shadow: 0 0 44px rgba(245,185,66,.55), 5px 5px 0 rgba(150,80,0,.22); }
+}
+@keyframes shimmerSweep {
+ 0%       { left: -120%; }
+ 60%,100% { left: 160%; }
+}
+.budget-preset--one {
+ width: 100%; margin-bottom: var(--sp-2);
+ padding: 18px 22px;
+ border-radius: 2px 16px 2px 16px;
+ background: linear-gradient(135deg, #FFF4C2 0%, #F5C842 30%, #E8920A 70%, #D47A00 100%);
+ border: 2px solid #C47000;
+ cursor: pointer; position: relative; overflow: hidden;
+ display: flex; align-items: center; justify-content: space-between; gap: 16px;
+ text-align: left;
+ transition: all .3s cubic-bezier(0.16,1,0.3,1);
+ animation: goldGlow 2.5s ease-in-out infinite;
+}
+.budget-preset--one::before {
+ content: '';
+ position: absolute; top: -50%; left: -120%;
+ width: 50%; height: 200%;
+ background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+ animation: shimmerSweep 2.8s ease-in-out infinite;
+ pointer-events: none;
+}
+.budget-preset--one:hover {
+ transform: translateY(-4px) scale(1.015);
+ box-shadow: 0 0 55px rgba(245,185,66,.55), 7px 7px 0 rgba(150,80,0,.3);
+ animation: none;
+}
+.budget-preset--one:active { transform: scale(.98); animation: none; }
+.budget-preset--one.sel {
+ transform: translateY(-3px);
+ box-shadow: 0 0 60px rgba(245,185,66,.65), 5px 5px 0 rgba(150,80,0,.3);
+ animation: none;
+}
+.b1-left {}
+.b1-amount {
+ display: block;
+ font-family: var(--fn-display); font-size: 3rem; font-weight: 900;
+ line-height: .9; letter-spacing: -0.07em; color: var(--gold-text);
+ font-variation-settings: 'opsz' 144,'WONK' 1;
+}
+.b1-tag {
+ display: inline-flex; align-items: center; gap: 4px;
+ font-family: var(--fn-mono); font-size: 9px; font-weight: 700;
+ text-transform: uppercase; letter-spacing: 2px; color: #9A6000;
+ background: rgba(255,255,255,.45); padding: 2px 8px; border-radius: 2px;
+ margin-top: 6px;
+}
+.b1-right { text-align: right; flex-shrink: 0; }
+.b1-headline {
+ font-family: var(--fn-display); font-size: .95rem; font-weight: 800;
+ color: #6A3D00; letter-spacing: -0.03em; line-height: 1.2;
+ font-variation-settings: 'opsz' 20;
+}
+.b1-equation {
+ font-family: var(--fn-mono); font-size: 9px; color: #9A6000;
+ margin-top: 5px; line-height: 1.5;
+}
+.b1-stars { font-size: 1.1rem; display: block; margin-top: 5px; letter-spacing: 3px; }
+.b1-footnote {
+ font-family: var(--fn-mono); font-size: 9.5px; color: var(--text-muted);
+ text-align: center; margin-top: -6px; margin-bottom: var(--sp-2); line-height: 1.6;
+}
+.budget-find-btn.find-btn--pot {
+ background: linear-gradient(135deg, #F5C842, #E8920A);
+ color: var(--gold-text);
+ box-shadow: 4px 4px 0 rgba(168,100,0,.25), 0 0 22px rgba(245,185,66,.28);
+}
+.budget-find-btn.find-btn--pot:hover {
+ box-shadow: 6px 6px 0 rgba(168,100,0,.3), 0 0 36px rgba(245,185,66,.45);
+}
+
 /* Guardian identity toggle (below wheel) */
 .gid-section {
  max-width: 460px; margin: 0 auto var(--sp-3);
@@ -1517,13 +1592,14 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
 .gid-btn {
  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
  padding: 14px 10px; cursor: pointer;
- background: #F5EDD8; border: 2px solid rgba(30,34,53,.12);
+ background: var(--surface); border: 2px solid rgba(30,34,53,.18);
  border-radius: 2px 12px 2px 12px;
- font-family: var(--fn-body); color: var(--text-muted);
+ font-family: var(--fn-body); color: var(--text);
  transition: all .18s cubic-bezier(0.16,1,0.3,1);
+ box-shadow: 2px 2px 0 rgba(30,34,53,.06);
 }
-.gid-btn:hover { border-color: rgba(212,74,30,.4); transform: translateY(-1px); }
-.gid-btn.sel { border-color: var(--urgency); color: var(--text); box-shadow: 3px 3px 0 rgba(212,74,30,.15); transform: translateY(-2px); }
+.gid-btn:hover { border-color: var(--urgency); transform: translateY(-2px); box-shadow: 3px 3px 0 rgba(232,83,58,.18); }
+.gid-btn.sel { border-color: var(--urgency); background: rgba(232,83,58,.06); color: var(--text); box-shadow: 3px 3px 0 rgba(232,83,58,.2); transform: translateY(-2px); }
 .gid-icon { font-size: 20px; }
 .gid-title { font-family: var(--fn-display); font-size: 13px; font-weight: 700; letter-spacing: -0.02em; font-variation-settings: 'opsz' 20; }
 .gid-sub { font-family: var(--fn-mono); font-size: 10px; }
@@ -4069,6 +4145,20 @@ button { touch-action: manipulation; }
   <div class="budget-section" id="budget-section">
    <div class="budget-eyebrow">Step 1 of 3</div>
    <h2 class="budget-title">How much do you want to give today?</h2>
+   <!-- $1 Community Pot — Gold Tier -->
+   <button class="budget-preset budget-preset--one" onclick="selectBudget(1,this)" type="button">
+    <div class="b1-left">
+     <span class="b1-amount">$1*</span>
+     <span class="b1-tag">⭐ Community Pot</span>
+    </div>
+    <div class="b1-right">
+     <div class="b1-headline">Every dollar<br>counts here.</div>
+     <div class="b1-equation">1,000,000 donors<br>= $1,000,000</div>
+     <span class="b1-stars">✨ ✨ ✨</span>
+    </div>
+   </button>
+   <p class="b1-footnote">* $1 goes straight to the Community Pot to fund wishes over time. No spin needed — just instant magic.</p>
+
    <div class="budget-presets">
     <button class="budget-preset" onclick="selectBudget(5,this)">$5</button>
     <button class="budget-preset" onclick="selectBudget(10,this)">$10</button>
@@ -6474,18 +6564,33 @@ window._spinCount = 0;
 function selectBudget(amount, btn){
  console.log('[Guardian] selectBudget:', amount);
  window._guardianBudget = amount;
+ // Clear sel from ALL budget buttons including the $1 gold one
  document.querySelectorAll('.budget-preset').forEach(b => b.classList.remove('sel'));
  if(btn) btn.classList.add('sel');
  const ci = document.getElementById('budget-custom');
  if(!btn && ci) ci.value = amount;
  const fb = document.getElementById('budget-find-btn');
- if(fb) fb.textContent = amount >= 1 ? 'Find wishes I can grant ✨' : 'Enter an amount above';
+ if(!fb) return;
+ if(amount === 1){
+  fb.textContent = 'Contribute $1 to Community Pot →';
+  fb.classList.add('find-btn--pot');
+ } else {
+  fb.textContent = amount >= 1 ? 'Find wishes I can grant ✨' : 'Enter an amount above';
+  fb.classList.remove('find-btn--pot');
+ }
 }
 
 function findWishesForBudget(amount){
  console.log('[Guardian] findWishesForBudget called, amount:', amount);
  if(!amount || amount < 1){ toast('Enter a budget above $1 to find wishes.'); return; }
  window._guardianBudget = amount;
+
+ // $1 Community Pot: bypass the wheel, go straight to pool payment
+ if(amount === 1){
+  console.log('[Guardian] $1 Community Pot flow triggered');
+  openCommunityPotModal();
+  return;
+ }
  const all = window.allWishes || [];
  console.log('[Guardian] allWishes total:', all.length);
 
