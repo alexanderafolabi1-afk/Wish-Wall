@@ -376,7 +376,6 @@
     <select class="sponsor-select" id="sp-tier" required>
      <option value="" disabled selected>Choose a tier…</option>
      <option value="Patron ($500/mo)">Patron: $500/mo &middot; One category, branded card &amp; monthly report</option>
-     <option value="Founding Patron ($1,500/mo)">Founding Patron: $1,500/mo &middot; All categories, featured placement</option>
      <option value="Bespoke (Custom)">Bespoke: Custom &middot; Tailored sponsorship for a specific cause</option>
      <option value="Just exploring">Just exploring, not sure yet</option>
     </select>
@@ -4305,27 +4304,6 @@ button { touch-action: manipulation; }
    <p class="bundle-note">WishCoins never expire. Unused coins carry forward. 1 WishCoin = $1 toward granting a wish.</p>
   </div>
 
-  <!-- Founding Patron Spotlight -->
-  <p class="patron-section-lbl">💜 Our Founding Patrons</p>
-  <div class="patron-banner">
-   <div class="patron-top">
-    <span class="patron-badge">🌟 Founding Patron</span>
-    <div class="patron-info">
-     <div class="patron-name">⚡ RenviaIT Ltd</div>
-     <div class="patron-tagline">Technology solutions and digital innovation</div>
-    </div>
-    <div class="patron-amount">$2,800</div>
-   </div>
-   <p class="patron-desc">RenviaIT Ltd believed in The Wish Wall before it had a single wish pinned. Their extraordinary founding contribution made it possible to grant wishes, build this platform, and keep the magic running.</p>
-   <div class="patron-footer">
-    <div class="patron-tags">
-     <span class="patron-tag">☁️ Cloud Infrastructure</span>
-     <span class="patron-tag">💻 Software Development</span>
-     <span class="patron-tag">🔐 Cybersecurity</span>
-    </div>
-    <a class="patron-link" href="https://renviait.com" target="_blank" rel="noopener">Visit RenviaIT -></a>
-   </div>
-  </div>
   <!-- Guardian Tier Banner -->
   <div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
 
@@ -4355,11 +4333,6 @@ button { touch-action: manipulation; }
       <div class="corp-tier-name">Patron</div>
       <div class="corp-tier-price">$500/mo</div>
       <div class="corp-tier-desc">Sponsor one category. Branded card on the wall. Monthly report.</div>
-     </div>
-     <div class="corp-tier corp-tier--mid">
-      <div class="corp-tier-name">Founding Patron</div>
-      <div class="corp-tier-price">$1,500/mo</div>
-      <div class="corp-tier-desc">Sponsor all categories. Featured placement. Priority impact report.</div>
      </div>
      <div class="corp-tier">
       <div class="corp-tier-name">Bespoke</div>
@@ -6644,6 +6617,19 @@ function findWishesForBudget(amount){
    .map(w => ({ ...w, est: Math.min(amount, 25) }))
    .slice(0, 8);
   console.log('[Guardian] using warmup fallback, count:', matches.length);
+ }
+
+ // Last-resort hardcoded wishes — ensures the wheel always spins
+ if(matches.length === 0){
+  matches = [
+   {id:'fw1', wishText:'Help with groceries this week — two kids, empty fridge 🛒', est: Math.min(amount, 60), country:'🌍 Global', cat:'money', color:'n-yellow'},
+   {id:'fw2', wishText:'Electric meter top-up — cut off tomorrow with a toddler at home ⚡', est: Math.min(amount, 40), country:'🌍 Global', cat:'money', color:'n-orange'},
+   {id:'fw3', wishText:'School supplies for my daughter — she starts Monday 📚', est: Math.min(amount, 35), country:'🌍 Global', cat:'education', color:'n-blue'},
+   {id:'fw4', wishText:'Bus pass for the month — three buses to get to work 🚌', est: Math.min(amount, 55), country:'🌍 Global', cat:'money', color:'n-pink'},
+   {id:'fw5', wishText:'Food shop for the week — just out of hospital with no income 🏥', est: Math.min(amount, 50), country:'🌍 Global', cat:'money', color:'n-green'},
+   {id:'fw6', wishText:'Baby formula — running out tonight and payday is Friday 🍼', est: Math.min(amount, 30), country:'🌍 Global', cat:'money', color:'n-yellow'},
+  ].filter(w => w.est >= 1);
+  console.log('[Guardian] using hardcoded fallback, count:', matches.length);
  }
 
  if(matches.length === 0){
