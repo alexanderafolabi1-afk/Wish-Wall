@@ -4391,7 +4391,7 @@ button { touch-action: manipulation; }
 
   <!-- STEP 3: GUARDIAN IDENTITY -->
   <div class="gid-section" id="gid-section">
-   <div class="gid-label">Step 3 of 3 -- How should you appear?</div>
+   <div class="gid-label">Step 3 of 3 · How should you appear?</div>
    <div class="gid-toggle-row">
     <button class="gid-btn sel" id="gid-anon" onclick="setGuardianIdentity(true)" type="button">
      <span class="gid-icon">🕵️</span>
@@ -4415,7 +4415,7 @@ button { touch-action: manipulation; }
   <div style="text-align:center;">
    <button class="grant-proceed-btn" id="grant-proceed-btn"
     onclick="proceedToGrantFromWheel()">
-    Grant this wish -- <span id="grant-btn-amount">$25</span>
+    Grant this wish · <span id="grant-btn-amount">$25</span>
    </button>
   </div>
 
@@ -4599,6 +4599,81 @@ button { touch-action: manipulation; }
 
 
  <!-- CTA ─────────────────────────────────────────────────────────────────── -->
+
+  <!-- WISHES GRANTED STORIES -->
+  <div class="impact-stories-wrap">
+   <span class="impact-eyebrow">Real Stories</span>
+   <h2 class="impact-block-title">Wishes That Came True ✨</h2>
+   <p class="impact-block-sub">These are real moments of connection between strangers who decided to give a damn about each other.</p>
+   <div class="impact-stories-masonry">
+    <div class="story-card story-yellow">
+     <span class="story-emoji">💛</span>
+     <p class="story-quote">I needed £40 for my daughter's school trip. I had to tell her no so many times. Within 24 hours a stranger had granted it. She went on that trip. She still doesn't know a stranger paid for it.</p>
+     <div class="story-meta">
+      <span class="story-who">🇬🇧 Mother of two · January 2025</span>
+      <span class="story-tag granted">Granted</span>
+     </div>
+    </div>
+    <div class="story-card story-blue">
+     <span class="story-emoji">💻</span>
+     <p class="story-quote">My laptop died two weeks before final exams. I couldn't afford a replacement. Someone I've never met bought me a refurbished one. I passed. I graduated.</p>
+     <div class="story-meta">
+      <span class="story-who">🇿🇦 University student · February 2025</span>
+      <span class="story-tag granted">Granted</span>
+     </div>
+    </div>
+    <div class="story-card story-green story-card--wide">
+     <span class="story-emoji">🌱</span>
+     <p class="story-quote">I pinned a wish for help with my CV. I'd been unemployed for eight months. A Guardian rewrote it, coached me over three calls, and helped me practise. I got the job. Life-changing doesn't cover it.</p>
+     <div class="story-meta">
+      <span class="story-who">🇳🇬 Job seeker · March 2025</span>
+      <span class="story-tag connected">Connected</span>
+     </div>
+    </div>
+    <div class="story-card story-pink">
+     <span class="story-emoji">🎂</span>
+     <p class="story-quote">My son turns five next week. I couldn't afford a birthday cake. Someone sent me £25 with a note: "Every child deserves a birthday." I cried for an hour.</p>
+     <div class="story-meta">
+      <span class="story-who">🇬🇧 Single parent · April 2025</span>
+      <span class="story-tag granted">Granted</span>
+     </div>
+    </div>
+    <div class="story-card story-purple">
+     <span class="story-emoji">🎻</span>
+     <p class="story-quote">I wished for someone to just listen. A Guardian spent two hours on a call with me when I was at my lowest. No agenda. Just presence. It saved me that night.</p>
+     <div class="story-meta">
+      <span class="story-who">🇺🇸 Anonymous · February 2025</span>
+      <span class="story-tag celebrated">Human connection</span>
+     </div>
+    </div>
+    <div class="story-card story-orange">
+     <span class="story-emoji">🛒</span>
+     <p class="story-quote">End of the month. Empty fridge. Two kids. I put a wish up half expecting nothing. A Guardian sent a supermarket voucher within the hour. We ate that night.</p>
+     <div class="story-meta">
+      <span class="story-who">🇮🇪 Parent · January 2025</span>
+      <span class="story-tag granted">Granted</span>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <!-- KINDNESS THROUGH HISTORY -->
+  <div class="kindness-section">
+   <div style="max-width:1100px;margin:0 auto;">
+    <span class="impact-eyebrow">Throughout History</span>
+    <h2 class="impact-block-title">Humans Have Always Shown Up For Each Other</h2>
+    <p class="impact-block-sub">What you do here is part of something ancient. Tap any card to read the full story.</p>
+    <div class="kindness-grid" id="kindness-grid"></div>
+    <div class="kindness-detail" id="kindness-detail" style="display:none;">
+     <button class="kindness-close" onclick="closeKindnessCard()">Close ✕</button>
+     <div class="kd-era" id="kd-era"></div>
+     <div class="kd-title" id="kd-title"></div>
+     <div class="kd-body" id="kd-body"></div>
+     <div class="kd-lesson" id="kd-lesson"></div>
+    </div>
+   </div>
+  </div>
+
  <div class="impact-cta-block">
  <p class="impact-cta-quote">Every wish on this wall is a person who decided to believe that a stranger might care.<br><strong style="color:var(--yellow);">Be that stranger.</strong></p>
  <div class="impact-cta-btns">
@@ -6714,7 +6789,7 @@ function proceedToGrantPayment(){
  if(wishTxtEl?.textContent) sessionStorage.setItem('ww-sponsor-wish-text', wishTxtEl.textContent);
 
  // Navigate to Stripe
- const base = window.STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+ const base = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
  const url = new URL(base.includes('://') ? base : 'https://' + base);
  url.searchParams.set('client_reference_id', 'grant_' + wishId);
  if(email) url.searchParams.set('prefilled_email', email);
@@ -7047,7 +7122,7 @@ function resetGuardianFlow(){
 function shareGuardian(platform){
  const name = window._guardianIdentity?.firstName;
  const msg = (name ? name + ' just' : 'Someone just') + ' granted a real wish on The Wish Wall. A stranger is having a better day. Join them. wishwall.xyz';
- if(platform === 'tiktok'){ navigator.clipboard.writeText(msg).then(() => toast('Caption copied -- paste into TikTok!')); }
+ if(platform === 'tiktok'){ navigator.clipboard.writeText(msg).then(() => toast('Caption copied · paste into TikTok!')); }
  else if(platform === 'whatsapp'){ window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank'); }
  else if(platform === 'twitter'){ window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(msg), '_blank'); }
 }
@@ -7162,7 +7237,7 @@ function paintLBWithTabs(donors){
 }
 
 function donatePool(){
- const STRIPE_POOL_LINK = window.STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_POOL_LINK';
+ const STRIPE_POOL_LINK = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_POOL_LINK';
  window.location.href = `${STRIPE_POOL_LINK}?prefilled_amount=${poolAmt * 100}`;
 }
 
@@ -8428,7 +8503,7 @@ function buildKindnessGrid(){
  <span class="kc-emoji">${k.emoji}</span>
  <div class="kc-title">${k.title}</div>
  <div class="kc-preview">${k.preview}</div>
- <div class="kc-read">Tap to read the full story -></div>
+ <div class="kc-read">Tap to read the full story →</div>
  </div>`).join('');
 }
 
