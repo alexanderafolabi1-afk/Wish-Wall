@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your wish is on the wall!</title>
+</head>
+<body style="margin:0;padding:0;background:#111;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#111;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid #222;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#D44A1E;padding:32px 40px;text-align:center;">
+              <p style="margin:0;font-size:36px;">📌</p>
+              <h1 style="margin:12px 0 0;color:#fff;font-size:26px;font-weight:700;letter-spacing:-0.5px;">Your wish is live on the wall!</h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 40px;color:#f5f0e8;">
+              <p style="margin:0 0 20px;font-size:17px;">Hi <strong>{{to_name}}</strong>,</p>
+              <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#ccc;">
+                Your wish has been pinned to <strong style="color:#f5f0e8;">The Wish Wall</strong> and is now visible to Guardians around the world. A Guardian may choose to make it real — we'll email you the moment it happens. 🌍
+              </p>
+
+              <!-- Wish card -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1a1a1a;border-radius:8px;border-left:4px solid #D44A1E;margin:0 0 28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="margin:0 0 6px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;">Your wish</p>
+                    <p style="margin:0;font-size:18px;font-style:italic;color:#f5f0e8;line-height:1.5;">"{{wish_text}}"</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Reference code -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1a1a1a;border-radius:8px;border:1px solid #333;margin:0 0 28px;">
+                <tr>
+                  <td style="padding:16px 24px;">
+                    <p style="margin:0 0 4px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;">Your wish reference code</p>
+                    <p style="margin:0;font-size:22px;font-weight:700;color:#D44A1E;letter-spacing:2px;">{{wish_code}}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 28px;font-size:15px;line-height:1.7;color:#ccc;">
+                Keep this code safe — you can use it to track and manage your wish. Guardians see your wish anonymously; your email is never shared publicly.
+              </p>
+
+              <!-- CTA button -->
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="background:#D44A1E;border-radius:8px;">
+                    <a href="{{wall_url}}" style="display:inline-block;padding:14px 32px;color:#fff;text-decoration:none;font-size:16px;font-weight:700;letter-spacing:0.3px;">View The Wall →</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 40px 28px;border-top:1px solid #1e1e1e;">
+              <p style="margin:0;font-size:12px;color:#555;line-height:1.6;">
+                The Wish Wall &middot; <a href="https://wishwall.xyz" style="color:#D44A1E;text-decoration:none;">wishwall.xyz</a><br>
+                You received this because you posted a wish. Questions? <a href="mailto:admin@wallwishes.xyz" style="color:#D44A1E;text-decoration:none;">admin@wallwishes.xyz</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
