@@ -335,6 +335,14 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
       <p class="led-note">Pot balance is stored in Firestore but never served to the public interface.</p>
     </div>
 
+    <!-- Email Queue -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:16px 20px;margin-bottom:20px;">
+      <h3 style="font-size:1rem;color:#FFE566;margin-bottom:8px;">📧 Wisher Email Queue</h3>
+      <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px;">Sends queued emails via Resend where sendAfter &lt;= now and sent is not true. Requires RESEND_API_KEY in Netlify env vars.</p>
+      <button class="led-save" id="send-queue-btn" onclick="sendQueuedEmails()" style="background:rgba(0,196,132,.2);border-color:#00c484;">📤 Send Queued Emails</button>
+      <span id="queue-status" style="font-size:12px;color:rgba(255,255,255,.5);margin-left:12px;"></span>
+    </div>
+
     <!-- Toolbar -->
     <div class="adm-toolbar">
       <input class="adm-search" type="text" id="adm-srch" placeholder="🔍 Search wishes, emails, names..." oninput="filterAdm()">
@@ -995,6 +1003,14 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
       </div>
       <button class="led-save" onclick="saveLedger()">💾 Save Ledger</button>
       <p class="led-note">Pot balance is stored in Firestore but never served to the public interface.</p>
+    </div>
+
+    <!-- Email Queue -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:16px 20px;margin-bottom:20px;">
+      <h3 style="font-size:1rem;color:#FFE566;margin-bottom:8px;">📧 Wisher Email Queue</h3>
+      <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px;">Sends queued emails via Resend where sendAfter &lt;= now and sent is not true. Requires RESEND_API_KEY in Netlify env vars.</p>
+      <button class="led-save" id="send-queue-btn" onclick="sendQueuedEmails()" style="background:rgba(0,196,132,.2);border-color:#00c484;">📤 Send Queued Emails</button>
+      <span id="queue-status" style="font-size:12px;color:rgba(255,255,255,.5);margin-left:12px;"></span>
     </div>
 
     <!-- Toolbar -->
