@@ -1558,7 +1558,7 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  margin-top: 6px;
 }
 .b1-right { flex-shrink: 0; display: flex; align-items: center; justify-content: flex-end; }
-.b1-egg { display: block; opacity: .85; transition: opacity .3s; }
+.b1-egg { display: block; opacity: .82; transition: opacity .3s; height: 60px; width: auto; }
 .budget-preset--one:hover .b1-egg { opacity: 1; }
 .b1-footnote {
  font-family: var(--fn-mono); font-size: 9.5px; color: var(--text-muted);
@@ -4144,20 +4144,61 @@ button { touch-action: manipulation; }
      <span class="b1-tag">⭐ Community Pot</span>
     </div>
     <div class="b1-right">
-     <svg class="b1-egg" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="31" cy="31" r="4.5" fill="#7A4800"/>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.6" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.72;0" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.1" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.48;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="0.7" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.28;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
-      </circle>
+     <svg class="b1-egg" width="90" height="74" viewBox="0 0 90 74" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Well: stone body -->
+      <rect x="37" y="47" width="16" height="16" rx="1.5" fill="#8B5200"/>
+      <line x1="37" y1="53" x2="53" y2="53" stroke="#5A2D00" stroke-width="0.8"/>
+      <line x1="37" y1="59" x2="53" y2="59" stroke="#5A2D00" stroke-width="0.8"/>
+      <!-- Well: arch posts -->
+      <rect x="35.5" y="33" width="3.5" height="16" rx="1" fill="#7A4800"/>
+      <rect x="51" y="33" width="3.5" height="16" rx="1" fill="#7A4800"/>
+      <!-- Well: crossbeam -->
+      <rect x="33" y="31" width="24" height="4" rx="2" fill="#7A4800"/>
+      <!-- Well: rope and bucket -->
+      <line x1="45" y1="35" x2="45" y2="45" stroke="#5A2D00" stroke-width="1"/>
+      <path d="M41.5 45 h7 l-1 5.5 h-5 z" fill="#9A6000"/>
+      <!-- Well: water glint inside -->
+      <ellipse cx="45" cy="47.5" rx="6" ry="1.8" fill="#9A6000" opacity="0.4"/>
+
+      <!-- Background left figure — approaching, carrying -->
+      <circle cx="24" cy="24" r="3.5" fill="#7A4800" opacity="0.52"/>
+      <line x1="24" y1="27.5" x2="24" y2="41" stroke="#7A4800" stroke-width="2" stroke-linecap="round" opacity="0.52"/>
+      <line x1="24" y1="41" x2="21" y2="52" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <line x1="24" y1="41" x2="27" y2="52" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <line x1="24" y1="33" x2="31" y2="36" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <ellipse cx="33.5" cy="35.5" rx="3.2" ry="2" fill="#8B5200" opacity="0.52"/>
+
+      <!-- Background right figure — approaching, carrying -->
+      <circle cx="66" cy="24" r="3.5" fill="#7A4800" opacity="0.52"/>
+      <line x1="66" y1="27.5" x2="66" y2="41" stroke="#7A4800" stroke-width="2" stroke-linecap="round" opacity="0.52"/>
+      <line x1="66" y1="41" x2="63" y2="52" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <line x1="66" y1="41" x2="69" y2="52" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <line x1="66" y1="33" x2="59" y2="36" stroke="#7A4800" stroke-width="1.8" stroke-linecap="round" opacity="0.52"/>
+      <ellipse cx="56.5" cy="35.5" rx="3.2" ry="2" fill="#8B5200" opacity="0.52"/>
+
+      <!-- Foreground left figure — actively pouring -->
+      <circle cx="10" cy="14" r="6" fill="#7A4800"/>
+      <line x1="10" y1="20" x2="10" y2="38" stroke="#7A4800" stroke-width="3" stroke-linecap="round"/>
+      <line x1="10" y1="38" x2="6" y2="55" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="10" y1="38" x2="14" y2="55" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="10" y1="27" x2="24" y2="33" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="28" cy="32" rx="5" ry="3" fill="#8B5200" transform="rotate(-20 28 32)"/>
+      <!-- Water arc: left jug → well -->
+      <path d="M30.5 35.5 Q34.5 42 37 47" stroke="#9A6000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="33" cy="41" r="1.2" fill="#9A6000" opacity="0.62"/>
+      <circle cx="35.5" cy="45" r="1" fill="#9A6000" opacity="0.4"/>
+
+      <!-- Foreground right figure — actively pouring -->
+      <circle cx="80" cy="14" r="6" fill="#7A4800"/>
+      <line x1="80" y1="20" x2="80" y2="38" stroke="#7A4800" stroke-width="3" stroke-linecap="round"/>
+      <line x1="80" y1="38" x2="76" y2="55" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="80" y1="38" x2="84" y2="55" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="80" y1="27" x2="66" y2="33" stroke="#7A4800" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="62" cy="32" rx="5" ry="3" fill="#8B5200" transform="rotate(20 62 32)"/>
+      <!-- Water arc: right jug → well -->
+      <path d="M59.5 35.5 Q55.5 42 53 47" stroke="#9A6000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="57" cy="41" r="1.2" fill="#9A6000" opacity="0.62"/>
+      <circle cx="54.5" cy="45" r="1" fill="#9A6000" opacity="0.4"/>
      </svg>
     </div>
    </button>
