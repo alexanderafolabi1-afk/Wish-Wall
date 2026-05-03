@@ -4144,20 +4144,39 @@ button { touch-action: manipulation; }
      <span class="b1-tag">⭐ Community Pot</span>
     </div>
     <div class="b1-right">
-     <svg class="b1-egg" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="31" cy="31" r="4.5" fill="#7A4800"/>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.6" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.72;0" dur="2.4s" begin="0s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="1.1" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.48;0" dur="2.4s" begin="0.8s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="31" cy="31" stroke="#7A4800" stroke-width="0.7" fill="none">
-       <animate attributeName="r" values="7;30" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
-       <animate attributeName="opacity" values="0.28;0" dur="2.4s" begin="1.6s" repeatCount="indefinite"/>
-      </circle>
+     <svg class="b1-egg" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Community well">
+      <!-- Well structure -->
+      <rect x="23" y="43" width="16" height="11" rx="2" fill="rgba(122,72,0,0.1)" stroke="#7A4800" stroke-width="1.5"/>
+      <ellipse cx="31" cy="43" rx="8" ry="2.8" fill="rgba(122,72,0,0.1)" stroke="#7A4800" stroke-width="1.5"/>
+      <!-- Well support posts -->
+      <line x1="23" y1="37" x2="23" y2="43" stroke="#7A4800" stroke-width="1.6"/>
+      <line x1="39" y1="37" x2="39" y2="43" stroke="#7A4800" stroke-width="1.6"/>
+      <!-- Well crossbeam -->
+      <line x1="20" y1="37" x2="42" y2="37" stroke="#7A4800" stroke-width="2"/>
+      <!-- Water ripple in well -->
+      <ellipse cx="31" cy="51" rx="5" ry="1.5" stroke="#7A4800" stroke-width="0.8" opacity="0.4"/>
+      <!-- Person 1 - left, pouring bucket -->
+      <circle cx="10" cy="17" r="3.2" stroke="#7A4800" stroke-width="1.4"/>
+      <line x1="10" y1="20" x2="10" y2="30" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="10" y1="30" x2="7" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="10" y1="30" x2="13" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="10" y1="23" x2="18" y2="29" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M17 27 L22 25 L21 31 L16 33 Z" fill="rgba(122,72,0,0.3)" stroke="#7A4800" stroke-width="1"/>
+      <path d="M19 31 Q20 36 22 40" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+      <!-- Person 2 - right, pouring bucket -->
+      <circle cx="52" cy="17" r="3.2" stroke="#7A4800" stroke-width="1.4"/>
+      <line x1="52" y1="20" x2="52" y2="30" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="52" y1="30" x2="49" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="52" y1="30" x2="55" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="52" y1="23" x2="44" y2="29" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M45 27 L40 25 L41 31 L46 33 Z" fill="rgba(122,72,0,0.3)" stroke="#7A4800" stroke-width="1"/>
+      <path d="M43 31 Q42 36 40 40" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+      <!-- Person 3 - back centre, smaller (depth) -->
+      <circle cx="31" cy="13" r="2.5" stroke="#7A4800" stroke-width="1.2" opacity="0.65"/>
+      <line x1="31" y1="16" x2="31" y2="24" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+      <line x1="31" y1="24" x2="28.5" y2="30" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+      <line x1="31" y1="24" x2="33.5" y2="30" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+      <line x1="28" y1="19" x2="34" y2="19" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
      </svg>
     </div>
    </button>
@@ -6649,7 +6668,7 @@ function openCommunityPotModal(){
  if(wishFrom)   wishFrom.textContent = '🌍 Community · All categories · All wishes';
  if(amtVal)     amtVal.textContent   = '$1.00';
  if(modalTitle) modalTitle.textContent = 'One dollar. Infinite possibility.';
- if(modalSub)   modalSub.textContent   = '1,000,000 people each giving $1 = $1,000,000 in wishes granted. Add yours now. Email is optional — we\'ll send you a beautiful thank-you if you do.';
+ if(modalSub)   modalSub.textContent   = 'Your $1 joins the Community Pot — a quiet act of collective care that helps grant wishes for people who truly need it. Email is optional — we\'ll send you a beautiful thank-you if you do.';
  if(amtRow)     amtRow.style.display   = 'flex';
  modal.dataset.wishId  = 'community_pot';
  modal.dataset.wishEst = '1';
