@@ -3437,6 +3437,171 @@ button { touch-action: manipulation; }
  }
 }
 
+/* WishCoin Bundle Grid */
+.bundle-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.bundle-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.bundle-eyebrow {
+  font-family: var(--fn-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--warmth);
+  margin-bottom: 8px;
+}
+.bundle-title {
+  font-family: var(--fn-display);
+  font-size: 1.6rem;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.bundle-sub {
+  font-family: var(--fn-body);
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+.bundle-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.bundle-card {
+  background: var(--card);
+  border-radius: 2px 12px 2px 12px;
+  padding: 20px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.bundle-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+.bundle-card--popular {
+  border: 2px solid var(--warmth);
+  box-shadow: 0 4px 18px rgba(232, 146, 10, 0.18);
+}
+.bundle-popular-tag {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--warmth);
+  color: #fff;
+  font-family: var(--fn-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.bundle-name {
+  font-family: var(--fn-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.bundle-price {
+  font-family: var(--fn-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.bundle-coins {
+  font-family: var(--fn-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.bundle-coin-lbl {
+  font-family: var(--fn-mono);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+.bundle-bonus {
+  font-family: var(--fn-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+  min-height: 14px;
+  visibility: hidden;
+}
+.bundle-bonus--show {
+  visibility: visible;
+}
+.bundle-eff {
+  font-family: var(--fn-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.bundle-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 2px 8px 2px 8px;
+  background: rgba(0,0,0,0.07);
+  border: none;
+  font-family: var(--fn-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  margin-top: auto;
+}
+.bundle-btn:hover {
+  background: rgba(0,0,0,0.13);
+}
+.bundle-btn--primary {
+  background: linear-gradient(135deg, var(--warmth), #F5B942);
+  color: #fff;
+}
+.bundle-btn--primary:hover {
+  background: linear-gradient(135deg, #d07d08, #e0a830);
+}
+.bundle-note {
+  font-family: var(--fn-body);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .bundle-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 400px) {
+  .bundle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .corp-section {
   max-width: 900px;
   margin: 0 auto;
@@ -3552,8 +3717,11 @@ button { touch-action: manipulation; }
   padding: 20px;
 }
 .corp-tier--mid {
-  background: rgba(245, 200, 66, 0.06);
-  border-color: rgba(245, 200, 66, 0.25);
+  background: rgba(245, 200, 66, 0.10);
+  border-color: rgba(245, 200, 66, 0.55);
+  border-width: 2px;
+  transform: scale(1.04);
+  box-shadow: 0 6px 28px rgba(245, 200, 66, 0.20);
 }
 .corp-tier-name {
   font-size: 11px;
@@ -4333,6 +4501,11 @@ button { touch-action: manipulation; }
       <div class="corp-tier-name">Patron</div>
       <div class="corp-tier-price">$500/mo</div>
       <div class="corp-tier-desc">Sponsor one category. Branded card on the wall. Monthly report.</div>
+     </div>
+     <div class="corp-tier corp-tier--mid">
+      <div class="corp-tier-name">Enterprise</div>
+      <div class="corp-tier-price">$1,500/mo</div>
+      <div class="corp-tier-desc">Sponsor three categories. Named Guardian on every granted wish in those categories. Quarterly impact report. Priority wish matching. Featured on homepage.</div>
      </div>
      <div class="corp-tier">
       <div class="corp-tier-name">Bespoke</div>
