@@ -6619,7 +6619,7 @@ function findWishesForBudget(amount){
   console.log('[Guardian] using warmup fallback, count:', matches.length);
  }
 
-  // Last-resort hardcoded wishes — ensures the wheel always spins
+ // Last-resort hardcoded wishes — ensures the wheel always spins
  if(matches.length === 0){
   matches = [
    {id:'fw1', wishText:'Help with groceries this week — two kids, empty fridge 🛒', est: Math.min(amount, 60), country:'🌍 Global', cat:'money', color:'n-yellow'},
