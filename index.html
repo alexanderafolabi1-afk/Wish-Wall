@@ -6366,10 +6366,7 @@ function closeGuardianBadge(){
 
 function sponsorAnotherWish(){
  closeGuardianBadge();
- resetGuardianWheel();
- showTab('guard');
- document.getElementById('gw-step-budget')?.scrollIntoView({ behavior:'smooth', block:'start' });
- announceA11y('Budget picker ready. Choose your next grant!');
+ resetGuardianFlow();
 }
 
 function openShareFromBadge(){
@@ -7459,7 +7456,7 @@ function checkReturn(){
    sessionStorage.removeItem('ww-pending-share');
    history.replaceState({}, '', location.pathname);
    launchConfetti(80);
-   // Show the Guardian Badge popup
+   // Gather guardian info stored before Stripe redirect
    const wishText = sessionStorage.getItem('ww-wheel-wish-text')
     || sessionStorage.getItem('ww-sponsor-wish-text')
     || '';
@@ -7467,9 +7464,21 @@ function checkReturn(){
    const guardianName  = sessionStorage.getItem('ww-guardian-name')  || '';
    // Send receipt email
    if(guardianEmail) sendGuardianReceiptEmail(guardianEmail, guardianName, wishText);
-   // Show Guardian tab then badge
+   // Show Guardian tab then the new thank-you overlay
    showTab('guard');
-   setTimeout(() => openGuardianBadge(wishText), 350);
+   setTimeout(() => {
+    const identity = (() => {
+     try { return JSON.parse(sessionStorage.getItem('ww-guardian-identity') || ''); } catch(e) { return { anon: true }; }
+    })();
+    const tyName = (!identity.anon && identity.firstName) ? identity.firstName : null;
+    const sub = document.getElementById('ty-sub');
+    if(sub) sub.textContent = (tyName ? tyName + ', a' : 'A') + ' real person is about to have a better day because of you.';
+    const rec = document.getElementById('ty-receipt');
+    if(rec) rec.textContent = guardianEmail ? 'A receipt was sent to ' + guardianEmail + '.' : 'Your generosity has been recorded.';
+    const tyOv = document.getElementById('guardian-thankyou-ov');
+    if(tyOv) tyOv.classList.add('open');
+    startConfetti();
+   }, 350);
   } else {
    // Retrieve wish text saved before Stripe redirect; fall back gracefully
    const pendingWish = sessionStorage.getItem('ww-pending-wish') || '';
