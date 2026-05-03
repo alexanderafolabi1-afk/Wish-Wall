@@ -6624,6 +6624,31 @@ function findWishesForBudget(amount){
  showSpinWheel();
 }
 
+function openCommunityPotModal(){
+ const wishTxt    = document.getElementById('guardian-wish-text');
+ const wishFrom   = document.getElementById('guardian-wish-from');
+ const amtVal     = document.getElementById('guardian-amount-val');
+ const modalTitle = document.querySelector('.guardian-modal-title');
+ const modalSub   = document.querySelector('.guardian-modal-sub');
+ const modal      = document.getElementById('guardian-modal-ov');
+ const emailInp   = document.getElementById('guardian-email-inp');
+ const amtRow     = document.getElementById('guardian-amount-row');
+ if(wishTxt)    wishTxt.textContent  = 'Adding $1 to the Community Pot — fuelling wishes for people who need it right now.';
+ if(wishFrom)   wishFrom.textContent = '🌍 Community · All categories · All wishes';
+ if(amtVal)     amtVal.textContent   = '$1.00';
+ if(modalTitle) modalTitle.textContent = 'One dollar. Infinite possibility.';
+ if(modalSub)   modalSub.textContent   = '1,000,000 people each giving $1 = $1,000,000 in wishes granted. Add yours now. Email is optional — we\'ll send you a beautiful thank-you if you do.';
+ if(amtRow)     amtRow.style.display   = 'flex';
+ modal.dataset.wishId  = 'community_pot';
+ modal.dataset.wishEst = '1';
+ modal.dataset.isPot   = 'true';
+ if(emailInp) emailInp.value = '';
+ modal.classList.add('open');
+ document.body.style.overflow = 'hidden';
+ console.log('[Guardian] openCommunityPotModal: modal opened');
+ setTimeout(() => emailInp?.focus(), 120);
+}
+
 const WHEEL_COLORS = ['#F5E580','#F2C0D4','#BAE4F5','#B8F0D4','#F5DDB0','#DDB8F5','#EEE9E2','#FAF8F5'];
 
 function showSpinWheel(){
