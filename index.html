@@ -5228,11 +5228,10 @@ button { touch-action: manipulation; }
 const STRIPE_PK = 'pk_live_51TNPKZRTh7hyVAFtyScgc5gnJEpeuJC6pP8HAXPKzGEGK5RKiOTBno1YIEC1WQU0W5A5hAOgLAssuhDUimpaQsWW00K6oTIHHQ';
 // Wisher wish-posting link — fixed at $1.99
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/14AbJ3fJTax1eTI8vY1gs00';
-// Guardian $1 Community Pot contribution — separate Stripe Payment Link (fixed at $1.00)
-// Create this link in Stripe Dashboard → Payment Links → $1.00 fixed price
-// Set "After payment" redirect to: https://wishwall.xyz/?payment=success
-// Set "Cancel" URL to: https://wishwall.xyz/guardian-checkout.html
-const STRIPE_GUARDIAN_LINK = 'https://buy.stripe.com/YOUR_GUARDIAN_1_DOLLAR_LINK';
+// ⚠️  Guardian $1 Community Pot link lives in guardian-checkout.html (STRIPE_GUARDIAN_LINK).
+// Create the $1.00 Payment Link in Stripe Dashboard → Payment Links, then paste the URL there.
+// After-payment redirect: https://wishwall.xyz/?payment=success
+// Cancel URL           : https://wishwall.xyz/guardian-checkout.html
 
 /* ============================================================
  REGIONAL PRICING (PPP tiers per audit recommendation)
