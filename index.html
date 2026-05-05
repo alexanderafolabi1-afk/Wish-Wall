@@ -6862,6 +6862,7 @@ async function findWishesForBudget(amount){
 
  // Show loading state on the button
  const findBtn = document.getElementById('budget-find-btn');
+ const findBtnOrigText = findBtn ? findBtn.textContent : '';
  if(findBtn){ findBtn.disabled = true; findBtn.textContent = 'Searching…'; }
 
  let matches = [];
@@ -6880,7 +6881,7 @@ async function findWishesForBudget(amount){
   matches = snap.docs
    .map(d => ({ id: d.id, ...d.data() }))
    // Exclude warmup/demo wishes; only include wishes with a valid est within budget
-   .filter(w => !w.warmup && w.est != null && Number(w.est) <= amount)
+   .filter(w => !w.warmup && w.est != null && !isNaN(Number(w.est)) && Number(w.est) <= amount)
    .slice(0, 8);
   console.log('[Guardian] Firestore matches:', matches.length);
  } catch(err) {
@@ -6888,7 +6889,7 @@ async function findWishesForBudget(amount){
  }
 
  // Restore button
- if(findBtn){ findBtn.disabled = false; findBtn.textContent = 'Find wishes I can grant ✨'; }
+ if(findBtn){ findBtn.disabled = false; findBtn.textContent = findBtnOrigText; }
 
  if(matches.length === 0){
   toast('No wishes are available in this budget range right now, check back soon.');
