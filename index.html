@@ -247,7 +247,7 @@
 
  <div class="guardian-amount-row" id="guardian-amount-row">
  <span class="guardian-amount-label">Your Grant</span>
- <span class="guardian-amount-val" id="guardian-amount-val">, </span>
+ <span class="guardian-amount-val" id="guardian-amount-val"></span>
  </div>
 
  <!-- Anonymous / Named toggle -->
@@ -459,7 +459,7 @@
 <script type="module">
  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
  import {
- getFirestore, collection, addDoc, getDocs, doc, updateDoc,
+ getFirestore, collection, addDoc, getDocs, doc, setDoc, updateDoc,
  onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc
  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
@@ -482,7 +482,7 @@
  donors: collection(db, 'donors'),
  ledger: doc(db, 'meta', 'ledger')
  };
- window._fb = { collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
+ window._fb = { collection, addDoc, getDocs, doc, setDoc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
 
  // Real-time wish listener — includes both approved and granted statuses
   const q = query(window._col.wishes, where('status', 'in', ['approved', 'granted']), orderBy('createdAt', 'desc'));
@@ -498,6 +498,7 @@
 
  window.saveWish = async (data) => addDoc(window._col.wishes, { ...data, createdAt: serverTimestamp() });
  window._firebaseReady = true;
+ clearTimeout(window._demoFallbackTimer);
  console.log('✨ Firebase connected');
  } catch(e) {
  console.warn('Firebase not configured running in demo mode:', e.message);
@@ -6410,7 +6411,7 @@ function findWishesForGuardian(){
   w.est && w.est > 0 && w.est <= _gwBudget
  ).sort((a, b) => {
   // Sort by oldest first: use queuedAt/createdAt if available, else default order
-  const da = a.queuedAt ? new Date(a.queuedAt).getTime() : (a.id || '').localeCompare(b.id || '');
+  const da = a.queuedAt ? new Date(a.queuedAt).getTime() : 0;
   const db2 = b.queuedAt ? new Date(b.queuedAt).getTime() : 0;
   return da - db2;
  });
@@ -6779,7 +6780,7 @@ function saveGuardianRewards(){
 }
 
 /* ══ EMAIL HELPERS (via Netlify function) ═════════════════════*/
-// Send wisher confirmation email (call from submitWish after save)
+// Send wisher "wish granted" notification email (call from checkReturn after guardian grants a wish)
 function sendWisherConfirmationEmail(email, wishText, wishCode){
  if(!email || !wishText) return;
  fetch('/.netlify/functions/send-wish-granted', {
@@ -7799,7 +7800,8 @@ async function submitWish(){
  sessionStorage.setItem('ww-pending-refcode', myCode);
  // NOTE: configure your Stripe Payment Link's "After payment" redirect to:
  //   https://wishwall.xyz/?payment=success
- // in the Stripe Dashboard → Payment Links → (your link) → Settings → After payment → Redirect to URL window.location.href = `${STRIPE_PAYMENT_LINK}?client_reference_id=${wishId}&prefilled_email=${encodeURIComponent(email)}`;
+ // in the Stripe Dashboard → Payment Links → (your link) → Settings → After payment → Redirect to URL
+ window.location.href = `${STRIPE_PAYMENT_LINK}?client_reference_id=${wishId}&prefilled_email=${encodeURIComponent(email)}`;
  } else {
  // Demo mode skip payment
  thisYear.push({ id: 'demo-' + Date.now(), date: Date.now() });
@@ -7908,7 +7910,7 @@ function checkReturn(){
    showTab('guard');
    setTimeout(() => {
     const identity = (() => {
-     try { return JSON.parse(sessionStorage.getItem('ww-guardian-identity') || ''); } catch(e) { return { anon: true }; }
+     const _rawId = sessionStorage.getItem('ww-guardian-identity'); if(!_rawId) return { anon: true }; try { return JSON.parse(_rawId) || { anon: true }; } catch(e) { return { anon: true }; }
     })();
     const tyName = (!identity.anon && identity.firstName) ? identity.firstName : null;
     const sub = document.getElementById('ty-sub');
@@ -8351,7 +8353,7 @@ function getDisplayWishes(realWishes){
  const pad = WARMUP_WISHES.slice(0, needed);
  return [...real, ...pad];
 }
-function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); }, 850); }
+function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes(DEMO); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
 
 function processWishQueue() {
@@ -8891,7 +8893,7 @@ function paintMarioPipe(){
  ">
  <div class="mario-note-pin" style="background:${pin};"></div>
  <span class="mario-note-flag">${flag}</span>
- <span class="mario-note-text">${rawTxt}</span>
+ <span class="mario-note-text">${esc(rawTxt)}</span>
  </div>`;
  }).join('');
 
@@ -9417,7 +9419,7 @@ function gpDonatePool(){
 var custom=parseFloat(document.getElementById('gpPoolCustom').value)||0;
 var amt=custom>0?custom:(window._gpPoolAmt||1);
 if(amt<1)return;
-var link=window.STRIPE_PAYMENT_LINK||window.STRIPE_POOL_LINK||'https://buy.stripe.com/placeholder';
+var link=window.STRIPE_POOL_LINK||window.STRIPE_PAYMENT_LINK||'https://buy.stripe.com/placeholder';
 window.open(link,'_blank');
 }
 
@@ -9495,7 +9497,7 @@ var co=w.est&&w.est>0?'$'+w.est:'Non-monetary';
 var ct=w.cat?(w.cat.charAt(0).toUpperCase()+w.cat.slice(1)):'Wish';
 return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,''+w.id+'')" style="opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
 '<span class="gp-m-flag">'+fl+'</span>'+
-'<p class="gp-m-txt">'+w.wishText+'</p>'+
+'<p class="gp-m-txt">'+esc(w.wishText)+'</p>'+
 '<div class="gp-m-foot"><span class="gp-m-cost">'+co+'</span><span class="gp-m-type">'+ct+'</span></div>'+
 '</div>';
 }).join('');
@@ -9516,8 +9518,14 @@ a.scrollIntoView({behavior:'smooth',block:'nearest'});
 
 function gpProceed(){
 if(!gpWishId)return;
-var link=window.STRIPE_PAYMENT_LINK||'https://buy.stripe.com/placeholder';
-window.location.href=link+'?client_reference_id=grant_'+gpWishId;
+var src=window.allWishes||window.DEMO||[];
+var wish=src.find(function(w){return w.id===gpWishId});
+sessionStorage.setItem("ww-checkout-type","grant");
+sessionStorage.setItem("ww-sponsor-wish-id",gpWishId);
+sessionStorage.setItem("ww-checkout-amount",wish&&wish.est?String(wish.est):"1.00");
+sessionStorage.setItem("ww-checkout-label","Guardian Grant · Wish #"+gpWishId);
+if(wish&&wish.wishText)sessionStorage.setItem("ww-sponsor-wish-text",wish.wishText);
+window.location.href="guardian-checkout.html";
 }
 
 function gpSpinAgain(){
