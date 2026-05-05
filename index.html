@@ -6028,7 +6028,7 @@ function paintWall(){
  if(isFiltering){
  grid.innerHTML = src.length
  ? src.map((w,i) => noteHTML(w,i)).join('')
- : '<div class="wall-empty" style="grid-column:1/-1">\u2728 No wishes found matching that search.</div>';
+ : '<div class="wall-empty" style="grid-column:1/-1">✨ No wishes found matching that search.</div>';
  return;
  }
 
@@ -9539,7 +9539,9 @@ g.innerHTML=picks.map(function(w,i){
 var fl=w.country?(w.country.split(' ')[0]):'';
 var co=w.est&&w.est>0?'$'+w.est:'Non-monetary';
 var ct=w.cat?(w.cat.charAt(0).toUpperCase()+w.cat.slice(1)):'Wish';
-var gbg=GP_NOTE_COLS[i%GP_NOTE_COLS.length];var grot=((i%5)-2).toFixed(1);return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,\''+w.id+'\')" style="--gpn-bg:'+gbg+';--gp-rot:'+grot+'deg;opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
+var gbg=GP_NOTE_COLS[i%GP_NOTE_COLS.length];
+var grot=((i%5)-2).toFixed(1);
+return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,\''+w.id+'\')" style="--gpn-bg:'+gbg+';--gp-rot:'+grot+'deg;opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
 '<span class="gp-m-flag">'+fl+'</span>'+
 '<p class="gp-m-txt">'+esc(w.wishText)+'</p>'+
 '<div class="gp-m-foot"><span class="gp-m-cost">'+co+'</span><span class="gp-m-type">'+ct+'</span></div>'+
