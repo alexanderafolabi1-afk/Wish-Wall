@@ -485,11 +485,41 @@
  window._fb = { collection, addDoc, getDocs, doc, setDoc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
 
  // Real-time wish listener — includes both approved and granted statuses
+  let _mainWallWishes = [];
+  let _paidFallbackWishes = [];
+  function _mergeAndRenderWall() {
+    const mainIds = new Set(_mainWallWishes.map(w => w.id));
+    const extra = _paidFallbackWishes.filter(w => !mainIds.has(w.id));
+    window.renderWishes([..._mainWallWishes, ...extra]);
+  }
+
   const q = query(window._col.wishes, where('status', 'in', ['approved', 'granted']), orderBy('createdAt', 'desc'));
- onSnapshot(q, snap => {
- const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
- window.renderWishes(wishes);
- });
+  onSnapshot(q,
+    snap => {
+      _mainWallWishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      _mergeAndRenderWall();
+    },
+    err => {
+      console.warn('Wall snapshot error (index may still be building):', err.message);
+      // Ensure the wall still renders warmup/demo data rather than staying blank
+      if (_mainWallWishes.length === 0) window.renderWishes([]);
+    }
+  );
+
+  // Fallback: catch wishes that have paidAt set but whose status was not yet
+  // updated to 'approved' (e.g. webhook fired late or partially failed).
+  // orderBy('paidAt') implicitly filters to documents that have the field.
+  const paidFallbackQ = query(window._col.wishes, orderBy('paidAt', 'desc'), limit(100));
+  onSnapshot(paidFallbackQ,
+    paidSnap => {
+      _paidFallbackWishes = paidSnap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(w => w.paidAt && (w.status === 'pending' || w.status === 'queued'))
+        .map(w => ({ ...w, status: 'approved' }));
+      if (_paidFallbackWishes.length > 0) _mergeAndRenderWall();
+    },
+    err => console.warn('paidAt fallback snapshot error:', err.message)
+  );
 
  // Ledger listener — pot balance now rendered publicly via s-pot
  onSnapshot(window._col.ledger, snap => {
@@ -5893,7 +5923,11 @@ if(document.readyState === 'loading'){
  RENDER WISHES
  ============================================================ */
 window.renderWishes = function(rawWishes){
- if(!rawWishes || rawWishes.length === 0) return; // never render empty
+ if(!rawWishes) return;
+ // If no real wishes yet, still paint warmup data so the wall is never blank.
+ // Only skip if the wall already has real wishes and this snapshot is empty
+ // (avoids erasing a live wall due to a transient empty snapshot).
+ if(rawWishes.length === 0 && window.allWishes?.length > 0) return;
  const wishes = getDisplayWishes(rawWishes);
  window.allWishes = wishes;
  window._lastWishes = rawWishes || []; // keep real wishes separately
@@ -8355,6 +8389,15 @@ function getDisplayWishes(realWishes){
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes(DEMO); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
+
+// Safety net: if Firebase connected but the wall is still blank after 6 s
+// (e.g. Firestore index still building caused an error), render warmup data.
+setTimeout(() => {
+  if(!window.allWishes || window.allWishes.length === 0) {
+    console.warn('Wall safety fallback: rendering warmup data');
+    window.renderWishes([]);
+  }
+}, 6000);
 
 function processWishQueue() {
   const capacity = WALL_CAPACITY;
