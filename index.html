@@ -4146,11 +4146,7 @@ button { touch-action: manipulation; }
 .gp-gold-lg{font-size:17px;padding:16px 44px}
 .gp-ghost{padding:14px 32px;border-radius:50px;border:1.5px solid rgba(0,0,0,.16);background:transparent;color:var(--text,#1E2235);font-weight:600;font-size:15px;cursor:pointer;transition:all .2s}
 .gp-ghost:hover{background:rgba(0,0,0,.05)}
-.gp-ticker{overflow:hidden;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);padding:13px 0;background:rgba(245,200,66,.04)}
-.gp-ticker-inner{display:flex;gap:28px;animation:gpScroll 28s linear infinite;width:max-content}
-@keyframes gpScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.gp-tick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted,#6B7080);white-space:nowrap;font-family:var(--fn-note,serif);font-style:italic;flex-shrink:0}
-.gp-dot{width:6px;height:6px;border-radius:50%;background:#F5C842;flex-shrink:0}
+
 .gp-pool-wrap{padding:44px 20px;max-width:880px;margin:0 auto}
 .gp-pool-card{background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(255,107,53,.07));border:1.5px solid rgba(245,200,66,.28);border-radius:20px;padding:34px;display:flex;gap:36px;flex-wrap:wrap;align-items:flex-start}
 .gp-pool-left{flex:1;min-width:230px}
@@ -4457,24 +4453,7 @@ button { touch-action: manipulation; }
 </div>
 </div>
 
-<div class="gp-ticker">
-<div class="gp-ticker-inner" id="gpTicker">
-<span class="gp-tick"><span class="gp-dot"></span>Grocery wish granted in the UK</span>
-<span class="gp-tick"><span class="gp-dot"></span>Laptop delivered in the US</span>
-<span class="gp-tick"><span class="gp-dot"></span>School fees covered in Canada</span>
-<span class="gp-tick"><span class="gp-dot"></span>Internship connection made in Germany</span>
-<span class="gp-tick"><span class="gp-dot"></span>Medical bill cleared in the US</span>
-<span class="gp-tick"><span class="gp-dot"></span>Baby supplies sent in France</span>
-<span class="gp-tick"><span class="gp-dot"></span>Mentorship found in Australia</span>
-<span class="gp-tick"><span class="gp-dot"></span>Driving test paid in the UK</span>
-<span class="gp-tick"><span class="gp-dot"></span>Coding bootcamp funded in Canada</span>
-<span class="gp-tick"><span class="gp-dot"></span>Sewing machine delivered in Netherlands</span>
-<span class="gp-tick"><span class="gp-dot"></span>Grocery wish granted in the UK</span>
-<span class="gp-tick"><span class="gp-dot"></span>Laptop delivered in the US</span>
-<span class="gp-tick"><span class="gp-dot"></span>School fees covered in Canada</span>
-<span class="gp-tick"><span class="gp-dot"></span>Internship connection made in Germany</span>
-</div>
-</div>
+
 
 <div class="gp-spin-wrap" id="gp-spin">
 <p class="gp-eye" style="text-align:center">Grant a wish</p>
@@ -8272,7 +8251,7 @@ if(!window._firebaseReady) loadDemo();
 setTimeout(() => {
   if(!window.allWishes || window.allWishes.length === 0) {
     console.warn('Wall safety fallback: rendering warmup data');
-    window.renderWishes([]);
+    window.renderWishes(DEMO);
   }
 }, 6000);
 
