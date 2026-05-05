@@ -6256,7 +6256,7 @@ function closeGuardianModal(){
  if(mainBtn) mainBtn.style.display = '';
  const errEl = document.getElementById('guardian-card-errors');
  if(errEl) errEl.textContent = '';
- if(_stripeCardEl){ try { _stripeCardEl.unmount(); } catch(_){} _stripeCardEl = null; }
+ if(_stripeCardEl){ try { _stripeCardEl.unmount(); } catch(e){ console.warn('Stripe unmount:', e); } _stripeCardEl = null; }
 }
 
 /* ══ GUARDIAN MODAL: ANON TOGGLE ══════════════════════════════ */
@@ -6689,13 +6689,8 @@ function saveGuardianRewards(){
  }
 
  // Send a thank-you email via EmailJS if configured
- if(email){
-  fetch('/.netlify/functions/send-wish-granted', {
-   method: 'POST',
-   headers: { 'Content-Type': 'application/json' },
-   body: JSON.stringify({ guardianEmail: email, wishText: 'Guardian rewards opt-in', name: name || 'Guardian' }),
-  }).catch(e => console.warn('guardian_rewards email:', e));
- }
+ // Guardian rewards opt-in recorded; receipt sent via webhook
+ console.log('[Guardian] Rewards opt-in saved for', email || 'anonymous');
 
  // Show success state
  const form = document.getElementById('gb-rewards-form-wrap');
@@ -6827,6 +6822,8 @@ function showGuardianCardForm(amount, wishId){
   _stripeInst = Stripe(STRIPE_PK);
  }
  if(!_stripeInst){ console.warn('Stripe.js not loaded'); return; }
+ // Unmount any existing element before mounting a fresh one
+ if(_stripeCardEl){ try { _stripeCardEl.unmount(); } catch(e){ console.warn('Stripe unmount:', e); } _stripeCardEl = null; }
  const elements = _stripeInst.elements();
  _stripeCardEl  = elements.create('card', { style: { base: { fontFamily: "'Lexend', sans-serif", fontSize: '16px' } } });
  _stripeCardEl.mount('#guardian-card-element');

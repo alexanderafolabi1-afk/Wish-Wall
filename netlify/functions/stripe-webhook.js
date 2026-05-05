@@ -56,11 +56,23 @@ exports.handler = async (event) => {
   if (stripeEvent.type === 'checkout.session.completed' ||
       stripeEvent.type === 'payment_intent.succeeded') {
 
-    const session       = stripeEvent.data.object;
-    const clientRef     = session.client_reference_id || session.metadata?.wishId || '';
-    const customerEmail = session.customer_details?.email || session.receipt_email || '';
-    const amountTotal   = ((session.amount_total ?? session.amount_received ?? 0) / 100).toFixed(2);
-    const currency      = (session.currency || 'usd').toUpperCase();
+    const session = stripeEvent.data.object;
+    const isPaymentIntent = stripeEvent.type === 'payment_intent.succeeded';
+
+    // Extract fields based on event type
+    const clientRef = isPaymentIntent
+      ? (session.metadata?.client_reference_id || session.metadata?.wishId || '')
+      : (session.client_reference_id || session.metadata?.wishId || '');
+
+    const customerEmail = isPaymentIntent
+      ? (session.receipt_email || session.metadata?.email || '')
+      : (session.customer_details?.email || session.receipt_email || '');
+
+    const amountTotal = isPaymentIntent
+      ? ((session.amount_received ?? session.amount ?? 0) / 100).toFixed(2)
+      : ((session.amount_total ?? 0) / 100).toFixed(2);
+
+    const currency = (session.currency || 'usd').toUpperCase();
 
     if (clientRef.startsWith('grant_')) {
       // ── Guardian payment: mark wish as granted ──────────────────────────

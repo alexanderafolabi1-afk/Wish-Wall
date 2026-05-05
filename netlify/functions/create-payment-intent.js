@@ -15,15 +15,16 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid amount (minimum 50 cents)' }) };
   }
 
+  const clientRef = wishId
+    ? (wishId === 'community_pot' ? 'community_pot' : 'grant_' + wishId)
+    : '';
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount:   Math.round(amount),
-      currency: 'usd',
-      metadata: {
-        wishId:         wishId || '',
-        client_reference_id: wishId ? (wishId === 'community_pot' ? 'community_pot' : 'grant_' + wishId) : '',
-        source:         'wish-wall',
-      },
+      amount:               Math.round(amount),
+      currency:             'usd',
+      // client_reference_id is a top-level field on PaymentIntent
+      ...(clientRef ? { metadata: { wishId, client_reference_id: clientRef } } : {}),
       automatic_payment_methods: { enabled: true },
     });
 
