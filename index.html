@@ -1273,13 +1273,20 @@ nav {
 .stamp-big { color: #1A5599; border-color: #1A5599; background: rgba(26,85,153,.08); }
 .stamp-goals { color: #128850; border-color: #128850; background: rgba(18,136,80,.08); }
 
-/* Granted badge */
+/* Granted badge — positioned at top-right corner of note-inner */
 .granted-badge {
  display: inline-flex; align-items: center; gap: 2px;
  background: var(--green-dk); color: #FAF8F5;
- border-radius: 2px; padding: 1px 6px;
- font-size: 8px; font-weight: 700; font-family: var(--fn-mono);
+ border-radius: 2px; padding: 1px 4px;
+ font-size: 7px; font-weight: 700; font-family: var(--fn-mono);
  animation: grantedPop .4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+/* Override in note cards: absolute top-right corner */
+.note-card.is-granted .granted-badge {
+ position: absolute;
+ top: 3px; right: 3px;
+ z-index: 4;
+ margin: 0;
 }
 @keyframes grantedPop { from { transform: scale(0); } 60% { transform: scale(1.25); } to { transform: scale(1); } }
 
@@ -4341,6 +4348,140 @@ button { touch-action: manipulation; }
 .gp-corp-grid { padding-top: 14px; }
 .gp-type-tags { padding-top: 14px; margin-top: 0 !important; }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MINI STICKY NOTE PILLS  (Change 1)
+   Every pill-shaped element → mini sticky note:
+   • 6 rotating note colours  • tiny thumbtack pin at top centre
+   • slight rotation −1 to +1 deg  • hover: lift + straighten
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Shared base ── */
+.gp-nm,
+.fil-btn,
+.wishcoin-pill,
+.wish-prompt-chip,
+.gb-rank-chip,
+.corp-badge,
+.sponsor-modal-badge,
+.gp-amt {
+  position: relative !important;
+  border-radius: 2px 8px 2px 8px !important;
+  border: none !important;
+  box-shadow: 2px 4px 0 rgba(30,34,53,.09), 0 2px 8px rgba(30,34,53,.10) !important;
+  overflow: visible !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic !important;
+  transition: transform .22s cubic-bezier(0.16,1,0.3,1), box-shadow .22s !important;
+}
+
+/* ── Thumbtack pin at top centre ── */
+.gp-nm::before,
+.fil-btn::before,
+.wishcoin-pill::before,
+.wish-prompt-chip::before,
+.gb-rank-chip::before,
+.corp-badge::before,
+.sponsor-modal-badge::before,
+.gp-amt::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 13px !important;
+  height: 13px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, #ff9080, #cc1100) !important;
+  box-shadow: 0 2px 5px rgba(26,16,8,.38) !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* ── Hover: lift and straighten ── */
+.gp-nm:hover,
+.fil-btn:hover,
+.wishcoin-pill:hover,
+.wish-prompt-chip:hover,
+.gb-rank-chip:hover,
+.corp-badge:hover,
+.sponsor-modal-badge:hover,
+.gp-amt:hover {
+  transform: scale(1.06) rotate(0deg) translateY(-5px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  z-index: 20 !important;
+}
+
+/* ── Beyond Money pills (.gp-nm) — colour + rotation by nth-child ── */
+.gp-nm:nth-child(6n+1) { background: #F5E580 !important; color: #2A1A06 !important; transform: rotate(-0.9deg); }
+.gp-nm:nth-child(6n+2) { background: #F2C0D4 !important; color: #2A1A06 !important; transform: rotate(0.7deg); }
+.gp-nm:nth-child(6n+3) { background: #BAE4F5 !important; color: #2A1A06 !important; transform: rotate(-0.5deg); }
+.gp-nm:nth-child(6n+4) { background: #B8F0D4 !important; color: #2A1A06 !important; transform: rotate(0.8deg); }
+.gp-nm:nth-child(6n+5) { background: #F5DDB0 !important; color: #2A1A06 !important; transform: rotate(-0.6deg); }
+.gp-nm:nth-child(6n+6) { background: #DDB8F5 !important; color: #2A1A06 !important; transform: rotate(0.4deg); }
+
+/* ── Wall filter buttons (.fil-btn) ── */
+/* input.search-inp is :nth-child(1) so buttons start at :nth-child(2) */
+.fil-btn:nth-child(2) { background: #F5E580 !important; color: #2A1A06 !important; transform: rotate(-0.7deg); }
+.fil-btn:nth-child(3) { background: #F2C0D4 !important; color: #2A1A06 !important; transform: rotate(0.5deg); }
+.fil-btn:nth-child(4) { background: #BAE4F5 !important; color: #2A1A06 !important; transform: rotate(-0.6deg); }
+/* Active filter button: straighten + lift to signal selection */
+.fil-btn.active {
+  transform: scale(1.04) rotate(0deg) translateY(-2px) !important;
+  box-shadow: 3px 6px 18px rgba(30,34,53,.18) !important;
+  z-index: 5;
+}
+
+/* ── Wish prompt chips (.wish-prompt-chip) ── */
+/* .wish-prompt-label <span> is :nth-child(1) so chips start at :nth-child(2) */
+.wish-prompt-chip:nth-child(2) { background: #B8F0D4 !important; color: #2A1A06 !important; transform: rotate(-0.8deg); }
+.wish-prompt-chip:nth-child(3) { background: #F5DDB0 !important; color: #2A1A06 !important; transform: rotate(0.6deg); }
+.wish-prompt-chip:nth-child(4) { background: #DDB8F5 !important; color: #2A1A06 !important; transform: rotate(-0.7deg); }
+
+/* ── WishCoins pill (.wishcoin-pill) ── */
+.wishcoin-pill { background: #F5E580 !important; color: #2A1A06 !important; transform: rotate(-0.5deg); }
+
+/* ── Guardian badge rank chip (.gb-rank-chip) ── */
+.gb-rank-chip {
+  background: #F2C0D4 !important;
+  color: #2A1A06 !important;
+  transform: rotate(0.6deg);
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* ── Corp sponsor badge (.corp-badge) ── */
+.corp-badge { background: #BAE4F5 !important; color: #2A1A06 !important; transform: rotate(-0.5deg); }
+
+/* ── Sponsor modal badge (.sponsor-modal-badge) ── */
+.sponsor-modal-badge {
+  background: #F5E580 !important;
+  color: #2A1A06 !important;
+  transform: rotate(-0.4deg);
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* ── Community pool amount buttons (.gp-amt) ── */
+.gp-amt:nth-child(6n+1) { background: #F5E580 !important; color: #2A1A06 !important; transform: rotate(-0.7deg); }
+.gp-amt:nth-child(6n+2) { background: #F2C0D4 !important; color: #2A1A06 !important; transform: rotate(0.5deg); }
+.gp-amt:nth-child(6n+3) { background: #BAE4F5 !important; color: #2A1A06 !important; transform: rotate(-0.6deg); }
+.gp-amt:nth-child(6n+4) { background: #B8F0D4 !important; color: #2A1A06 !important; transform: rotate(0.7deg); }
+.gp-amt:nth-child(6n+5) { background: #F5DDB0 !important; color: #2A1A06 !important; transform: rotate(-0.5deg); }
+.gp-amt:nth-child(6n+6) { background: #DDB8F5 !important; color: #2A1A06 !important; transform: rotate(0.4deg); }
+/* Selected amount: straighten + lift */
+.gp-amt.gp-amt-sel {
+  transform: scale(1.04) rotate(0deg) translateY(-2px) !important;
+  box-shadow: 3px 6px 18px rgba(30,34,53,.18) !important;
+  z-index: 5;
+}
+
+/* ── Container padding-top so pins are never clipped ── */
+.gp-nm-wrap       { padding-top: 14px !important; }
+.wall-toolbar     { padding-top: 14px !important; }
+.wish-prompts     { padding-top: 14px !important; }
+.corp-card-top    { padding-top: 12px !important; }
+.gp-amts          { padding-top: 14px !important; }
+
 </style>
 
 </head>
@@ -6033,7 +6174,7 @@ function paintWall(){
  }
 
  /* ── 3-zone layout ─────────────────────────────────────────────
-  Zone 1 (slots 0–184) : 185 granted warmup wishes, green sticky notes
+  Zone 1 (slots 0–184) : 185 granted warmup wishes, colourful rotating sticky notes
   Zone 2 (slots 185+)  : real Firebase approved/granted wishes
   Zone 3 (remaining)   : placeholder notes — opacity 0.45, not clickable
   ─────────────────────────────────────────────── */
@@ -6053,8 +6194,8 @@ function paintWall(){
  : '';
 
  if(i < 185){
-  // Zone 1: granted warmup wish — force green sticky note with is-granted class
-  const w = { ...DEMO_RAW[i], color: 'n-green' };
+  // Zone 1: granted warmup wish — colourful sticky notes rotating through all 6 note colours
+  const w = { ...DEMO_RAW[i], color: NOTE_COLS[i % NOTE_COLS.length] };
   cells.push(noteHTML(w, i, tileStyle));
  } else {
   const realIdx = i - 185;
@@ -6086,7 +6227,7 @@ function noteHTML(w, i, tileStyle=''){
  ? `<span class="wish-stamp ${STAMPS[w.stamp].cls}">${STAMPS[w.stamp].txt}</span>`
  : '';
 
- const grantedBadge = granted ? `<span class="granted-badge">✅😊</span>` : '';
+ const grantedBadge = granted ? `<span class="granted-badge">✅</span>` : '';
  const connectDot = w.isConnect ? `<span style="font-size:6px;color:rgba(0,180,220,.8);">🤝</span>` : '';
 
  // Encode wish data for click handler safe serialisation
