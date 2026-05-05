@@ -9,9 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://js.stripe.com">
-<link rel="preconnect" href="https://cdn.emailjs.com">
-<!-- EmailJS — configure EMAILJS_PUBLIC_KEY + EMAILJS_SERVICE_ID as window vars before this -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
 <link rel="preconnect" href="https://www.gstatic.com">
 
 <!-- PRIMARY SEO: US + UK + Global dominance -->
@@ -275,6 +272,16 @@
    aria-label="Your first name for the leaderboard">
  </div>
 
+ <!-- Step 3: Stripe Elements card form (shown after clicking Grant) -->
+ <div id="guardian-card-section" style="display:none;margin-top:16px;">
+  <div id="guardian-card-element" style="padding:12px;border:1.5px solid rgba(30,34,53,.18);border-radius:4px;background:#fff;"></div>
+  <div id="guardian-card-errors" style="color:#D44A1E;font-size:13px;margin-top:6px;"></div>
+  <button class="guardian-modal-btn" id="guardian-pay-btn" onclick="submitGuardianPayment()"
+   style="margin-top:12px;" type="button">
+   💙 Pay <span id="guardian-pay-amount"></span> now
+  </button>
+ </div>
+
  <button class="guardian-modal-btn" id="guardian-modal-btn"
  onclick="proceedToGrantPayment()">
  💙 Grant this wish &#8594;
@@ -477,14 +484,14 @@
  };
  window._fb = { collection, addDoc, getDocs, doc, updateDoc, onSnapshot, query, where, orderBy, limit, serverTimestamp, getDoc };
 
- // Real-time wish listener
- const q = query(window._col.wishes, where('status', '==', 'approved'), orderBy('createdAt', 'desc'));
+ // Real-time wish listener — includes both approved and granted statuses
+  const q = query(window._col.wishes, where('status', 'in', ['approved', 'granted']), orderBy('createdAt', 'desc'));
  onSnapshot(q, snap => {
  const wishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
  window.renderWishes(wishes);
  });
 
- // Ledger listener internal only, pot balance NOT rendered publicly
+ // Ledger listener — pot balance now rendered publicly via s-pot
  onSnapshot(window._col.ledger, snap => {
  if (snap.exists()) window.updateLedger(snap.data());
  });
@@ -4173,6 +4180,13 @@ button { touch-action: manipulation; }
  <!-- Wall -->
  <div class="wall-section">
 
+ <!-- HERO STATS strip -->
+ <div class="hero-stats" aria-label="Platform statistics">
+  <div class="stat-pill"><span class="stat-num" id="s-guardians">158</span><span>Guardians</span></div>
+  <div class="stat-pill"><span class="stat-num" id="s-countries">18+</span><span>Countries</span></div>
+  <div class="stat-pill stat-pill--pot"><span class="stat-num" id="s-pot">$0</span><span>Magic Pool</span></div>
+ </div>
+
  <!-- HOW IT WORKS inline strip -->
  <div class="how-strip">
  <div class="how-step"><span class="how-step-n">1</span><span data-i18n="how_step1">Write your wish</span></div>
@@ -6303,9 +6317,10 @@ function findWishesForGuardian(){
  if(!_gwBudget || _gwBudget < 5){
   return alert('Please choose a budget first!');
  }
- // Get eligible wishes: approved, non-granted, est <= budget, sorted by oldest first
+ // Get eligible wishes: approved only, non-granted, est <= budget, sorted by oldest first
  const pool = (window.allWishes || []).filter(w =>
-  (w.status === 'approved' || w.status === 'queued') &&
+  w.status === 'approved' &&
+  !w.granted &&
   w.est && w.est > 0 && w.est <= _gwBudget
  ).sort((a, b) => {
   // Sort by oldest first: use queuedAt/createdAt if available, else default order
@@ -6666,12 +6681,13 @@ function saveGuardianRewards(){
  }
 
  // Send a thank-you email via EmailJS if configured
- _gwSendEmail('guardian_rewards', {
-  to_name: name || 'Guardian',
-  to_email: email,
-  guardian_name: name,
-  guardian_country: country,
- });
+ if(email){
+  fetch('/.netlify/functions/send-wish-granted', {
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json' },
+   body: JSON.stringify({ guardianEmail: email, wishText: 'Guardian rewards opt-in', name: name || 'Guardian' }),
+  }).catch(e => console.warn('guardian_rewards email:', e));
+ }
 
  // Show success state
  const form = document.getElementById('gb-rewards-form-wrap');
@@ -6681,41 +6697,25 @@ function saveGuardianRewards(){
  announceA11y('Details saved! Thank you so much. You are on our thank-you list.');
 }
 
-/* ══ EMAILJS WRAPPER ════════════════════════════════════════ */
-// Configure EmailJS in your Netlify env or inline:
-// window.EMAILJS_PUBLIC_KEY = 'your_key'
-// window.EMAILJS_SERVICE_ID = 'your_service'
-function _gwSendEmail(templateId, params){
- // Graceful no-op if EmailJS is not configured
- try {
-  const key = window.EMAILJS_PUBLIC_KEY;
-  const svc = window.EMAILJS_SERVICE_ID;
-  if(!key || !svc || !params.to_email) return;
-  if(typeof emailjs === 'undefined') return;
-  emailjs.send(svc, templateId, params).catch(e => console.warn('EmailJS:', e));
- } catch(e){ /* silent */ }
-}
-
+/* ══ EMAIL HELPERS (via Netlify function) ═════════════════════*/
 // Send wisher confirmation email (call from submitWish after save)
 function sendWisherConfirmationEmail(email, wishText, wishCode){
- _gwSendEmail('wisher_pinned', {
-  to_email: email,
-  to_name: email.split('@')[0],
-  wish_text: wishText,
-  wish_code: wishCode || '',
-  wall_url: 'https://wishwall.xyz',
- });
+ if(!email || !wishText) return;
+ fetch('/.netlify/functions/send-wish-granted', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ wisherEmail: email, wishText, name: email.split('@')[0] }),
+ }).catch(e => console.warn('sendWisherConfirmationEmail:', e));
 }
 
 // Send guardian receipt email (call from checkReturn)
 function sendGuardianReceiptEmail(email, guardianName, wishText){
- _gwSendEmail('guardian_receipt', {
-  to_email: email,
-  to_name: guardianName || 'Guardian',
-  wish_text: wishText || 'a heartfelt wish',
-  wall_url: 'https://wishwall.xyz',
-  receipt_ref: 'WW-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase(),
- });
+ if(!email || !wishText) return;
+ fetch('/.netlify/functions/send-wish-granted', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ guardianEmail: email, wishText, name: guardianName || 'Guardian' }),
+ }).catch(e => console.warn('sendGuardianReceiptEmail:', e));
 }
 
 /* ══ SPONSOR ENQUIRY MODAL */
@@ -6796,21 +6796,83 @@ function proceedToGrantPayment(){
  const wishTxtEl = document.getElementById('guardian-wish-text');
  if(wishTxtEl?.textContent) sessionStorage.setItem('ww-sponsor-wish-text', wishTxtEl.textContent);
 
- closeGuardianModal();
+ // Show embedded Stripe Elements card form (keeps user on wallwishes.xyz)
+ showGuardianCardForm(isPot ? 1 : est, isPot ? 'community_pot' : wishId);
+}
 
- if(isPot){
-  // $1 Community Pot — route through Wish Wall branded checkout page
-  sessionStorage.setItem('ww-checkout-type', 'pot');
-  sessionStorage.setItem('ww-checkout-amount', '1.00');
-  sessionStorage.setItem('ww-checkout-label', 'Guardian · Community Pot contribution');
-  window.location.href = 'guardian-checkout.html';
- } else {
-  // Regular grant (wheel selection) — navigate directly to Stripe
-  const base = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
-  const url = new URL(base.includes('://') ? base : 'https://' + base);
-  url.searchParams.set('client_reference_id', 'grant_' + wishId);
-  if(email) url.searchParams.set('prefilled_email', email);
-  window.location.href = url.toString();
+// Stripe Elements instances for guardian modal
+let _stripeInst = null;
+let _stripeCardEl = null;
+
+function showGuardianCardForm(amount, wishId){
+ const cardSection = document.getElementById('guardian-card-section');
+ const mainBtn     = document.getElementById('guardian-modal-btn');
+ const payAmtSpan  = document.getElementById('guardian-pay-amount');
+ if(cardSection) cardSection.style.display = 'block';
+ if(mainBtn)     mainBtn.style.display     = 'none';
+ if(payAmtSpan)  payAmtSpan.textContent    = '$' + Number(amount).toFixed(2);
+ const modal = document.getElementById('guardian-modal-ov');
+ modal.dataset.payAmount = amount;
+ modal.dataset.payWishId = wishId;
+
+ if(!_stripeInst && typeof Stripe !== 'undefined'){
+  _stripeInst = Stripe(STRIPE_PK);
+ }
+ if(!_stripeInst){ console.warn('Stripe.js not loaded'); return; }
+ const elements = _stripeInst.elements();
+ _stripeCardEl  = elements.create('card', { style: { base: { fontFamily: "'Lexend', sans-serif", fontSize: '16px' } } });
+ _stripeCardEl.mount('#guardian-card-element');
+ _stripeCardEl.on('change', ev => {
+  const errEl = document.getElementById('guardian-card-errors');
+  if(errEl) errEl.textContent = ev.error ? ev.error.message : '';
+ });
+}
+
+async function submitGuardianPayment(){
+ const modal  = document.getElementById('guardian-modal-ov');
+ const amount = parseFloat(modal.dataset.payAmount) || 10;
+ const wishId = modal.dataset.payWishId || '';
+ const payBtn = document.getElementById('guardian-pay-btn');
+ const errEl  = document.getElementById('guardian-card-errors');
+ if(payBtn){ payBtn.disabled = true; payBtn.textContent = 'Processing...'; }
+
+ try {
+  const res = await fetch('/.netlify/functions/create-payment-intent', {
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json' },
+   body: JSON.stringify({ amount: Math.round(amount * 100), wishId }),
+  });
+  const data = await res.json();
+  if(!res.ok || !data.clientSecret) throw new Error(data.error || 'No client secret');
+
+  const email = sessionStorage.getItem('ww-guardian-email') || '';
+  const { error } = await _stripeInst.confirmCardPayment(data.clientSecret, {
+   payment_method: {
+    card: _stripeCardEl,
+    billing_details: email ? { email } : {},
+   },
+  });
+
+  if(error){
+   if(errEl) errEl.textContent = error.message;
+   if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💙 Pay $' + amount.toFixed(2) + ' now'; }
+   return;
+  }
+
+  // Payment succeeded - webhook will update Firebase
+  closeGuardianModal();
+  const tyName = sessionStorage.getItem('ww-guardian-name') || null;
+  const sub = document.getElementById('ty-sub');
+  if(sub) sub.textContent = (tyName ? tyName + ', a' : 'A') + ' real person is about to have a better day because of you.';
+  const rec = document.getElementById('ty-receipt');
+  if(rec) rec.textContent = email ? 'A receipt was sent to ' + email + '.' : 'Your generosity has been recorded.';
+  const tyOv = document.getElementById('guardian-thankyou-ov');
+  if(tyOv) tyOv.classList.add('open');
+  startConfetti();
+ } catch(err){
+  console.error('submitGuardianPayment error:', err);
+  if(errEl) errEl.textContent = err.message || 'Payment failed. Please try again.';
+  if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💙 Pay $' + amount.toFixed(2) + ' now'; }
  }
 }
 
@@ -7248,8 +7310,28 @@ function paintLBWithTabs(donors){
 }
 
 function donatePool(){
- const STRIPE_POOL_LINK = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_POOL_LINK';
- window.location.href = `${STRIPE_POOL_LINK}?prefilled_amount=${poolAmt * 100}`;
+ showPoolCardForm(poolAmt);
+}
+
+// Pool donation via embedded Stripe Elements
+let _stripePool = null;
+let _stripePoolCard = null;
+
+function showPoolCardForm(amount){
+ // Use guardian modal as payment surface
+ const modal    = document.getElementById('guardian-modal-ov');
+ const wishTxt  = document.getElementById('guardian-wish-text');
+ const wishFrom = document.getElementById('guardian-wish-from');
+ const amtVal   = document.getElementById('guardian-amount-val');
+ if(wishTxt)  wishTxt.textContent  = 'Adding $' + Number(amount).toFixed(2) + ' to the Magic Pool.';
+ if(wishFrom) wishFrom.textContent = '🌍 Community · All wishes';
+ if(amtVal)   amtVal.textContent   = '$' + Number(amount).toFixed(2);
+ modal.dataset.wishId  = 'community_pot';
+ modal.dataset.wishEst = amount;
+ modal.dataset.isPot   = 'true';
+ modal.classList.add('open');
+ document.body.style.overflow = 'hidden';
+ showGuardianCardForm(amount, 'community_pot');
 }
 
 /* ============================================================
@@ -8257,6 +8339,10 @@ window.updateLedger = function(data){
 
  // Public ledger cards
  const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
+
+ // Magic Pool counter
+ const potEl = document.getElementById('s-pot');
+ if(potEl) potEl.textContent = '$' + Number(d.potBalance ?? 0).toLocaleString('en-US');
 
  // Push to live impact counters
  liveStats.granted = d.totalGranted || 185;
