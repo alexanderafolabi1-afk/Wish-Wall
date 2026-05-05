@@ -54,3 +54,6 @@
   from = "/admin"
   to = "/admin.html"
   status = 200
+
+[functions."send-hope-emails"]
+  schedule = "0 */6 * * *"
