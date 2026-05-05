@@ -5226,7 +5226,12 @@ button { touch-action: manipulation; }
  CONFIGURATION Replace all values before going live
  ============================================================ */
 const STRIPE_PK = 'pk_live_51TNPKZRTh7hyVAFtyScgc5gnJEpeuJC6pP8HAXPKzGEGK5RKiOTBno1YIEC1WQU0W5A5hAOgLAssuhDUimpaQsWW00K6oTIHHQ';
+// Wisher wish-posting link — fixed at $1.99
 const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/14AbJ3fJTax1eTI8vY1gs00';
+// ⚠️  Guardian $1 Community Pot link lives in guardian-checkout.html (STRIPE_GUARDIAN_LINK).
+// Create the $1.00 Payment Link in Stripe Dashboard → Payment Links, then paste the URL there.
+// After-payment redirect: https://wishwall.xyz/?payment=success
+// Cancel URL           : https://wishwall.xyz/guardian-checkout.html
 
 /* ============================================================
  REGIONAL PRICING (PPP tiers per audit recommendation)
@@ -6771,10 +6776,11 @@ function proceedToGrantPayment(){
  const emailInp = document.getElementById('guardian-email-inp');
  const nameInp  = document.getElementById('guardian-name-inp');
  const wishId = modal.dataset.wishId;
- const est = parseFloat(modal.dataset.wishEst) || 10;
- const email = (emailInp?.value || '').trim();
- const name  = (nameInp?.value  || '').trim();
- const anon  = sessionStorage.getItem('ww-guardian-anon') === '1'
+ const isPot  = modal.dataset.isPot === 'true';
+ const est    = parseFloat(modal.dataset.wishEst) || 10;
+ const email  = (emailInp?.value || '').trim();
+ const name   = (nameInp?.value  || '').trim();
+ const anon   = sessionStorage.getItem('ww-guardian-anon') === '1'
    || (!document.getElementById('gm-anon-no')?.classList.contains('anon-toggle-btn--active'));
  // Save guardian info to sessionStorage
  if(email) sessionStorage.setItem('ww-guardian-email', email);
@@ -6787,14 +6793,22 @@ function proceedToGrantPayment(){
  const wishTxtEl = document.getElementById('guardian-wish-text');
  if(wishTxtEl?.textContent) sessionStorage.setItem('ww-sponsor-wish-text', wishTxtEl.textContent);
 
- // Navigate to Stripe
- const base = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
- const url = new URL(base.includes('://') ? base : 'https://' + base);
- url.searchParams.set('client_reference_id', 'grant_' + wishId);
- if(email) url.searchParams.set('prefilled_email', email);
-
  closeGuardianModal();
- window.location.href = url.toString();
+
+ if(isPot){
+  // $1 Community Pot — route through Wish Wall branded checkout page
+  sessionStorage.setItem('ww-checkout-type', 'pot');
+  sessionStorage.setItem('ww-checkout-amount', '1.00');
+  sessionStorage.setItem('ww-checkout-label', 'Guardian · Community Pot contribution');
+  window.location.href = 'guardian-checkout.html';
+ } else {
+  // Regular grant (wheel selection) — navigate directly to Stripe
+  const base = STRIPE_PAYMENT_LINK || 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+  const url = new URL(base.includes('://') ? base : 'https://' + base);
+  url.searchParams.set('client_reference_id', 'grant_' + wishId);
+  if(email) url.searchParams.set('prefilled_email', email);
+  window.location.href = url.toString();
+ }
 }
 
 function selPool(amt, btn){
