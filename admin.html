@@ -390,6 +390,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 .ctrl-action-btn{
   width:100%;padding:14px 20px;border-radius:50px;border:1px solid;
   font-family:var(--fn-d);font-size:15px;cursor:pointer;transition:all .2s;
+  min-height:48px;
 }
 .ctrl-btn-pause{background:rgba(255,51,102,.15);color:var(--red);border-color:var(--red);}
 .ctrl-btn-pause:hover{background:var(--red);color:#fff;}
@@ -475,6 +476,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   border:none;background:transparent;color:rgba(255,255,255,.45);
   font-family:var(--fn);font-size:10px;font-weight:700;
   cursor:pointer;padding:4px 0;text-transform:uppercase;letter-spacing:.3px;
+  min-height:48px;
 }
 .mob-nav-btn.on{color:var(--orange);}
 .mob-nav-btn:active{color:var(--yellow);}
@@ -499,6 +501,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .wish-table-wrap{display:none;}
   .wish-cards{display:flex;}
   .adm-search{min-width:100%;}
+  .ctrl-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -813,7 +816,7 @@ function updateAdmStats(){
 }
 
 function getFiltered(){
-  let src = allAdmWishes;
+  let src = allAdmWishes.filter(w => w.warmup !== true);
   if(admFilter !== 'all') src = src.filter(w => w.status === admFilter);
   if(admSearch){
     const q = admSearch.toLowerCase();
@@ -1169,20 +1172,8 @@ function toast(msg, type='green'){
 function loadDemoIfNeeded(){
   if(!window._fbReady){
     setTimeout(() => {
-      window.renderAdmin([
-        {id:'d1',wishText:"I wish for enough to fix my mum's roof 🏠",name:'Jane D.',email:'jane@example.com',status:'pending',anonymous:false,country:'🇬🇧 UK',createdAt:null},
-        {id:'d2',wishText:"I wish to finally finish my novel 📖",name:'',email:'anon@example.com',status:'approved',anonymous:true,country:'🌍 Global',createdAt:null},
-        {id:'d3',wishText:"My ex sees me thriving and it haunts him gently. Forever 💅",name:'',email:'anon2@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',createdAt:null},
-        {id:'d4',wishText:"I wish my dog gets better soon 🐕",name:'Tom S.',email:'tom@example.com',status:'granted',anonymous:false,country:'🇬🇧 UK',createdAt:null,grantCost:35},
-        {id:'d5',wishText:"Help me reach my car fund. Rural area — no car means no job 🚗",name:'',email:'anon3@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',createdAt:null},
-        {id:'d6',wishText:"Just a hug from someone who means it. That's it. 🤗",name:'',email:'anon4@example.com',status:'granted',anonymous:true,country:'🌍 Global',createdAt:null,cheekyResponse:'💛 We see you'},
-        {id:'d7',wishText:"Connect me to a food bank in my area — just moved, have nothing 🤝",name:'',email:'anon5@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',isConnect:true,createdAt:null},
-      ]);
-      window.renderDonors([
-        {id:'don1',amount:50,name:'Sarah M.',email:'sarah@example.com',createdAt:null},
-        {id:'don2',amount:25,name:'Anonymous',email:'',createdAt:null},
-        {id:'don3',amount:100,name:'James K.',email:'james@example.com',createdAt:null},
-      ]);
+      window.renderAdmin([]);
+      window.renderDonors([]);
     }, 500);
   }
 }
