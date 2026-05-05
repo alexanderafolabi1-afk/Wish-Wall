@@ -2001,15 +2001,21 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  border-radius: 2px 14px 2px 14px;
  padding: var(--sp-4); margin-bottom: var(--sp-3);
  display: flex; gap: var(--sp-3); align-items: flex-start;
- background: var(--card);
+ background: #ffffff;
  border: 1px solid rgba(30,34,53,.1);
  box-shadow: 3px 3px 0 rgba(30,34,53,.05);
  transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .how-card:hover { transform: translate(-2px, -3px); box-shadow: 5px 6px 0 rgba(30,34,53,.08); }
 .how-card-icon { font-size: 2rem; flex-shrink: 0; filter: drop-shadow(0 2px 4px rgba(26,16,8,.15)); }
-.how-card-title { font-family: var(--fn-display); font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 6px; letter-spacing: -0.03em; font-variation-settings: 'opsz' 40; }
-.how-card-body { font-family: var(--fn-body); font-size: .95rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; text-wrap: pretty; }
+.how-card-title { font-family: var(--fn-display); font-size: 1.3rem; font-weight: 800; color: #1E2235; margin-bottom: 6px; letter-spacing: -0.03em; font-variation-settings: 'opsz' 40; }
+.how-card-body { font-family: var(--fn-body); font-size: .95rem; font-weight: 300; color: #3d4259; line-height: 1.7; text-wrap: pretty; }
+
+/* ============================================================
+ MAGIC PAGE (TAB-HOW) OVERRIDES
+ ============================================================ */
+#tab-how .sec-sub { color: #3d4259; }
+#tab-how .pin-btn { background: #D44A1E; color: #ffffff; }
 
 /* ============================================================
  ACCESSIBILITY UTILITIES
@@ -3770,8 +3776,8 @@ button { touch-action: manipulation; }
   gap: 0;
   max-width: 700px;
   margin: 0 auto 48px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(245, 200, 66, 0.1);
+  background: #ffffff;
+  border: 1px solid rgba(30,34,53,.1);
   border-radius: 18px;
   overflow: hidden;
 }
@@ -3786,21 +3792,18 @@ button { touch-action: manipulation; }
 }
 .lib-divider {
   width: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(30,34,53,.1);
   align-self: stretch;
 }
 .lib-num {
   font-family: var(--fn-display);
   font-size: 1.8rem;
   font-weight: 900;
-  background: linear-gradient(135deg, #F5C842, #FF6B35);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #D44A1E;
 }
 .lib-label {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #6B7080;
   font-family: var(--fn-ui);
   font-weight: 600;
   text-transform: uppercase;
@@ -3824,14 +3827,14 @@ button { touch-action: manipulation; }
 .fame-title {
   font-family: var(--fn-display);
   font-size: clamp(1.6rem, 4vw, 2.4rem);
-  color: #FAFAF7;
+  color: #1E2235;
   margin-bottom: 10px;
   letter-spacing: -0.3px;
 }
 .fame-sub {
   font-family: var(--fn-note);
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #3d4259;
   margin-bottom: 28px;
   font-style: italic;
 }
@@ -3842,8 +3845,8 @@ button { touch-action: manipulation; }
   text-align: left;
 }
 .fame-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #EEE9E2;
+  border: 1px solid rgba(30,34,53,.12);
   border-radius: 16px;
   padding: 22px;
   display: flex;
@@ -3853,18 +3856,18 @@ button { touch-action: manipulation; }
 }
 .fame-card:hover {
   transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.07);
+  background: #E5DFD7;
 }
 .fame-quote {
   font-family: var(--fn-note);
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: #1E2235;
   line-height: 1.65;
   flex: 1;
 }
 .fame-meta {
   font-size: 11px;
-  color: rgba(245, 200, 66, 0.6);
+  color: #6B7080;
   font-family: var(--fn-ui);
   font-weight: 600;
 }
@@ -4703,32 +4706,32 @@ button { touch-action: manipulation; }
 
  <div class="live-impact-bar">
   <div class="lib-item">
-   <span class="lib-num">~12,800</span>
+   <span class="lib-num">1,000</span>
    <span class="lib-label">Wishes Pinned</span>
   </div>
   <div class="lib-divider"></div>
   <div class="lib-item">
-   <span class="lib-num">~9,200</span>
+   <span class="lib-num">185</span>
    <span class="lib-label">Wishes Granted</span>
   </div>
   <div class="lib-divider"></div>
   <div class="lib-item">
-   <span class="lib-num">~6,500+</span>
+   <span class="lib-num">158</span>
    <span class="lib-label">Active Guardians</span>
   </div>
   <div class="lib-divider"></div>
   <div class="lib-item">
-   <span class="lib-num">~43</span>
+   <span class="lib-num">18+</span>
    <span class="lib-label">Countries Reached</span>
   </div>
  </div>
 
  <div class="fame-section">
   <h3 class="fame-title">Wall of Kindness 🛡️</h3>
-  <p class="fame-sub">Illustrative community milestones — approximate and updated periodically.</p>
+  <p class="fame-sub">Illustrative community milestones, approximate and updated periodically.</p>
   <div class="fame-grid">
    <div class="fame-card">
-    <p class="fame-quote">“I sent £40 for groceries to someone in Glasgow. It cost me nothing meaningful — but to them it meant everything.”</p>
+    <p class="fame-quote">“I sent £40 for groceries to someone in Glasgow. It cost me nothing meaningful, but to them it meant everything.”</p>
     <span class="fame-meta">Guardian · United Kingdom</span>
    </div>
    <div class="fame-card">
@@ -4736,48 +4739,48 @@ button { touch-action: manipulation; }
     <span class="fame-meta">Wisher · Nigeria</span>
    </div>
    <div class="fame-card">
-    <p class="fame-quote">“I granted three wishes last month — a textbook, a bus pass, and just a kind message. Small things, huge heart.”</p>
+    <p class="fame-quote">“I granted three wishes last month, a textbook, a bus pass, and just a kind message. Small things, huge heart.”</p>
     <span class="fame-meta">Guardian · United States</span>
    </div>
   </div>
  </div>
 
- <div class="how-card" style="background:rgba(255,229,102,.08);border:1px solid rgba(255,229,102,.2);">
+ <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">📌</div>
  <div>
- <h3 class="how-card-title" style="color:var(--yellow);">Step 1 Pin a Wish</h3>
+ <h3 class="how-card-title">Step 1 Pin a Wish</h3>
  <p class="how-card-body">Write your wish (max 350 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
  </div>
  </div>
 
- <div class="how-card" style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.18);">
+ <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">🛡️</div>
  <div>
- <h3 class="how-card-title" style="color:var(--blue);">Step 2 Guardians Appear</h3>
+ <h3 class="how-card-title">Step 2 Guardians Appear</h3>
  <p class="how-card-body">Community Guardians browse the wall and choose a wish to make real. They can grant it directly, sending money, purchasing an item, making a connection, or offering a skill, or top up the Magic Pool for wishes they want to support but cannot fulfil alone.</p>
  </div>
  </div>
 
- <div class="how-card" style="background:rgba(0,255,179,.07);border:1px solid rgba(0,255,179,.18);">
+ <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">✅</div>
  <div>
- <h3 class="how-card-title" style="color:var(--green);">Step 3 Wishes Get Granted</h3>
+ <h3 class="how-card-title">Step 3 Wishes Get Granted</h3>
  <p class="how-card-body">When we connect a Guardian to a wisher and fulfilment is verified, money sent, item delivered, connection made, hug given, the note turns green ✅ on the wall. Guardians fulfil directly or ask the Wish Wall to arrange it on their behalf. Both wisher and Guardian receive a private confirmation. Identities are never revealed. Every moment is honoured.</p>
  </div>
  </div>
 
- <div class="how-card" style="background:rgba(180,77,255,.07);border:1px solid rgba(180,77,255,.18);">
+ <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">🧱</div>
  <div>
- <h3 class="how-card-title" style="color:var(--purple);">The Wall as Mosaic</h3>
+ <h3 class="how-card-title">The Wall as Mosaic</h3>
  <p class="how-card-body">The 1,000-spot wall always stays full 1,000 wishes, 1,000 stories. Together the notes form a mosaic image a giant "Thank You ❤️" with each note carrying one tile of that design. When granted wishes are replaced after 4 hours, new tiles join the mosaic. The wall is never empty. The message never changes.</p>
  </div>
  </div>
 
- <div class="how-card" style="background:rgba(255,123,44,.07);border:1px solid rgba(255,123,44,.18);">
+ <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">📊</div>
  <div>
- <h3 class="how-card-title" style="color:var(--orange);">Radical Transparency</h3>
+ <h3 class="how-card-title">Radical Transparency</h3>
  <p class="how-card-body">Every wish is verified against a government-issued ID before it goes live, no exceptions. When a Guardian chooses to grant a wish, we fulfil it on their behalf: sourcing, purchasing, or arranging exactly what was asked. The wisher receives their grant. The Guardian receives verified proof that the deed was done and a record of the gratitude given. No middlemen. No ambiguity. Just a closed loop of verified kindness. Questions? Email <a href="/cdn-cgi/l/email-protection#fd9c99909493bd8a9c91918a948e95988ed3858487" style="color:var(--yellow);"><span class="__cf_email__" data-cfemail="28494c454146685f4944445f415b404d5b06505152">[email&#160;protected]</span></a></p>
  </div>
  </div>
