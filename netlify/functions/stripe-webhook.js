@@ -1,6 +1,13 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const admin  = require('firebase-admin');
 
+function countryFlag(cc) {
+  if (!cc || cc.length !== 2) return '🌍';
+  return String.fromCodePoint(
+    ...[...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65)
+  );
+}
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -93,6 +100,27 @@ exports.handler = async (event) => {
           totalDonations:  admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
           updatedAt:       admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
+
+        // Write to donors collection
+        // customer_details.name is available on checkout.session.completed;
+        // payment_intent.succeeded carries customer info in metadata instead.
+        const customerName = isPaymentIntent
+          ? (session.metadata?.customer_name || session.metadata?.name || 'Guardian')
+          : (session.customer_details?.name || 'Guardian');
+        const customerCountryCode = isPaymentIntent
+          ? (session.metadata?.country || '')
+          : (session.customer_details?.address?.country || '');
+        const flag = countryFlag(customerCountryCode);
+        await db.collection('donors').add({
+          name:      customerName,
+          amount:    parseFloat(amountTotal),
+          country:   customerCountryCode ? `${flag} ${customerCountryCode}` : '🌍 Global',
+          flag,
+          type:      'individual',
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        }).catch(err => console.error(
+          `Failed to write donor record for ${customerName} £${amountTotal}:`, err
+        ));
 
         // Fetch wish data for the email
         const wishSnap = await wishRef.get();
