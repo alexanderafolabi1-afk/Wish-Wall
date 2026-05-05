@@ -1150,6 +1150,22 @@ nav {
   letter-spacing: 0.01em;
 }
 
+/* Placeholder notes (positions 187–1000) — same look, ghosted */
+.note-placeholder {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: default;
+}
+.note-placeholder .note-text.note-placeholder-text {
+  font-family: var(--fn-body);
+  font-style: italic;
+  font-size: 7px;
+  line-height: 1.45;
+  color: rgba(40,30,20,0.70);
+  letter-spacing: 0.01em;
+}
+
+
 /* Tunnel / queue cards, coming_soon wishes waiting to go live */
 .note-tunnel-card {
   pointer-events: none;
@@ -4234,6 +4250,97 @@ button { touch-action: manipulation; }
 .gp-cstat{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
 .gp-cstat:last-child{border-bottom:none}
 }
+/* ============================================================
+ GUARDIAN PAGE — STICKY NOTE CARDS
+ Every card becomes a sticky note matching the wall note aesthetic.
+ Colors: #F5E580 #F2C0D4 #BAE4F5 #B8F0D4 #F5DDB0 #DDB8F5
+ ============================================================ */
+.gp-fame-card,
+.gp-tier,
+.gp-cstat,
+.gp-match-card,
+.gp-ttag,
+.gp-spin-left {
+  position: relative !important;
+  background: var(--gpn-bg, #F5E580) !important;
+  border: none !important;
+  border-radius: 2px 8px 2px 8px !important;
+  box-shadow: 2px 4px 0 rgba(30,34,53,.08), 3px 6px 14px rgba(30,34,53,.11) !important;
+  transform: rotate(var(--gp-rot, 0deg)) !important;
+  transition: transform .22s cubic-bezier(0.16,1,0.3,1), box-shadow .22s !important;
+  overflow: visible !important;
+  font-family: var(--fn-body) !important;
+  font-style: italic !important;
+}
+/* Thumbtack pin at top centre */
+.gp-fame-card::before,
+.gp-tier::before,
+.gp-cstat::before,
+.gp-match-card::before,
+.gp-ttag::before,
+.gp-spin-left::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff9080, #cc1100);
+  box-shadow: 0 2px 6px rgba(26,16,8,.35);
+  z-index: 5;
+  pointer-events: none;
+}
+/* Hover: lift, straighten, shadow */
+.gp-fame-card:hover,
+.gp-tier:hover,
+.gp-cstat:hover,
+.gp-match-card:hover,
+.gp-ttag:hover,
+.gp-spin-left:hover {
+  transform: scale(1.05) rotate(0deg) translateY(-5px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  z-index: 20;
+}
+/* Selected match card stays lifted */
+.gp-match-card.gp-sel {
+  transform: scale(1.03) rotate(0deg) translateY(-3px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  z-index: 15;
+}
+/* Active/selected ttag */
+.gp-ttag.gp-ttag-on {
+  transform: scale(1.03) rotate(0deg) translateY(-2px) !important;
+  box-shadow: 3px 6px 18px rgba(30,34,53,.16) !important;
+  z-index: 5;
+}
+/* Fraunces bold for key numbers */
+.gp-cnum,
+.gp-tier-price,
+.gp-m-cost,
+.gp-f-rank {
+  font-family: var(--fn-display) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+}
+/* Sometype Mono for labels */
+.gp-clbl,
+.gp-tier-lbl,
+.gp-m-type,
+.gp-lbl {
+  font-family: var(--fn-mono) !important;
+  font-style: normal !important;
+}
+/* The spin-left card needs top margin for pin */
+.gp-spin-left { margin-top: 14px; }
+/* Ensure containers show overflow for pins */
+.gp-corp-stats { overflow: visible !important; padding-top: 14px; }
+.gp-fame-grid,
+.gp-match-grid,
+.gp-corp-grid { padding-top: 14px; }
+.gp-type-tags { padding-top: 14px; margin-top: 0 !important; }
+
 </style>
 
 </head>
@@ -5749,6 +5856,50 @@ const TUNNEL_MESSAGES = [
 
 const DEMO = DEMO_RAW;
 
+
+/* Fast lookup to exclude DEMO_RAW items from Zone 2 real wishes */
+const DEMO_IDS = new Set(DEMO_RAW.map(w => w.id));
+
+/* ============================================================
+ PLACEHOLDER MESSAGES — shown in ghost spots (positions 187–1000)
+ ============================================================ */
+const PLACEHOLDER_MESSAGES = [
+  "Your guardian is out there",
+  "Wishes come true here",
+  "This spot is waiting for you",
+  "Someone is about to be helped",
+  "A stranger will grant this",
+  "Kindness lives here",
+  "Your wish could live here",
+  "Hope is on its way",
+  "The wall is listening",
+  "One wish can change everything",
+  "Someone cares. They just do not know you yet",
+  "This spot has your name on it",
+  "Good things are coming",
+  "You are not alone",
+  "Someone is watching this wall right now",
+  "Pin your wish. See what happens",
+  "Magic is real here",
+  "The next wish granted could be yours",
+  "Guardians are browsing right now",
+  "Every wish matters",
+  "Small wishes, big hearts",
+  "This could be your moment",
+  "Someone out there wants to help",
+  "Dare to wish",
+  "The wall never sleeps",
+];
+
+function placeholderNoteHTML(i, tileStyle=''){
+  const color = NOTE_COLS[i % NOTE_COLS.length];
+  const pinCls = PIN_COLS[i % PIN_COLS.length];
+  const rot = ROTS[i % ROTS.length];
+  const msg = PLACEHOLDER_MESSAGES[i % PLACEHOLDER_MESSAGES.length];
+  return `<div class="note-card ${color} note-placeholder" style="--rot:${rot}deg;${tileStyle}" aria-hidden="true" tabindex="-1"><div class="note-inner"><div class="note-pin ${pinCls}"></div><p class="note-text note-placeholder-text">${esc(msg)}</p></div></div>`;
+}
+
+
 /* ============================================================
  STATE
  ============================================================ */
@@ -5869,7 +6020,7 @@ function paintWall(){
 
  if(searchQ){
  const q = searchQ.toLowerCase();
- src = src.filter(w => w.wishText.toLowerCase().includes(q));
+ src = src.filter(w => (w.wishText||'').toLowerCase().includes(q));
  }
 
  const isFiltering = curFilter !== 'all' || searchQ;
@@ -5881,23 +6032,18 @@ function paintWall(){
  return;
  }
 
- const total = allWishes.length;
- const VISIBLE = Math.min(total + 50, WALL_CAPACITY);
- const wallWishes = allWishes.filter(w => w.status === 'granted' || w.status === 'approved');
+ /* ── 3-zone layout ─────────────────────────────────────────────
+  Zone 1 (slots 0–184) : 185 granted warmup wishes, green sticky notes
+  Zone 2 (slots 185+)  : real Firebase approved/granted wishes
+  Zone 3 (remaining)   : placeholder notes — opacity 0.45, not clickable
+  ─────────────────────────────────────────────── */
+ const realApproved = (window._lastWishes || []).filter(w =>
+ !w.warmup && !DEMO_IDS.has(w.id) &&
+ (w.status === 'approved' || w.status === 'granted')
+ );
 
- // Build slot map, only granted/approved wishes appear on the wall;
- // coming_soon wishes stay in the queue, leaving ghost slots visible
- const slotMap = new Array(WALL_CAPACITY).fill(null);
- wallWishes.forEach((w, i) => {
- const slot = (w._slot !== undefined && w._slot < WALL_CAPACITY) ? w._slot : i % WALL_CAPACITY;
- if(!slotMap[slot]) slotMap[slot] = w;
- });
- /*
- Mosaic: compute tile column/row for each slot position
- so each note carries its fragment of the composite image.
- Column 0-24 (left-right), Row 0-19 (top-bottom)
- */
- const cells = slotMap.map((w, i) => {
+ const cells = [];
+ for(let i = 0; i < WALL_CAPACITY; i++){
  const col = i % WALL_COLS;
  const row = Math.floor(i / WALL_COLS);
  const tilePosX = -(col * TILE_W);
@@ -5905,13 +6051,24 @@ function paintWall(){
  const tileStyle = MOSAIC_IMAGE_URL
  ? `--tile-fragment:url('${MOSAIC_IMAGE_URL}');--tile-pos:${tilePosX}px ${tilePosY}px;`
  : '';
- return w
- ? noteHTML(w, i, tileStyle)
- : `<div class="note-spot has-tile" style="${tileStyle}" onclick="openModal()" title="Spot ${i+1} pin your wish here!"><span class="spot-num">${i+1}</span></div>`;
- });
+
+ if(i < 185){
+  // Zone 1: granted warmup wish — force green sticky note with is-granted class
+  const w = { ...DEMO_RAW[i], color: 'n-green' };
+  cells.push(noteHTML(w, i, tileStyle));
+ } else {
+  const realIdx = i - 185;
+  if(realIdx < realApproved.length){
+  // Zone 2: real Firebase approved wish (glowing pin, clickable)
+  cells.push(noteHTML(realApproved[realIdx], i, tileStyle));
+  } else {
+  // Zone 3: placeholder note
+  cells.push(placeholderNoteHTML(i, tileStyle));
+  }
+ }
+ }
  grid.innerHTML = cells.join('');
 }
-
 function noteHTML(w, i, tileStyle=''){
  const color = w.color || NOTE_COLS[i % NOTE_COLS.length];
  const pinCls = PIN_COLS[i % PIN_COLS.length];
@@ -8241,7 +8398,10 @@ const WARMUP_WISHES = (function(){
 
 // Merge warmup into demo data, always pad to fill all 1000 slots
 function getDisplayWishes(realWishes){
- return realWishes || [];
+ // Always include the 185 DEMO_RAW granted wishes (Zone 1).
+ // Filter out warmup and demo-seed items from real Firebase wishes.
+ const real = (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
+ return [...DEMO_RAW, ...real];
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes(DEMO); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
@@ -9379,7 +9539,9 @@ g.innerHTML=picks.map(function(w,i){
 var fl=w.country?(w.country.split(' ')[0]):'';
 var co=w.est&&w.est>0?'$'+w.est:'Non-monetary';
 var ct=w.cat?(w.cat.charAt(0).toUpperCase()+w.cat.slice(1)):'Wish';
-return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,\''+w.id+'\')" style="opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
+var gbg=GP_NOTE_COLS[i%GP_NOTE_COLS.length];
+var grot=((i%5)-2).toFixed(1);
+return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,\''+w.id+'\')" style="--gpn-bg:'+gbg+';--gp-rot:'+grot+'deg;opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
 '<span class="gp-m-flag">'+fl+'</span>'+
 '<p class="gp-m-txt">'+esc(w.wishText)+'</p>'+
 '<div class="gp-m-foot"><span class="gp-m-cost">'+co+'</span><span class="gp-m-type">'+ct+'</span></div>'+
@@ -9453,13 +9615,16 @@ var GP_FAME=[
 
 var FLAG_MAP={'GB':'🇬🇧','US':'🇺🇸','CA':'🇨🇦','AU':'🇦🇺','DE':'🇩🇪','FR':'🇫🇷','NL':'🇳🇱','SE':'🇸🇪','IE':'🇮🇪','ES':'🇪🇸','IT':'🇮🇹','CH':'🇨🇭','NO':'🇳🇴','DK':'🇩🇰','FI':'🇫🇮','BE':'🇧🇪','PT':'🇵🇹','NZ':'🇳🇿'};
 
+var GP_NOTE_COLS=['#F5E580','#F2C0D4','#BAE4F5','#B8F0D4','#F5DDB0','#DDB8F5'];
 function gpRenderFame(all){
 var d=all?GP_FAME:GP_FAME.slice(0,12);
 var g=document.getElementById('gpFameGrid');
 if(!g)return;
-g.innerHTML=d.map(function(x){
+g.innerHTML=d.map(function(x,i){
 var flag=FLAG_MAP[x.f]||x.f;
-return '<div class="gp-fame-card"><span class="gp-f-rank">'+x.r+'</span><span class="gp-f-flag">'+flag+'</span><span class="gp-f-name">'+x.n+'</span></div>';
+var bg=GP_NOTE_COLS[i%GP_NOTE_COLS.length];
+var rot=((i%5)-2).toFixed(1);
+return '<div class="gp-fame-card" style="--gpn-bg:'+bg+';--gp-rot:'+rot+'deg"><span class="gp-f-rank">'+x.r+'</span><span class="gp-f-flag">'+flag+'</span><span class="gp-f-name">'+x.n+'</span></div>';
 }).join('');
 }
 
@@ -9468,9 +9633,20 @@ gpRenderFame(true);
 document.getElementById('gpFameBtn').style.display='none';
 }
 
+
+function initGuardianStickyNotes(){
+  var els=document.querySelectorAll('.gp-tier,.gp-cstat,.gp-ttag,.gp-spin-left');
+  els.forEach(function(el,i){
+    var bg=GP_NOTE_COLS[i%GP_NOTE_COLS.length];
+    var rot=((i%5)-2).toFixed(1);
+    el.style.setProperty('--gpn-bg',bg);
+    el.style.setProperty('--gp-rot',rot+'deg');
+  });
+}
 function gpInitGuardian(){
 gpDrawWheel();
 gpRenderFame(false);
+initGuardianStickyNotes();
 window._gpPoolAmt=1;
 }
 
