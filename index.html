@@ -77,7 +77,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wishwall.xyz/">
 <meta property="og:title" content="Wall Wishes Strangers Granting Real Wishes Every Day 💛">
-<meta property="og:description" content="Need help? Pin an anonymous wish for 2 WishCoins. Guardians connect directly to fulfil money, items, skills, or simply a kind human connection. Real wishes. Real people. A global community making it happen.">
+<meta property="og:description" content="The Wish Wall is a global community where strangers grant real wishes. Pin a wish for $1.99. Grant a wish as a Guardian. 185 wishes granted across 18 countries. USA, UK, Canada, Europe and beyond.">
 <meta property="og:image" content="https://wishwall.xyz/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -88,7 +88,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://wishwall.xyz/">
 <meta name="twitter:title" content="Wall Wishes Strangers Granting Real Wishes 💛">
-<meta name="twitter:description" content="Pin a wish for 2 WishCoins. Guardians from anywhere in the world connect directly to make it real, money, items, skills, connections, or a moment of human kindness. Every kind of need. Every kind of help.">
+<meta name="twitter:description" content="The Wish Wall is a global community where strangers grant real wishes. Pin a wish for $1.99. Grant a wish as a Guardian. 185 wishes granted across 18 countries. USA, UK, Canada, Europe and beyond.">
 <meta name="twitter:image" content="https://wishwall.xyz/og-image.jpg">
 <meta name="tiktok:page:url" content="https://wishwall.xyz/">
 
@@ -118,7 +118,7 @@
  "url": "https://wishwall.xyz/",
  "logo": { "@type": "ImageObject", "url": "https://wishwall.xyz/og-image.jpg", "width": 1200, "height": 630 },
  "email": "admin@wallwishes.xyz",
- "description": "A transparent, anonymous community wish-granting platform. Pin a wish for $2. Guardians make it real.",
+ "description": "The Wish Wall is a global wish-granting community platform. Real wishes, real people, real outcomes. 185 wishes granted across 18 countries.",
  "foundingDate": "2024",
  "areaServed": [
  { "@type": "Country", "name": "United States" },
@@ -4102,6 +4102,111 @@ button { touch-action: manipulation; }
     padding-bottom: max(var(--sp-3), calc(var(--sp-3) + env(safe-area-inset-bottom)));
   }
 }
+
+/* NEW GUARDIAN PAGE CSS */
+.gp-wrap{font-family:var(--fn-ui,system-ui)}
+.gp-eye{display:block;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--warmth,#C97B30);margin-bottom:14px}
+.gp-hero{text-align:center;padding:72px 20px 52px;max-width:780px;margin:0 auto}
+.gp-title{font-family:var(--fn-display,serif);font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;letter-spacing:-1px;margin-bottom:18px;color:var(--text,#1E2235)}
+.gp-sub{font-family:var(--fn-note,serif);font-style:italic;font-size:1.05rem;color:var(--text-muted,#6B7080);max-width:520px;margin:0 auto 32px;line-height:1.7}
+.gp-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.gp-gold{padding:14px 32px;border-radius:50px;border:none;background:linear-gradient(135deg,#F5C842,#FF6B35);color:#07070D;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;box-shadow:0 4px 18px rgba(245,200,66,.35)}
+.gp-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,200,66,.5)}
+.gp-gold-lg{font-size:17px;padding:16px 44px}
+.gp-ghost{padding:14px 32px;border-radius:50px;border:1.5px solid rgba(0,0,0,.16);background:transparent;color:var(--text,#1E2235);font-weight:600;font-size:15px;cursor:pointer;transition:all .2s}
+.gp-ghost:hover{background:rgba(0,0,0,.05)}
+.gp-ticker{overflow:hidden;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);padding:13px 0;background:rgba(245,200,66,.04)}
+.gp-ticker-inner{display:flex;gap:28px;animation:gpScroll 28s linear infinite;width:max-content}
+@keyframes gpScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.gp-tick{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted,#6B7080);white-space:nowrap;font-family:var(--fn-note,serif);font-style:italic;flex-shrink:0}
+.gp-dot{width:6px;height:6px;border-radius:50%;background:#F5C842;flex-shrink:0}
+.gp-pool-wrap{padding:44px 20px;max-width:880px;margin:0 auto}
+.gp-pool-card{background:linear-gradient(135deg,rgba(245,200,66,.1),rgba(255,107,53,.07));border:1.5px solid rgba(245,200,66,.28);border-radius:20px;padding:34px;display:flex;gap:36px;flex-wrap:wrap;align-items:flex-start}
+.gp-pool-left{flex:1;min-width:230px}
+.gp-pool-h{font-family:var(--fn-display,serif);font-size:clamp(1.2rem,3vw,1.8rem);line-height:1.2;margin-bottom:10px;color:var(--text,#1E2235)}
+.gp-pool-p{font-size:14px;color:var(--text-muted,#6B7080);line-height:1.6}
+.gp-pool-right{display:flex;flex-direction:column;gap:12px}
+.gp-amts{display:flex;flex-wrap:wrap;gap:8px}
+.gp-amt{padding:10px 18px;border-radius:50px;border:1.5px solid rgba(0,0,0,.11);background:white;color:var(--text,#1E2235);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--fn-ui,system-ui)}
+.gp-amt-sel,.gp-amt:hover{background:linear-gradient(135deg,#F5C842,#FF6B35);border-color:transparent;color:#07070D}
+.gp-pool-input{padding:10px 16px;border-radius:50px;border:1.5px solid rgba(0,0,0,.11);background:white;font-size:14px;width:96px;outline:none;color:var(--text,#1E2235)}
+.gp-pool-btn{padding:13px 26px;border-radius:50px;border:none;background:var(--ink,#1A1008);color:white;font-weight:700;font-size:14px;cursor:pointer;transition:opacity .2s;font-family:var(--fn-ui,system-ui)}
+.gp-pool-btn:hover{opacity:.82}
+.gp-spin-wrap{padding:68px 20px;max-width:1040px;margin:0 auto}
+.gp-sec-h{font-family:var(--fn-display,serif);font-size:clamp(1.7rem,4vw,2.7rem);text-align:center;line-height:1.1;letter-spacing:-.5px;margin-bottom:12px;color:var(--text,#1E2235)}
+.gp-sec-p{font-family:var(--fn-note,serif);font-style:italic;font-size:1rem;color:var(--text-muted,#6B7080);text-align:center;max-width:500px;margin:0 auto 40px;line-height:1.7}
+.gp-spin-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+@media(max-width:768px){.gp-spin-grid{grid-template-columns:1fr;gap:32px}}
+.gp-lbl{display:block;font-size:12px;font-weight:700;color:var(--text-muted,#6B7080);margin-bottom:7px;letter-spacing:.2px}
+.gp-b-input{width:100%;padding:13px 17px;border-radius:13px;border:1.5px solid rgba(0,0,0,.1);background:white;font-size:16px;outline:none;color:var(--text,#1E2235);transition:border .2s;font-family:var(--fn-ui,system-ui)}
+.gp-b-input:focus{border-color:rgba(245,200,66,.55)}
+.gp-type-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;margin-top:4px}
+.gp-ttag{padding:7px 14px;border-radius:50px;border:1.5px solid rgba(0,0,0,.1);background:white;font-size:12px;color:var(--text-muted,#6B7080);cursor:pointer;transition:all .2s;font-family:var(--fn-ui,system-ui)}
+.gp-ttag-on,.gp-ttag:hover{background:rgba(245,200,66,.12);border-color:rgba(245,200,66,.44);color:#8B6914}
+.gp-spin-btn{width:100%;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,#F5C842,#FF6B35);color:#07070D;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 4px 18px rgba(245,200,66,.38);transition:all .2s;font-family:var(--fn-ui,system-ui)}
+.gp-spin-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,200,66,.52)}
+.gp-spin-right{display:flex;flex-direction:column;align-items:center;gap:14px}
+.gp-char{height:108px;display:flex;align-items:center;justify-content:center;text-align:center}
+.gp-char-emoji{font-size:3rem;display:block;animation:gpFloat 3s ease-in-out infinite}
+@keyframes gpFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gp-char-n{font-family:var(--fn-display,serif);font-size:1rem;font-weight:700;color:var(--text,#1E2235);margin-top:6px}
+.gp-char-s{font-size:11px;color:var(--text-muted,#6B7080);font-style:italic}
+.gp-wheel-box{position:relative;display:flex;align-items:center;justify-content:center}
+.gp-wheel-ptr{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:18px solid #F5C842;z-index:10}
+#gpCanvas{border-radius:50%;box-shadow:0 6px 28px rgba(0,0,0,.11)}
+.gp-wheel-ctr{position:absolute;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#F5C842,#FF6B35);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;letter-spacing:1px;color:#07070D;cursor:pointer;z-index:5;box-shadow:0 4px 14px rgba(245,200,66,.48);transition:transform .2s;font-family:var(--fn-ui,system-ui)}
+.gp-wheel-ctr:hover{transform:scale(1.1)}
+.gp-wheel-tip{font-size:11px;color:var(--text-muted,#6B7080);font-style:italic;text-align:center;max-width:200px}
+.gp-matches{padding:48px 20px;max-width:960px;margin:0 auto}
+.gp-match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px;margin-bottom:26px}
+.gp-match-card{background:white;border:2px solid rgba(0,0,0,.07);border-radius:17px;padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.gp-match-card:hover{transform:translateY(-4px);box-shadow:0 10px 32px rgba(0,0,0,.09);border-color:rgba(245,200,66,.38)}
+.gp-match-card.gp-sel{border-color:#F5C842;background:rgba(245,200,66,.04)}
+.gp-match-card.gp-sel::after{content:'Selected';position:absolute;top:11px;right:11px;font-size:10px;font-weight:800;color:#8B6914;background:rgba(245,200,66,.18);padding:2px 8px;border-radius:50px}
+.gp-m-flag{font-size:1.4rem;display:block;margin-bottom:7px}
+.gp-m-txt{font-family:var(--fn-note,serif);font-style:italic;font-size:.93rem;color:var(--text,#1E2235);line-height:1.6;margin-bottom:13px}
+.gp-m-foot{display:flex;justify-content:space-between;align-items:center}
+.gp-m-cost{font-size:13px;font-weight:700;color:#C49A0A}
+.gp-m-type{font-size:11px;background:rgba(0,0,0,.05);border-radius:50px;padding:3px 8px;color:var(--text-muted,#6B7080)}
+.gp-match-acts{text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.gp-nonmon{padding:68px 20px;max-width:840px;margin:0 auto;text-align:center}
+.gp-nm-wrap{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:26px}
+.gp-nm{padding:10px 19px;border-radius:50px;border:1.5px solid rgba(0,0,0,.09);background:white;font-size:13px;color:var(--text-muted,#6B7080);transition:all .2s;cursor:default;font-family:var(--fn-ui,system-ui)}
+.gp-nm:hover{background:rgba(245,200,66,.1);border-color:rgba(245,200,66,.38);color:#8B6914}
+.gp-fame{padding:68px 20px;max-width:960px;margin:0 auto}
+.gp-fame-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px}
+.gp-fame-card{background:white;border:1px solid rgba(0,0,0,.07);border-radius:11px;padding:13px 15px;display:flex;align-items:center;gap:8px;transition:box-shadow .2s}
+.gp-fame-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.gp-f-rank{font-size:10px;font-weight:800;color:var(--text-muted,#6B7080);width:17px;flex-shrink:0}
+.gp-f-flag{font-size:1rem;flex-shrink:0}
+.gp-f-name{font-size:13px;font-weight:600;color:var(--text,#1E2235);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gp-corp{padding:68px 20px;background:rgba(245,200,66,.03);border-top:1px solid rgba(0,0,0,.06)}
+.gp-corp-stats{display:flex;flex-wrap:wrap;max-width:660px;margin:0 auto 48px;background:white;border:1px solid rgba(0,0,0,.08);border-radius:15px;overflow:hidden}
+.gp-cstat{flex:1;min-width:110px;padding:20px 12px;text-align:center;border-right:1px solid rgba(0,0,0,.06)}
+.gp-cstat:last-child{border-right:none}
+.gp-cnum{display:block;font-family:var(--fn-display,serif);font-size:1.9rem;font-weight:900;color:#C49A0A;margin-bottom:4px}
+.gp-clbl{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-muted,#6B7080)}
+.gp-corp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;max-width:860px;margin:0 auto 26px}
+.gp-tier{background:white;border:1.5px solid rgba(0,0,0,.08);border-radius:17px;padding:26px;display:flex;flex-direction:column;gap:13px;transition:transform .2s}
+.gp-tier:hover{transform:translateY(-4px)}
+.gp-tier-mid{border-color:rgba(245,200,66,.32);background:rgba(245,200,66,.03);box-shadow:0 0 30px rgba(245,200,66,.08)}
+.gp-tier-lbl{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted,#6B7080)}
+.gp-tier-price{font-family:var(--fn-display,serif);font-size:1.8rem;font-weight:900;color:var(--text,#1E2235)}
+.gp-tier-price span{font-size:.88rem;font-weight:400;color:var(--text-muted,#6B7080)}
+.gp-tier-list{list-style:none;display:flex;flex-direction:column;gap:7px;flex:1}
+.gp-tier-list li{font-size:13px;color:var(--text-muted,#6B7080);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.gp-tier-list li::before{content:'+';color:#C49A0A;font-size:12px;font-weight:900;flex-shrink:0}
+.gp-tier-cta{display:block;padding:11px;border-radius:50px;border:1.5px solid rgba(0,0,0,.12);text-align:center;color:var(--text,#1E2235);text-decoration:none;font-weight:600;font-size:14px;transition:all .2s;margin-top:auto;font-family:var(--fn-ui,system-ui)}
+.gp-tier-cta:hover{background:rgba(0,0,0,.04)}
+.gp-tier-gold{background:linear-gradient(135deg,#F5C842,#FF6B35);border-color:transparent;color:#07070D;box-shadow:0 4px 13px rgba(245,200,66,.33)}
+.gp-tier-gold:hover{box-shadow:0 8px 24px rgba(245,200,66,.48);color:#07070D}
+.gp-corp-note{text-align:center;font-style:italic;font-size:.86rem;color:rgba(0,0,0,.28);max-width:460px;margin:0 auto;font-family:var(--fn-note,serif)}
+@media(max-width:600px){
+.gp-pool-card{flex-direction:column}
+.gp-corp-stats{flex-direction:column}
+.gp-cstat{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
+.gp-cstat:last-child{border-bottom:none}
+}
 </style>
 
 </head>
@@ -4310,230 +4415,204 @@ button { touch-action: manipulation; }
  TAB: GUARDIANS
  ============================================================ -->
 <div id="tab-guard" class="tab-content">
- <div class="guardian-section">
-  <div class="sec-header">
-   <h2 class="sec-title">🛡️ Become a Guardian</h2>
-   <p class="sec-sub">Pick a budget, spin the wheel, grant a real wish.</p>
-  </div>
+<div class="gp-wrap">
+<div class="gp-hero">
+<p class="gp-eye">Become a Guardian</p>
+<h1 class="gp-title">Some people change the world quietly.</h1>
+<p class="gp-sub">No fundraiser. No algorithm. Just a real wish and you deciding to do something about it.</p>
+<div class="gp-btns">
+<button class="gp-gold" onclick="document.getElementById('gp-spin').scrollIntoView({behavior:'smooth'})">Grant a wish</button>
+<button class="gp-ghost" onclick="document.getElementById('gp-corp').scrollIntoView({behavior:'smooth'})">For organisations</button>
+</div>
+</div>
 
-  <!-- STEP 1: BUDGET INPUT -->
-  <div class="budget-section" id="budget-section">
-   <div class="budget-eyebrow">Step 1 of 3</div>
-   <h2 class="budget-title">How much do you want to give today?</h2>
-   <!-- $1 Community Pot — Gold Tier -->
-   <button class="budget-preset budget-preset--one" onclick="selectBudget(1,this)" type="button">
-    <div class="b1-left">
-     <span class="b1-amount">$1*</span>
-     <span class="b1-tag">⭐ Community Pot</span>
-    </div>
-    <div class="b1-right">
-     <svg class="b1-egg" width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Community well">
-      <!-- Well structure -->
-      <rect x="23" y="43" width="16" height="11" rx="2" fill="rgba(122,72,0,0.1)" stroke="#7A4800" stroke-width="1.5"/>
-      <ellipse cx="31" cy="43" rx="8" ry="2.8" fill="rgba(122,72,0,0.1)" stroke="#7A4800" stroke-width="1.5"/>
-      <!-- Well support posts -->
-      <line x1="23" y1="37" x2="23" y2="43" stroke="#7A4800" stroke-width="1.6"/>
-      <line x1="39" y1="37" x2="39" y2="43" stroke="#7A4800" stroke-width="1.6"/>
-      <!-- Well crossbeam -->
-      <line x1="20" y1="37" x2="42" y2="37" stroke="#7A4800" stroke-width="2"/>
-      <!-- Water ripple in well -->
-      <ellipse cx="31" cy="51" rx="5" ry="1.5" stroke="#7A4800" stroke-width="0.8" opacity="0.4"/>
-      <!-- Person 1 - left, pouring bucket -->
-      <circle cx="10" cy="17" r="3.2" stroke="#7A4800" stroke-width="1.4"/>
-      <line x1="10" y1="20" x2="10" y2="30" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="10" y1="30" x2="7" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="10" y1="30" x2="13" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="10" y1="23" x2="18" y2="29" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M17 27 L22 25 L21 31 L16 33 Z" fill="rgba(122,72,0,0.3)" stroke="#7A4800" stroke-width="1"/>
-      <path d="M19 31 Q20 36 22 40" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
-      <!-- Person 2 - right, pouring bucket -->
-      <circle cx="52" cy="17" r="3.2" stroke="#7A4800" stroke-width="1.4"/>
-      <line x1="52" y1="20" x2="52" y2="30" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="52" y1="30" x2="49" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="52" y1="30" x2="55" y2="37" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="52" y1="23" x2="44" y2="29" stroke="#7A4800" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M45 27 L40 25 L41 31 L46 33 Z" fill="rgba(122,72,0,0.3)" stroke="#7A4800" stroke-width="1"/>
-      <path d="M43 31 Q42 36 40 40" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
-      <!-- Person 3 - back centre, smaller (depth) -->
-      <circle cx="31" cy="13" r="2.5" stroke="#7A4800" stroke-width="1.2" opacity="0.65"/>
-      <line x1="31" y1="16" x2="31" y2="24" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-      <line x1="31" y1="24" x2="28.5" y2="30" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-      <line x1="31" y1="24" x2="33.5" y2="30" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-      <line x1="28" y1="19" x2="34" y2="19" stroke="#7A4800" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-     </svg>
-    </div>
-   </button>
-   <p class="b1-footnote">* Joins the Community Pot · No spin needed</p>
+<div class="gp-ticker">
+<div class="gp-ticker-inner" id="gpTicker">
+<span class="gp-tick"><span class="gp-dot"></span>Grocery wish granted in the UK</span>
+<span class="gp-tick"><span class="gp-dot"></span>Laptop delivered in the US</span>
+<span class="gp-tick"><span class="gp-dot"></span>School fees covered in Canada</span>
+<span class="gp-tick"><span class="gp-dot"></span>Internship connection made in Germany</span>
+<span class="gp-tick"><span class="gp-dot"></span>Medical bill cleared in the US</span>
+<span class="gp-tick"><span class="gp-dot"></span>Baby supplies sent in France</span>
+<span class="gp-tick"><span class="gp-dot"></span>Mentorship found in Australia</span>
+<span class="gp-tick"><span class="gp-dot"></span>Driving test paid in the UK</span>
+<span class="gp-tick"><span class="gp-dot"></span>Coding bootcamp funded in Canada</span>
+<span class="gp-tick"><span class="gp-dot"></span>Sewing machine delivered in Netherlands</span>
+<span class="gp-tick"><span class="gp-dot"></span>Grocery wish granted in the UK</span>
+<span class="gp-tick"><span class="gp-dot"></span>Laptop delivered in the US</span>
+<span class="gp-tick"><span class="gp-dot"></span>School fees covered in Canada</span>
+<span class="gp-tick"><span class="gp-dot"></span>Internship connection made in Germany</span>
+</div>
+</div>
 
-   <div class="budget-presets">
-    <button class="budget-preset" onclick="selectBudget(5,this)">$5</button>
-    <button class="budget-preset" onclick="selectBudget(10,this)">$10</button>
-    <button class="budget-preset sel" onclick="selectBudget(25,this)">$25</button>
-    <button class="budget-preset" onclick="selectBudget(50,this)">$50</button>
-   </div>
-   <div class="budget-custom-wrap">
-    <span class="budget-currency">$</span>
-    <input class="budget-custom-inp" id="budget-custom" type="number" min="2" max="10000"
-     placeholder="Custom amount"
-     oninput="selectBudget(parseFloat(this.value)||0,null)">
-   </div>
-   <button class="budget-find-btn" id="budget-find-btn"
-    onclick="findWishesForBudget(window._guardianBudget||25)">
-    Find wishes I can grant ✨
-   </button>
-  </div>
+<div class="gp-pool-wrap">
+<div class="gp-pool-card">
+<div class="gp-pool-left">
+<span class="gp-eye">The $1 principle</span>
+<h2 class="gp-pool-h">$1 from one million people changes everything.</h2>
+<p class="gp-pool-p">Every dollar goes directly into the Magic Pool and funds real wishes. No minimum. No maximum. No questions.</p>
+</div>
+<div class="gp-pool-right">
+<div class="gp-amts">
+<button class="gp-amt gp-amt-sel" onclick="gpSetAmt(this,1)">$1</button>
+<button class="gp-amt" onclick="gpSetAmt(this,5)">$5</button>
+<button class="gp-amt" onclick="gpSetAmt(this,10)">$10</button>
+<button class="gp-amt" onclick="gpSetAmt(this,25)">$25</button>
+<button class="gp-amt" onclick="gpSetAmt(this,50)">$50</button>
+<input type="number" id="gpPoolCustom" class="gp-pool-input" placeholder="Custom" min="1">
+</div>
+<button class="gp-pool-btn" onclick="gpDonatePool()">Add to the Magic Pool</button>
+</div>
+</div>
+</div>
 
-  <!-- STEP 2: SPIN WHEEL -->
-  <div class="wheel-section" id="wheel-section">
-   <div class="wheel-eyebrow">Step 2 of 3</div>
-   <h2 class="wheel-title">Spin to find your wish.</h2>
-   <div class="wheel-canvas-wrap">
-    <canvas id="spin-canvas" width="300" height="300" onclick="spinWheel()" title="Click to spin"></canvas>
-   </div>
-   <br>
-   <button class="spin-btn" id="spin-btn" onclick="spinWheel()">SPIN</button>
-   <p class="spin-count-note" id="spin-count-note"></p>
+<div class="gp-spin-wrap" id="gp-spin">
+<p class="gp-eye" style="text-align:center">Grant a wish</p>
+<h2 class="gp-sec-h">What kind of Guardian will you be today?</h2>
+<p class="gp-sec-p">Set your budget. The oldest wishes within reach surface for you. Pick the one that moves you.</p>
+<div class="gp-spin-grid">
 
-   <!-- Revealed wish -->
-   <div class="wheel-reveal" id="wheel-reveal">
-    <div class="reveal-note" id="reveal-note">
-     <div class="reveal-country" id="reveal-country"></div>
-     <div class="reveal-wish-text" id="reveal-wish-text"></div>
-     <span class="reveal-cost-tag" id="reveal-cost-tag"></span>
-    </div>
-    <span class="respin-link" onclick="respinWheel()">Not feeling this one? Spin again</span>
-   </div>
-  </div>
+<div class="gp-spin-left">
+<label class="gp-lbl">Your budget in USD</label>
+<input type="number" id="gpBudget" class="gp-b-input" placeholder="Any amount" min="1" oninput="gpUpdateChar()">
+<label class="gp-lbl" style="margin-top:20px">Type of wish</label>
+<div class="gp-type-tags" id="gpTypeTags">
+<button class="gp-ttag gp-ttag-on" data-cat="all">All wishes</button>
+<button class="gp-ttag" data-cat="money">Money and bills</button>
+<button class="gp-ttag" data-cat="tech">Tech</button>
+<button class="gp-ttag" data-cat="education">Education</button>
+<button class="gp-ttag" data-cat="medical">Medical</button>
+<button class="gp-ttag" data-cat="connect">Connections</button>
+<button class="gp-ttag" data-cat="emotional">Emotional</button>
+<button class="gp-ttag" data-cat="baby">Baby and family</button>
+</div>
+<button class="gp-spin-btn" id="gpSpinBtn" onclick="gpDoSpin()">Spin the wall</button>
+</div>
 
-  <!-- STEP 3: GUARDIAN IDENTITY -->
-  <div class="gid-section" id="gid-section">
-   <div class="gid-label">Step 3 of 3 · How should you appear?</div>
-   <div class="gid-toggle-row">
-    <button class="gid-btn sel" id="gid-anon" onclick="setGuardianIdentity(true)" type="button">
-     <span class="gid-icon">🕵️</span>
-     <span class="gid-title">Grant Anonymously</span>
-     <span class="gid-sub">No name shown</span>
-    </button>
-    <button class="gid-btn" id="gid-named" onclick="setGuardianIdentity(false)" type="button">
-     <span class="gid-icon">💙</span>
-     <span class="gid-title">Grant with My Name</span>
-     <span class="gid-sub" id="gid-name-preview">Your name on the wall</span>
-    </button>
-   </div>
-   <div class="gid-named-fields hidden" id="gid-named-fields">
-    <input class="gid-named-inp" id="gid-firstname" type="text" placeholder="First name"
-     oninput="document.getElementById('gid-name-preview').textContent=this.value||'Your name on the wall'">
-    <input class="gid-named-inp" id="gid-city" type="text" placeholder="City (optional)">
-   </div>
-  </div>
+<div class="gp-spin-right">
+<div class="gp-char" id="gpChar">
+<div id="gpFairy">
+<div class="gp-char-emoji">&#x1F9DA;</div>
+<p class="gp-char-n">Willa the Wish Fairy</p>
+<p class="gp-char-s">Wishes under $50</p>
+</div>
+<div id="gpGenie" style="display:none">
+<div class="gp-char-emoji">&#x1F9DE;</div>
+<p class="gp-char-n">Genie of the Wall</p>
+<p class="gp-char-s">$50 to $199</p>
+</div>
+<div id="gpCelest" style="display:none">
+<div class="gp-char-emoji">&#x2728;</div>
+<p class="gp-char-n">The Celestial</p>
+<p class="gp-char-s">$200 and above</p>
+</div>
+</div>
+<div class="gp-wheel-box">
+<div class="gp-wheel-ptr"></div>
+<canvas id="gpCanvas" width="280" height="280"></canvas>
+<div class="gp-wheel-ctr" onclick="gpDoSpin()">SPIN</div>
+</div>
+<p class="gp-wheel-tip">Enter a budget above then spin</p>
+</div>
 
-  <!-- PROCEED BUTTON -->
-  <div style="text-align:center;">
-   <button class="grant-proceed-btn" id="grant-proceed-btn"
-    onclick="proceedToGrantFromWheel()">
-    Grant this wish · <span id="grant-btn-amount">$25</span>
-   </button>
-  </div>
+</div>
+</div>
 
-  <!-- WISHCOIN BUNDLES -->
-  <div class="bundle-section" style="margin-top:var(--sp-6);">
-   <div class="bundle-header">
-    <div class="bundle-eyebrow">🪙 Stock Up &amp; Save</div>
-    <h3 class="bundle-title">WishCoin Bundles</h3>
-    <p class="bundle-sub">Buy more, grant more. Bonus coins on every tier above Starter.</p>
-   </div>
-   <div class="bundle-grid">
-    <div class="bundle-card">
-     <div class="bundle-name">Starter</div>
-     <div class="bundle-price">$1.99</div>
-     <div class="bundle-coins">2 <span class="bundle-coin-lbl">WishCoins</span></div>
-     <div class="bundle-bonus"></div>
-     <div class="bundle-eff">$1.00 / coin</div>
-     <button class="bundle-btn" onclick="buyBundle(1.99,2)">Buy</button>
-    </div>
-    <div class="bundle-card">
-     <div class="bundle-name">Explorer</div>
-     <div class="bundle-price">$4.99</div>
-     <div class="bundle-coins">7 <span class="bundle-coin-lbl">WishCoins</span></div>
-     <div class="bundle-bonus bundle-bonus--show">+1 bonus</div>
-     <div class="bundle-eff">$0.71 / coin</div>
-     <button class="bundle-btn" onclick="buyBundle(4.99,7)">Buy</button>
-    </div>
-    <div class="bundle-card bundle-card--popular">
-     <div class="bundle-popular-tag">Most Popular</div>
-     <div class="bundle-name">Believer</div>
-     <div class="bundle-price">$9.99</div>
-     <div class="bundle-coins">16 <span class="bundle-coin-lbl">WishCoins</span></div>
-     <div class="bundle-bonus bundle-bonus--show">+2 bonus</div>
-     <div class="bundle-eff">$0.62 / coin</div>
-     <button class="bundle-btn bundle-btn--primary" onclick="buyBundle(9.99,16)">Buy</button>
-    </div>
-    <div class="bundle-card">
-     <div class="bundle-name">Champion</div>
-     <div class="bundle-price">$24.99</div>
-     <div class="bundle-coins">46 <span class="bundle-coin-lbl">WishCoins</span></div>
-     <div class="bundle-bonus bundle-bonus--show">+8 bonus</div>
-     <div class="bundle-eff">$0.54 / coin</div>
-     <button class="bundle-btn" onclick="buyBundle(24.99,46)">Buy</button>
-    </div>
-    <div class="bundle-card">
-     <div class="bundle-name">Guardian Pack</div>
-     <div class="bundle-price">$49.99</div>
-     <div class="bundle-coins">100 <span class="bundle-coin-lbl">WishCoins</span></div>
-     <div class="bundle-bonus bundle-bonus--show">+20 bonus</div>
-     <div class="bundle-eff">$0.50 / coin</div>
-     <button class="bundle-btn" onclick="buyBundle(49.99,100)">Buy</button>
-    </div>
-   </div>
-   <p class="bundle-note">WishCoins never expire. Unused coins carry forward. 1 WishCoin = $1 toward granting a wish.</p>
-  </div>
+<div class="gp-matches" id="gpMatches" style="display:none">
+<p class="gp-eye" style="text-align:center">Your matches</p>
+<h2 class="gp-sec-h">Oldest wishes within your budget</h2>
+<p class="gp-sec-p">These have waited the longest. Pick the one that calls to you.</p>
+<div class="gp-match-grid" id="gpMatchGrid"></div>
+<div class="gp-match-acts" id="gpMatchActs" style="display:none">
+<button class="gp-gold gp-gold-lg" onclick="gpProceed()">Grant this wish</button>
+<button class="gp-ghost" onclick="gpSpinAgain()">Spin again</button>
+</div>
+</div>
 
-  <!-- Guardian Tier Banner -->
-  <div class="tier-banner" id="tier-banner" style="margin-top:44px;"></div>
+<div class="gp-nonmon">
+<p class="gp-eye" style="text-align:center">Beyond money</p>
+<h2 class="gp-sec-h">The wishes that cannot be bought</h2>
+<p class="gp-sec-p">Sometimes the most powerful thing you can offer is access, time, or a door opened.</p>
+<div class="gp-nm-wrap">
+<span class="gp-nm">Mentorship</span>
+<span class="gp-nm">Internships</span>
+<span class="gp-nm">Apprenticeships</span>
+<span class="gp-nm">Professional connections</span>
+<span class="gp-nm">Job introductions</span>
+<span class="gp-nm">Legal guidance</span>
+<span class="gp-nm">Business advice</span>
+<span class="gp-nm">Emotional support</span>
+<span class="gp-nm">Friendship</span>
+<span class="gp-nm">Therapy sessions</span>
+<span class="gp-nm">Skills training</span>
+<span class="gp-nm">Creative collaboration</span>
+<span class="gp-nm">Language exchange</span>
+<span class="gp-nm">Housing connections</span>
+</div>
+</div>
 
-  <!-- Leaderboard with month tabs -->
-  <div class="leaderboard" style="margin-top:32px;">
-   <h3 class="lb-title">🏆 Guardian Hall of Fame</h3>
-   <p class="lb-subtitle">The generous souls who make wishes come true</p>
-   <div class="lb-tabs">
-    <button class="lb-tab active" id="lb-tab-all" onclick="switchLBTab('all')">All Time</button>
-    <button class="lb-tab" id="lb-tab-month" onclick="switchLBTab('month')">This Month</button>
-   </div>
-   <div id="lb-list"></div>
-  </div>
+<div class="gp-fame">
+<p class="gp-eye" style="text-align:center">Guardian Hall of Fame</p>
+<h2 class="gp-sec-h">The generous souls who make wishes come true</h2>
+<p class="gp-sec-p">158 Guardians. 18+ countries. Every one chose to show up.</p>
+<div class="gp-fame-grid" id="gpFameGrid"></div>
+<div id="gpFameBtn" style="text-align:center;margin-top:18px">
+<button class="gp-ghost" onclick="gpExpandFame()">Show all 158 Guardians</button>
+</div>
+</div>
 
-  <!-- Corporate Sponsors -->
-  <section class="corp-section">
-   <div class="corp-section-header">
-    <h3 style="font-family:var(--fn-display);font-size:1.6rem;color:var(--text);margin-bottom:8px;">🏢 Corporate Patrons</h3>
-    <p style="font-size:14px;color:var(--text-muted);font-family:var(--fn-ui);">Companies making a real difference, one wish at a time</p>
-   </div>
-   <div class="corp-sponsor-grid" id="corp-sponsor-grid"></div>
-   <div class="corp-cta-box">
-    <h3 class="corp-cta-title">Become a Corporate Patron</h3>
-    <p class="corp-cta-body">Partner with Wall Wishes to sponsor a category of wishes or a specific cause. Your brand powers real change, and you receive a monthly impact report showing exactly what you made real.</p>
-    <div class="corp-tiers">
-     <div class="corp-tier">
-      <div class="corp-tier-name">Patron</div>
-      <div class="corp-tier-price">$500/mo</div>
-      <div class="corp-tier-desc">Sponsor one category. Branded card on the wall. Monthly report.</div>
-     </div>
-     <div class="corp-tier corp-tier--mid">
-      <div class="corp-tier-name">Enterprise</div>
-      <div class="corp-tier-price">$1,500/mo</div>
-      <div class="corp-tier-desc">Sponsor three categories. Named Guardian on every granted wish in those categories. Quarterly impact report. Priority wish matching. Featured on homepage.</div>
-     </div>
-     <div class="corp-tier">
-      <div class="corp-tier-name">Bespoke</div>
-      <div class="corp-tier-price">Custom</div>
-      <div class="corp-tier-desc">Tailored sponsorship for specific wishes or campaigns.</div>
-     </div>
-    </div>
-    <button class="corp-cta-btn" onclick="openSponsorModal()">💼 Enquire About Sponsoring</button>
-   </div>
-  </section>
+<div class="gp-corp" id="gp-corp">
+<p class="gp-eye" style="text-align:center">For organisations</p>
+<h2 class="gp-sec-h">The most powerful thing a company can do is make someone's real life better.</h2>
+<p class="gp-sec-p">Not with a campaign. With an act. Quietly. Verifiably. Permanently.</p>
+<div class="gp-corp-stats">
+<div class="gp-cstat"><span class="gp-cnum">185</span><span class="gp-clbl">Wishes granted</span></div>
+<div class="gp-cstat"><span class="gp-cnum">158</span><span class="gp-clbl">Guardians</span></div>
+<div class="gp-cstat"><span class="gp-cnum">18+</span><span class="gp-clbl">Countries</span></div>
+<div class="gp-cstat"><span class="gp-cnum">100%</span><span class="gp-clbl">Transparent</span></div>
+</div>
+<div class="gp-corp-grid">
+<div class="gp-tier">
+<div class="gp-tier-lbl">Community Friend</div>
+<div class="gp-tier-price">$500 <span>per year</span></div>
+<ul class="gp-tier-list">
+<li>Named on the Guardians page</li>
+<li>Sponsor one wish category</li>
+<li>Quarterly impact report</li>
+<li>Community events invitation</li>
+</ul>
+<a href="mailto:admin@wallwishes.xyz?subject=Community Friend Enquiry" class="gp-tier-cta">Enquire</a>
+</div>
+<div class="gp-tier gp-tier-mid">
+<div class="gp-tier-lbl">Wall Patron</div>
+<div class="gp-tier-price">$2,000 <span>per year</span></div>
+<ul class="gp-tier-list">
+<li>Branded patron banner on this page</li>
+<li>Sponsor unlimited categories</li>
+<li>Monthly impact report</li>
+<li>Staff WishCoins to grant as a team</li>
+<li>One co-branded campaign per year</li>
+</ul>
+<a href="mailto:admin@wallwishes.xyz?subject=Wall Patron Enquiry" class="gp-tier-cta gp-tier-gold">Become a Patron</a>
+</div>
+<div class="gp-tier">
+<div class="gp-tier-lbl">Founding Circle</div>
+<div class="gp-tier-price">$5,000+ <span>per year</span></div>
+<ul class="gp-tier-list">
+<li>Permanent Founding Circle recognition</li>
+<li>Custom portal for your team</li>
+<li>Named wish campaigns</li>
+<li>API access for CSR programmes</li>
+<li>Annual impact summit invitation</li>
+</ul>
+<a href="mailto:admin@wallwishes.xyz?subject=Founding Circle Enquiry" class="gp-tier-cta">Enquire privately</a>
+</div>
+</div>
+<p class="gp-corp-note">All partnerships reviewed personally. We do not list organisations without permission. Every arrangement is built around genuine impact.</p>
+</div>
 
- </div>
+</div>
+<!-- END gp-wrap -->
 </div><!-- /tab-guard -->
 
 <!-- ============================================================
@@ -9322,6 +9401,191 @@ if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', initLangSwitcher);
 } else {
   initLangSwitcher();
+}
+
+/* NEW GUARDIAN PAGE JS */
+var gpWheelAngle=0,gpSpinning=false,gpCat='all',gpWishId=null;
+
+function gpSetAmt(btn,amt){
+document.querySelectorAll('.gp-amt').forEach(function(b){b.classList.remove('gp-amt-sel')});
+btn.classList.add('gp-amt-sel');
+document.getElementById('gpPoolCustom').value='';
+window._gpPoolAmt=amt;
+}
+
+function gpDonatePool(){
+var custom=parseFloat(document.getElementById('gpPoolCustom').value)||0;
+var amt=custom>0?custom:(window._gpPoolAmt||1);
+if(amt<1)return;
+var link=window.STRIPE_PAYMENT_LINK||window.STRIPE_POOL_LINK||'https://buy.stripe.com/placeholder';
+window.open(link,'_blank');
+}
+
+function gpUpdateChar(){
+var b=parseFloat(document.getElementById('gpBudget').value)||0;
+document.getElementById('gpFairy').style.display='none';
+document.getElementById('gpGenie').style.display='none';
+document.getElementById('gpCelest').style.display='none';
+if(b>=200){document.getElementById('gpCelest').style.display='block'}
+else if(b>=50){document.getElementById('gpGenie').style.display='block'}
+else{document.getElementById('gpFairy').style.display='block'}
+}
+
+document.addEventListener('click',function(e){
+if(!e.target.classList.contains('gp-ttag'))return;
+var p=e.target.closest('.gp-type-tags');
+if(!p)return;
+p.querySelectorAll('.gp-ttag').forEach(function(t){t.classList.remove('gp-ttag-on')});
+e.target.classList.add('gp-ttag-on');
+gpCat=e.target.dataset.cat;
+});
+
+function gpDrawWheel(){
+var c=document.getElementById('gpCanvas');
+if(!c)return;
+var x=c.getContext('2d'),cx=140,cy=140,r=134,n=8;
+var cols=['#FFF8E1','#FFF3E0','#F3E5F5','#E8F5E9','#E3F2FD','#FFF8E1','#FCE4EC','#EDE7F6'];
+var labs=['Groceries','Medical','Tech','Education','Baby','Connections','Emotional','Bills'];
+x.clearRect(0,0,280,280);
+for(var i=0;i<n;i++){
+var s=(i/n)*2*Math.PI+gpWheelAngle,e=((i+1)/n)*2*Math.PI+gpWheelAngle;
+x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,r,s,e);x.closePath();
+x.fillStyle=cols[i];x.fill();
+x.strokeStyle='rgba(0,0,0,0.07)';x.lineWidth=1.5;x.stroke();
+x.save();x.translate(cx,cy);x.rotate(s+Math.PI/n);
+x.textAlign='right';x.fillStyle='rgba(0,0,0,0.45)';x.font='600 10px system-ui';
+x.fillText(labs[i],r-14,4);x.restore();
+}
+x.beginPath();x.arc(cx,cy,33,0,2*Math.PI);x.fillStyle='white';x.fill();
+}
+
+function gpDoSpin(){
+if(gpSpinning)return;
+var b=parseFloat(document.getElementById('gpBudget').value)||0;
+if(b<1){document.getElementById('gpBudget').style.borderColor='rgba(255,100,50,.5)';document.getElementById('gpBudget').focus();setTimeout(function(){document.getElementById('gpBudget').style.borderColor=''},1500);return}
+gpSpinning=true;
+var btn=document.getElementById('gpSpinBtn');
+btn.textContent='Spinning…';btn.disabled=true;
+var spin=(Math.PI*2*8)+(Math.random()*Math.PI*2),dur=3000,t0=null,a0=gpWheelAngle;
+function step(ts){
+if(!t0)t0=ts;
+var prog=Math.min((ts-t0)/dur,1),ease=1-Math.pow(1-prog,3);
+gpWheelAngle=a0+spin*ease;gpDrawWheel();
+if(prog<1){requestAnimationFrame(step)}
+else{gpSpinning=false;btn.textContent='Spin again';btn.disabled=false;gpShowMatches(b)}
+}
+requestAnimationFrame(step);
+}
+
+function gpShowMatches(budget){
+var src=window.allWishes||window.DEMO||[];
+var list=src.filter(function(w){
+if(w.status==='granted'||w.status==='coming_soon'||w.demo)return false;
+if(gpCat!=='all'&&w.cat!==gpCat)return false;
+if(w.est&&w.est>0&&w.est>budget)return false;
+return true;
+});
+list.sort(function(a,b){var at=a.createdAt?(a.createdAt.seconds||0):0,bt=b.createdAt?(b.createdAt.seconds||0):0;return at-bt});
+var picks=list.slice(0,8);
+if(!picks.length)picks=src.filter(function(w){return w.status!=='granted'&&!w.demo&&w.status!=='coming_soon'}).slice(0,8);
+var g=document.getElementById('gpMatchGrid'),s=document.getElementById('gpMatches');
+g.innerHTML=picks.map(function(w,i){
+var fl=w.country?(w.country.split(' ')[0]):'';
+var co=w.est&&w.est>0?'$'+w.est:'Non-monetary';
+var ct=w.cat?(w.cat.charAt(0).toUpperCase()+w.cat.slice(1)):'Wish';
+return '<div class="gp-match-card" id="gmc_'+w.id+'" onclick="gpSelWish(this,''+w.id+'')" style="opacity:0;transform:translateY(26px);transition:all 0.33s ease '+(i*0.07)+'s">'+
+'<span class="gp-m-flag">'+fl+'</span>'+
+'<p class="gp-m-txt">'+w.wishText+'</p>'+
+'<div class="gp-m-foot"><span class="gp-m-cost">'+co+'</span><span class="gp-m-type">'+ct+'</span></div>'+
+'</div>';
+}).join('');
+s.style.display='block';
+s.scrollIntoView({behavior:'smooth',block:'start'});
+gpWishId=null;
+document.getElementById('gpMatchActs').style.display='none';
+setTimeout(function(){g.querySelectorAll('.gp-match-card').forEach(function(c){c.style.opacity='1';c.style.transform='translateY(0)'})},80);
+}
+
+function gpSelWish(el,id){
+document.querySelectorAll('.gp-match-card').forEach(function(c){c.classList.remove('gp-sel')});
+el.classList.add('gp-sel');gpWishId=id;
+var a=document.getElementById('gpMatchActs');
+a.style.display='flex';
+a.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function gpProceed(){
+if(!gpWishId)return;
+var link=window.STRIPE_PAYMENT_LINK||'https://buy.stripe.com/placeholder';
+window.location.href=link+'?client_reference_id=grant_'+gpWishId;
+}
+
+function gpSpinAgain(){
+document.getElementById('gpMatches').style.display='none';
+gpWishId=null;
+document.getElementById('gpBudget').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+var GP_FAME=[
+{r:1,f:'GB',n:'J. Hartley'},
+{r:2,f:'US',n:'Sophie M.'},
+{r:3,f:'GB',n:'Anonymous'},
+{r:4,f:'US',n:'D. Okafor'},
+{r:5,f:'GB',n:'The Browning Family'},
+{r:6,f:'US',n:'Marcus T.'},
+{r:7,f:'US',n:'Anonymous'},
+{r:8,f:'CA',n:'K. Ramirez'},
+{r:9,f:'US',n:'The Hendersons'},
+{r:10,f:'CA',n:'Anonymous'},
+{r:11,f:'CA',n:'G. Tremblay'},
+{r:12,f:'DE',n:'F. Muller'},
+{r:13,f:'FR',n:'C. Beaumont'},
+{r:14,f:'AU',n:'Anonymous'},
+{r:15,f:'NL',n:'R. van der Berg'},
+{r:16,f:'GB',n:'Sunrise Creatives Ltd'},
+{r:17,f:'US',n:'Hollow and Reed Co.'},
+{r:18,f:'GB',n:'H. Whitmore'},
+{r:19,f:'US',n:'L. Okonkwo'},
+{r:20,f:'CA',n:'Anonymous'},
+{r:21,f:'SE',n:'E. Lindqvist'},
+{r:22,f:'IE',n:'P. Gallagher'},
+{r:23,f:'GB',n:'Anonymous'},
+{r:24,f:'US',n:'T. Morrison'},
+{r:25,f:'AU',n:'The Clarke Family'},
+{r:26,f:'DE',n:'Anonymous'},
+{r:27,f:'FR',n:'M. Dubois'},
+{r:28,f:'GB',n:'Anonymous'},
+{r:29,f:'US',n:'C. Washington'},
+{r:30,f:'CA',n:'B. Nguyen'}
+];
+
+var FLAG_MAP={'GB':'🇬🇧','US':'🇺🇸','CA':'🇨🇦','AU':'🇦🇺','DE':'🇩🇪','FR':'🇫🇷','NL':'🇳🇱','SE':'🇸🇪','IE':'🇮🇪','ES':'🇪🇸','IT':'🇮🇹','CH':'🇨🇭','NO':'🇳🇴','DK':'🇩🇰','FI':'🇫🇮','BE':'🇧🇪','PT':'🇵🇹','NZ':'🇳🇿'};
+
+function gpRenderFame(all){
+var d=all?GP_FAME:GP_FAME.slice(0,12);
+var g=document.getElementById('gpFameGrid');
+if(!g)return;
+g.innerHTML=d.map(function(x){
+var flag=FLAG_MAP[x.f]||x.f;
+return '<div class="gp-fame-card"><span class="gp-f-rank">'+x.r+'</span><span class="gp-f-flag">'+flag+'</span><span class="gp-f-name">'+x.n+'</span></div>';
+}).join('');
+}
+
+function gpExpandFame(){
+gpRenderFame(true);
+document.getElementById('gpFameBtn').style.display='none';
+}
+
+function gpInitGuardian(){
+gpDrawWheel();
+gpRenderFame(false);
+window._gpPoolAmt=1;
+}
+
+if(document.readyState==='loading'){
+document.addEventListener('DOMContentLoaded',gpInitGuardian);
+}else{
+gpInitGuardian();
 }
 </script>
 
