@@ -4476,27 +4476,6 @@ button { touch-action: manipulation; }
 </div>
 </div>
 
-<div class="gp-pool-wrap">
-<div class="gp-pool-card">
-<div class="gp-pool-left">
-<span class="gp-eye">The $1 principle</span>
-<h2 class="gp-pool-h">$1 from one million people changes everything.</h2>
-<p class="gp-pool-p">Every dollar goes directly into the Magic Pool and funds real wishes. No minimum. No maximum. No questions.</p>
-</div>
-<div class="gp-pool-right">
-<div class="gp-amts">
-<button class="gp-amt gp-amt-sel" onclick="gpSetAmt(this,1)">$1</button>
-<button class="gp-amt" onclick="gpSetAmt(this,5)">$5</button>
-<button class="gp-amt" onclick="gpSetAmt(this,10)">$10</button>
-<button class="gp-amt" onclick="gpSetAmt(this,25)">$25</button>
-<button class="gp-amt" onclick="gpSetAmt(this,50)">$50</button>
-<input type="number" id="gpPoolCustom" class="gp-pool-input" placeholder="Custom" min="1">
-</div>
-<button class="gp-pool-btn" onclick="gpDonatePool()">Add to the Magic Pool</button>
-</div>
-</div>
-</div>
-
 <div class="gp-spin-wrap" id="gp-spin">
 <p class="gp-eye" style="text-align:center">Grant a wish</p>
 <h2 class="gp-sec-h">What kind of Guardian will you be today?</h2>
@@ -5774,66 +5753,6 @@ const DEMO_RAW = [
  {id:'d184',wishText:"Help me fund one night in a safe hostel just moved cities between rooms 🏠", status:'granted', color:'n-blue',   stamp:'prayer',   cat:'bold',      est:50,  country:'🇨🇦 Canada'},
  {id:'d185',wishText:"Cover my son's school meals for the term free meals got cut and we can't fill the gap 🍽️", status:'granted', color:'n-yellow', stamp:'verified', cat:'money',     est:150, country:'🇬🇧 UK'},
 ];
-
-function expandDemoToThousand(base) {
-  const expanded = [...base];
-  const colors = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
-  const stamps = ['verified','valid','prayer','goals','big','legend','chaos','unhinged'];
-  const cats = ['money','medical','tech','education','baby','tools','experience','connect','emotional','funny','bold'];
-  const countries = [
-    '🇬🇧 UK','🇺🇸 US','🇨🇦 Canada','🇩🇪 Germany','🇫🇷 France',
-    '🇳🇱 Netherlands','🇸🇪 Sweden','🇪🇸 Spain','🇮🇹 Italy',
-    '🇵🇹 Portugal','🇧🇪 Belgium','🇨🇭 Switzerland','🇦🇹 Austria',
-    '🇩🇰 Denmark','🇳🇴 Norway','🇫🇮 Finland','🇮🇪 Ireland',
-    '🇦🇺 Australia','🇳🇿 New Zealand'
-  ];
-  const templates = [
-    'Help with groceries this week',
-    'Need support covering rent shortfall',
-    'Laptop for studying at home',
-    'Baby supplies until payday',
-    'School fees this term',
-    'Medical appointment costs',
-    'Work tools replacement',
-    'Internet connection at home',
-    'Warm coat for winter',
-    'Medication this month',
-    'Phone for job hunting',
-    'Transport to work',
-    'Childcare gap this week',
-    'Utility bill shortfall',
-    'Debt holding me back',
-    'First month deposit to move',
-    'Camera for my course',
-    'Guitar to keep playing music',
-    'Just need someone to notice',
-    'Birthday for my child this week'
-  ];
-  let counter = 186;
-  while(expanded.length < 1000) {
-    const t = templates[counter % templates.length];
-    const c = countries[counter % countries.length];
-    const col = colors[counter % colors.length];
-    const st = stamps[counter % stamps.length];
-    const cat = cats[counter % cats.length];
-    const est = [0,20,30,40,50,60,80,100,120,150][counter % 10];
-    expanded.push({
-      id: 'g' + counter,
-      wishText: t,
-      status: 'coming_soon',
-      color: col,
-      stamp: st,
-      cat: cat,
-      est: est,
-      country: c
-    });
-    counter++;
-  }
-  return expanded;
-}
-
-// Spread real wishes across all 1000 slots using deterministic seeded positions
-// so the wall always looks full and the ❤️ mosaic pattern emerges from afar
 const TUNNEL_MESSAGES = [
   'Patience is a virtue. We are on our way.',
   'Good things come to those who wait. Almost there.',
@@ -5849,9 +5768,7 @@ const TUNNEL_MESSAGES = [
   'We are queued up and ready. The wall will call our name.',
 ];
 
-const DEMO_EXPANDED = expandDemoToThousand(DEMO_RAW);
-const DEMO_POSITIONS = seededShuffle([...Array(1000).keys()], 42);
-const DEMO = DEMO_EXPANDED.map((w, i) => ({ ...w, _slot: DEMO_POSITIONS[i] }));
+const DEMO = DEMO_RAW;
 
 /* ============================================================
  STATE
@@ -5996,41 +5913,6 @@ function paintWall(){
  const slot = (w._slot !== undefined && w._slot < WALL_CAPACITY) ? w._slot : i % WALL_CAPACITY;
  if(!slotMap[slot]) slotMap[slot] = w;
  });
- // Fill remaining slots with ghost placeholder notes so the wall is always full
- const ghostTexts = [
- 'A wish is waiting to find this spot. Have faith.',
- 'Your guardian is already out there. Post your wish.',
- 'This wall has space for your dream. What are you waiting for?',
- 'Someone browsed this spot today. They are ready to give.',
- 'Every granted wish started right here. Empty. Waiting. Real.',
- 'Pin something here. You have nothing to lose and everything to gain.',
- 'Hundreds of wishes have been granted from spots like this one.',
- 'Your story matters. This wall is proof. Pin it.',
- 'A stranger is looking for a wish to grant right now. Make it yours.',
- 'The only wishes that never come true are the ones never posted.',
- 'This spot does not know what it will become yet. Neither do you.',
- 'Quiet spaces like this one have changed real lives. Be next.',
- 'Not every hero wears a cape. Some just browse a wall like this.',
- 'Your wish does not have to be big. It just has to be real.',
- 'Someone granted a wish from this exact kind of spot last week.',
- ];
- const ghostColors = ['n-yellow','n-pink','n-blue','n-green','n-orange','n-lav'];
- const ghostPins = ['pin-r','pin-b','pin-g','pin-y'];
- const ghostRots = [-2,-1,0,1,2,-1.5,1.5];
- for(let i=0; i<WALL_CAPACITY; i++){
- if(!slotMap[i]){
- slotMap[i] = {
- id: 'ghost-'+i,
- wishText: ghostTexts[i % ghostTexts.length],
- status: 'ghost',
- color: ghostColors[(i*7+3) % ghostColors.length],
- _ghost: true,
- _pinCls: ghostPins[(i*3+1) % ghostPins.length],
- _rot: ghostRots[(i*5+2) % ghostRots.length],
- };
- }
- }
-
  /*
  Mosaic: compute tile column/row for each slot position
  so each note carries its fragment of the composite image.
@@ -8380,12 +8262,7 @@ const WARMUP_WISHES = (function(){
 
 // Merge warmup into demo data, always pad to fill all 1000 slots
 function getDisplayWishes(realWishes){
- const real = realWishes || [];
- const needed = Math.max(0, 1000 - real.length);
- if(needed === 0) return real;
- // Pad with warmup wishes to fill all 1000 slots
- const pad = WARMUP_WISHES.slice(0, needed);
- return [...real, ...pad];
+ return realWishes || [];
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes(DEMO); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
@@ -8400,22 +8277,7 @@ setTimeout(() => {
 }, 6000);
 
 function processWishQueue() {
-  const capacity = WALL_CAPACITY;
-  const liveWishes = DEMO.filter(function(w) {
-    return w.status === 'granted' || w.status === 'approved';
-  });
-  const available = capacity - liveWishes.length;
-  if (available <= 0) return;
-  const queued = DEMO.filter(function(w) {
-    return w.status === 'coming_soon';
-  });
-  const toPromote = queued.slice(0, available);
-  toPromote.forEach(function(w) {
-    w.status = 'approved';
-  });
-  if (toPromote.length > 0) {
-    paintWall();
-  }
+  // No queue in demo mode — wall shows 185 granted wishes with placeholder spots
 }
 updateWCPill();
 checkReturn();
