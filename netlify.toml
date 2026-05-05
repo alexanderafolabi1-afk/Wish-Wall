@@ -40,7 +40,7 @@
 [[headers]]
   for = "/admin.html"
   [headers.values]
-    Content-Type = "text/html"
+    Content-Type = "text/html; charset=UTF-8"
 
 [[headers]]
   for = "/*"
