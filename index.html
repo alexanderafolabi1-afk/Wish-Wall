@@ -7910,7 +7910,7 @@ function checkReturn(){
    showTab('guard');
    setTimeout(() => {
     const identity = (() => {
-     try { return JSON.parse(sessionStorage.getItem('ww-guardian-identity') || 'null') || { anon: true }; } catch(e) { return { anon: true }; }
+     const _rawId = sessionStorage.getItem('ww-guardian-identity'); if(!_rawId) return { anon: true }; try { return JSON.parse(_rawId) || { anon: true }; } catch(e) { return { anon: true }; }
     })();
     const tyName = (!identity.anon && identity.firstName) ? identity.firstName : null;
     const sub = document.getElementById('ty-sub');
