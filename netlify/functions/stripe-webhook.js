@@ -135,7 +135,33 @@ exports.handler = async (event) => {
         console.error('Error processing guardian grant:', err);
       }
 
-    } else if (clientRef && clientRef !== 'community_pot') {
+    } else if (clientRef === 'community_pot' || clientRef.startsWith('pot_')) {
+      // ── Community Pot contribution ──────────────────────────────────────
+      try {
+        const ledgerRef = db.collection('meta').doc('ledger');
+        await ledgerRef.set({
+          potBalance:     admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
+          totalDonations: admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
+          updatedAt:      admin.firestore.FieldValue.serverTimestamp(),
+        }, { merge: true });
+
+        if (customerEmail) {
+          await sendEmail({
+            to:          customerEmail,
+            subject:     '🪙 Your Magic Pool contribution was received',
+            htmlContent: `
+              <p>Hi there,</p>
+              <p>Thank you! Your contribution of <strong>${currency} ${amountTotal}</strong> has been added to the Magic Pool.</p>
+              <p>It will be used to grant wishes for people who need it most. You are part of the magic. 🌟</p>
+              <p>— The Wish Wall team</p>
+            `,
+          }).catch(err => console.error('Failed to send pot contribution email:', err));
+        }
+      } catch (err) {
+        console.error('Error processing pot contribution:', err);
+      }
+
+    } else if (clientRef && !clientRef.startsWith('pot_')) {
       // ── Pin payment: mark wish as approved ─────────────────────────────
       const wishId = clientRef;
       try {
@@ -143,6 +169,7 @@ exports.handler = async (event) => {
         await wishRef.update({
           status:     'approved',
           approvedAt: admin.firestore.FieldValue.serverTimestamp(),
+          paidAt:     admin.firestore.FieldValue.serverTimestamp(),
         });
 
         // Update ledger fees
@@ -169,31 +196,6 @@ exports.handler = async (event) => {
         console.error('Error processing pin payment:', err);
       }
 
-    } else if (clientRef === 'community_pot' || clientRef.startsWith('pot_')) {
-      // ── Community Pot contribution ──────────────────────────────────────
-      try {
-        const ledgerRef = db.collection('meta').doc('ledger');
-        await ledgerRef.set({
-          potBalance:     admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
-          totalDonations: admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
-          updatedAt:      admin.firestore.FieldValue.serverTimestamp(),
-        }, { merge: true });
-
-        if (customerEmail) {
-          await sendEmail({
-            to:          customerEmail,
-            subject:     '🪙 Your Magic Pool contribution was received',
-            htmlContent: `
-              <p>Hi there,</p>
-              <p>Thank you! Your contribution of <strong>${currency} ${amountTotal}</strong> has been added to the Magic Pool.</p>
-              <p>It will be used to grant wishes for people who need it most. You are part of the magic. 🌟</p>
-              <p>— The Wish Wall team</p>
-            `,
-          }).catch(err => console.error('Failed to send pot contribution email:', err));
-        }
-      } catch (err) {
-        console.error('Error processing pot contribution:', err);
-      }
     }
   }
 
