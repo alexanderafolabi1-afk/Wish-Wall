@@ -6249,6 +6249,14 @@ async function sponsorWish(id){
 function closeGuardianModal(){
  document.getElementById('guardian-modal-ov').classList.remove('open');
  document.body.style.overflow = '';
+ // Reset card section so it's fresh on next open
+ const cardSection = document.getElementById('guardian-card-section');
+ if(cardSection) cardSection.style.display = 'none';
+ const mainBtn = document.getElementById('guardian-modal-btn');
+ if(mainBtn) mainBtn.style.display = '';
+ const errEl = document.getElementById('guardian-card-errors');
+ if(errEl) errEl.textContent = '';
+ if(_stripeCardEl){ try { _stripeCardEl.unmount(); } catch(_){} _stripeCardEl = null; }
 }
 
 /* ══ GUARDIAN MODAL: ANON TOGGLE ══════════════════════════════ */
