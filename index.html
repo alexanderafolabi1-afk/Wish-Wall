@@ -6848,7 +6848,7 @@ function selectBudget(amount, btn){
  }
 }
 
-function findWishesForBudget(amount){
+async function findWishesForBudget(amount){
  console.log('[Guardian] findWishesForBudget called, amount:', amount);
  if(!amount || amount < 1){ toast('Enter a budget above $1 to find wishes.'); return; }
  window._guardianBudget = amount;
@@ -6859,45 +6859,40 @@ function findWishesForBudget(amount){
   openCommunityPotModal();
   return;
  }
- const all = window.allWishes || [];
- console.log('[Guardian] allWishes total:', all.length);
 
- // Real approved wishes with an est at or under budget
- let matches = all
-  .filter(w => w.status === 'approved' && !w.warmup && w.est && w.est <= amount)
-  .sort((a,b) => {
-   const ta = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
-   const tb = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
-   return ta - tb;
-  })
-  .slice(0, 8);
+ // Show loading state on the button
+ const findBtn = document.getElementById('budget-find-btn');
+ const findBtnOrigText = findBtn ? findBtn.textContent : '';
+ if(findBtn){ findBtn.disabled = true; findBtn.textContent = 'Searching…'; }
 
- console.log('[Guardian] real matches:', matches.length);
-
- // Fallback: use warmup wishes so the wheel always works
- if(matches.length === 0){
-  matches = all
-   .filter(w => w.status === 'approved' && w.warmup)
-   .map(w => ({ ...w, est: Math.min(amount, 25) }))
+ let matches = [];
+ try {
+  if(!window._firebaseReady || !window._col || !window._fb){
+   throw new Error('Firebase not ready');
+  }
+  const { query, where, orderBy, getDocs } = window._fb;
+  // Query Firestore directly for approved wishes sorted oldest-first
+  const q = query(
+   window._col.wishes,
+   where('status', '==', 'approved'),
+   orderBy('createdAt', 'asc')
+  );
+  const snap = await getDocs(q);
+  matches = snap.docs
+   .map(d => ({ id: d.id, ...d.data() }))
+   // Exclude warmup/demo wishes; only include wishes with a valid est within budget
+   .filter(w => !w.warmup && w.est != null && !isNaN(Number(w.est)) && Number(w.est) <= amount)
    .slice(0, 8);
-  console.log('[Guardian] using warmup fallback, count:', matches.length);
+  console.log('[Guardian] Firestore matches:', matches.length);
+ } catch(err) {
+  console.warn('[Guardian] Firestore query failed:', err);
  }
 
- // Last-resort hardcoded wishes — ensures the wheel always spins
- if(matches.length === 0){
-  matches = [
-   {id:'fw1', wishText:'Help with groceries this week — two kids, empty fridge 🛒', est: Math.min(amount, 60), country:'🌍 Global', cat:'money', color:'n-yellow'},
-   {id:'fw2', wishText:'Electric meter top-up — cut off tomorrow with a toddler at home ⚡', est: Math.min(amount, 40), country:'🌍 Global', cat:'money', color:'n-orange'},
-   {id:'fw3', wishText:'School supplies for my daughter — she starts Monday 📚', est: Math.min(amount, 35), country:'🌍 Global', cat:'education', color:'n-blue'},
-   {id:'fw4', wishText:'Bus pass for the month — three buses to get to work 🚌', est: Math.min(amount, 55), country:'🌍 Global', cat:'money', color:'n-pink'},
-   {id:'fw5', wishText:'Food shop for the week — just out of hospital with no income 🏥', est: Math.min(amount, 50), country:'🌍 Global', cat:'money', color:'n-green'},
-   {id:'fw6', wishText:'Baby formula — running out tonight and payday is Friday 🍼', est: Math.min(amount, 30), country:'🌍 Global', cat:'money', color:'n-yellow'},
-  ].filter(w => w.est >= 1);
-  console.log('[Guardian] using hardcoded fallback, count:', matches.length);
- }
+ // Restore button
+ if(findBtn){ findBtn.disabled = false; findBtn.textContent = findBtnOrigText; }
 
  if(matches.length === 0){
-  toast('No wishes found. Check back soon!');
+  toast('No wishes are available in this budget range right now, check back soon.');
   return;
  }
  window._guardianMatches = matches;
