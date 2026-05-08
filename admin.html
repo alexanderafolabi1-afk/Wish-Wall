@@ -796,6 +796,8 @@ function switchTab(name){
   document.querySelectorAll('.sidebar-btn, .mob-nav-btn').forEach(b =>
     b.classList.toggle('on', b.dataset.tab === name)
   );
+  const content = document.querySelector('.adm-content');
+  if(content) content.scrollTop = 0;
 }
 
 /* ============================================================
