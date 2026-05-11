@@ -2736,6 +2736,17 @@ button { touch-action: manipulation; }
   transform: translateY(-2px);
   box-shadow: 0 8px 36px rgba(245, 200, 66, 0.5);
 }
+.ww-quiet-banner {
+  text-align:center;
+  padding:12px 20px;
+  background:rgba(245,150,50,0.08);
+  border-bottom:1px solid rgba(245,150,50,0.2);
+  font-size:13px;
+  color:rgba(180,90,20,0.9);
+  font-family:var(--fn-note,serif);
+  font-style:italic;
+  letter-spacing:0.2px;
+}
 .gp-aging .note-inner {
   box-shadow: 0 0 0 2px rgba(245,150,50,0.3), var(--shadow-note);
   animation: gpAgingPulse 3s ease-in-out infinite;
@@ -2854,6 +2865,7 @@ button { touch-action: manipulation; }
  Granted wishes tick green. Cheeky wishes get stamped.
  After 4 hours the oldest granted wishes rotate out.
  -->
+ <div id="ww-quiet-banner" class="ww-quiet-banner" style="display:none"></div>
  <div class="wall-grid" id="wall-grid">
  <!-- Skeleton placeholders (25 cols visible above fold) -->
  <div class="note-skel"><div class="skel-inner"></div></div>
@@ -4566,6 +4578,7 @@ async function sponsorWish(id){
  document.body.style.overflow = 'hidden';
  setTimeout(() => emailInp?.focus(), 120);
  announceA11y('Grant wish form opened. Enter your email to receive a receipt.');
+ localStorage.setItem('ww-last-activity', Date.now());
 }
 
 function closeGuardianModal(){
@@ -5482,7 +5495,26 @@ function getDisplayWishes(realWishes){
  return [...real, ...pad];
 }
 function loadDemo(){ setTimeout(() => { window.renderWishes(DEMO); processWishQueue(); }, 850); }
-if(!window._firebaseReady) loadDemo();
+function checkWallActivity() {
+  var lastActivity = localStorage.getItem('ww-last-activity');
+  var now = Date.now();
+  if (!lastActivity) {
+    localStorage.setItem('ww-last-activity', now);
+    return;
+  }
+  var hoursQuiet = (now - parseInt(lastActivity)) / (1000 * 60 * 60);
+  var banner = document.getElementById('ww-quiet-banner');
+  if (!banner) return;
+  if (hoursQuiet > 6) {
+    var hrs = Math.floor(hoursQuiet);
+    var mins = Math.floor((hoursQuiet - hrs) * 60);
+    banner.innerHTML = 'The wall has been quiet for ' + hrs + ' hours and ' + mins + ' minutes. Wishes are waiting.';
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+if(!window._firebaseReady) { loadDemo(); checkWallActivity(); }
 
 function processWishQueue() {
   const capacity = WALL_CAPACITY;
