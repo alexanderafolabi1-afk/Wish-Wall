@@ -7667,6 +7667,7 @@ const CORP_SPONSORS = [
 
 function paintLB(donors){
  const list = document.getElementById('lb-list');
+ if(!list) return;
  const data = (donors || DEMO_LB).slice(0, 158);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
@@ -7712,13 +7713,14 @@ function toggleLbExpand(){
    grid.querySelectorAll('.lb-card:not(.revealed)').forEach(c => c.classList.add('revealed'));
   }
  } else {
-  const cards = grid.querySelectorAll('.lb-card');
-  cards.forEach((c, i) => {
-   if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
-  });
-  btn.textContent = `Show all 158 Guardians ↓`;
-  document.getElementById('lb-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
- }
+   const cards = grid.querySelectorAll('.lb-card');
+   cards.forEach((c, i) => {
+    if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
+   });
+   btn.textContent = `Show all 158 Guardians ↓`;
+   const list = document.getElementById('lb-list');
+   if(list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 setTimeout(() => paintLB(null), 100);
 setTimeout(() => paintCorpSponsors(), 100);
