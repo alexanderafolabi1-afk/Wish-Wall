@@ -1,6 +1,6 @@
 {
   "name": "The Wish Wall",
-  "short_name": "WishWall",
+  "short_name": "WallWishes",
   "description": "Pin a wish. Let strangers make it real.",
   "start_url": "/",
   "display": "standalone",

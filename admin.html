@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish Wall Admin 🔐 — wishwall.xyz</title>
+<title>Wish Wall Admin 🔐 — wallwishes.xyz</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="/admin-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
@@ -19,9 +19,9 @@
   // ⚠️ Same config as index.html
   const firebaseConfig = {
     apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
-    authDomain: "wishwall-79dd2.firebaseapp.com",
-    projectId: "wishwall-79dd2",
-    storageBucket: "wishwall-79dd2.firebasestorage.app",
+    authDomain: "wallwishes-79dd2.firebaseapp.com",
+    projectId: "wallwishes-79dd2",
+    storageBucket: "wallwishes-79dd2.firebasestorage.app",
     messagingSenderId: "496538589706",
     appId: "1:496538589706:web:bb27da6e931f9155e31df3"
   };
@@ -516,7 +516,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Unlock ✨</button>
     <p class="login-err" id="login-err"></p>
-    <p class="login-domain">wishwall.xyz · admin@wallwishes.xyz</p>
+    <p class="login-domain">wallwishes.xyz · admin@wallwishes.xyz</p>
   </div>
 </div>
 
@@ -526,7 +526,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   <div class="adm-header">
     <div>
       <span class="adm-logo">🧱 Wish Wall Admin</span>
-      <span class="adm-domain"> · wishwall.xyz</span>
+      <span class="adm-domain"> · wallwishes.xyz</span>
     </div>
     <button class="adm-logout" onclick="logout()">Log out</button>
   </div>
@@ -612,12 +612,12 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
       <!-- ▸ DONATIONS TAB ──────────────────────────────── -->
       <div class="tab-panel" id="tab-donations">
         <!--
-          NOTE: Pot balance is intentionally NOT displayed publicly on wishwall.xyz
+          NOTE: Pot balance is intentionally NOT displayed publicly on wallwishes.xyz
           per platform policy. This admin editor is for internal tracking only.
         -->
         <div class="led-editor">
           <h3>📊 Update Transparency Ledger</h3>
-          <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
+          <p>⚠️ The pot balance is NOT publicly visible on wallwishes.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
           <div class="led-fields">
             <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="300" min="0"></div>
             <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="14620" min="0"></div>
@@ -745,7 +745,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
    ⚠️  For production: replace with Firebase Auth or equivalent
    Contact: admin@wallwishes.xyz
    ============================================================ */
-const ADMIN_PW  = 'wishwall2025'; // ⚠️ CHANGE BEFORE DEPLOYING
+const ADMIN_PW  = 'wallwishes2025'; // ⚠️ CHANGE BEFORE DEPLOYING
 const ADMIN_KEY = 'ww_admin_auth';
 
 let allAdmWishes    = [];
@@ -976,7 +976,7 @@ async function approve(id){
   try{
     if(window.fbApprove) await window.fbApprove(id);
     else { const w = allAdmWishes.find(x=>x.id===id); if(w) w.status='approved'; updateAdmStats(); paintTable(); paintCards(); }
-    toast('✅ Wish approved and live on wishwall.xyz!');
+    toast('✅ Wish approved and live on wallwishes.xyz!');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
 }
 
@@ -1060,7 +1060,7 @@ async function saveLedger(){
   };
   try{
     if(window.fbUpdateLedger) await window.fbUpdateLedger(data);
-    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wishwall.xyz.');
+    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wallwishes.xyz.');
   } catch(e){ toast('❌ Ledger save failed: '+e.message,'red'); }
 }
 
@@ -1092,7 +1092,7 @@ async function sendQueuedEmails(){
 async function togglePause(){
   const btn     = document.getElementById('ctrl-pause-btn');
   const isPaused = btn.dataset.paused === '1';
-  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wishwall.xyz?')) return;
+  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wallwishes.xyz?')) return;
   try{
     if(window.fbSetConfig) await window.fbSetConfig({ paused: !isPaused });
     else toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
