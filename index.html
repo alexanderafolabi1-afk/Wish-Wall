@@ -7718,8 +7718,8 @@ function toggleLbExpand(){
     if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
    });
    btn.textContent = `Show all 158 Guardians ↓`;
-   const list = document.getElementById('lb-list');
-   if(list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   const lbList = document.getElementById('lb-list');
+   if(lbList) lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 setTimeout(() => paintLB(null), 100);
