@@ -15,6 +15,7 @@ const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const FROM_EMAIL = 'hello@wallwishes.xyz';
 const FROM_NAME = 'The Wish Wall';
 const MAX_BATCH = 50;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function sendEmail({ to, subject, htmlContent }) {
   const res = await fetch(BREVO_API_URL, {
@@ -73,7 +74,7 @@ exports.handler = async (event) => {
     for (const docSnap of dueDocs) {
       const data = docSnap.data() || {};
       const to = String(data.email || '').trim();
-      if (!to.includes('@')) continue;
+      if (!EMAIL_RE.test(to)) continue;
 
       let wishText = 'Your wish';
       if (data.wishId) {
@@ -82,7 +83,9 @@ exports.handler = async (event) => {
           if (wishSnap.exists) {
             wishText = String(wishSnap.data().wishText || wishText);
           }
-        } catch (_) {}
+        } catch (err) {
+          console.warn(`Could not load wish ${data.wishId} for queued email ${docSnap.id}:`, err.message);
+        }
       }
 
       const step = Number(data.step || 1);
@@ -116,4 +119,3 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
-

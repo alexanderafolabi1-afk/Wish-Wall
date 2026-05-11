@@ -15,6 +15,7 @@ const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const FROM_EMAIL = 'hello@wallwishes.xyz';
 const FROM_NAME = 'The Wish Wall';
 const MAX_RECIPIENTS = 250;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function sendEmail({ to, subject, htmlContent }) {
   const res = await fetch(BREVO_API_URL, {
@@ -53,13 +54,15 @@ exports.handler = async (event) => {
   try {
     const body = event.body ? JSON.parse(event.body) : {};
     balance = Number(body.balance || 0);
-  } catch (_) {}
+  } catch (err) {
+    console.warn('send-pool-email: invalid JSON body, defaulting balance to 0:', err.message);
+  }
 
   try {
     const snap = await db.collection('subscribers').limit(MAX_RECIPIENTS).get();
     const recipients = snap.docs
       .map((d) => String((d.data() || {}).email || '').trim())
-      .filter((email) => email.includes('@'));
+      .filter((email) => EMAIL_RE.test(email));
 
     let sent = 0;
     for (const to of recipients) {
@@ -81,4 +84,3 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
-
