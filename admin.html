@@ -13,15 +13,15 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import {
     getFirestore, collection, getDocs, doc, updateDoc, deleteDoc,
-    query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch
+    query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch, increment
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   // ⚠️ Same config as index.html
   const firebaseConfig = {
     apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
-    authDomain: "wallwishes-79dd2.firebaseapp.com",
-    projectId: "wallwishes-79dd2",
-    storageBucket: "wallwishes-79dd2.firebasestorage.app",
+    authDomain: "wishwall-79dd2.firebaseapp.com",
+    projectId: "wishwall-79dd2",
+    storageBucket: "wishwall-79dd2.firebasestorage.app",
     messagingSenderId: "496538589706",
     appId: "1:496538589706:web:bb27da6e931f9155e31df3"
   };
@@ -37,7 +37,7 @@
       ledger: doc(db, 'meta', 'ledger'),
       config: doc(db, 'meta', 'config'),
     };
-    window._ops = { getDocs, doc, updateDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch };
+    window._ops = { getDocs, doc, updateDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch, increment };
 
     window.fbApprove = async (id) => {
       await updateDoc(doc(db,'wishes',id), { status:'approved', approvedAt: serverTimestamp() });
@@ -47,6 +47,9 @@
     };
     window.fbGrant = async (id, cost) => {
       await updateDoc(doc(db,'wishes',id), { status:'granted', grantedAt: serverTimestamp(), grantCost: cost });
+    };
+    window.fbIncrementGranted = async () => {
+      await setDoc(doc(db,'meta','ledger'), { totalGranted: increment(1), updatedAt: serverTimestamp() }, { merge: true });
     };
     window.fbDelete = async (id) => {
       await deleteDoc(doc(db,'wishes',id));
@@ -126,13 +129,26 @@
         const data = snap.data();
         const poolEl = document.getElementById('a-pool');
         if (poolEl) poolEl.textContent = '\u00a3' + (data.potBalance || 0).toLocaleString();
-        const fields = { 'l-fees': data.totalFees, 'l-don': data.totalDonations,
-                         'l-gr': data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance };
+        const fields = {
+          'l-fees': data.totalFees, 'l-don': data.totalDonations,
+          'l-gr': data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance,
+          'l-total-wishes': data.totalWishes, 'l-guardians': data.totalGuardians,
+          'l-countries': data.countries,
+        };
         Object.entries(fields).forEach(([id, val]) => {
           const el = document.getElementById(id);
-          if (el && val != null) el.value = val;
+          if (!el || val == null) return;
+          if (el.tagName === 'INPUT') el.value = val;
+          else el.textContent = val;
         });
       }
+    });
+
+    // Email queue onSnapshot — live view of outgoing email queue
+    const emailQ = query(collection(db,'email_queue'), orderBy('createdAt','desc'));
+    onSnapshot(emailQ, snap => {
+      const emails = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      window.renderEmailQueue(emails);
     });
 
     // Config onSnapshot — live pause state in Controls tab
@@ -624,6 +640,9 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
             <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="0" min="0"></div>
             <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="0" min="0"></div>
             <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="0" min="0"></div>
+            <div class="led-field"><label>Total Wishes</label><input type="number" id="l-total-wishes" value="0" min="0" readonly></div>
+            <div class="led-field"><label>Total Guardians</label><input type="number" id="l-guardians" value="0" min="0" readonly></div>
+            <div class="led-field"><label>Countries</label><input type="number" id="l-countries" value="0" min="0" readonly></div>
           </div>
           <button class="led-save" onclick="saveLedger()">💾 Save Ledger</button>
           <p class="led-note">Pot balance is stored in Firestore but never served to the public interface.</p>
@@ -642,6 +661,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
           <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px;">Sends queued emails via Resend where sendAfter &lt;= now and sent is not true. Requires RESEND_API_KEY in Netlify env vars.</p>
           <button class="led-save" id="send-queue-btn" onclick="sendQueuedEmails()" style="background:rgba(0,196,132,.2);border-color:#00c484;">📤 Send Queued Emails</button>
           <span id="queue-status" style="font-size:12px;color:rgba(255,255,255,.5);margin-left:12px;"></span>
+        </div>
+
+        <h3 class="sec-h">📬 Live Email Queue</h3>
+        <div id="email-queue-list">
+          <div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Loading email queue...</div>
         </div>
       </div>
 
@@ -702,8 +726,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 <div class="grant-modal" id="grant-modal">
   <div class="grant-box">
     <h3>✅😊 Mark as Granted</h3>
-    <p>Record the cost to grant this wish (optional). The note will be ticked green with a smile on the wall.</p>
-    <input class="grant-inp" type="number" id="grant-cost" placeholder="Cost in £ (optional)" min="0">
+    <p>Enter the guardian's email (optional) and cost. The note will be ticked green on the wall.</p>
+    <label for="grant-email" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:6px;">Guardian Email (optional)</label>
+    <input class="grant-inp" type="email" id="grant-email" placeholder="guardian@example.com">
+    <label for="grant-cost" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:6px;">Cost in £ (optional)</label>
+    <input class="grant-inp" type="number" id="grant-cost" placeholder="0.00" min="0">
     <div class="grant-btns">
       <button class="grant-ok" onclick="confirmGrant()">Grant It ✨</button>
       <button class="grant-cancel" onclick="closeGrantModal()">Cancel</button>
@@ -811,15 +838,24 @@ window.renderAdmin = function(wishes){
 };
 
 function updateAdmStats(){
-  document.getElementById('a-total').textContent   = allAdmWishes.length;
-  document.getElementById('a-pending').textContent = allAdmWishes.filter(w => w.status === 'pending').length;
-  document.getElementById('a-granted').textContent = allAdmWishes.filter(w => w.status === 'granted').length;
+  const real = allAdmWishes.filter(w => w.warmup !== true);
+  document.getElementById('a-total').textContent   = real.length;
+  document.getElementById('a-pending').textContent = real.filter(w => w.status === 'pending' || w.status === 'queued').length;
+  document.getElementById('a-granted').textContent = real.filter(w => w.status === 'granted').length;
   // a-pool updated by ledger onSnapshot
 }
 
 function getFiltered(){
   let src = allAdmWishes.filter(w => w.warmup !== true);
-  if(admFilter !== 'all') src = src.filter(w => w.status === admFilter);
+  if(admFilter === 'pending'){
+    src = src.filter(w =>
+      w.status === 'pending' ||
+      w.status === 'queued'  ||
+      (w.status === 'approved' && !w.grantedAt)
+    );
+  } else if(admFilter !== 'all'){
+    src = src.filter(w => w.status === admFilter);
+  }
   if(admSearch){
     const q = admSearch.toLowerCase();
     src = src.filter(w =>
@@ -991,6 +1027,7 @@ async function reject(id){
 
 function grantWish(id){
   grantTargetId = id;
+  document.getElementById('grant-email').value = '';
   document.getElementById('grant-cost').value = '';
   document.getElementById('grant-modal').classList.add('open');
 }
@@ -1000,10 +1037,29 @@ function closeGrantModal(){
 }
 async function confirmGrant(){
   if(!grantTargetId) return;
+  const guardianEmail = document.getElementById('grant-email').value.trim();
   const cost = parseFloat(document.getElementById('grant-cost').value) || 0;
+  const wish = allAdmWishes.find(x => x.id === grantTargetId);
   try{
+    // Call send-wish-granted Netlify function (fire-and-forget)
+    fetch('/.netlify/functions/send-wish-granted', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        wishId: grantTargetId,
+        guardianEmail: guardianEmail || undefined,
+        wishText: wish ? (wish.wishText || '') : '',
+        name: wish ? (wish.name || '') : '',
+      }),
+    }).catch(err => console.warn('send-wish-granted email error:', err));
+
+    // Update wish document
     if(window.fbGrant) await window.fbGrant(grantTargetId, cost);
-    else { const w = allAdmWishes.find(x=>x.id===grantTargetId); if(w){ w.status='granted'; w.grantCost=cost; } updateAdmStats(); paintTable(); paintCards(); }
+    else { if(wish){ wish.status='granted'; wish.grantCost=cost; } updateAdmStats(); paintTable(); paintCards(); }
+
+    // Increment totalGranted in ledger
+    if(window.fbIncrementGranted) await window.fbIncrementGranted().catch(() => {});
+
     closeGrantModal();
     toast('🎉 Wish granted! Note ticked green with smile on the wall.');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
@@ -1067,6 +1123,34 @@ async function saveLedger(){
 /* ============================================================
    EMAIL QUEUE
    ============================================================ */
+window.renderEmailQueue = function(emails){
+  const el = document.getElementById('email-queue-list');
+  if(!el) return;
+
+  if(!emails.length){
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">No queued emails 📭</div>';
+    return;
+  }
+
+  el.innerHTML = emails.map(e => {
+    let sendAfterStr = '—';
+    try{
+      const d = e.sendAfter?.toDate ? e.sendAfter.toDate() : (e.sendAfter ? new Date(e.sendAfter) : null);
+      if(d) sendAfterStr = d.toLocaleString('en-GB',{day:'numeric',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+    }catch(_){}
+
+    const sentLabel = e.sent ? '<span style="color:var(--green);font-size:11px;">✅ Sent</span>'
+                              : '<span style="color:var(--yellow);font-size:11px;">⏳ Pending</span>';
+    return `<div class="donor-card">
+  <div style="flex:1;min-width:0;">
+    <div class="donor-info" style="font-size:12px;word-break:break-all;">${esc(e.recipient||e.email||'—')}</div>
+    <div class="donor-date">Type: ${esc(e.type||'—')} · Step: ${esc(String(e.step||'—'))} · Send after: ${sendAfterStr}</div>
+  </div>
+  <div style="flex-shrink:0;">${sentLabel}</div>
+</div>`;
+  }).join('');
+};
+
 async function sendQueuedEmails(){
   const btn    = document.getElementById('send-queue-btn');
   const status = document.getElementById('queue-status');
@@ -1123,8 +1207,8 @@ async function sendPoolEmail(){
 
 function exportCSV(){
   if(!allAdmWishes.length){ toast('No wishes to export.', 'red'); return; }
-  const rows = [['ID','Wish','Name','Email','Country','Status','Date','GrantCost']];
-  allAdmWishes.forEach(w => {
+  const rows = [['id','wishText','status','country','createdAt','email','cat']];
+  allAdmWishes.filter(w => w.warmup !== true).forEach(w => {
     let dateStr = '';
     try{
       const d = w.createdAt?.toDate ? w.createdAt.toDate() : (w.createdAt ? new Date(w.createdAt) : null);
@@ -1133,12 +1217,11 @@ function exportCSV(){
     rows.push([
       w.id,
       '"' + (w.wishText||'').replace(/"/g,'""') + '"',
-      '"' + (w.name||'').replace(/"/g,'""') + '"',
-      '"' + (w.email||'').replace(/"/g,'""') + '"',
-      '"' + (w.country||'').replace(/"/g,'""') + '"',
       w.status || '',
+      '"' + (w.country||'').replace(/"/g,'""') + '"',
       dateStr,
-      w.grantCost || '',
+      '"' + (w.email||'').replace(/"/g,'""') + '"',
+      '"' + (w.cat||w.category||'').replace(/"/g,'""') + '"',
     ]);
   });
   const csv  = rows.map(r => r.join(',')).join('\r\n');
@@ -1176,6 +1259,7 @@ function loadDemoIfNeeded(){
     setTimeout(() => {
       window.renderAdmin([]);
       window.renderDonors([]);
+      window.renderEmailQueue([]);
       document.getElementById('queue-status').textContent = 'Firebase is not connected. Showing live-empty state only.';
     }, 500);
   }
