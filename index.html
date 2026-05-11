@@ -2761,6 +2761,44 @@ button { touch-action: manipulation; }
   border:1px solid rgba(245,150,50,0.3); border-radius:50px; padding:2px 7px;
   font-family:var(--fn-ui,system-ui); letter-spacing:0.3px;
 }
+.ww-live-toast {
+  position:fixed;
+  bottom:80px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(10,10,15,0.92);
+  border:1px solid rgba(245,200,66,0.25);
+  border-radius:50px;
+  padding:12px 24px;
+  font-size:13px;
+  color:rgba(255,255,255,0.8);
+  font-family:var(--fn-note,serif);
+  font-style:italic;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:999;
+  opacity:0;
+  transition:all 0.4s ease;
+  white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.ww-live-toast.ww-toast-show {
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.ww-toast-dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#F5C842;
+  flex-shrink:0;
+  animation:gpFloat 1.5s ease-in-out infinite;
+}
+@keyframes gpFloat {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
 </style>
 
 </head>
@@ -4579,6 +4617,7 @@ async function sponsorWish(id){
  setTimeout(() => emailInp?.focus(), 120);
  announceA11y('Grant wish form opened. Enter your email to receive a receipt.');
  localStorage.setItem('ww-last-activity', Date.now());
+ showLiveGrantToast(w.country || '');
 }
 
 function closeGuardianModal(){
@@ -6242,6 +6281,29 @@ if(document.readyState === 'loading'){
 } else {
   initLangSwitcher();
 }
+
+/* ============================================================
+ LIVE GRANT TOAST — ephemeral bottom notification on grant
+ ============================================================ */
+function showLiveGrantToast(country) {
+  var existing = document.getElementById('ww-live-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'ww-live-toast';
+  toast.className = 'ww-live-toast';
+  var countryText = country ? ' in ' + country : '';
+  toast.innerHTML = '<span class="ww-toast-dot"></span> A wish just came true' + countryText;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.classList.add('ww-toast-show'); }, 100);
+  setTimeout(function() {
+    toast.classList.remove('ww-toast-show');
+    setTimeout(function() { if(toast.parentNode) toast.remove(); }, 500);
+  }, 8000);
+}
+
+setTimeout(function() {
+  showLiveGrantToast('the UK');
+}, 4000);
 
 </script>
 
