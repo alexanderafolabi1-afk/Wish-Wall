@@ -6305,6 +6305,24 @@ setTimeout(function() {
   showLiveGrantToast('the UK');
 }, 4000);
 
+/* ============================================================
+ VISITOR LOG — writes one entry per page load to localStorage
+ ============================================================ */
+function logVisit() {
+  var log = JSON.parse(localStorage.getItem('ww-visitor-log') || '[]');
+  var entry = {
+    date: new Date().toLocaleDateString('en-GB'),
+    time: new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}),
+    page: window.location.hash || 'home',
+    country: window._detectedCountry || 'Unknown',
+    device: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
+  };
+  log.unshift(entry);
+  if (log.length > 200) log = log.slice(0, 200);
+  localStorage.setItem('ww-visitor-log', JSON.stringify(log));
+}
+logVisit();
+
 </script>
 
 </body>

@@ -276,6 +276,44 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
   .adm-body{padding:16px;}
   .wish-table{display:block;overflow-x:auto;}
 }
+
+/* ADMIN NAV TABS */
+.adm-nav{
+  display:flex;gap:4px;padding:12px 20px 0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+}
+.adm-nav-btn{
+  padding:10px 20px;border:none;border-radius:10px 10px 0 0;
+  background:transparent;color:rgba(255,255,255,.5);
+  font-family:var(--fn);font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.adm-nav-btn.active{background:var(--bg);color:#fff;border-top:2px solid var(--orange);}
+.adm-nav-btn:hover:not(.active){color:rgba(255,255,255,.8);}
+
+/* VISITOR LOG PANEL */
+.vis-panel{padding:24px 20px;}
+.vis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.vis-title{font-size:18px;font-weight:700;color:var(--yellow);}
+.vis-count{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;}
+.vis-clear-btn{
+  padding:8px 16px;border:1px solid var(--red);border-radius:8px;
+  background:transparent;color:var(--red);font-family:var(--fn);font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.vis-clear-btn:hover{background:rgba(255,51,102,.12);}
+.vis-table{width:100%;border-collapse:collapse;font-size:13px;}
+.vis-table th{
+  text-align:left;padding:10px 12px;color:rgba(255,255,255,.5);
+  font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;
+}
+.vis-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.vis-table tr:hover td{background:rgba(255,255,255,.03);}
+.vis-device-badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:600;}
+.vis-device-badge.mobile{background:rgba(0,212,255,.15);color:var(--blue);}
+.vis-device-badge.desktop{background:rgba(0,255,179,.15);color:var(--green);}
+.vis-empty{text-align:center;padding:48px 20px;color:rgba(255,255,255,.35);font-size:14px;line-height:1.6;}
+
 </style>
 </head>
 <body>
@@ -304,7 +342,13 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
     <button class="adm-logout" onclick="logout()">Log out</button>
   </div>
 
-  <div class="adm-body">
+  <!-- Admin Nav Tabs -->
+  <div class="adm-nav">
+    <button class="adm-nav-btn active" id="nav-dashboard" onclick="switchAdmPanel('dashboard')">📊 Dashboard</button>
+    <button class="adm-nav-btn" id="nav-visitors" onclick="switchAdmPanel('visitors')">👥 Visitors</button>
+  </div>
+
+  <div class="adm-body" id="admin-dashboard">
 
     <!-- Stats -->
     <div class="adm-stats">
@@ -365,6 +409,15 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
     </div>
 
   </div>
+
+  <!-- Visitors Panel -->
+  <!-- NOTE: This visitor log uses localStorage which means it only tracks visits on the device
+       where admin.html is viewed. For cross-device visitor tracking, integrate Google Analytics
+       or Plausible Analytics by adding their script tag to index.html. -->
+  <div id="admin-visitors" class="vis-panel" style="display:none">
+    <div id="vis-content"></div>
+  </div>
+
 </div>
 
 <!-- Grant Modal -->
@@ -642,6 +695,66 @@ function toast(msg, type='green'){
 /* ============================================================
    DEMO DATA
    ============================================================ */
+/* ============================================================
+   ADMIN NAV — panel switcher
+   ============================================================ */
+function switchAdmPanel(name) {
+  document.getElementById('admin-dashboard').style.display = name === 'dashboard' ? '' : 'none';
+  document.getElementById('admin-visitors').style.display = name === 'visitors' ? '' : 'none';
+  ['dashboard','visitors'].forEach(function(n) {
+    var btn = document.getElementById('nav-' + n);
+    if(btn) btn.classList.toggle('active', n === name);
+  });
+  if(name === 'visitors') renderVisitorLog();
+}
+
+/* ============================================================
+   VISITOR LOG
+   ============================================================ */
+function renderVisitorLog() {
+  var log = JSON.parse(localStorage.getItem('ww-visitor-log') || '[]');
+  var container = document.getElementById('vis-content');
+  if(!container) return;
+  if(log.length === 0) {
+    container.innerHTML = '<div class=\'vis-empty\'>No visits recorded yet.<br>Visits are tracked when real users visit the site.</div>';
+    return;
+  }
+  var rows = log.map(function(v) {
+    var deviceCls = (v.device || '').toLowerCase() === 'mobile' ? 'mobile' : 'desktop';
+    return '<tr>' +
+      '<td>' + escAdm(v.date || '') + '</td>' +
+      '<td>' + escAdm(v.time || '') + '</td>' +
+      '<td>' + escAdm(v.page || '') + '</td>' +
+      '<td>' + escAdm(v.country || '') + '</td>' +
+      '<td><span class=\'vis-device-badge ' + deviceCls + '\'>' + escAdm(v.device || '') + '</span></td>' +
+    '</tr>';
+  }).join('');
+  container.innerHTML =
+    '<div class=\'vis-header\'>' +
+      '<div><div class=\'vis-title\'>👥 Visitor Log</div>' +
+      '<div class=\'vis-count\'>' + log.length + ' visit' + (log.length !== 1 ? 's' : '') + ' recorded</div></div>' +
+      '<button class=\'vis-clear-btn\' onclick=\'clearVisitorLog()\'>🗑 Clear Log</button>' +
+    '</div>' +
+    '<div style=\'overflow-x:auto;\'>' +
+      '<table class=\'vis-table\'>' +
+        '<thead><tr><th>Date</th><th>Time</th><th>Page</th><th>Country</th><th>Device</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+    '</div>';
+}
+
+function clearVisitorLog() {
+  if(!confirm('Clear all visitor log entries?')) return;
+  localStorage.removeItem('ww-visitor-log');
+  renderVisitorLog();
+}
+
+function escAdm(str) {
+  var d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
 function loadDemoIfNeeded(){
   if(!window._fbReady){
     setTimeout(() => {
