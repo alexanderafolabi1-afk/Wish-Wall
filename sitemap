@@ -3,35 +3,35 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://wishwall.xyz/</loc>
+    <loc>https://wallwishes.xyz/</loc>
     <lastmod>2026-03-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://wishwall.xyz/privacy</loc>
+    <loc>https://wallwishes.xyz/privacy</loc>
     <lastmod>2026-03-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://wishwall.xyz/terms</loc>
+    <loc>https://wallwishes.xyz/terms</loc>
     <lastmod>2026-03-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://wishwall.xyz/cookies</loc>
+    <loc>https://wallwishes.xyz/cookies</loc>
     <lastmod>2026-03-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
 
   <url>
-    <loc>https://wishwall.xyz/contact</loc>
+    <loc>https://wallwishes.xyz/contact</loc>
     <lastmod>2026-04-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>

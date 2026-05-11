@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish Wall Admin 🔐 — wishwall.xyz</title>
+<title>Wish Wall Admin 🔐 — wallwishes.xyz</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="/admin-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
@@ -18,12 +18,12 @@
 
   // ⚠️ Same config as index.html
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
+    authDomain: "wallwishes-79dd2.firebaseapp.com",
+    projectId: "wallwishes-79dd2",
+    storageBucket: "wallwishes-79dd2.firebasestorage.app",
+    messagingSenderId: "496538589706",
+    appId: "1:496538589706:web:bb27da6e931f9155e31df3"
   };
 
   try {
@@ -390,6 +390,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 .ctrl-action-btn{
   width:100%;padding:14px 20px;border-radius:50px;border:1px solid;
   font-family:var(--fn-d);font-size:15px;cursor:pointer;transition:all .2s;
+  min-height:48px;
 }
 .ctrl-btn-pause{background:rgba(255,51,102,.15);color:var(--red);border-color:var(--red);}
 .ctrl-btn-pause:hover{background:var(--red);color:#fff;}
@@ -475,6 +476,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   border:none;background:transparent;color:rgba(255,255,255,.45);
   font-family:var(--fn);font-size:10px;font-weight:700;
   cursor:pointer;padding:4px 0;text-transform:uppercase;letter-spacing:.3px;
+  min-height:48px;
 }
 .mob-nav-btn.on{color:var(--orange);}
 .mob-nav-btn:active{color:var(--yellow);}
@@ -499,6 +501,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .wish-table-wrap{display:none;}
   .wish-cards{display:flex;}
   .adm-search{min-width:100%;}
+  .ctrl-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -513,7 +516,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Unlock ✨</button>
     <p class="login-err" id="login-err"></p>
-    <p class="login-domain">wishwall.xyz · admin@wallwishes.xyz</p>
+    <p class="login-domain">wallwishes.xyz · admin@wallwishes.xyz</p>
   </div>
 </div>
 
@@ -523,7 +526,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   <div class="adm-header">
     <div>
       <span class="adm-logo">🧱 Wish Wall Admin</span>
-      <span class="adm-domain"> · wishwall.xyz</span>
+      <span class="adm-domain"> · wallwishes.xyz</span>
     </div>
     <button class="adm-logout" onclick="logout()">Log out</button>
   </div>
@@ -609,18 +612,18 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
       <!-- ▸ DONATIONS TAB ──────────────────────────────── -->
       <div class="tab-panel" id="tab-donations">
         <!--
-          NOTE: Pot balance is intentionally NOT displayed publicly on wishwall.xyz
+          NOTE: Pot balance is intentionally NOT displayed publicly on wallwishes.xyz
           per platform policy. This admin editor is for internal tracking only.
         -->
         <div class="led-editor">
           <h3>📊 Update Transparency Ledger</h3>
-          <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
+          <p>⚠️ The pot balance is NOT publicly visible on wallwishes.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
           <div class="led-fields">
-            <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="300" min="0"></div>
-            <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="14620" min="0"></div>
-            <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="60" min="0"></div>
-            <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="45" min="0"></div>
-            <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="9720" min="0"></div>
+            <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="0" min="0"></div>
+            <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="0" min="0"></div>
+            <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="0" min="0"></div>
+            <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="0" min="0"></div>
+            <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="0" min="0"></div>
           </div>
           <button class="led-save" onclick="saveLedger()">💾 Save Ledger</button>
           <p class="led-note">Pot balance is stored in Firestore but never served to the public interface.</p>
@@ -714,7 +717,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <h3>💜 Add a Response Stamp</h3>
     <p>For cheeky, funny, or sweet wishes — stamp it with a response. This appears as a small badge on the note.</p>
     <div class="respond-presets">
-      <span class="respond-preset" onclick="setResponse('😂 We love you')">�� We love you</span>
+      <span class="respond-preset" onclick="setResponse('😂 We love you')">😂 We love you</span>
       <span class="respond-preset" onclick="setResponse('🔥 Respect.')">🔥 Respect.</span>
       <span class="respond-preset" onclick="setResponse('💛 We see you')">💛 We see you</span>
       <span class="respond-preset" onclick="setResponse('🌪️ Absolutely not. And yet.')">🌪️ Absolutely not. And yet.</span>
@@ -742,7 +745,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
    ⚠️  For production: replace with Firebase Auth or equivalent
    Contact: admin@wallwishes.xyz
    ============================================================ */
-const ADMIN_PW  = 'wishwall2025'; // ⚠️ CHANGE BEFORE DEPLOYING
+const ADMIN_PW  = 'wallwishes2025'; // ⚠️ CHANGE BEFORE DEPLOYING
 const ADMIN_KEY = 'ww_admin_auth';
 
 let allAdmWishes    = [];
@@ -793,6 +796,8 @@ function switchTab(name){
   document.querySelectorAll('.sidebar-btn, .mob-nav-btn').forEach(b =>
     b.classList.toggle('on', b.dataset.tab === name)
   );
+  const content = document.querySelector('.adm-content');
+  if(content) content.scrollTop = 0;
 }
 
 /* ============================================================
@@ -813,7 +818,7 @@ function updateAdmStats(){
 }
 
 function getFiltered(){
-  let src = allAdmWishes;
+  let src = allAdmWishes.filter(w => w.warmup !== true);
   if(admFilter !== 'all') src = src.filter(w => w.status === admFilter);
   if(admSearch){
     const q = admSearch.toLowerCase();
@@ -971,7 +976,7 @@ async function approve(id){
   try{
     if(window.fbApprove) await window.fbApprove(id);
     else { const w = allAdmWishes.find(x=>x.id===id); if(w) w.status='approved'; updateAdmStats(); paintTable(); paintCards(); }
-    toast('✅ Wish approved and live on wishwall.xyz!');
+    toast('✅ Wish approved and live on wallwishes.xyz!');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
 }
 
@@ -1055,7 +1060,7 @@ async function saveLedger(){
   };
   try{
     if(window.fbUpdateLedger) await window.fbUpdateLedger(data);
-    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wishwall.xyz.');
+    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wallwishes.xyz.');
   } catch(e){ toast('❌ Ledger save failed: '+e.message,'red'); }
 }
 
@@ -1087,7 +1092,7 @@ async function sendQueuedEmails(){
 async function togglePause(){
   const btn     = document.getElementById('ctrl-pause-btn');
   const isPaused = btn.dataset.paused === '1';
-  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wishwall.xyz?')) return;
+  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wallwishes.xyz?')) return;
   try{
     if(window.fbSetConfig) await window.fbSetConfig({ paused: !isPaused });
     else toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
@@ -1169,20 +1174,9 @@ function toast(msg, type='green'){
 function loadDemoIfNeeded(){
   if(!window._fbReady){
     setTimeout(() => {
-      window.renderAdmin([
-        {id:'d1',wishText:"I wish for enough to fix my mum's roof 🏠",name:'Jane D.',email:'jane@example.com',status:'pending',anonymous:false,country:'🇬🇧 UK',createdAt:null},
-        {id:'d2',wishText:"I wish to finally finish my novel 📖",name:'',email:'anon@example.com',status:'approved',anonymous:true,country:'🌍 Global',createdAt:null},
-        {id:'d3',wishText:"My ex sees me thriving and it haunts him gently. Forever 💅",name:'',email:'anon2@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',createdAt:null},
-        {id:'d4',wishText:"I wish my dog gets better soon 🐕",name:'Tom S.',email:'tom@example.com',status:'granted',anonymous:false,country:'🇬🇧 UK',createdAt:null,grantCost:35},
-        {id:'d5',wishText:"Help me reach my car fund. Rural area — no car means no job 🚗",name:'',email:'anon3@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',createdAt:null},
-        {id:'d6',wishText:"Just a hug from someone who means it. That's it. 🤗",name:'',email:'anon4@example.com',status:'granted',anonymous:true,country:'🌍 Global',createdAt:null,cheekyResponse:'💛 We see you'},
-        {id:'d7',wishText:"Connect me to a food bank in my area — just moved, have nothing 🤝",name:'',email:'anon5@example.com',status:'approved',anonymous:true,country:'🇬🇧 UK',isConnect:true,createdAt:null},
-      ]);
-      window.renderDonors([
-        {id:'don1',amount:50,name:'Sarah M.',email:'sarah@example.com',createdAt:null},
-        {id:'don2',amount:25,name:'Anonymous',email:'',createdAt:null},
-        {id:'don3',amount:100,name:'James K.',email:'james@example.com',createdAt:null},
-      ]);
+      window.renderAdmin([]);
+      window.renderDonors([]);
+      document.getElementById('queue-status').textContent = 'Firebase is not connected. Showing live-empty state only.';
     }, 500);
   }
 }
