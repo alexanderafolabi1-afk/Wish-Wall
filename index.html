@@ -6143,8 +6143,7 @@ window.renderWishes = function(rawWishes){
  // (avoids erasing a live wall due to a transient empty snapshot).
  if(rawWishes.length === 0 && window.allWishes?.length > 0) return;
  const wishes = getDisplayWishes(rawWishes);
- allWishes = wishes;
- window.allWishes = allWishes;
+ window.allWishes = allWishes = wishes;
  window._lastWishes = rawWishes || []; // keep real wishes separately
  updateStats(rawWishes);
  paintWall();
@@ -8579,11 +8578,8 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
  ============================================================ */
 
 // Base values replaced by live Firebase data when connected
-let liveStats = {
- granted: 185,
- guardians: 158,
- countries: 18,
-};
+const DEFAULT_LIVE_STATS = { granted: 185, guardians: 158, countries: 18 };
+let liveStats = { ...DEFAULT_LIVE_STATS };
 
 function animLiveNum(id, target, prefix='', suffix='', duration=900){
  const el = document.getElementById(id);
@@ -8610,9 +8606,9 @@ function renderLiveStats(){
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
  const d = data || {
-  totalGranted: liveStats.granted,
-  totalGuardians: liveStats.guardians,
-  totalCountries: liveStats.countries,
+  totalGranted: DEFAULT_LIVE_STATS.granted,
+  totalGuardians: DEFAULT_LIVE_STATS.guardians,
+  totalCountries: DEFAULT_LIVE_STATS.countries,
  };
  const totalGranted = Number(d.totalGranted);
  const totalGuardians = Number(d.totalGuardians);
