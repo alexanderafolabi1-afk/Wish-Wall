@@ -534,7 +534,7 @@
           name: d.name || 'Anonymous',
           flag: d.flag || '🌍',
           amount: Number(d.amount) || 0,
-          grantedAt: d.createdAt?.toDate ? d.createdAt.toDate().toISOString() : null,
+          donatedAt: d.createdAt?.toDate ? d.createdAt.toDate().toISOString() : null,
         }));
       window._lbDonors = donors;
       if (typeof window.paintLBWithTabs === 'function') window.paintLBWithTabs(donors);
@@ -7572,12 +7572,12 @@ function switchLBTab(mode){
 function paintLBWithTabs(donors){
  window._lbDonors = donors;
  let data = Array.isArray(donors) ? donors : [];
- if(_lbMode === 'month'){
-  const monthStart = new Date();
-  monthStart.setDate(1); monthStart.setHours(0,0,0,0);
-  const filtered = data.filter(d => d.grantedAt ? new Date(d.grantedAt) >= monthStart : false);
-  data = filtered.length > 0 ? filtered : [];
- }
+  if(_lbMode === 'month'){
+   const monthStart = new Date();
+   monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+   const filtered = data.filter(d => d.donatedAt ? new Date(d.donatedAt) >= monthStart : false);
+   data = filtered.length > 0 ? filtered : [];
+  }
  paintLB(data);
 }
 

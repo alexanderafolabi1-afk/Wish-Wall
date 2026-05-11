@@ -74,7 +74,10 @@ exports.handler = async (event) => {
     for (const docSnap of dueDocs) {
       const data = docSnap.data() || {};
       const to = String(data.email || '').trim();
-      if (!EMAIL_RE.test(to)) continue;
+      if (!EMAIL_RE.test(to)) {
+        console.warn(`Skipping invalid queued email recipient on ${docSnap.id}: ${to || '<empty>'}`);
+        continue;
+      }
 
       let wishText = 'Your wish';
       if (data.wishId) {
@@ -88,7 +91,8 @@ exports.handler = async (event) => {
         }
       }
 
-      const step = Number(data.step || 1);
+      const rawStep = Number(data.step || 1);
+      const step = rawStep === 2 ? 2 : 1;
       const subject = step === 1
         ? '💛 Your wish is now on The Wish Wall'
         : '✨ We are still rooting for your wish';
