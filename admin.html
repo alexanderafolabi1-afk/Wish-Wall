@@ -80,7 +80,7 @@
       if (!snap.exists()) return;
       const data = snap.data();
       const poolEl = document.getElementById('a-pool');
-      if (poolEl) poolEl.textContent = '$' + (data.potBalance || 0).toLocaleString();
+      if (poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
       const fields = {
         'l-fees': data.totalFees, 'l-don': data.totalDonations,
         'l-gr':   data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance,
@@ -103,11 +103,7 @@
       }
     }, err => console.error('Config snapshot error:', err.message));
 
-    // ── Email queue: live list in Emails tab ──────────────────────────────
-    const emailQ = query(collection(db, 'email_queue'), orderBy('createdAt', 'desc'));
-    onSnapshot(emailQ, snap => {
-      window.renderEmailQueue(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, err => console.error('Email queue snapshot error:', err.message));
+    // email_queue is fetched on-demand via adminFetch (PII: not exposed client-side)
 
     window._fbReady = true;
   } catch(e) {
@@ -577,11 +573,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
           <h3>📊 Update Transparency Ledger</h3>
           <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
           <div class="led-fields">
-            <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="300" min="0"></div>
-            <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="14620" min="0"></div>
-            <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="60" min="0"></div>
-            <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="45" min="0"></div>
-            <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="9720" min="0"></div>
+            <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="0" min="0"></div>
+            <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="0" min="0"></div>
+            <div class="led-field"><label>Wishes Granted</label><input type="number" id="l-gr" value="0" min="0"></div>
+            <div class="led-field"><label>Avg Cost Per Wish (£)</label><input type="number" id="l-avg" value="0" min="0"></div>
+            <div class="led-field"><label>Pot Balance (£) — Internal</label><input type="number" id="l-pot" value="0" min="0"></div>
           </div>
           <button class="led-save" onclick="saveLedger()">💾 Save Ledger</button>
           <p class="led-note">Pot balance is stored in Firestore but never served to the public interface.</p>
@@ -601,9 +597,9 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
           <button class="led-save" id="send-queue-btn" onclick="sendQueuedEmails()" style="background:rgba(0,196,132,.2);border-color:#00c484;">📤 Send Queued Emails</button>
           <span id="queue-status" style="font-size:12px;color:rgba(255,255,255,.5);margin-left:12px;"></span>
         </div>
-        <h3 class="sec-h">📋 Live Email Queue</h3>
+        <h3 class="sec-h">📋 Email Queue <button onclick="refreshEmailQueue()" style="font-size:11px;padding:4px 10px;margin-left:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:rgba(255,255,255,.7);cursor:pointer;">🔄 Refresh</button></h3>
         <div class="donor-list" id="email-queue-list">
-          <div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Loading queue...</div>
+          <div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Click Refresh to load queue.</div>
         </div>
       </div>
 
@@ -666,7 +662,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <h3>✅😊 Mark as Granted</h3>
     <p>Record the guardian email and cost. Emails will be sent to both the wisher and guardian. The note will be ticked green with a smile on the wall.</p>
     <input class="grant-inp" type="email" id="grant-guardian-email" placeholder="Guardian email (optional)">
-    <input class="grant-inp" type="number" id="grant-cost" placeholder="Cost in $ (optional)" min="0">
+    <input class="grant-inp" type="number" id="grant-cost" placeholder="Cost in £ (optional)" min="0">
     <div class="grant-btns">
       <button class="grant-ok" onclick="confirmGrant()">Grant It ✨</button>
       <button class="grant-cancel" onclick="closeGrantModal()">Cancel</button>
@@ -680,7 +676,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <h3>💜 Add a Response Stamp</h3>
     <p>For cheeky, funny, or sweet wishes — stamp it with a response. This appears as a small badge on the note.</p>
     <div class="respond-presets">
-      <span class="respond-preset" onclick="setResponse('😂 We love you')">�� We love you</span>
+      <span class="respond-preset" onclick="setResponse('😂 We love you')">😂 We love you</span>
       <span class="respond-preset" onclick="setResponse('🔥 Respect.')">🔥 Respect.</span>
       <span class="respond-preset" onclick="setResponse('💛 We see you')">💛 We see you</span>
       <span class="respond-preset" onclick="setResponse('🌪️ Absolutely not. And yet.')">🌪️ Absolutely not. And yet.</span>
@@ -971,6 +967,17 @@ window.renderEmailQueue = function(emails){
 </div>`;
   }).join('');
 };
+
+async function refreshEmailQueue(){
+  const el = document.getElementById('email-queue-list');
+  if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Loading…</div>';
+  try{
+    const res = await adminFetch('getEmailQueue');
+    window.renderEmailQueue(res.docs || []);
+  }catch(err){
+    if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,100,100,.6);">Failed to load: '+esc(err.message)+'</div>';
+  }
+}
 
 /* ============================================================
    FILTER & SEARCH

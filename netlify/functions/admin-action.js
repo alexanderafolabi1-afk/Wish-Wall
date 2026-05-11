@@ -92,15 +92,28 @@ exports.handler = async (event) => {
 
       case 'flushQueue': {
         const snap = await db.collection('wishes').where('status', '==', 'queued').get();
-        if (!snap.empty) {
+        let total = 0;
+        const CHUNK = 500;
+        for (let i = 0; i < snap.docs.length; i += CHUNK) {
           const batch = db.batch();
-          snap.docs.forEach(d => batch.update(d.ref, {
+          snap.docs.slice(i, i + CHUNK).forEach(d => batch.update(d.ref, {
             status:     'approved',
             approvedAt: FieldValue.serverTimestamp(),
           }));
           await batch.commit();
+          total += Math.min(CHUNK, snap.docs.length - i);
         }
-        return { statusCode: 200, body: JSON.stringify({ ok: true, count: snap.size }) };
+        return { statusCode: 200, body: JSON.stringify({ ok: true, count: total }) };
+      }
+
+      case 'getEmailQueue': {
+        const snap = await db.collection('email_queue')
+          .orderBy('createdAt', 'desc').limit(200).get();
+        const docs = snap.docs.map(d => ({ id: d.id, ...d.data(),
+          createdAt: d.data().createdAt?.toDate?.()?.toISOString() || null,
+          sendAfter:  d.data().sendAfter?.toDate?.()?.toISOString()  || null,
+        }));
+        return { statusCode: 200, body: JSON.stringify({ ok: true, docs }) };
       }
 
       default:
