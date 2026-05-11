@@ -94,6 +94,17 @@ exports.handler = async (event) => {
           updatedAt:       admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
 
+        // Record in donors collection
+        await db.collection('donors').add({
+          name:      customerEmail || 'Anonymous',
+          email:     customerEmail || '',
+          amount:    parseFloat(amountTotal),
+          currency,
+          type:      'grant',
+          wishId,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
         // Fetch wish data for the email
         const wishSnap = await wishRef.get();
         const wishData = wishSnap.exists ? wishSnap.data() : {};
@@ -152,6 +163,17 @@ exports.handler = async (event) => {
           updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
 
+        // Record in donors collection
+        await db.collection('donors').add({
+          name:      customerEmail || 'Anonymous',
+          email:     customerEmail || '',
+          amount:    parseFloat(amountTotal),
+          currency,
+          type:      'pin',
+          wishId,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
         // Email to wisher
         if (customerEmail) {
           await sendEmail({
@@ -178,6 +200,16 @@ exports.handler = async (event) => {
           totalDonations: admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
           updatedAt:      admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
+
+        // Record in donors collection
+        await db.collection('donors').add({
+          name:      customerEmail || 'Anonymous',
+          email:     customerEmail || '',
+          amount:    parseFloat(amountTotal),
+          currency,
+          type:      'pot',
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
 
         if (customerEmail) {
           await sendEmail({
