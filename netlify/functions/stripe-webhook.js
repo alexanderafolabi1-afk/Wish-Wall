@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
-const FROM_EMAIL    = 'hello@wallwishes.xyz';
+const FROM_EMAIL    = 'hello@wishwall.xyz';
 const FROM_NAME     = 'The Wish Wall';
 
 async function sendEmail({ to, subject, htmlContent }) {
@@ -101,9 +101,7 @@ exports.handler = async (event) => {
           updatedAt:       admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
 
-        // Write to donors collection
-        // customer_details.name is available on checkout.session.completed;
-        // payment_intent.succeeded carries customer info in metadata instead.
+        // Record in donors collection
         const customerName = isPaymentIntent
           ? (session.metadata?.customer_name || session.metadata?.name || 'Guardian')
           : (session.customer_details?.name || 'Guardian');
@@ -113,14 +111,15 @@ exports.handler = async (event) => {
         const flag = countryFlag(customerCountryCode);
         await db.collection('donors').add({
           name:      customerName,
+          email:     customerEmail || '',
           amount:    parseFloat(amountTotal),
+          currency,
           country:   customerCountryCode ? `${flag} ${customerCountryCode}` : '🌍 Global',
           flag,
-          type:      'individual',
+          type:      'grant',
+          wishId,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        }).catch(err => console.error(
-          `Failed to write donor record for ${customerName} £${amountTotal}:`, err
-        ));
+        });
 
         // Fetch wish data for the email
         const wishSnap = await wishRef.get();
@@ -173,6 +172,24 @@ exports.handler = async (event) => {
           updatedAt:      admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
 
+        const potName = isPaymentIntent
+          ? (session.metadata?.customer_name || session.metadata?.name || 'Contributor')
+          : (session.customer_details?.name || 'Contributor');
+        const potCC = isPaymentIntent
+          ? (session.metadata?.country || '')
+          : (session.customer_details?.address?.country || '');
+        const potFlag = countryFlag(potCC);
+        await db.collection('donors').add({
+          name:      potName,
+          email:     customerEmail || '',
+          amount:    parseFloat(amountTotal),
+          currency,
+          country:   potCC ? `${potFlag} ${potCC}` : '🌍 Global',
+          flag:      potFlag,
+          type:      'pot',
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
         if (customerEmail) {
           await sendEmail({
             to:          customerEmail,
@@ -189,7 +206,7 @@ exports.handler = async (event) => {
         console.error('Error processing pot contribution:', err);
       }
 
-    } else if (clientRef && !clientRef.startsWith('pot_')) {
+    } else if (clientRef) {
       // ── Pin payment: mark wish as approved ─────────────────────────────
       const wishId = clientRef;
       try {
@@ -197,7 +214,6 @@ exports.handler = async (event) => {
         await wishRef.update({
           status:     'approved',
           approvedAt: admin.firestore.FieldValue.serverTimestamp(),
-          paidAt:     admin.firestore.FieldValue.serverTimestamp(),
         });
 
         // Update ledger fees
@@ -206,6 +222,17 @@ exports.handler = async (event) => {
           totalFees: admin.firestore.FieldValue.increment(parseFloat(amountTotal)),
           updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
+
+        // Record in donors collection
+        await db.collection('donors').add({
+          name:      customerEmail || 'Anonymous',
+          email:     customerEmail || '',
+          amount:    parseFloat(amountTotal),
+          currency,
+          type:      'pin',
+          wishId,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
 
         // Email to wisher
         if (customerEmail) {
@@ -223,7 +250,6 @@ exports.handler = async (event) => {
       } catch (err) {
         console.error('Error processing pin payment:', err);
       }
-
     }
   }
 
