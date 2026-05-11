@@ -727,8 +727,10 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   <div class="grant-box">
     <h3>✅😊 Mark as Granted</h3>
     <p>Enter the guardian's email (optional) and cost. The note will be ticked green on the wall.</p>
-    <input class="grant-inp" type="email" id="grant-email" placeholder="Guardian email (optional)">
-    <input class="grant-inp" type="number" id="grant-cost" placeholder="Cost in £ (optional)" min="0">
+    <label for="grant-email" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:6px;">Guardian Email (optional)</label>
+    <input class="grant-inp" type="email" id="grant-email" placeholder="guardian@example.com">
+    <label for="grant-cost" style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:6px;">Cost in £ (optional)</label>
+    <input class="grant-inp" type="number" id="grant-cost" placeholder="0.00" min="0">
     <div class="grant-btns">
       <button class="grant-ok" onclick="confirmGrant()">Grant It ✨</button>
       <button class="grant-cancel" onclick="closeGrantModal()">Cancel</button>
