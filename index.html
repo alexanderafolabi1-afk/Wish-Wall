@@ -493,10 +493,12 @@
     window.renderWishes([..._mainWallWishes, ...extra]);
   }
 
-  const q = query(window._col.wishes, where('status', 'in', ['approved', 'granted']), orderBy('createdAt', 'desc'));
+  const q = query(window._col.wishes, orderBy('createdAt', 'desc'));
   onSnapshot(q,
     snap => {
-      _mainWallWishes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      _mainWallWishes = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(w => w.status === 'approved' || w.status === 'granted');
       _mergeAndRenderWall();
     },
     err => {
@@ -519,6 +521,25 @@
       if (_paidFallbackWishes.length > 0) _mergeAndRenderWall();
     },
     err => console.warn('paidAt fallback snapshot error:', err.message)
+  );
+
+  // Live donor leaderboard data
+  const donorQ = query(window._col.donors, orderBy('createdAt', 'desc'), limit(200));
+  onSnapshot(donorQ,
+    snap => {
+      const donors = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(d => Number(d.amount) > 0)
+        .map(d => ({
+          name: d.name || 'Anonymous',
+          flag: d.flag || '🌍',
+          amount: Number(d.amount) || 0,
+          grantedAt: d.createdAt?.toDate ? d.createdAt.toDate().toISOString() : null,
+        }));
+      window._lbDonors = donors;
+      if (typeof window.paintLBWithTabs === 'function') window.paintLBWithTabs(donors);
+    },
+    err => console.warn('Donor leaderboard snapshot error:', err.message)
   );
 
  // Ledger listener — pot balance now rendered publicly via s-pot
@@ -6170,50 +6191,19 @@ function paintWall(){
  }
 
  const isFiltering = curFilter !== 'all' || searchQ;
-
  if(isFiltering){
- grid.innerHTML = src.length
- ? src.map((w,i) => noteHTML(w,i)).join('')
- : '<div class="wall-empty" style="grid-column:1/-1">✨ No wishes found matching that search.</div>';
- return;
+  grid.innerHTML = src.length
+  ? src.map((w,i) => noteHTML(w,i)).join('')
+  : '<div class="wall-empty" style="grid-column:1/-1">✨ No wishes found matching that search.</div>';
+  return;
  }
 
- /* ── 3-zone layout ─────────────────────────────────────────────
-  Zone 1 (slots 0–184) : 185 granted warmup wishes, colourful rotating sticky notes
-  Zone 2 (slots 185+)  : real Firebase approved/granted wishes
-  Zone 3 (remaining)   : placeholder notes — opacity 0.45, not clickable
-  ─────────────────────────────────────────────── */
- const realApproved = (window._lastWishes || []).filter(w =>
- !w.warmup && !DEMO_IDS.has(w.id) &&
- (w.status === 'approved' || w.status === 'granted')
- );
-
- const cells = [];
- for(let i = 0; i < WALL_CAPACITY; i++){
- const col = i % WALL_COLS;
- const row = Math.floor(i / WALL_COLS);
- const tilePosX = -(col * TILE_W);
- const tilePosY = -(row * TILE_H);
- const tileStyle = MOSAIC_IMAGE_URL
- ? `--tile-fragment:url('${MOSAIC_IMAGE_URL}');--tile-pos:${tilePosX}px ${tilePosY}px;`
- : '';
-
- if(i < 185){
-  // Zone 1: granted warmup wish — colourful sticky notes rotating through all 6 note colours
-  const w = { ...DEMO_RAW[i], color: NOTE_COLS[i % NOTE_COLS.length] };
-  cells.push(noteHTML(w, i, tileStyle));
- } else {
-  const realIdx = i - 185;
-  if(realIdx < realApproved.length){
-  // Zone 2: real Firebase approved wish (glowing pin, clickable)
-  cells.push(noteHTML(realApproved[realIdx], i, tileStyle));
-  } else {
-  // Zone 3: placeholder note
-  cells.push(placeholderNoteHTML(i, tileStyle));
-  }
+ if(!src.length){
+  grid.innerHTML = '<div class="wall-empty" style="grid-column:1/-1">✨ No live wishes yet. Be the first to post one.</div>';
+  return;
  }
- }
- grid.innerHTML = cells.join('');
+
+ grid.innerHTML = src.map((w,i) => noteHTML(w,i)).join('');
 }
 function noteHTML(w, i, tileStyle=''){
  const color = w.color || NOTE_COLS[i % NOTE_COLS.length];
@@ -7581,12 +7571,12 @@ function switchLBTab(mode){
 
 function paintLBWithTabs(donors){
  window._lbDonors = donors;
- let data = donors || DEMO_LB;
+ let data = Array.isArray(donors) ? donors : [];
  if(_lbMode === 'month'){
   const monthStart = new Date();
   monthStart.setDate(1); monthStart.setHours(0,0,0,0);
   const filtered = data.filter(d => d.grantedAt ? new Date(d.grantedAt) >= monthStart : false);
-  data = filtered.length > 0 ? filtered : data.filter(d => !d.type);
+  data = filtered.length > 0 ? filtered : [];
  }
  paintLB(data);
 }
@@ -7673,7 +7663,12 @@ const CORP_SPONSORS = [
 function paintLB(donors){
  const list = document.getElementById('lb-list');
  if (!list) return;
- const data = (donors || DEMO_LB).slice(0, 158);
+ const data = (Array.isArray(donors) ? donors : []).slice(0, 158);
+ if(data.length === 0){
+  list.innerHTML = '<div class="lb-summary">No Guardian activity yet.</div>';
+  return;
+ }
+ const flags = [...new Set(data.map(d => d.flag || '🌍'))].slice(0, 6).join('');
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
  const COLLAPSED = 12;
@@ -7686,8 +7681,8 @@ function paintLB(donors){
 </div>`).join('');
 
  list.innerHTML =
-  `<div class="lb-summary">158 Guardians from 🇺🇸🇬🇧🇨🇦🇩🇪🇫🇷🇳🇱 and beyond</div>` +
-  `<div class="lb-grid" id="lb-grid">${cardHTML}</div>` +
+  `<div class="lb-summary">${data.length} Guardians${flags ? ` from ${flags}` : ''} and beyond</div>` +
+  `<div class="lb-grid" id="lb-grid" data-total="${data.length}">${cardHTML}</div>` +
   (data.length > COLLAPSED ? `<div class="lb-expand-wrap"><button class="lb-expand-btn" id="lb-expand-btn" onclick="toggleLbExpand()">Show all ${data.length} Guardians ↓</button></div>` : '');
 
  const visible = list.querySelectorAll('.lb-card:not(.lb-card--hidden)');
@@ -7718,16 +7713,17 @@ function toggleLbExpand(){
   } else {
    grid.querySelectorAll('.lb-card:not(.revealed)').forEach(c => c.classList.add('revealed'));
   }
- } else {
-   const cards = grid.querySelectorAll('.lb-card');
-   cards.forEach((c, i) => {
-    if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
-   });
-   btn.textContent = `Show all 158 Guardians ↓`;
-   lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    const cards = grid.querySelectorAll('.lb-card');
+    const total = Number(grid.dataset.total || cards.length || 0);
+    cards.forEach((c, i) => {
+     if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
+    });
+    btn.textContent = `Show all ${total} Guardians ↓`;
+    lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
-setTimeout(() => paintLB(null), 100);
+setTimeout(() => paintLB([]), 100);
 setTimeout(() => paintCorpSponsors(), 100);
 
 function openModal(){
@@ -8545,20 +8541,18 @@ const WARMUP_WISHES = (function(){
 
 // Merge warmup into demo data, always pad to fill all 1000 slots
 function getDisplayWishes(realWishes){
- // Always include the 185 DEMO_RAW granted wishes (Zone 1).
- // Filter out warmup and demo-seed items from real Firebase wishes.
- const real = (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
- return [...DEMO_RAW, ...real];
+ // Only render real wishes from Firestore on the live wall.
+ return (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
 }
-function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes(DEMO); } }, 3000); }
+function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes([]); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
 
 // Safety net: if Firebase connected but the wall is still blank after 6 s
 // (e.g. Firestore index still building caused an error), render warmup data.
 setTimeout(() => {
   if(!window.allWishes || window.allWishes.length === 0) {
-    console.warn('Wall safety fallback: rendering warmup data');
-    window.renderWishes(DEMO);
+    console.warn('Wall safety fallback: rendering empty live state');
+    window.renderWishes([]);
   }
 }, 6000);
 
@@ -8581,9 +8575,9 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
 
 // Base values replaced by live Firebase data when connected
 let liveStats = {
- granted: 185,
- guardians: 158,
- countries: 18,
+ granted: 0,
+ guardians: 0,
+ countries: 0,
 };
 
 function animLiveNum(id, target, prefix='', suffix='', duration=900){
