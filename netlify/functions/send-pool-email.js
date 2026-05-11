@@ -53,7 +53,8 @@ exports.handler = async (event) => {
   let balance = 0;
   try {
     const body = event.body ? JSON.parse(event.body) : {};
-    balance = Number(body.balance || 0);
+    const parsed = Number(body.balance || 0);
+    balance = Number.isFinite(parsed) ? parsed : 0;
   } catch (err) {
     console.warn('send-pool-email: invalid JSON body, defaulting balance to 0:', err.message);
   }
