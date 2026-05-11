@@ -7699,7 +7699,8 @@ function paintLB(donors){
 function toggleLbExpand(){
  const grid = document.getElementById('lb-grid');
  const btn = document.getElementById('lb-expand-btn');
- if(!grid || !btn) return;
+ const lbList = document.getElementById('lb-list');
+ if (!grid || !btn || !lbList) return;
  const hidden = grid.querySelectorAll('.lb-card--hidden');
  if(hidden.length > 0){
   hidden.forEach(c => { c.classList.remove('lb-card--hidden'); c.removeAttribute('aria-hidden'); });
@@ -7718,8 +7719,7 @@ function toggleLbExpand(){
     if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
    });
    btn.textContent = `Show all 158 Guardians ↓`;
-   const lbList = document.getElementById('lb-list');
-   if (lbList) lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 setTimeout(() => paintLB(null), 100);
