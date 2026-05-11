@@ -2736,6 +2736,20 @@ button { touch-action: manipulation; }
   transform: translateY(-2px);
   box-shadow: 0 8px 36px rgba(245, 200, 66, 0.5);
 }
+.gp-aging .note-inner {
+  box-shadow: 0 0 0 2px rgba(245,150,50,0.3), var(--shadow-note);
+  animation: gpAgingPulse 3s ease-in-out infinite;
+}
+@keyframes gpAgingPulse {
+  0%,100%{box-shadow:0 0 0 2px rgba(245,150,50,0.3),var(--shadow-note)}
+  50%{box-shadow:0 0 0 4px rgba(245,150,50,0.5),var(--shadow-note)}
+}
+.gp-expiry-badge {
+  position:absolute; bottom:8px; right:8px; font-size:9px; font-weight:700;
+  color:rgba(200,100,20,0.8); background:rgba(245,150,50,0.12);
+  border:1px solid rgba(245,150,50,0.3); border-radius:50px; padding:2px 7px;
+  font-family:var(--fn-ui,system-ui); letter-spacing:0.3px;
+}
 </style>
 
 </head>
@@ -4264,8 +4278,12 @@ function noteHTML(w, i, tileStyle=''){
  }
 
  const statusCls = granted ? 'is-granted is-real' : 'is-real';
+ const idNum = parseInt((w.id || '').replace(/\D/g, '')) || 0;
+ const isAging = idNum >= 51 && idNum <= 100;
+ const agingClass = isAging ? ' gp-aging' : '';
+ const agingBadge = isAging ? `<span class="gp-expiry-badge">Waiting 48+ hours</span>` : '';
  return `
-<div class="note-card ${color} ${statusCls}"
+<div class="note-card ${color} ${statusCls}${agingClass}"
  style="--rot:${rot}deg;${tileStyle}"
  data-id="${safeId}"
  onclick="openWishDetail('${safeId}')"
@@ -4278,6 +4296,7 @@ function noteHTML(w, i, tileStyle=''){
  ${w.country ? `<span class="note-country">${esc(w.country)}</span>` : ''}
  ${grantedBadge}${connectDot}
  </div>
+ ${agingBadge}
  </div>
 </div>`;
 }
