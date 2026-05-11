@@ -8609,7 +8609,11 @@ function renderLiveStats(){
 
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
- const d = data || {};
+ const d = data || {
+  totalGranted: liveStats.granted,
+  totalGuardians: liveStats.guardians,
+  totalCountries: liveStats.countries,
+ };
  const totalGranted = Number(d.totalGranted);
  const totalGuardians = Number(d.totalGuardians);
  const totalCountries = Number(d.totalCountries);
