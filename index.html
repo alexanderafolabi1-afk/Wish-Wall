@@ -7667,6 +7667,7 @@ const CORP_SPONSORS = [
 
 function paintLB(donors){
  const list = document.getElementById('lb-list');
+ if (!list) return;
  const data = (donors || DEMO_LB).slice(0, 158);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
@@ -7698,7 +7699,8 @@ function paintLB(donors){
 function toggleLbExpand(){
  const grid = document.getElementById('lb-grid');
  const btn = document.getElementById('lb-expand-btn');
- if(!grid || !btn) return;
+ const lbList = document.getElementById('lb-list');
+ if (!grid || !btn || !lbList) return;
  const hidden = grid.querySelectorAll('.lb-card--hidden');
  if(hidden.length > 0){
   hidden.forEach(c => { c.classList.remove('lb-card--hidden'); c.removeAttribute('aria-hidden'); });
@@ -7712,13 +7714,13 @@ function toggleLbExpand(){
    grid.querySelectorAll('.lb-card:not(.revealed)').forEach(c => c.classList.add('revealed'));
   }
  } else {
-  const cards = grid.querySelectorAll('.lb-card');
-  cards.forEach((c, i) => {
-   if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
-  });
-  btn.textContent = `Show all 158 Guardians ↓`;
-  document.getElementById('lb-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
- }
+   const cards = grid.querySelectorAll('.lb-card');
+   cards.forEach((c, i) => {
+    if(i >= 12){ c.classList.add('lb-card--hidden'); c.classList.remove('revealed'); }
+   });
+   btn.textContent = `Show all 158 Guardians ↓`;
+   lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 setTimeout(() => paintLB(null), 100);
 setTimeout(() => paintCorpSponsors(), 100);
