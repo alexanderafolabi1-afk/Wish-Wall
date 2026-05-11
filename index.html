@@ -7667,7 +7667,7 @@ const CORP_SPONSORS = [
 
 function paintLB(donors){
  const list = document.getElementById('lb-list');
- if(!list) return;
+ if (!list) return;
  const data = (donors || DEMO_LB).slice(0, 158);
  const medals = ['🥇','🥈','🥉'];
  const rankCls = ['gold','silver','bronze'];
@@ -7719,7 +7719,7 @@ function toggleLbExpand(){
    });
    btn.textContent = `Show all 158 Guardians ↓`;
    const lbList = document.getElementById('lb-list');
-   if(lbList) lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   if (lbList) lbList.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 setTimeout(() => paintLB(null), 100);
