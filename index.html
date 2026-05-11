@@ -6143,7 +6143,7 @@ window.renderWishes = function(rawWishes){
  // (avoids erasing a live wall due to a transient empty snapshot).
  if(rawWishes.length === 0 && window.allWishes?.length > 0) return;
  const wishes = getDisplayWishes(rawWishes);
- window.allWishes = wishes;
+ window.allWishes = allWishes = wishes;
  window._lastWishes = rawWishes || []; // keep real wishes separately
  updateStats(rawWishes);
  paintWall();
@@ -6432,15 +6432,18 @@ function filterWishes(){
 /* ============================================================
  STATS pot balance NOT publicly displayed per brief
  ============================================================ */
-function updateStats(){
- const PLATFORM = window._platformStats || { total: 1000, granted: 185 };
- const total = window._firebaseReady ? allWishes.length : PLATFORM.total;
- const granted = window._firebaseReady ? allWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
- animNum('s-total', total);
- animNum('s-granted', granted);
- // Public stat pills: Guardians and Countries (sourced from liveStats, updated by Firebase ledger)
- animNum('s-guardians', liveStats.guardians);
- animNum('s-countries', liveStats.countries);
+function updateStats(rawWishes){
+  const PLATFORM = window._platformStats || { total: 1000, granted: 185 };
+  const liveWishes = (Array.isArray(rawWishes) ? rawWishes : window._lastWishes || [])
+   .filter(w => !w.warmup && !DEMO_IDS.has(w.id));
+  const hasLiveData = window._firebaseReady && liveWishes.length > 0;
+  const total = hasLiveData ? liveWishes.length : PLATFORM.total;
+  const granted = hasLiveData ? liveWishes.filter(w => w.status === 'granted').length : PLATFORM.granted;
+  animNum('s-total', total);
+  animNum('s-granted', granted);
+  // Public stat pills: Guardians and Countries (sourced from liveStats, updated by Firebase ledger)
+  animNum('s-guardians', liveStats.guardians);
+  animNum('s-countries', liveStats.countries);
  // Pot balance is internal only, not rendered to any public element
  updateMilestone(total);
 }
@@ -8541,8 +8544,9 @@ const WARMUP_WISHES = (function(){
 
 // Merge warmup into demo data, always pad to fill all 1000 slots
 function getDisplayWishes(realWishes){
- // Only render real wishes from Firestore on the live wall.
- return (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
+ const liveWishes = (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
+ if(liveWishes.length > 0) return liveWishes;
+ return WARMUP_WISHES;
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes([]); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
@@ -8574,11 +8578,8 @@ document.getElementById('footer-year').textContent = new Date().getFullYear();
  ============================================================ */
 
 // Base values replaced by live Firebase data when connected
-let liveStats = {
- granted: 0,
- guardians: 0,
- countries: 0,
-};
+const DEFAULT_LIVE_STATS = { granted: 185, guardians: 158, countries: 18 };
+let liveStats = { ...DEFAULT_LIVE_STATS };
 
 function animLiveNum(id, target, prefix='', suffix='', duration=900){
  const el = document.getElementById(id);
@@ -8604,16 +8605,25 @@ function renderLiveStats(){
 
 // Update live stats from Firebase ledger
 window.updateLedger = function(data){
- const d = data || { totalGranted: 185 };
+ const d = data || {
+  totalGranted: DEFAULT_LIVE_STATS.granted,
+  totalGuardians: DEFAULT_LIVE_STATS.guardians,
+  totalCountries: DEFAULT_LIVE_STATS.countries,
+ };
+ const totalGranted = Number(d.totalGranted);
+ const totalGuardians = Number(d.totalGuardians);
+ const totalCountries = Number(d.totalCountries);
  const fmt = n => Number(n ?? 0).toLocaleString('en-US');
 
  // Public ledger cards
- const ledGr = document.getElementById('led-gr'); if(ledGr) ledGr.textContent = fmt(d.totalGranted);
+ const ledGr = document.getElementById('led-gr');
+ if(ledGr) ledGr.textContent = fmt(Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted);
 
 
  // Push to live impact counters
- liveStats.granted = d.totalGranted || 185;
-  if(d.totalGuardians) liveStats.guardians = d.totalGuardians;
+ liveStats.granted = Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted;
+ if(Number.isFinite(totalGuardians) && totalGuardians > 0) liveStats.guardians = totalGuardians;
+ if(Number.isFinite(totalCountries) && totalCountries > 0) liveStats.countries = totalCountries;
  renderLiveStats();
 };
 window.updateLedger(null);
