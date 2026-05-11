@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
-const FROM_EMAIL    = 'hello@wishwall.xyz';
+const FROM_EMAIL    = 'hello@wallwishes.xyz';
 const FROM_NAME     = 'The Wish Wall';
 
 async function sendEmail({ to, subject, htmlContent }) {

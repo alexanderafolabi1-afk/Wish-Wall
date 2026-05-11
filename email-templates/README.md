@@ -36,7 +36,7 @@ Each file is a self-contained HTML email that can be pasted directly into an Ema
 | `{{to_name}}` | Derived from the email username (e.g. `jane` from `jane@email.com`) |
 | `{{wish_text}}` | The full text of the wish |
 | `{{wish_code}}` | The wisher's referral/tracking code |
-| `{{wall_url}}` | `https://wishwall.xyz` |
+| `{{wall_url}}` | `https://wallwishes.xyz` |
 
 ---
 
@@ -54,7 +54,7 @@ Each file is a self-contained HTML email that can be pasted directly into an Ema
 | `{{to_email}}` | Guardian's email address |
 | `{{to_name}}` | Guardian's name (or `"Guardian"` if not provided) |
 | `{{wish_text}}` | The text of the wish that was granted |
-| `{{wall_url}}` | `https://wishwall.xyz` |
+| `{{wall_url}}` | `https://wallwishes.xyz` |
 | `{{receipt_ref}}` | Auto-generated receipt reference (e.g. `WW-LCX3KABC`) |
 
 ---
