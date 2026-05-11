@@ -6203,7 +6203,11 @@ function paintWall(){
   return;
  }
 
- grid.innerHTML = src.map((w,i) => noteHTML(w,i)).join('');
+ const tiles = src.map((w,i) => noteHTML(w,i));
+ for(let i = src.length; i < WALL_CAPACITY; i++){
+  tiles.push(placeholderNoteHTML(i));
+ }
+ grid.innerHTML = tiles.join('');
 }
 function noteHTML(w, i, tileStyle=''){
  const color = w.color || NOTE_COLS[i % NOTE_COLS.length];
@@ -8542,11 +8546,10 @@ const WARMUP_WISHES = (function(){
  return wishes;
 })();
 
-// Merge warmup into demo data, always pad to fill all 1000 slots
+// Always show the 185 granted demo wishes first, then append any real live Firebase wishes
 function getDisplayWishes(realWishes){
  const liveWishes = (realWishes || []).filter(w => !w.warmup && !DEMO_IDS.has(w.id));
- if(liveWishes.length > 0) return liveWishes;
- return WARMUP_WISHES;
+ return [...DEMO_RAW, ...liveWishes];
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes([]); } }, 3000); }
 if(!window._firebaseReady) loadDemo();
