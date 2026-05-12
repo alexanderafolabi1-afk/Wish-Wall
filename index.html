@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://js.stripe.com">
+<script src="https://js.stripe.com/v3/"></script>
 <link rel="preconnect" href="https://www.gstatic.com">
 
 <!-- PRIMARY SEO: US + UK + Global dominance -->
@@ -4720,77 +4721,43 @@ button { touch-action: manipulation; }
 .gp-pool-btn:hover { opacity:.85; transform:translateY(-2px); }
 .gp-pool-right { flex-shrink:0; }
 
-/* Wing flutter */
-@keyframes faWingFlap {
-  0%,100% { transform:scaleX(1)   scaleY(0.85); }
-  50%      { transform:scaleX(0.8) scaleY(1.1);  }
+/* Fairy float up/down */
+@keyframes faFloat {
+  0%,100% { transform:translateY(0px); }
+  50%     { transform:translateY(-15px); }
 }
-/* Figure-8 float */
-@keyframes faFloat8 {
-  0%   { transform:translate(0px,0px)    rotate(0deg);  }
-  25%  { transform:translate(20px,-16px) rotate(8deg);  }
-  50%  { transform:translate(0px,-6px)   rotate(0deg);  }
-  75%  { transform:translate(-20px,-16px)rotate(-8deg); }
-  100% { transform:translate(0px,0px)    rotate(0deg);  }
+/* Left-side wing flutter: scaleX 1 → 0.3 */
+@keyframes faWing2 {
+  0%   { transform-box:fill-box; transform:scaleX(1); }
+  100% { transform-box:fill-box; transform:scaleX(0.3); }
 }
-/* Gentle spin around its own centre */
-@keyframes faSpin {
-  from { transform:rotate(0deg); }
-  to   { transform:rotate(360deg); }
+/* Right-side wing flutter (mirror) */
+@keyframes faWing2r {
+  0%   { transform-box:fill-box; transform:scaleX(1); }
+  100% { transform-box:fill-box; transform:scaleX(0.3); }
 }
-/* Bob up/down */
-@keyframes faBob {
-  0%,100% { transform:translateY(0px)   rotate(-3deg); }
-  50%     { transform:translateY(-18px) rotate(3deg);  }
-}
-/* Dance side to side */
-@keyframes faDance {
-  0%,100% { transform:translateX(0px)   rotate(-5deg); }
-  50%     { transform:translateX(16px)  rotate(5deg);  }
-}
-/* Fly toward bowl, tip wand, fly back */
-@keyframes faPour {
-  0%,55%,100% { transform:translate(0px,0px)    rotate(0deg);  }
-  65%          { transform:translate(38px,55px)  rotate(25deg); }
-  75%          { transform:translate(38px,55px)  rotate(55deg); }
-  88%          { transform:translate(38px,55px)  rotate(25deg); }
-}
-/* Sparkles fall from wand into bowl during pour */
-@keyframes faSparkFall {
-  0%,60%,100% { opacity:0; transform:translateY(0px);   }
-  68%,78%     { opacity:1; transform:translateY(20px);  }
-  85%         { opacity:0; transform:translateY(40px);  }
-}
-/* Bowl glow brightens when sparkles land */
+/* Bowl glow pulse */
 @keyframes faBowlGlow {
-  0%,60%,100% { opacity:.25; r:22px; }
-  78%,88%     { opacity:.85; r:28px; }
+  0%,100% { opacity:.3; r:32px; }
+  50%     { opacity:.9; r:44px; }
 }
-/* Star twinkle */
+/* 4-pointed star sparkle pulse */
 @keyframes faTwinkle {
-  0%,100% { opacity:.15; }
-  50%     { opacity:1;   }
+  0%,100% { opacity:.1; transform:scale(0.6); }
+  50%     { opacity:1;  transform:scale(1.2); }
 }
-/* Floating star drift */
+/* Ambient star drift */
 @keyframes faStarDrift {
-  0%,100% { transform:translateY(0px)   rotate(0deg);   opacity:.2; }
-  40%     { transform:translateY(-12px) rotate(180deg); opacity:.9; }
-  80%     { transform:translateY(-6px)  rotate(270deg); opacity:.4; }
+  0%,100% { transform:translateY(0px) rotate(0deg);   opacity:.25; }
+  45%     { transform:translateY(-14px) rotate(180deg); opacity:.95; }
+  80%     { transform:translateY(-7px)  rotate(270deg); opacity:.4;  }
 }
-/* Fairy classes */
-.fa-f8    { animation:faFloat8 7s ease-in-out infinite; }
-.fa-spin  { animation:faSpin   14s linear infinite;     }
-.fa-bob   { animation:faBob    3.2s ease-in-out infinite; }
-.fa-dance { animation:faDance  3.8s ease-in-out infinite; }
-.fa-pour  { animation:faPour   10s ease-in-out infinite; }
-.fa-wing  { animation:faWingFlap .45s ease-in-out infinite alternate; transform-origin:center; }
-.fa-spark { animation:faSparkFall 10s ease-in-out infinite; }
-.fa-bowl-glow { animation:faBowlGlow 10s ease-in-out infinite; }
-.fa-twinkle   { animation:faTwinkle  2.2s ease-in-out infinite alternate; }
-.fa-drift     { animation:faStarDrift 6s ease-in-out infinite; }
+.fa-bowl-glow { animation:faBowlGlow 3s ease-in-out infinite; }
+.fa-twinkle   { animation:faTwinkle  1.8s ease-in-out infinite alternate; }
+.fa-drift     { animation:faStarDrift 5s ease-in-out infinite; }
 @media(max-width:600px){
   .gp-pool-card { flex-direction:column; }
-  .gp-pool-right svg { width:220px; height:190px; }
+  .gp-pool-right svg { width:240px; height:210px; }
 }
 </style>
 
@@ -5019,109 +4986,170 @@ button { touch-action: manipulation; }
 <p class="gp-eye">The Magic Pool</p>
 <h2 class="gp-pool-h">Can't grant a whole wish today?<br>Drop $1 into the pot.</h2>
 <p class="gp-pool-p">The Magic Pool is a shared fund. When no single Guardian can cover a wish alone, the pool does it together. Every dollar counts. Every drop fills the bowl — and wishes still come true.</p>
-<a href="https://buy.stripe.com/7sYeVf2X7eNh12SeUm1gs01"
-   target="_blank" rel="noopener"
-   class="gp-pool-btn">🪙 Drop $1 into the pool</a>
+<button class="gp-pool-btn" onclick="openPoolModal()">🪙 Drop $1 into the pool</button>
+</div>
+
+<!-- ── Magic Pool payment modal ─────────────────────────────────────────── -->
+<div id="pool-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;align-items:center;justify-content:center;" onclick="if(event.target===this)closePoolModal()">
+  <div style="background:#1a0d2e;border:1px solid #7c3aed;border-radius:18px;padding:32px 28px;max-width:380px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+    <button onclick="closePoolModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#a78bfa;font-size:22px;cursor:pointer;line-height:1;">&times;</button>
+    <p style="color:#a78bfa;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px">The Magic Pool</p>
+    <h3 style="color:#fff;font-size:1.4rem;margin:0 0 8px">Drop $1 into the pot 🪙</h3>
+    <p style="color:#c4b5fd;font-size:.9rem;margin:0 0 20px">Your $1 joins others to grant wishes together. You stay right here.</p>
+    <div id="pool-card-wrap" style="background:#120826;border:1px solid #4c1d95;border-radius:10px;padding:14px 12px;margin-bottom:18px;">
+      <div id="pool-card-element"></div>
+    </div>
+    <div id="pool-card-error" style="color:#f87171;font-size:.85rem;margin-bottom:12px;min-height:20px;"></div>
+    <button id="pool-pay-btn" onclick="submitPoolPayment()" style="width:100%;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:10px;color:#fff;font-size:1rem;font-weight:700;padding:14px;cursor:pointer;transition:opacity .2s;">
+      💜 Contribute $1
+    </button>
+    <div id="pool-success" style="display:none;text-align:center;padding:16px 0 0;">
+      <div style="font-size:2rem;margin-bottom:8px;">🌟</div>
+      <p style="color:#a3e635;font-weight:700;font-size:1.1rem;margin:0 0 4px">Thank you! You're magic.</p>
+      <p style="color:#c4b5fd;font-size:.88rem;margin:0">Your $1 is in the pool. Wishes will come true.</p>
+    </div>
+  </div>
 </div>
 
 <div class="gp-pool-right">
-<!-- Animated fairy scene — pure SVG + CSS, no external assets -->
-<svg viewBox="0 0 280 250" xmlns="http://www.w3.org/2000/svg" width="280" height="250" aria-hidden="true" style="overflow:visible">
+<!-- Beautiful fairy scene — 5 detailed fairies in arc above magic bowl -->
+<svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg" width="320" height="280" aria-hidden="true" style="overflow:visible">
   <defs>
     <radialGradient id="bowlGlowGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#F5E580" stop-opacity="0.9"/>
+      <stop offset="0%" stop-color="#F5E580" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#a78bfa" stop-opacity="0.4"/>
       <stop offset="100%" stop-color="#F5E580" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bowlLiquid" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
     </radialGradient>
   </defs>
 
-  <!-- Bowl glow (brightens when lavender fairy pours) -->
-  <circle class="fa-bowl-glow" cx="140" cy="210" r="22" fill="url(#bowlGlowGrad)"/>
+  <!-- Bowl glow pulse -->
+  <circle class="fa-bowl-glow" cx="160" cy="244" r="32" fill="url(#bowlGlowGrad)"/>
 
-  <!-- Communal bowl / cauldron -->
-  <g transform="translate(112,195)">
-    <path d="M6 0 Q0 22 28 26 Q56 22 50 0Z" fill="#7d5944"/>
-    <ellipse cx="28" cy="0" rx="22" ry="8" fill="#a07050"/>
-    <ellipse cx="28" cy="-1" rx="17" ry="5.5" fill="#B8F0D4" opacity="0.85"/>
-    <ellipse cx="28" cy="26" rx="24" ry="7" fill="#4a3728" opacity="0.6"/>
+  <!-- Communal bowl — wider, more beautiful -->
+  <g transform="translate(120,224)">
+    <path d="M4 0 Q-4 30 40 36 Q84 30 76 0Z" fill="#6b4c35"/>
+    <path d="M8 0 Q4 28 40 32 Q76 28 72 0Z" fill="#8b6245"/>
+    <ellipse cx="40" cy="0" rx="36" ry="11" fill="#a07855"/>
+    <ellipse cx="40" cy="-2" rx="28" ry="8" fill="url(#bowlLiquid)" opacity="0.9"/>
+    <ellipse cx="40" cy="-2" rx="22" ry="5.5" fill="#c4b5fd" opacity="0.5"/>
+    <ellipse cx="40" cy="36" rx="38" ry="9" fill="#3d2b1f" opacity="0.55"/>
   </g>
 
-  <!-- FAIRY 1 — Yellow, figure-8 float, top-left -->
-  <g class="fa-f8" transform="translate(55,58)">
-    <ellipse class="fa-wing" cx="-8" cy="2" rx="14" ry="7" fill="#F5E580" opacity="0.55" transform="rotate(-30,-8,2)"/>
-    <ellipse class="fa-wing" cx="8"  cy="2" rx="14" ry="7" fill="#F5E580" opacity="0.55" transform="rotate(30,8,2)"/>
-    <path d="M-4,0 Q-7,15 0,17 Q7,15 4,0Z" fill="#F5E580"/>
-    <circle cx="0" cy="-7" r="6" fill="#FDDBB4"/>
-    <path d="M-4,-12 Q0,-16 4,-12" stroke="#c8a010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <line x1="5" y1="-3" x2="17" y2="-14" stroke="#c8a010" stroke-width="1.5"/>
-    <polygon points="17,-18 20,-13 14,-13" fill="#F5E580"/>
-    <circle cx="17" cy="-18" r="2.5" fill="#fff" class="fa-twinkle"/>
+  <!-- FAIRY 1 — Golden, arc-left-far, floats up-down -->
+  <!-- float delay 0s -->
+  <g style="animation:faFloat 2s ease-in-out infinite;animation-delay:0s;transform-origin:42px 60px" transform="translate(20,25)">
+    <!-- wings: left side 2 pointed ellipses -->
+    <ellipse cx="22" cy="58" rx="22" ry="9" fill="#F5E580" opacity="0.6" transform="rotate(-40,22,58)" style="animation:faWing2 0.4s ease-in-out infinite alternate;transform-origin:22px 58px"/>
+    <ellipse cx="22" cy="68" rx="16" ry="7" fill="#F5E580" opacity="0.5" transform="rotate(-55,22,68)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.1s;transform-origin:22px 68px"/>
+    <!-- wings: right side -->
+    <ellipse cx="62" cy="58" rx="22" ry="9" fill="#F5E580" opacity="0.6" transform="rotate(40,62,58)" style="animation:faWing2r 0.4s ease-in-out infinite alternate;transform-origin:62px 58px"/>
+    <ellipse cx="62" cy="68" rx="16" ry="7" fill="#F5E580" opacity="0.5" transform="rotate(55,62,68)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.1s;transform-origin:62px 68px"/>
+    <!-- body -->
+    <ellipse cx="42" cy="72" rx="8" ry="14" fill="#F5E580"/>
+    <!-- head -->
+    <circle cx="42" cy="52" r="9" fill="#FDDBB4"/>
+    <!-- hair squiggle -->
+    <path d="M34,46 Q38,40 42,44 Q46,40 50,46" stroke="#c8a010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- left arm -->
+    <line x1="34" y1="65" x2="22" y2="74" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <!-- right arm / wand arm -->
+    <line x1="50" y1="65" x2="62" y2="57" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <!-- wand -->
+    <line x1="62" y1="57" x2="72" y2="44" stroke="#c8a010" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- 4-pointed star at wand tip -->
+    <path d="M72,38 L74,42 L78,44 L74,46 L72,50 L70,46 L66,44 L70,42 Z" fill="#ffe566" class="fa-twinkle" style="animation-delay:0s"/>
+    <!-- sparkles near wand -->
+    <path d="M78,36 L79,38 L81,39 L79,40 L78,42 L77,40 L75,39 L77,38 Z" fill="#fff" class="fa-twinkle" style="animation-delay:.3s"/>
+    <path d="M68,34 L69,36 L71,37 L69,38 L68,40 L67,38 L65,37 L67,36 Z" fill="#F5E580" class="fa-twinkle" style="animation-delay:.6s"/>
+    <path d="M82,42 L83,44 L85,45 L83,46 L82,48 L81,46 L79,45 L81,44 Z" fill="#ffdd44" class="fa-twinkle" style="animation-delay:.9s"/>
   </g>
 
-  <!-- FAIRY 2 — Pink, slow spin (orbits small circle), top-right -->
-  <g transform="translate(215,68)">
-    <g class="fa-spin" style="transform-origin:0px 0px">
-      <ellipse class="fa-wing" cx="-8" cy="2" rx="13" ry="7" fill="#F2C0D4" opacity="0.6" transform="rotate(-25,-8,2)"/>
-      <ellipse class="fa-wing" cx="8"  cy="2" rx="13" ry="7" fill="#F2C0D4" opacity="0.6" transform="rotate(25,8,2)"/>
-      <path d="M-4,0 Q-6,14 0,16 Q6,14 4,0Z" fill="#F2C0D4"/>
-      <circle cx="0" cy="-7" r="6" fill="#FDDBB4"/>
-      <path d="M-4,-12 Q0,-15 4,-12" stroke="#c47fa0" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      <line x1="5" y1="-3" x2="17" y2="-14" stroke="#c47fa0" stroke-width="1.5"/>
-      <polygon points="17,-18 20,-13 14,-13" fill="#F2C0D4"/>
-      <circle cx="17" cy="-18" r="2.5" fill="#fff" class="fa-twinkle" style="animation-delay:.6s"/>
-    </g>
+  <!-- FAIRY 2 — Rose/Pink, arc-left-near, float delay 0.4s -->
+  <g style="animation:faFloat 2.3s ease-in-out infinite;animation-delay:0.4s;transform-origin:78px 45px" transform="translate(56,10)">
+    <ellipse cx="58" cy="43" rx="20" ry="8" fill="#F2C0D4" opacity="0.62" transform="rotate(-38,58,43)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.05s;transform-origin:58px 43px"/>
+    <ellipse cx="58" cy="52" rx="15" ry="6" fill="#F2C0D4" opacity="0.5" transform="rotate(-52,58,52)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.15s;transform-origin:58px 52px"/>
+    <ellipse cx="98" cy="43" rx="20" ry="8" fill="#F2C0D4" opacity="0.62" transform="rotate(38,98,43)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.05s;transform-origin:98px 43px"/>
+    <ellipse cx="98" cy="52" rx="15" ry="6" fill="#F2C0D4" opacity="0.5" transform="rotate(52,98,52)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.15s;transform-origin:98px 52px"/>
+    <ellipse cx="78" cy="58" rx="7" ry="12" fill="#F2C0D4"/>
+    <circle cx="78" cy="39" r="8.5" fill="#FDDBB4"/>
+    <path d="M70,33 Q74,27 78,31 Q82,27 86,33" stroke="#c47fa0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <line x1="71" y1="52" x2="60" y2="60" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="85" y1="52" x2="97" y2="44" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="97" y1="44" x2="106" y2="32" stroke="#c47fa0" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M106,26 L108,30 L112,32 L108,34 L106,38 L104,34 L100,32 L104,30 Z" fill="#F2C0D4" class="fa-twinkle" style="animation-delay:.2s"/>
+    <path d="M112,24 L113,26 L115,27 L113,28 L112,30 L111,28 L109,27 L111,26 Z" fill="#fff" class="fa-twinkle" style="animation-delay:.5s"/>
+    <path d="M102,22 L103,24 L105,25 L103,26 L102,28 L101,26 L99,25 L101,24 Z" fill="#F2C0D4" class="fa-twinkle" style="animation-delay:.8s"/>
+    <path d="M116,30 L117,32 L119,33 L117,34 L116,36 L115,34 L113,33 L115,32 Z" fill="#ffb3d1" class="fa-twinkle" style="animation-delay:1.1s"/>
   </g>
 
-  <!-- FAIRY 3 — Blue, bob up/down, left -->
-  <g class="fa-bob" transform="translate(30,138)">
-    <ellipse class="fa-wing" cx="-8" cy="2" rx="13" ry="7" fill="#BAE4F5" opacity="0.6" transform="rotate(-28,-8,2)"/>
-    <ellipse class="fa-wing" cx="8"  cy="2" rx="13" ry="7" fill="#BAE4F5" opacity="0.6" transform="rotate(28,8,2)"/>
-    <path d="M-4,0 Q-6,14 0,16 Q6,14 4,0Z" fill="#BAE4F5"/>
-    <circle cx="0" cy="-7" r="6" fill="#FDDBB4"/>
-    <path d="M-4,-12 Q0,-15 4,-12" stroke="#4a9ebf" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <line x1="5" y1="-3" x2="17" y2="-14" stroke="#4a9ebf" stroke-width="1.5"/>
-    <polygon points="17,-18 20,-13 14,-13" fill="#BAE4F5"/>
-    <circle cx="17" cy="-18" r="2.5" fill="#fff" class="fa-twinkle" style="animation-delay:1.1s"/>
+  <!-- FAIRY 3 — Lavender/Purple, arc-top-centre, float delay 0.8s -->
+  <g style="animation:faFloat 1.9s ease-in-out infinite;animation-delay:0.8s;transform-origin:160px 30px" transform="translate(132,0)">
+    <ellipse cx="28" cy="28" rx="22" ry="9" fill="#DDB8F5" opacity="0.62" transform="rotate(-35,28,28)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.1s;transform-origin:28px 28px"/>
+    <ellipse cx="28" cy="38" rx="16" ry="7" fill="#DDB8F5" opacity="0.5" transform="rotate(-50,28,38)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.2s;transform-origin:28px 38px"/>
+    <ellipse cx="56" cy="28" rx="22" ry="9" fill="#DDB8F5" opacity="0.62" transform="rotate(35,56,28)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.1s;transform-origin:56px 28px"/>
+    <ellipse cx="56" cy="38" rx="16" ry="7" fill="#DDB8F5" opacity="0.5" transform="rotate(50,56,38)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.2s;transform-origin:56px 38px"/>
+    <ellipse cx="42" cy="48" rx="8" ry="14" fill="#DDB8F5"/>
+    <circle cx="42" cy="26" r="10" fill="#FDDBB4"/>
+    <path d="M34,19 Q38,13 42,17 Q46,13 50,19" stroke="#9b5cc4" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <line x1="34" y1="41" x2="22" y2="52" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="50" y1="41" x2="62" y2="30" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="62" y1="30" x2="72" y2="16" stroke="#9b5cc4" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M72,10 L74,14 L78,16 L74,18 L72,22 L70,18 L66,16 L70,14 Z" fill="#DDB8F5" class="fa-twinkle" style="animation-delay:.4s"/>
+    <path d="M78,8 L79,10 L81,11 L79,12 L78,14 L77,12 L75,11 L77,10 Z" fill="#fff" class="fa-twinkle" style="animation-delay:.7s"/>
+    <path d="M68,6 L69,8 L71,9 L69,10 L68,12 L67,10 L65,9 L67,8 Z" fill="#DDB8F5" class="fa-twinkle" style="animation-delay:1s"/>
+    <path d="M82,14 L83,16 L85,17 L83,18 L82,20 L81,18 L79,17 L81,16 Z" fill="#e9d5ff" class="fa-twinkle" style="animation-delay:1.3s"/>
+    <path d="M74,4 L75,6 L77,7 L75,8 L74,10 L73,8 L71,7 L73,6 Z" fill="#f3e8ff" class="fa-twinkle" style="animation-delay:1.6s"/>
   </g>
 
-  <!-- FAIRY 4 — Green, dance side-to-side, right -->
-  <g class="fa-dance" transform="translate(240,140)">
-    <ellipse class="fa-wing" cx="-8" cy="2" rx="13" ry="7" fill="#B8F0D4" opacity="0.6" transform="rotate(-25,-8,2)"/>
-    <ellipse class="fa-wing" cx="8"  cy="2" rx="13" ry="7" fill="#B8F0D4" opacity="0.6" transform="rotate(25,8,2)"/>
-    <path d="M-4,0 Q-6,14 0,16 Q6,14 4,0Z" fill="#B8F0D4"/>
-    <circle cx="0" cy="-7" r="6" fill="#FDDBB4"/>
-    <path d="M-4,-12 Q0,-15 4,-12" stroke="#3a9e6e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <line x1="5" y1="-3" x2="17" y2="-14" stroke="#3a9e6e" stroke-width="1.5"/>
-    <polygon points="17,-18 20,-13 14,-13" fill="#B8F0D4"/>
-    <circle cx="17" cy="-18" r="2.5" fill="#fff" class="fa-twinkle" style="animation-delay:1.7s"/>
+  <!-- FAIRY 4 — Teal/Blue, arc-right-near, float delay 1.2s -->
+  <g style="animation:faFloat 2.1s ease-in-out infinite;animation-delay:1.2s;transform-origin:242px 45px" transform="translate(186,10)">
+    <ellipse cx="56" cy="43" rx="20" ry="8" fill="#BAE4F5" opacity="0.62" transform="rotate(-38,56,43)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.15s;transform-origin:56px 43px"/>
+    <ellipse cx="56" cy="52" rx="15" ry="6" fill="#BAE4F5" opacity="0.5" transform="rotate(-52,56,52)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.25s;transform-origin:56px 52px"/>
+    <ellipse cx="84" cy="43" rx="20" ry="8" fill="#BAE4F5" opacity="0.62" transform="rotate(38,84,43)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.15s;transform-origin:84px 43px"/>
+    <ellipse cx="84" cy="52" rx="15" ry="6" fill="#BAE4F5" opacity="0.5" transform="rotate(52,84,52)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.25s;transform-origin:84px 52px"/>
+    <ellipse cx="70" cy="58" rx="7" ry="12" fill="#BAE4F5"/>
+    <circle cx="70" cy="39" r="8.5" fill="#FDDBB4"/>
+    <path d="M62,33 Q66,27 70,31 Q74,27 78,33" stroke="#4a9ebf" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <line x1="63" y1="52" x2="52" y2="60" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="77" y1="52" x2="88" y2="44" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="88" y1="44" x2="98" y2="32" stroke="#4a9ebf" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M98,26 L100,30 L104,32 L100,34 L98,38 L96,34 L92,32 L96,30 Z" fill="#BAE4F5" class="fa-twinkle" style="animation-delay:.6s"/>
+    <path d="M104,24 L105,26 L107,27 L105,28 L104,30 L103,28 L101,27 L103,26 Z" fill="#fff" class="fa-twinkle" style="animation-delay:.9s"/>
+    <path d="M94,22 L95,24 L97,25 L95,26 L94,28 L93,26 L91,25 L93,24 Z" fill="#BAE4F5" class="fa-twinkle" style="animation-delay:1.2s"/>
+    <path d="M108,30 L109,32 L111,33 L109,34 L108,36 L107,34 L105,33 L107,32 Z" fill="#7dd3fc" class="fa-twinkle" style="animation-delay:1.5s"/>
   </g>
 
-  <!-- FAIRY 5 — Lavender, pours into bowl every 10s, top-centre -->
-  <g class="fa-pour" transform="translate(105,42)">
-    <ellipse class="fa-wing" cx="-8" cy="2" rx="14" ry="8" fill="#DDB8F5" opacity="0.55" transform="rotate(-32,-8,2)"/>
-    <ellipse class="fa-wing" cx="8"  cy="2" rx="14" ry="8" fill="#DDB8F5" opacity="0.55" transform="rotate(32,8,2)"/>
-    <path d="M-4,0 Q-7,15 0,17 Q7,15 4,0Z" fill="#DDB8F5"/>
-    <circle cx="0" cy="-7" r="6" fill="#FDDBB4"/>
-    <path d="M-4,-12 Q0,-16 4,-12" stroke="#9b5cc4" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-    <line x1="5" y1="-3" x2="17" y2="-14" stroke="#9b5cc4" stroke-width="1.5"/>
-    <polygon points="17,-18 20,-13 14,-13" fill="#DDB8F5"/>
-    <!-- Sparkles poured from wand -->
-    <circle class="fa-spark" cx="18" cy="-14" r="3.5" fill="#F5E580" style="animation-delay:0s"/>
-    <circle class="fa-spark" cx="22" cy="-10" r="2.5" fill="#fff"    style="animation-delay:.18s"/>
-    <circle class="fa-spark" cx="14" cy="-8"  r="2"   fill="#DDB8F5" style="animation-delay:.36s"/>
-    <circle class="fa-spark" cx="20" cy="-6"  r="2"   fill="#F5E580" style="animation-delay:.54s"/>
+  <!-- FAIRY 5 — Emerald/Green, arc-right-far, float delay 1.6s -->
+  <g style="animation:faFloat 2.4s ease-in-out infinite;animation-delay:1.6s;transform-origin:278px 60px" transform="translate(232,25)">
+    <ellipse cx="46" cy="58" rx="21" ry="9" fill="#B8F0D4" opacity="0.62" transform="rotate(-40,46,58)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.2s;transform-origin:46px 58px"/>
+    <ellipse cx="46" cy="68" rx="15" ry="7" fill="#B8F0D4" opacity="0.5" transform="rotate(-55,46,68)" style="animation:faWing2 0.4s ease-in-out infinite alternate 0.3s;transform-origin:46px 68px"/>
+    <ellipse cx="74" cy="58" rx="21" ry="9" fill="#B8F0D4" opacity="0.62" transform="rotate(40,74,58)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.2s;transform-origin:74px 58px"/>
+    <ellipse cx="74" cy="68" rx="15" ry="7" fill="#B8F0D4" opacity="0.5" transform="rotate(55,74,68)" style="animation:faWing2r 0.4s ease-in-out infinite alternate 0.3s;transform-origin:74px 68px"/>
+    <ellipse cx="60" cy="72" rx="8" ry="14" fill="#B8F0D4"/>
+    <circle cx="60" cy="52" r="9" fill="#FDDBB4"/>
+    <path d="M52,46 Q56,40 60,44 Q64,40 68,46" stroke="#3a9e6e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <line x1="52" y1="65" x2="40" y2="74" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="68" y1="65" x2="78" y2="56" stroke="#FDDBB4" stroke-width="2" stroke-linecap="round"/>
+    <line x1="78" y1="56" x2="88" y2="42" stroke="#3a9e6e" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M88,36 L90,40 L94,42 L90,44 L88,48 L86,44 L82,42 L86,40 Z" fill="#B8F0D4" class="fa-twinkle" style="animation-delay:.8s"/>
+    <path d="M94,34 L95,36 L97,37 L95,38 L94,40 L93,38 L91,37 L93,36 Z" fill="#fff" class="fa-twinkle" style="animation-delay:1.1s"/>
+    <path d="M84,32 L85,34 L87,35 L85,36 L84,38 L83,36 L81,35 L83,34 Z" fill="#B8F0D4" class="fa-twinkle" style="animation-delay:1.4s"/>
+    <path d="M98,40 L99,42 L101,43 L99,44 L98,46 L97,44 L95,43 L97,42 Z" fill="#6ee7b7" class="fa-twinkle" style="animation-delay:1.7s"/>
+    <path d="M90,30 L91,32 L93,33 L91,34 L90,36 L89,34 L87,33 L89,32 Z" fill="#d1fae5" class="fa-twinkle" style="animation-delay:2s"/>
   </g>
 
-  <!-- Floating star particles scattered around -->
-  <text class="fa-drift" x="88"  y="95"  font-size="10" fill="#F5E580"  style="animation-delay:0s">✦</text>
-  <text class="fa-drift" x="175" y="85"  font-size="8"  fill="#F2C0D4"  style="animation-delay:1.2s">★</text>
-  <text class="fa-drift" x="60"  y="172" font-size="8"  fill="#BAE4F5"  style="animation-delay:2.5s">✦</text>
-  <text class="fa-drift" x="210" y="108" font-size="9"  fill="#B8F0D4"  style="animation-delay:.8s">★</text>
-  <text class="fa-drift" x="140" y="148" font-size="7"  fill="#DDB8F5"  style="animation-delay:3.1s">✦</text>
-  <text class="fa-drift" x="105" y="72"  font-size="9"  fill="#F5E580"  style="animation-delay:1.9s">·</text>
-  <text class="fa-drift" x="190" y="160" font-size="8"  fill="#F2C0D4"  style="animation-delay:.4s">✦</text>
-  <text class="fa-drift" x="46"  y="105" font-size="7"  fill="#BAE4F5"  style="animation-delay:2s">★</text>
-  <text class="fa-drift" x="238" y="170" font-size="8"  fill="#B8F0D4"  style="animation-delay:3.6s">·</text>
-  <text class="fa-drift" x="155" y="52"  font-size="7"  fill="#DDB8F5"  style="animation-delay:1.5s">✦</text>
+  <!-- Ambient sparkle drifts -->
+  <path class="fa-drift" d="M82,120 L83,123 L86,124 L83,125 L82,128 L81,125 L78,124 L81,123 Z" fill="#F5E580" style="animation-delay:0s"/>
+  <path class="fa-drift" d="M200,100 L201,103 L204,104 L201,105 L200,108 L199,105 L196,104 L199,103 Z" fill="#F2C0D4" style="animation-delay:1.2s"/>
+  <path class="fa-drift" d="M48,160 L49,162 L51,163 L49,164 L48,166 L47,164 L45,163 L47,162 Z" fill="#BAE4F5" style="animation-delay:2.5s"/>
+  <path class="fa-drift" d="M256,130 L257,133 L260,134 L257,135 L256,138 L255,135 L252,134 L255,133 Z" fill="#B8F0D4" style="animation-delay:.8s"/>
+  <path class="fa-drift" d="M158,80 L159,82 L161,83 L159,84 L158,86 L157,84 L155,83 L157,82 Z" fill="#DDB8F5" style="animation-delay:3.1s"/>
+  <path class="fa-drift" d="M110,142 L111,144 L113,145 L111,146 L110,148 L109,146 L107,145 L109,144 Z" fill="#F5E580" style="animation-delay:1.9s"/>
+  <path class="fa-drift" d="M218,165 L219,167 L221,168 L219,169 L218,171 L217,169 L215,168 L217,167 Z" fill="#F2C0D4" style="animation-delay:.4s"/>
 </svg>
 </div><!-- /gp-pool-right -->
 
@@ -7562,6 +7590,79 @@ function selPool(amt, btn){
  poolAmt = amt;
  document.querySelectorAll('.pool-amt-btn').forEach(b => b.classList.remove('sel'));
  btn.classList.add('sel');
+}
+
+// ── Magic Pool inline payment modal ────────────────────────────────────────
+let _poolCardEl = null;
+let _poolStripe = null;
+
+function openPoolModal(){
+ const ov = document.getElementById('pool-modal-overlay');
+ if(!ov) return;
+ ov.style.display = 'flex';
+ document.getElementById('pool-success').style.display = 'none';
+ document.getElementById('pool-card-wrap').style.display = 'block';
+ document.getElementById('pool-card-error').textContent = '';
+ const payBtn = document.getElementById('pool-pay-btn');
+ if(payBtn){ payBtn.style.display = ''; payBtn.disabled = false; payBtn.textContent = '💜 Contribute $1'; }
+ initPoolCard();
+}
+
+function closePoolModal(){
+ const ov = document.getElementById('pool-modal-overlay');
+ if(ov) ov.style.display = 'none';
+ if(_poolCardEl){ try { _poolCardEl.unmount(); } catch(e){} _poolCardEl = null; }
+}
+
+function initPoolCard(){
+ if(!_poolStripe){
+  if(typeof Stripe === 'undefined'){ console.warn('Stripe.js not loaded'); return; }
+  _poolStripe = Stripe(STRIPE_PK);
+ }
+ if(_poolCardEl){ try { _poolCardEl.unmount(); } catch(e){} _poolCardEl = null; }
+ const elements = _poolStripe.elements();
+ _poolCardEl = elements.create('card', {
+  style:{ base:{ fontFamily:"'Lexend',sans-serif", fontSize:'16px', color:'#e9d5ff', '::placeholder':{ color:'#7c3aed' } } }
+ });
+ _poolCardEl.mount('#pool-card-element');
+ _poolCardEl.on('change', ev => {
+  const errEl = document.getElementById('pool-card-error');
+  if(errEl) errEl.textContent = ev.error ? ev.error.message : '';
+ });
+}
+
+async function submitPoolPayment(){
+ const payBtn = document.getElementById('pool-pay-btn');
+ const errEl  = document.getElementById('pool-card-error');
+ if(!_poolCardEl || !_poolStripe){ if(errEl) errEl.textContent = 'Card form not ready.'; return; }
+ if(payBtn){ payBtn.disabled = true; payBtn.textContent = 'Processing...'; }
+ if(errEl) errEl.textContent = '';
+ try {
+  const res = await fetch('/.netlify/functions/create-payment-intent', {
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body: JSON.stringify({ amount: 100, wishId: 'community_pot' }),
+  });
+  const data = await res.json();
+  if(!res.ok || !data.clientSecret) throw new Error(data.error || 'Could not start payment');
+  const { error } = await _poolStripe.confirmCardPayment(data.clientSecret, {
+   payment_method: { card: _poolCardEl },
+  });
+  if(error){
+   if(errEl) errEl.textContent = error.message;
+   if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💜 Contribute $1'; }
+   return;
+  }
+  // Success
+  if(payBtn) payBtn.style.display = 'none';
+  document.getElementById('pool-card-wrap').style.display = 'none';
+  document.getElementById('pool-success').style.display = 'block';
+  setTimeout(closePoolModal, 3500);
+ } catch(err){
+  console.error('submitPoolPayment error:', err);
+  if(errEl) errEl.textContent = err.message || 'Payment failed. Please try again.';
+  if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💜 Contribute $1'; }
+ }
 }
 
 /* ============================================================
