@@ -4969,7 +4969,7 @@ button { touch-action: manipulation; }
 </svg>
 <h2 class="magic-pool-h">The Magic Pool is growing.</h2>
 <p class="magic-pool-p">Add $1 and help grant a wish today.</p>
-<button type="button" class="magic-pool-btn" id="magic-pool-btn" onclick="magicPoolContributionPay()"><span aria-hidden="true">📌</span><span>$1</span></button>
+<button type="button" class="magic-pool-btn" id="magic-pool-btn"><span aria-hidden="true">📌</span><span>$1</span></button>
 <div class="magic-pool-card-wrap" id="magic-pool-card-wrap">
 <div id="magic-pool-card-element" class="magic-pool-card-element"></div>
 <div id="magic-pool-card-errors" class="magic-pool-card-errors" aria-live="polite"></div>
@@ -7490,8 +7490,15 @@ async function magicPoolContributionPay(){
    headers: { 'Content-Type': 'application/json' },
    body: JSON.stringify({ amount: 100, wishId: 'community_pot' }),
   });
-  const data = await res.json();
-  if(!res.ok || !data.clientSecret) throw new Error((data && data.error) || 'Unable to create payment intent.');
+  const raw = await res.text();
+  let data = {};
+  try {
+   data = raw ? JSON.parse(raw) : {};
+  } catch(parseErr){
+   throw new Error(res.ok ? 'Invalid payment response from server.' : 'Payment service unavailable. Please try again.');
+  }
+  if(!res.ok) throw new Error((data && data.error) || 'Unable to create payment intent.');
+  if(!data.clientSecret) throw new Error('Unable to create payment intent.');
   const stripe = getMagicPoolStripe();
   if(!stripe || !_magicPoolCardEl) throw new Error('Payment form is not ready.');
   const email = (sessionStorage.getItem('ww-guardian-email') || '').trim();
@@ -7518,6 +7525,10 @@ function initMagicPoolContribution(){
  try {
   const btn = document.getElementById('magic-pool-btn');
   if(!btn) return;
+  if(!btn.dataset.magicPoolBound){
+   btn.addEventListener('click', magicPoolContributionPay);
+   btn.dataset.magicPoolBound = '1';
+  }
   setMagicPoolFeedback('', false);
  } catch(err){
   console.warn('initMagicPoolContribution error:', err);
