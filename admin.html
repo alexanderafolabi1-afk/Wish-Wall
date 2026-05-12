@@ -9,10 +9,6 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
-<!-- Firebase compat SDK (global firebase.* API — no ES modules) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
 <style>
 :root{
@@ -603,74 +599,6 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 'use strict';
 
 /* ============================================================
-   FIREBASE — compat SDK init + listeners
-   ============================================================ */
-const app = firebase.initializeApp({
-  apiKey:            "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
-  authDomain:        "wishwall-79dd2.firebaseapp.com",
-  projectId:         "wishwall-79dd2",
-  storageBucket:     "wishwall-79dd2.firebasestorage.app",
-  messagingSenderId: "496538589706",
-  appId:             "1:496538589706:web:bb27da6e931f9155e31df3"
-});
-const db = firebase.firestore();
-
-function startListeners() {
-  db.collection('wishes').onSnapshot(function(snap) {
-    console.log('[admin] wishes snapshot:', snap.docs.length, 'docs');
-    snap.docs.forEach(function(d) {
-      var w = d.data();
-      console.log('[admin] wish', d.id, '| status:', w.status, '| text:', (w.wishText||'').slice(0,60));
-    });
-    var wishes = snap.docs.map(function(d) {
-      return Object.assign({ id: d.id }, d.data());
-    });
-    renderAdmin(wishes);
-  }, function(err) {
-    console.error('Wishes error:', err.message);
-  });
-
-  db.collection('donors').onSnapshot(function(snap) {
-    var donors = snap.docs.map(function(d) {
-      return Object.assign({ id: d.id }, d.data());
-    });
-    renderDonors(donors);
-  }, function(err) {
-    console.error('Donors error:', err.message);
-  });
-
-  db.collection('meta').doc('ledger').onSnapshot(function(snap) {
-    if (!snap.exists) return;
-    var data = snap.data();
-    var poolEl = document.getElementById('a-pool');
-    if (poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
-    var fields = {
-      'l-fees': data.totalFees, 'l-don': data.totalDonations,
-      'l-gr':   data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance,
-    };
-    Object.entries(fields).forEach(function(kv) {
-      var el = document.getElementById(kv[0]);
-      if (el && kv[1] != null) el.value = kv[1];
-    });
-  }, function(err) {
-    console.error('Ledger error:', err.message);
-  });
-
-  db.collection('meta').doc('config').onSnapshot(function(snap) {
-    if (!snap.exists) return;
-    var paused = !!snap.data().paused;
-    var btn = document.getElementById('ctrl-pause-btn');
-    if (btn) {
-      btn.textContent    = paused ? '▶️ Resume Submissions' : '⏸ Pause New Submissions';
-      btn.dataset.paused = paused ? '1' : '0';
-      btn.className      = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
-    }
-  }, function(err) {
-    console.error('Config error:', err.message);
-  });
-}
-
-/* ============================================================
    AUTH — simple password gate
    ============================================================ */
 const ADMIN_PW  = 'Wishwall2026';
@@ -704,7 +632,6 @@ function login(){
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('adm-wrap').classList.add('show');
     requestNotificationPermission();
-    startListeners();
   } else {
     document.getElementById('login-err').textContent = '❌ Wrong password. Try again.';
     document.getElementById('adm-pw').value = '';
@@ -720,7 +647,6 @@ if(sessionStorage.getItem(ADMIN_KEY)){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('adm-wrap').classList.add('show');
   requestNotificationPermission();
-  startListeners();
 }
 
 function requestNotificationPermission(){
@@ -744,6 +670,23 @@ function switchTab(name){
 /* ============================================================
    RENDER — TABLE (desktop) + CARDS (mobile)
    ============================================================ */
+window.renderLedger = function(data){
+  var poolEl = document.getElementById('a-pool');
+  if(poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
+  var fields = {'l-fees':data.totalFees,'l-don':data.totalDonations,'l-gr':data.totalGranted,'l-avg':data.avgCost,'l-pot':data.potBalance};
+  Object.entries(fields).forEach(function(kv){
+    var el = document.getElementById(kv[0]);
+    if(el && kv[1] != null) el.value = kv[1];
+  });
+  var btn = document.getElementById('ctrl-pause-btn');
+  if(btn && data.paused != null){
+    var paused = !!data.paused;
+    btn.textContent    = paused ? '▶️ Resume Submissions' : '⏸ Pause New Submissions';
+    btn.dataset.paused = paused ? '1' : '0';
+    btn.className      = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
+  }
+};
+
 window.renderAdmin = function(wishes){
   allAdmWishes = wishes;
   updateAdmStats();
@@ -1184,5 +1127,29 @@ function loadDemoIfNeeded(){
 }
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
+  authDomain: "wishwall-79dd2.firebaseapp.com",
+  projectId: "wishwall-79dd2",
+  storageBucket: "wishwall-79dd2.firebasestorage.app",
+  messagingSenderId: "496538589706",
+  appId: "1:496838589706:web:bb27da6e931f9155e31df3"
+});
+var db = firebase.firestore();
+db.collection('wishes').onSnapshot(function(snap){
+  window._adminWishes = snap.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+  if(typeof renderAdmin === 'function') renderAdmin(window._adminWishes);
+}, function(err){ console.error('Wishes error:', err.message); });
+db.collection('donors').onSnapshot(function(snap){
+  window._adminDonors = snap.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
+  if(typeof renderDonors === 'function') renderDonors(window._adminDonors);
+}, function(err){ console.error('Donors error:', err.message); });
+db.collection('meta').doc('ledger').onSnapshot(function(doc){
+  if(doc.exists && typeof renderLedger === 'function') renderLedger(doc.data());
+}, function(err){ console.error('Ledger error:', err.message); });
+</script>
 </body>
 </html>
