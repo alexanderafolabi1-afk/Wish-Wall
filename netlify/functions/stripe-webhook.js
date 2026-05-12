@@ -173,20 +173,25 @@ exports.handler = async (event) => {
         }, { merge: true });
 
         const potName = isPaymentIntent
-          ? (session.metadata?.customer_name || session.metadata?.name || 'Contributor')
-          : (session.customer_details?.name || 'Contributor');
+          ? (session.metadata?.customer_name || session.metadata?.name || 'Anonymous')
+          : (session.customer_details?.name || 'Anonymous');
+        const potAnonymous = isPaymentIntent
+          ? (session.metadata?.anonymous === 'true')
+          : false;
         const potCC = isPaymentIntent
           ? (session.metadata?.country || '')
           : (session.customer_details?.address?.country || '');
         const potFlag = countryFlag(potCC);
+        const sessionId = session.id || '';
         await db.collection('donors').add({
-          name:      potName,
+          name:      potAnonymous ? 'Anonymous' : (potName || 'Anonymous'),
           email:     customerEmail || '',
           amount:    parseFloat(amountTotal),
           currency,
           country:   potCC ? `${potFlag} ${potCC}` : '🌍 Global',
           flag:      potFlag,
-          type:      'pot',
+          type:      'pool',
+          sessionId,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
 
@@ -195,13 +200,32 @@ exports.handler = async (event) => {
             to:          customerEmail,
             subject:     '🪙 Your Magic Pool contribution was received',
             htmlContent: `
-              <p>Hi there,</p>
+              <p>Hi${potAnonymous || !potName ? '' : ' ' + potName + ','}${potAnonymous || !potName ? ' there,' : ''}</p>
               <p>Thank you! Your contribution of <strong>${currency} ${amountTotal}</strong> has been added to the Magic Pool.</p>
               <p>It will be used to grant wishes for people who need it most. You are part of the magic. 🌟</p>
               <p>— The Wish Wall team</p>
             `,
           }).catch(err => console.error('Failed to send pot contribution email:', err));
         }
+
+        // Admin notification
+        const donorDisplay = potAnonymous ? 'Anonymous' : (potName || 'Anonymous');
+        const donorEmailDisplay = customerEmail || 'not provided';
+        const donorDate = new Date().toUTCString();
+        await sendEmail({
+          to:          'admin@wallwishes.xyz',
+          subject:     'New Magic Pool donation',
+          htmlContent: `
+            <p><strong>New Magic Pool donation received.</strong></p>
+            <ul>
+              <li><strong>Amount:</strong> ${currency} ${amountTotal}</li>
+              <li><strong>Donor name:</strong> ${donorDisplay}</li>
+              <li><strong>Donor email:</strong> ${donorEmailDisplay}</li>
+              <li><strong>Date/time:</strong> ${donorDate}</li>
+              <li><strong>Session ID:</strong> ${sessionId}</li>
+            </ul>
+          `,
+        }).catch(err => console.error('Failed to send admin pool notification:', err));
       } catch (err) {
         console.error('Error processing pot contribution:', err);
       }

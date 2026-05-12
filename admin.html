@@ -1130,7 +1130,7 @@ function loadDemoIfNeeded(){
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-firebase.initializeApp({
+const _app = firebase.initializeApp({
   apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
   authDomain: "wishwall-79dd2.firebaseapp.com",
   projectId: "wishwall-79dd2",
@@ -1138,18 +1138,36 @@ firebase.initializeApp({
   messagingSenderId: "496538589706",
   appId: "1:496838589706:web:bb27da6e931f9155e31df3"
 });
-var db = firebase.firestore();
-db.collection('wishes').onSnapshot(function(snap){
-  window._adminWishes = snap.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
-  if(typeof renderAdmin === 'function') renderAdmin(window._adminWishes);
-}, function(err){ console.error('Wishes error:', err.message); });
-db.collection('donors').onSnapshot(function(snap){
-  window._adminDonors = snap.docs.map(function(d){ return Object.assign({id:d.id},d.data()); });
-  if(typeof renderDonors === 'function') renderDonors(window._adminDonors);
-}, function(err){ console.error('Donors error:', err.message); });
-db.collection('meta').doc('ledger').onSnapshot(function(doc){
-  if(doc.exists && typeof renderLedger === 'function') renderLedger(doc.data());
-}, function(err){ console.error('Ledger error:', err.message); });
+const _db = firebase.firestore();
+
+function _startAdminListeners() {
+  _db.collection('wishes').onSnapshot(function(snap) {
+    var wishes = snap.docs.map(function(d) {
+      return Object.assign({ id: d.id }, d.data());
+    });
+    if (typeof renderAdmin === 'function') renderAdmin(wishes);
+  }, function(err) { console.error('Wishes:', err.message); });
+
+  _db.collection('donors').onSnapshot(function(snap) {
+    var donors = snap.docs.map(function(d) {
+      return Object.assign({ id: d.id }, d.data());
+    });
+    if (typeof renderDonors === 'function') renderDonors(donors);
+  }, function(err) { console.error('Donors:', err.message); });
+
+  _db.collection('meta').doc('ledger').onSnapshot(function(doc) {
+    if (doc.exists && typeof renderLedger === 'function') renderLedger(doc.data());
+  }, function(err) { console.error('Ledger:', err.message); });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var checkReady = setInterval(function() {
+    if (typeof renderAdmin === 'function') {
+      clearInterval(checkReady);
+      _startAdminListeners();
+    }
+  }, 200);
+});
 </script>
 </body>
 </html>
