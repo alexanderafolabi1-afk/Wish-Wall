@@ -34,10 +34,13 @@
     // ── Wishes: live render + browser notifications ────────────────────────
     const wishQ = query(collection(db, 'wishes'), orderBy('createdAt', 'desc'));
     onSnapshot(wishQ, snap => {
-      // Exclude warmup documents
-      const all = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
-        .filter(w => !w.warmup);
+      console.log('[admin] wishes snapshot received:', snap.docs.length, 'docs');
+      snap.docs.forEach(d => {
+        const w = d.data();
+        console.log('[admin] wish', d.id, '| status:', w.status, '| text:', (w.wishText||'').slice(0, 60));
+      });
+
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
       if (knownWishIds !== null && Notification.permission === 'granted') {
         const now = Date.now();
@@ -458,6 +461,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .adm-search{min-width:100%;}
 }
 </style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
 <body>
 
