@@ -4279,6 +4279,33 @@ button { touch-action: manipulation; }
 .gp-cstat{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
 .gp-cstat:last-child{border-bottom:none}
 }
+.gp-magic-pool{max-width:880px;margin:0 auto 28px;padding:0 20px}
+#magic-pool-contribution{position:relative;background:linear-gradient(145deg,rgba(186,228,245,.4),rgba(184,240,212,.35));border:1.5px solid rgba(77,174,122,.28);border-radius:20px;padding:30px 24px;box-shadow:0 8px 28px rgba(30,34,53,.08)}
+.magic-pool-illustration{width:100%;max-width:760px;margin:0 auto 18px;display:block}
+.magic-pool-illustration .water-stream{stroke:#4DAE7A;stroke-width:4;stroke-linecap:round;stroke-dasharray:4 8;animation:magicPoolFlow 1.1s linear infinite}
+.magic-pool-illustration .water-stream.w2{animation-duration:.95s}
+.magic-pool-illustration .water-stream.w3{animation-duration:1.25s}
+.magic-pool-illustration .water-stream.w4{animation-duration:.85s}
+.magic-pool-illustration .water-ripple{fill:none;stroke:rgba(77,174,122,.45);stroke-width:2;animation:magicPoolRipple 2s ease-in-out infinite}
+.magic-pool-illustration .water-ripple.r2{animation-delay:.55s}
+.magic-pool-illustration .droplet{fill:#4DAE7A;animation:magicPoolDrop 1.7s ease-in-out infinite}
+.magic-pool-illustration .droplet.d2{animation-delay:.35s}
+.magic-pool-illustration .droplet.d3{animation-delay:.75s}
+.magic-pool-h{font-family:var(--fn-display,serif);font-size:clamp(1.4rem,3vw,2rem);line-height:1.15;letter-spacing:-.5px;color:var(--text,#1E2235);text-align:center;margin:0 0 8px}
+.magic-pool-p{font-family:var(--fn-note,serif);font-style:italic;font-size:1rem;color:var(--text-muted,#6B7080);text-align:center;margin:0 0 18px}
+.magic-pool-btn{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;width:min(440px,100%);margin:0 auto;padding:18px 24px;border:none;border-radius:4px 10px 4px 10px;background:#F5E580;color:#1A1008;font-family:var(--fn-body);font-size:1.3rem;font-weight:800;cursor:pointer;box-shadow:2px 4px 0 rgba(30,34,53,.12),6px 10px 20px rgba(30,34,53,.14);transition:transform .2s,box-shadow .2s}
+.magic-pool-btn:hover{transform:translateY(-2px) rotate(-.5deg);box-shadow:2px 6px 0 rgba(30,34,53,.14),8px 14px 24px rgba(30,34,53,.16)}
+.magic-pool-btn:disabled{opacity:.85;cursor:not-allowed;transform:none}
+.magic-pool-btn::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9f93,#cf2a19);box-shadow:0 2px 7px rgba(26,16,8,.35)}
+.magic-pool-card-wrap{max-width:440px;margin:14px auto 0;display:none}
+.magic-pool-card-wrap.open{display:block}
+.magic-pool-card-element{padding:12px;border:1.5px solid rgba(30,34,53,.18);border-radius:8px;background:#fff}
+.magic-pool-card-errors,.magic-pool-card-status{text-align:center;font-size:13px;margin-top:8px;min-height:18px}
+.magic-pool-card-errors{color:#D44A1E}
+.magic-pool-card-status{color:#2B7A53}
+@keyframes magicPoolFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-24}}
+@keyframes magicPoolRipple{0%,100%{opacity:.25;transform:scale(.98)}50%{opacity:.9;transform:scale(1.03)}}
+@keyframes magicPoolDrop{0%,100%{transform:translateY(-1px)}50%{transform:translateY(2px)}}
 /* ============================================================
  GUARDIAN PAGE — STICKY NOTE CARDS
  Every card becomes a sticky note matching the wall note aesthetic.
@@ -4912,6 +4939,44 @@ button { touch-action: manipulation; }
 </div>
 </div>
 
+<div class="gp-magic-pool">
+<div id="magic-pool-contribution">
+<svg class="magic-pool-illustration" viewBox="0 0 760 320" role="img" aria-label="People pouring water into a shared bowl">
+<ellipse cx="380" cy="278" rx="196" ry="26" fill="rgba(30,34,53,.08)"></ellipse>
+<ellipse cx="380" cy="250" rx="150" ry="44" fill="#F5E580" opacity=".9"></ellipse>
+<ellipse cx="380" cy="250" rx="122" ry="31" fill="#BAE4F5"></ellipse>
+<ellipse class="water-ripple" cx="380" cy="250" rx="78" ry="14"></ellipse>
+<ellipse class="water-ripple r2" cx="380" cy="250" rx="54" ry="9"></ellipse>
+<g>
+<circle cx="86" cy="98" r="18" fill="#F2C0D4"></circle><rect x="68" y="116" width="36" height="62" rx="13" fill="#C97B30"></rect><rect x="100" y="132" width="22" height="12" rx="6" fill="#F5E580" transform="rotate(-20 100 132)"></rect>
+<path class="water-stream w1" d="M121 145 C182 170,242 205,304 230"></path>
+</g>
+<g>
+<circle cx="184" cy="74" r="16" fill="#B8F0D4"></circle><rect x="167" y="90" width="34" height="58" rx="12" fill="#1E2235"></rect><rect x="198" y="103" width="20" height="11" rx="5" fill="#F5E580" transform="rotate(-14 198 103)"></rect>
+<path class="water-stream w2" d="M218 114 C268 145,310 184,345 226"></path>
+</g>
+<g>
+<circle cx="675" cy="88" r="18" fill="#BAE4F5"></circle><rect x="656" y="106" width="38" height="64" rx="14" fill="#D44A1E"></rect><rect x="636" y="126" width="22" height="12" rx="6" fill="#F5E580" transform="rotate(22 636 126)"></rect>
+<path class="water-stream w3" d="M638 138 C584 170,530 204,460 232"></path>
+</g>
+<g>
+<circle cx="560" cy="62" r="16" fill="#F5DDB0"></circle><rect x="544" y="78" width="33" height="56" rx="12" fill="#4DAE7A"></rect><rect x="528" y="88" width="20" height="11" rx="5" fill="#F5E580" transform="rotate(18 528 88)"></rect>
+<path class="water-stream w4" d="M530 98 C492 132,452 181,413 224"></path>
+</g>
+<circle class="droplet d1" cx="333" cy="210" r="4"></circle>
+<circle class="droplet d2" cx="394" cy="198" r="4"></circle>
+<circle class="droplet d3" cx="442" cy="214" r="4"></circle>
+</svg>
+<h2 class="magic-pool-h">The Magic Pool is growing.</h2>
+<p class="magic-pool-p">Add $1 and help grant a wish today.</p>
+<button type="button" class="magic-pool-btn" id="magic-pool-btn"><span aria-hidden="true">📌</span><span>$1</span></button>
+<div class="magic-pool-card-wrap" id="magic-pool-card-wrap">
+<div id="magic-pool-card-element" class="magic-pool-card-element"></div>
+<div id="magic-pool-card-errors" class="magic-pool-card-errors" aria-live="polite"></div>
+<div id="magic-pool-card-status" class="magic-pool-card-status" aria-live="polite"></div>
+</div>
+</div>
+</div>
 
 
 <div class="gp-spin-wrap" id="gp-spin">
@@ -7341,6 +7406,132 @@ async function submitGuardianPayment(){
   console.error('submitGuardianPayment error:', err);
   if(errEl) errEl.textContent = err.message || 'Payment failed. Please try again.';
   if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💙 Pay $' + amount.toFixed(2) + ' now'; }
+ }
+}
+
+let _magicPoolStripe = null;
+let _magicPoolCardEl = null;
+let _magicPoolBusy = false;
+
+function setMagicPoolFeedback(message, isError){
+ try {
+  const errEl = document.getElementById('magic-pool-card-errors');
+  const okEl  = document.getElementById('magic-pool-card-status');
+  if(errEl) errEl.textContent = isError ? (message || 'Something went wrong. Please try again.') : '';
+  if(okEl)  okEl.textContent  = !isError ? (message || '') : '';
+ } catch(err){
+  console.warn('setMagicPoolFeedback error:', err);
+ }
+}
+
+function getMagicPoolStripe(){
+ try {
+  if(_magicPoolStripe) return _magicPoolStripe;
+  if(typeof _stripeInst !== 'undefined' && _stripeInst){
+   _magicPoolStripe = _stripeInst;
+   return _magicPoolStripe;
+  }
+  if(typeof Stripe === 'undefined'){
+   setMagicPoolFeedback('Stripe is loading. Please try again in a moment.', true);
+   return null;
+  }
+  _magicPoolStripe = Stripe(STRIPE_PK);
+  return _magicPoolStripe;
+ } catch(err){
+  console.error('getMagicPoolStripe error:', err);
+  setMagicPoolFeedback('Unable to start payment right now.', true);
+  return null;
+ }
+}
+
+function mountMagicPoolCardElement(){
+ try {
+  const wrap = document.getElementById('magic-pool-card-wrap');
+  if(wrap) wrap.classList.add('open');
+  const stripe = getMagicPoolStripe();
+  if(!stripe) return false;
+  if(_magicPoolCardEl){
+   try { _magicPoolCardEl.unmount(); } catch(unmountErr){ console.warn('magic pool unmount error:', unmountErr); }
+   _magicPoolCardEl = null;
+  }
+  const elements = stripe.elements();
+  _magicPoolCardEl = elements.create('card', { style: { base: { fontFamily: "'Lexend', sans-serif", fontSize: '16px' } } });
+  _magicPoolCardEl.mount('#magic-pool-card-element');
+  _magicPoolCardEl.on('change', function(ev){
+   try {
+    setMagicPoolFeedback(ev && ev.error ? ev.error.message : '', !!(ev && ev.error));
+   } catch(changeErr){
+    console.warn('magic pool card change error:', changeErr);
+   }
+  });
+  setMagicPoolFeedback('Enter your card details, then press the $1 note again to confirm.', false);
+  return true;
+ } catch(err){
+  console.error('mountMagicPoolCardElement error:', err);
+  setMagicPoolFeedback('Unable to load card form. Please refresh and try again.', true);
+  return false;
+ }
+}
+
+async function magicPoolContributionPay(){
+ try {
+  const btn = document.getElementById('magic-pool-btn');
+  if(_magicPoolBusy) return;
+  if(!_magicPoolCardEl){
+   const mounted = mountMagicPoolCardElement();
+   if(mounted && btn) btn.innerHTML = '<span aria-hidden="true">📌</span><span>Pay $1 now</span>';
+   return;
+  }
+  _magicPoolBusy = true;
+  if(btn){ btn.disabled = true; btn.innerHTML = '<span aria-hidden="true">📌</span><span>Processing…</span>'; }
+  setMagicPoolFeedback('', false);
+  const res = await fetch('/.netlify/functions/create-payment-intent', {
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json' },
+   body: JSON.stringify({ amount: 100, wishId: 'community_pot' }),
+  });
+  const raw = await res.text();
+  let data = {};
+  try {
+   data = raw ? JSON.parse(raw) : {};
+  } catch(parseErr){
+   throw new Error(res.ok ? 'Invalid payment response from server.' : 'Payment service unavailable. Please try again.');
+  }
+  if(!res.ok) throw new Error((data && data.error) || 'Unable to create payment intent.');
+  if(!data.clientSecret) throw new Error('Unable to create payment intent.');
+  const stripe = getMagicPoolStripe();
+  if(!stripe || !_magicPoolCardEl) throw new Error('Payment form is not ready.');
+  const email = (sessionStorage.getItem('ww-guardian-email') || '').trim();
+  const confirmation = await stripe.confirmCardPayment(data.clientSecret, {
+   payment_method: {
+    card: _magicPoolCardEl,
+    billing_details: email ? { email: email } : {},
+   },
+  });
+  if(confirmation && confirmation.error) throw new Error(confirmation.error.message || 'Payment failed.');
+  setMagicPoolFeedback('Success! Your $1 is on its way to the Magic Pool.', false);
+  if(btn){ btn.innerHTML = '<span aria-hidden="true">📌</span><span>$1 added</span>'; btn.disabled = true; }
+ } catch(err){
+  console.error('magicPoolContributionPay error:', err);
+  setMagicPoolFeedback((err && err.message) || 'Payment failed. Please try again.', true);
+  const btn = document.getElementById('magic-pool-btn');
+  if(btn){ btn.disabled = false; btn.innerHTML = '<span aria-hidden="true">📌</span><span>Pay $1 now</span>'; }
+ } finally {
+  _magicPoolBusy = false;
+ }
+}
+
+function initMagicPoolContribution(){
+ try {
+  const btn = document.getElementById('magic-pool-btn');
+  if(!btn) return;
+  if(!btn.dataset.magicPoolBound){
+   btn.addEventListener('click', magicPoolContributionPay);
+   btn.dataset.magicPoolBound = '1';
+  }
+  setMagicPoolFeedback('', false);
+ } catch(err){
+  console.warn('initMagicPoolContribution error:', err);
  }
 }
 
@@ -9990,6 +10181,7 @@ function gpInitGuardian(){
 gpDrawWheel();
 gpRenderFame(false);
 initGuardianStickyNotes();
+initMagicPoolContribution();
 window._gpPoolAmt=1;
 }
 
