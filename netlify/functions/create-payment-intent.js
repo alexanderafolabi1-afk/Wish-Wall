@@ -9,7 +9,7 @@ exports.handler = async (event) => {
   try { body = JSON.parse(event.body); }
   catch { return { statusCode: 400, body: 'Invalid JSON' }; }
 
-  const { amount, wishId } = body;
+  const { amount, wishId, donorName, donorEmail, anonymous } = body;
 
   if (!amount || typeof amount !== 'number' || amount < 50) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid amount (minimum 50 cents)' }) };
@@ -19,14 +19,20 @@ exports.handler = async (event) => {
     ? (wishId === 'community_pot' ? 'community_pot' : 'grant_' + wishId)
     : '';
 
+  const metadata = clientRef ? { wishId, client_reference_id: clientRef } : {};
+  if (donorName)  metadata.name      = String(donorName).slice(0, 200);
+  if (anonymous)  metadata.anonymous = 'true';
+
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount:               Math.round(amount),
-      currency:             'usd',
-      // client_reference_id is a top-level field on PaymentIntent
-      ...(clientRef ? { metadata: { wishId, client_reference_id: clientRef } } : {}),
+    const intentParams = {
+      amount:   Math.round(amount),
+      currency: 'usd',
       automatic_payment_methods: { enabled: true },
-    });
+    };
+    if (Object.keys(metadata).length) intentParams.metadata = metadata;
+    if (donorEmail) intentParams.receipt_email = String(donorEmail).slice(0, 200);
+
+    const paymentIntent = await stripe.paymentIntents.create(intentParams);
 
     return {
       statusCode: 200,

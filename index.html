@@ -4991,12 +4991,23 @@ button { touch-action: manipulation; }
 
 <!-- ── Magic Pool payment modal ─────────────────────────────────────────── -->
 <div id="pool-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;align-items:center;justify-content:center;" onclick="if(event.target===this)closePoolModal()">
-  <div style="background:#1a0d2e;border:1px solid #7c3aed;border-radius:18px;padding:32px 28px;max-width:380px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+  <div style="background:#1a0d2e;border:1px solid #7c3aed;border-radius:18px;padding:32px 28px;max-width:400px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6);">
     <button onclick="closePoolModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#a78bfa;font-size:22px;cursor:pointer;line-height:1;">&times;</button>
     <p style="color:#a78bfa;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px">The Magic Pool</p>
     <h3 style="color:#fff;font-size:1.4rem;margin:0 0 8px">Drop $1 into the pot 🪙</h3>
-    <p style="color:#c4b5fd;font-size:.9rem;margin:0 0 20px">Your $1 joins others to grant wishes together. You stay right here.</p>
-    <div id="pool-card-wrap" style="background:#120826;border:1px solid #4c1d95;border-radius:10px;padding:14px 12px;margin-bottom:18px;">
+    <p style="color:#c4b5fd;font-size:.9rem;margin:0 0 16px">Your $1 joins others to grant wishes together. You stay right here.</p>
+    <!-- Donor info fields -->
+    <input id="pool-donor-name" type="text" placeholder="Your name (optional)" maxlength="100"
+      style="width:100%;background:#120826;border:1px solid #4c1d95;border-radius:8px;color:#e9d5ff;font-size:.9rem;padding:10px 12px;margin-bottom:10px;outline:none;font-family:inherit;box-sizing:border-box;"/>
+    <input id="pool-donor-email" type="email" placeholder="your@email.com (optional)" maxlength="200"
+      style="width:100%;background:#120826;border:1px solid #4c1d95;border-radius:8px;color:#e9d5ff;font-size:.9rem;padding:10px 12px;margin-bottom:12px;outline:none;font-family:inherit;box-sizing:border-box;"/>
+    <!-- Anon toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button id="pool-anon-no" onclick="poolSetAnon(false)" style="flex:1;padding:9px 8px;border-radius:8px;border:2px solid #7c3aed;background:#2d1457;color:#e9d5ff;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s;">✨ Donate with my name</button>
+      <button id="pool-anon-yes" onclick="poolSetAnon(true)" style="flex:1;padding:9px 8px;border-radius:8px;border:2px solid #4c1d95;background:transparent;color:#a78bfa;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s;">🕵️ Donate anonymously</button>
+    </div>
+    <!-- Card element -->
+    <div id="pool-card-wrap" style="background:#120826;border:1px solid #4c1d95;border-radius:10px;padding:14px 12px;margin-bottom:14px;">
       <div id="pool-card-element"></div>
     </div>
     <div id="pool-card-error" style="color:#f87171;font-size:.85rem;margin-bottom:12px;min-height:20px;"></div>
@@ -7595,14 +7606,37 @@ function selPool(amt, btn){
 // ── Magic Pool inline payment modal ────────────────────────────────────────
 let _poolCardEl = null;
 let _poolStripe = null;
+let _poolAnon   = false;
+
+function poolSetAnon(isAnon){
+ _poolAnon = isAnon;
+ const btnNo  = document.getElementById('pool-anon-no');
+ const btnYes = document.getElementById('pool-anon-yes');
+ if(btnNo){
+  btnNo.style.borderColor  = isAnon ? '#4c1d95' : '#7c3aed';
+  btnNo.style.background   = isAnon ? 'transparent' : '#2d1457';
+  btnNo.style.color        = isAnon ? '#a78bfa' : '#e9d5ff';
+ }
+ if(btnYes){
+  btnYes.style.borderColor = isAnon ? '#7c3aed' : '#4c1d95';
+  btnYes.style.background  = isAnon ? '#2d1457' : 'transparent';
+  btnYes.style.color       = isAnon ? '#e9d5ff' : '#a78bfa';
+ }
+}
 
 function openPoolModal(){
  const ov = document.getElementById('pool-modal-overlay');
  if(!ov) return;
+ _poolAnon = false;
  ov.style.display = 'flex';
  document.getElementById('pool-success').style.display = 'none';
  document.getElementById('pool-card-wrap').style.display = 'block';
  document.getElementById('pool-card-error').textContent = '';
+ const nameEl  = document.getElementById('pool-donor-name');
+ const emailEl = document.getElementById('pool-donor-email');
+ if(nameEl)  nameEl.value  = '';
+ if(emailEl) emailEl.value = '';
+ poolSetAnon(false);
  const payBtn = document.getElementById('pool-pay-btn');
  if(payBtn){ payBtn.style.display = ''; payBtn.disabled = false; payBtn.textContent = '💜 Contribute $1'; }
  initPoolCard();
@@ -7632,22 +7666,28 @@ function initPoolCard(){
 }
 
 async function submitPoolPayment(){
- const payBtn = document.getElementById('pool-pay-btn');
- const errEl  = document.getElementById('pool-card-error');
+ const payBtn  = document.getElementById('pool-pay-btn');
+ const errEl   = document.getElementById('pool-card-error');
+ const donorName  = (document.getElementById('pool-donor-name')?.value  || '').trim();
+ const donorEmail = (document.getElementById('pool-donor-email')?.value || '').trim();
  if(!_poolCardEl || !_poolStripe){ if(errEl) errEl.textContent = 'Card form not ready.'; return; }
  if(payBtn){ payBtn.disabled = true; payBtn.textContent = 'Processing...'; }
  if(errEl) errEl.textContent = '';
  try {
+  const payload = { amount: 100, wishId: 'community_pot' };
+  if(donorName)  payload.donorName  = donorName;
+  if(donorEmail) payload.donorEmail = donorEmail;
+  if(_poolAnon)  payload.anonymous  = true;
   const res = await fetch('/.netlify/functions/create-payment-intent', {
    method:'POST',
    headers:{'Content-Type':'application/json'},
-   body: JSON.stringify({ amount: 100, wishId: 'community_pot' }),
+   body: JSON.stringify(payload),
   });
   const data = await res.json();
   if(!res.ok || !data.clientSecret) throw new Error(data.error || 'Could not start payment');
-  const { error } = await _poolStripe.confirmCardPayment(data.clientSecret, {
-   payment_method: { card: _poolCardEl },
-  });
+  const confirmOpts = { payment_method: { card: _poolCardEl } };
+  if(donorEmail) confirmOpts.receipt_email = donorEmail;
+  const { error } = await _poolStripe.confirmCardPayment(data.clientSecret, confirmOpts);
   if(error){
    if(errEl) errEl.textContent = error.message;
    if(payBtn){ payBtn.disabled = false; payBtn.textContent = '💜 Contribute $1'; }
