@@ -6,111 +6,13 @@
 <title>Wish Wall Admin 🔐 — wishwall.xyz</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="/admin-manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
-<!-- Firebase SDK — read-only listeners; writes go through /.netlify/functions/admin-action -->
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import {
-    getFirestore, collection, doc, query, orderBy, onSnapshot
-  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
-    authDomain: "wishwall-79dd2.firebaseapp.com",
-    projectId: "wishwall-79dd2",
-    storageBucket: "wishwall-79dd2.firebasestorage.app",
-    messagingSenderId: "496538589706",
-    appId: "1:496538589706:web:bb27da6e931f9155e31df3"
-  };
-
-  try {
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-
-    let knownWishIds  = null;
-    let knownDonorIds = null;
-
-    // ── Wishes: live render + browser notifications ────────────────────────
-    const wishQ = query(collection(db, 'wishes'), orderBy('createdAt', 'desc'));
-    onSnapshot(wishQ, snap => {
-      // Exclude warmup documents
-      const all = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
-        .filter(w => !w.warmup);
-
-      if (knownWishIds !== null && Notification.permission === 'granted') {
-        const now = Date.now();
-        snap.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            const w = change.doc.data();
-            if (!w.warmup && !knownWishIds.has(change.doc.id) &&
-                (w.status === 'pending' || w.status === 'queued')) {
-              const ms = w.createdAt?.toMillis ? w.createdAt.toMillis()
-                       : (w.createdAt ? new Date(w.createdAt).getTime() : 0);
-              if (ms && now - ms < 60000) {
-                try { new Notification('New wish posted', { body: (w.wishText||'').slice(0,80), icon:'/favicon.ico' }); } catch(_){}
-              }
-            }
-          }
-        });
-      }
-      knownWishIds = new Set(snap.docs.map(d => d.id));
-      window.renderAdmin(all);
-    }, err => console.error('Wishes snapshot error:', err.message));
-
-    // ── Donors: live render + notifications ────────────────────────────────
-    const donorQ = query(collection(db, 'donors'), orderBy('createdAt', 'desc'));
-    onSnapshot(donorQ, snap => {
-      const donors = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (knownDonorIds !== null && Notification.permission === 'granted') {
-        snap.docChanges().forEach(change => {
-          if (change.type === 'added' && !knownDonorIds.has(change.doc.id)) {
-            const d = change.doc.data();
-            try { new Notification('New donation', { body: '$' + d.amount + ' from ' + (d.name||'Anonymous') }); } catch(_){}
-          }
-        });
-      }
-      knownDonorIds = new Set(snap.docs.map(d => d.id));
-      window.renderDonors(donors);
-    }, err => console.error('Donors snapshot error:', err.message));
-
-    // ── Ledger: update stats strip + ledger editor fields ─────────────────
-    onSnapshot(doc(db, 'meta', 'ledger'), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      const poolEl = document.getElementById('a-pool');
-      if (poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
-      const fields = {
-        'l-fees': data.totalFees, 'l-don': data.totalDonations,
-        'l-gr':   data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance,
-      };
-      Object.entries(fields).forEach(([id, val]) => {
-        const el = document.getElementById(id);
-        if (el && val != null) el.value = val;
-      });
-    }, err => console.error('Ledger snapshot error:', err.message));
-
-    // ── Config: live pause-button state ───────────────────────────────────
-    onSnapshot(doc(db, 'meta', 'config'), snap => {
-      if (!snap.exists()) return;
-      const paused = !!snap.data().paused;
-      const btn = document.getElementById('ctrl-pause-btn');
-      if (btn) {
-        btn.textContent    = paused ? '\u25b6\ufe0f Resume Submissions' : '\u23f8 Pause New Submissions';
-        btn.dataset.paused = paused ? '1' : '0';
-        btn.className      = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
-      }
-    }, err => console.error('Config snapshot error:', err.message));
-
-    // email_queue is fetched on-demand via adminFetch (PII: not exposed client-side)
-
-    window._fbReady = true;
-  } catch(e) {
-    console.warn('Firebase init error:', e.message);
-    window._fbReady = false;
-  }
-</script>
+<!-- Firebase compat SDK (global firebase.* API — no ES modules) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
 <style>
 :root{
@@ -458,6 +360,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .adm-search{min-width:100%;}
 }
 </style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
 <body>
 
@@ -700,6 +603,74 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 'use strict';
 
 /* ============================================================
+   FIREBASE — compat SDK init + listeners
+   ============================================================ */
+const app = firebase.initializeApp({
+  apiKey:            "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
+  authDomain:        "wishwall-79dd2.firebaseapp.com",
+  projectId:         "wishwall-79dd2",
+  storageBucket:     "wishwall-79dd2.firebasestorage.app",
+  messagingSenderId: "496538589706",
+  appId:             "1:496538589706:web:bb27da6e931f9155e31df3"
+});
+const db = firebase.firestore();
+
+function startListeners() {
+  db.collection('wishes').onSnapshot(function(snap) {
+    console.log('[admin] wishes snapshot:', snap.docs.length, 'docs');
+    snap.docs.forEach(function(d) {
+      var w = d.data();
+      console.log('[admin] wish', d.id, '| status:', w.status, '| text:', (w.wishText||'').slice(0,60));
+    });
+    var wishes = snap.docs.map(function(d) {
+      return Object.assign({ id: d.id }, d.data());
+    });
+    renderAdmin(wishes);
+  }, function(err) {
+    console.error('Wishes error:', err.message);
+  });
+
+  db.collection('donors').onSnapshot(function(snap) {
+    var donors = snap.docs.map(function(d) {
+      return Object.assign({ id: d.id }, d.data());
+    });
+    renderDonors(donors);
+  }, function(err) {
+    console.error('Donors error:', err.message);
+  });
+
+  db.collection('meta').doc('ledger').onSnapshot(function(snap) {
+    if (!snap.exists) return;
+    var data = snap.data();
+    var poolEl = document.getElementById('a-pool');
+    if (poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
+    var fields = {
+      'l-fees': data.totalFees, 'l-don': data.totalDonations,
+      'l-gr':   data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance,
+    };
+    Object.entries(fields).forEach(function(kv) {
+      var el = document.getElementById(kv[0]);
+      if (el && kv[1] != null) el.value = kv[1];
+    });
+  }, function(err) {
+    console.error('Ledger error:', err.message);
+  });
+
+  db.collection('meta').doc('config').onSnapshot(function(snap) {
+    if (!snap.exists) return;
+    var paused = !!snap.data().paused;
+    var btn = document.getElementById('ctrl-pause-btn');
+    if (btn) {
+      btn.textContent    = paused ? '▶️ Resume Submissions' : '⏸ Pause New Submissions';
+      btn.dataset.paused = paused ? '1' : '0';
+      btn.className      = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
+    }
+  }, function(err) {
+    console.error('Config error:', err.message);
+  });
+}
+
+/* ============================================================
    AUTH — simple password gate
    ============================================================ */
 const ADMIN_PW  = 'Wishwall2026';
@@ -733,7 +704,7 @@ function login(){
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('adm-wrap').classList.add('show');
     requestNotificationPermission();
-    loadDemoIfNeeded();
+    startListeners();
   } else {
     document.getElementById('login-err').textContent = '❌ Wrong password. Try again.';
     document.getElementById('adm-pw').value = '';
@@ -749,7 +720,7 @@ if(sessionStorage.getItem(ADMIN_KEY)){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('adm-wrap').classList.add('show');
   requestNotificationPermission();
-  loadDemoIfNeeded();
+  startListeners();
 }
 
 function requestNotificationPermission(){
