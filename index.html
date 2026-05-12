@@ -4508,6 +4508,191 @@ button { touch-action: manipulation; }
 .corp-card-top    { padding-top: 12px !important; }
 .gp-amts          { padding-top: 14px !important; }
 
+
+/* ============================================================
+   MAGIC PAGE (TAB-HOW) — playful sticky-note redesign
+   ============================================================ */
+
+/* Floating star particles behind hero */
+#how-particles { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+#how-particles span {
+  position:absolute; display:block; width:6px; height:6px; opacity:0;
+  animation: howFloat 8s ease-in-out infinite;
+  font-size:12px; line-height:1; user-select:none;
+}
+@keyframes howFloat {
+  0%   { opacity:0; transform:translateY(60px) scale(.6) rotate(0deg); }
+  15%  { opacity:.7; }
+  85%  { opacity:.5; }
+  100% { opacity:0; transform:translateY(-80px) scale(1) rotate(360deg); }
+}
+
+/* "How the Magic Works" heading — big Fraunces + warm gradient */
+#tab-how .sec-header {
+  position:relative; text-align:center; margin-bottom:36px;
+  padding:32px 20px 28px;
+  background:linear-gradient(135deg,rgba(245,229,128,.18) 0%,rgba(245,221,176,.22) 50%,rgba(221,184,245,.12) 100%);
+  border-radius:20px;
+}
+#tab-how .sec-title {
+  font-family:var(--fn-display);
+  font-size:clamp(2rem,6vw,3.2rem);
+  font-weight:900;
+  font-variation-settings:'opsz' 48,'wght' 900;
+  color:#1E2235;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+  margin-bottom:10px;
+}
+#tab-how .sec-sub {
+  font-family:var(--fn-body);
+  font-size:1rem;
+  color:#5a5f7a;
+}
+
+/* Cork-board stats strip */
+#tab-how .live-impact-bar {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(180,140,80,.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(160,120,60,.2) 0%, transparent 55%),
+    #BFA06A;
+  border:none;
+  border-radius:14px;
+  overflow:visible;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.18), 0 4px 20px rgba(0,0,0,.12);
+  gap:16px;
+  padding:28px 20px;
+  flex-wrap:wrap;
+}
+#tab-how .lib-divider { display:none; }
+
+/* Sticky note lib-items */
+#tab-how .lib-item {
+  position:relative;
+  border-radius:2px;
+  padding:24px 16px 20px;
+  box-shadow:3px 5px 10px rgba(0,0,0,.22), 0 1px 2px rgba(0,0,0,.1);
+  min-width:120px;
+}
+#tab-how .lib-item:nth-child(1) { background:#F5E580; transform:rotate(-1.8deg); }
+#tab-how .lib-item:nth-child(2) { background:#BAE4F5; transform:rotate(1.2deg); }
+#tab-how .lib-item:nth-child(3) { background:#B8F0D4; transform:rotate(-0.6deg); }
+#tab-how .lib-item:nth-child(4) { background:#F5DDB0; transform:rotate(1.9deg); }
+#tab-how .lib-item:nth-child(5) { background:#DDB8F5; transform:rotate(-1.3deg); }
+/* Thumbtack pins */
+#tab-how .lib-item::before {
+  content:'';
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  width:18px; height:18px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#E05025,#8B2010);
+  box-shadow:0 2px 6px rgba(0,0,0,.45),inset 0 -1px 3px rgba(0,0,0,.2);
+  z-index:2;
+}
+/* Torn bottom edge on lib-items */
+#tab-how .lib-item::after {
+  content:''; position:absolute; bottom:-4px; left:0; right:0; height:5px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='5'%3E%3Cpath d='M0 5 Q2 0 4 3 Q6 5 8 1 Q10 0 12 3 Q14 5 16 1 Q18 0 20 3 L20 5Z' fill='%23000000' fill-opacity='0.09'/%3E%3C/svg%3E");
+  background-repeat:repeat-x; background-size:20px 5px;
+}
+#tab-how .lib-num {
+  font-family:var(--fn-display);
+  font-size:2.2rem;
+  font-weight:900;
+  font-variation-settings:'opsz' 48,'wght' 900;
+  color:#1E2235;
+  line-height:1;
+}
+#tab-how .lib-label {
+  font-family:var(--fn-mono);
+  font-size:9px;
+  font-variant:small-caps;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:rgba(30,34,53,.65);
+  margin-top:4px;
+}
+
+/* Wall of Kindness — sticky note fame-cards */
+#tab-how .fame-grid { gap:20px; }
+#tab-how .fame-card {
+  position:relative;
+  border:none;
+  border-radius:2px;
+  padding:28px 18px 22px;
+  box-shadow:3px 5px 12px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.08);
+  transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;
+  overflow:visible;
+}
+#tab-how .fame-card:nth-child(1) { background:#F5E580; transform:rotate(-1.5deg); }
+#tab-how .fame-card:nth-child(2) { background:#F2C0D4; transform:rotate(1.1deg); }
+#tab-how .fame-card:nth-child(3) { background:#BAE4F5; transform:rotate(-0.7deg); }
+#tab-how .fame-card:nth-child(4) { background:#B8F0D4; transform:rotate(2deg); }
+#tab-how .fame-card:nth-child(5) { background:#F5DDB0; transform:rotate(-1.8deg); }
+#tab-how .fame-card:nth-child(6) { background:#DDB8F5; transform:rotate(.9deg); }
+#tab-how .fame-card:hover { transform:rotate(0deg) translateY(-4px); box-shadow:5px 8px 20px rgba(0,0,0,.18); }
+/* Pin on fame-card */
+#tab-how .fame-card::before {
+  content:'';
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  width:18px; height:18px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#E05025,#8B2010);
+  box-shadow:0 2px 6px rgba(0,0,0,.45),inset 0 -1px 3px rgba(0,0,0,.2);
+  z-index:2;
+}
+/* Torn bottom edge on fame-cards */
+#tab-how .fame-card::after {
+  content:''; position:absolute; bottom:-4px; left:0; right:0; height:5px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='5'%3E%3Cpath d='M0 5 Q2 0 4 3 Q6 5 8 1 Q10 0 12 3 Q14 5 16 1 Q18 0 20 3 L20 5Z' fill='%23000000' fill-opacity='0.09'/%3E%3C/svg%3E");
+  background-repeat:repeat-x; background-size:20px 5px;
+}
+#tab-how .fame-quote {
+  font-family:var(--fn-body);
+  font-size:.95rem;
+  font-style:italic;
+  color:#1E2235;
+  line-height:1.7;
+  flex:1;
+}
+#tab-how .fame-meta {
+  font-family:var(--fn-mono);
+  font-size:10px;
+  font-variant:small-caps;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:rgba(30,34,53,.55);
+}
+
+/* Step connectors — dotted curved line between how-cards */
+.how-steps-wrap { position:relative; }
+.how-step-connector {
+  display:flex; justify-content:center; align-items:center;
+  height:32px; margin:-2px 0;
+  position:relative; z-index:0;
+}
+.how-step-connector svg { opacity:.45; }
+
+/* How-card subtle left-border accent by step */
+#tab-how .how-card:nth-of-type(1) { border-left:4px solid #F5E580; }
+#tab-how .how-card:nth-of-type(2) { border-left:4px solid #BAE4F5; }
+#tab-how .how-card:nth-of-type(3) { border-left:4px solid #B8F0D4; }
+#tab-how .how-card:nth-of-type(4) { border-left:4px solid #DDB8F5; }
+#tab-how .how-card:nth-of-type(5) { border-left:4px solid #F5DDB0; }
+
+/* Pin My Wish button — bigger + pulse */
+#tab-how .pin-btn {
+  font-size:1.2rem !important;
+  padding:18px 52px !important;
+  border-radius:14px !important;
+  background:#D44A1E !important;
+  color:#ffffff !important;
+  box-shadow:0 4px 20px rgba(212,74,30,.35);
+  animation:howPinPulse 2.8s ease-in-out infinite;
+}
+@keyframes howPinPulse {
+  0%,100% { box-shadow:0 4px 20px rgba(212,74,30,.35); }
+  50%      { box-shadow:0 6px 32px rgba(212,74,30,.55), 0 0 0 8px rgba(212,74,30,.08); }
+}
+#tab-how .pin-btn:hover { animation:none; transform:translateY(-2px); box-shadow:0 8px 28px rgba(212,74,30,.5) !important; }
 </style>
 
 </head>
@@ -5052,7 +5237,8 @@ button { touch-action: manipulation; }
 <!-- ============================================================
  TAB: HOW IT WORKS
  ============================================================ -->
-<div id="tab-how" class="tab-content">
+<div id="tab-how" class="tab-content" style="position:relative;">
+ <div id="how-particles" aria-hidden="true"></div>
  <div style="max-width:700px;margin:0 auto;padding:60px 20px;position:relative;z-index:1;">
  <div class="sec-header">
  <h2 class="sec-title">How the Magic Works ✨</h2>
@@ -5100,6 +5286,7 @@ button { touch-action: manipulation; }
   </div>
  </div>
 
+ <div class="how-steps-wrap">
  <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">📌</div>
  <div>
@@ -5107,7 +5294,7 @@ button { touch-action: manipulation; }
  <p class="how-card-body">Write your wish (max 350 characters), pay 2 WishCoins ($2 USD) via Stripe, and your wish appears on the wall instantly. Your real name is required for verification but you choose whether it shows on the wall. Anonymous. No judgement. Open to everyone, everywhere. Up to 3 wishes per year.</p>
  </div>
  </div>
-
+ <div class="how-step-connector"><svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 C10 8, 30 20, 20 32" stroke="#D44A1E" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" fill="none"/></svg></div>
  <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">🛡️</div>
  <div>
@@ -5115,7 +5302,7 @@ button { touch-action: manipulation; }
  <p class="how-card-body">Community Guardians browse the wall and choose a wish to make real. They can grant it directly, sending money, purchasing an item, making a connection, or offering a skill, or top up the Magic Pool for wishes they want to support but cannot fulfil alone.</p>
  </div>
  </div>
-
+ <div class="how-step-connector"><svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 C10 8, 30 20, 20 32" stroke="#D44A1E" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" fill="none"/></svg></div>
  <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">✅</div>
  <div>
@@ -5123,7 +5310,7 @@ button { touch-action: manipulation; }
  <p class="how-card-body">When we connect a Guardian to a wisher and fulfilment is verified, money sent, item delivered, connection made, hug given, the note turns green ✅ on the wall. Guardians fulfil directly or ask the Wish Wall to arrange it on their behalf. Both wisher and Guardian receive a private confirmation. Identities are never revealed. Every moment is honoured.</p>
  </div>
  </div>
-
+ <div class="how-step-connector"><svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 C10 8, 30 20, 20 32" stroke="#D44A1E" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" fill="none"/></svg></div>
  <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">🧱</div>
  <div>
@@ -5131,7 +5318,7 @@ button { touch-action: manipulation; }
  <p class="how-card-body">The 1,000-spot wall always stays full 1,000 wishes, 1,000 stories. Together the notes form a mosaic image a giant "Thank You ❤️" with each note carrying one tile of that design. When granted wishes are replaced after 4 hours, new tiles join the mosaic. The wall is never empty. The message never changes.</p>
  </div>
  </div>
-
+ <div class="how-step-connector"><svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 C10 8, 30 20, 20 32" stroke="#D44A1E" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round" fill="none"/></svg></div>
  <div class="how-card" style="background:#ffffff;border:1px solid rgba(30,34,53,.1);">
  <div class="how-card-icon">📊</div>
  <div>
@@ -5139,6 +5326,8 @@ button { touch-action: manipulation; }
  <p class="how-card-body">Every wish is verified against a government-issued ID before it goes live, no exceptions. When a Guardian chooses to grant a wish, we fulfil it on their behalf: sourcing, purchasing, or arranging exactly what was asked. The wisher receives their grant. The Guardian receives verified proof that the deed was done and a record of the gratitude given. No middlemen. No ambiguity. Just a closed loop of verified kindness. Questions? Email <a href="/cdn-cgi/l/email-protection#fd9c99909493bd8a9c91918a948e95988ed3858487" style="color:var(--yellow);"><span class="__cf_email__" data-cfemail="28494c454146685f4944445f415b404d5b06505152">[email&#160;protected]</span></a></p>
  </div>
  </div>
+
+ </div><!-- /how-steps-wrap -->
 
  <div style="text-align:center;margin-top:44px;">
  <button class="pin-btn" onclick="showTab('wall');openModal();" style="font-size:18px;padding:14px 38px;">
@@ -6447,12 +6636,12 @@ function updateStats(rawWishes){
   animNum('s-granted', granted);
   // Public stat pills: Guardians and Countries (sourced from liveStats, updated by Firebase ledger)
   animNum('s-guardians', liveStats.guardians);
-  animNum('s-countries', liveStats.countries);
+  animNum('s-countries', liveStats.countries, '+');
  // Pot balance is internal only, not rendered to any public element
  updateMilestone(total);
 }
 
-function animNum(id, target){
+function animNum(id, target, suffix=''){
  const el = document.getElementById(id);
  if(!el) return;
  const start = parseInt(el.textContent.replace(/\D/g,'')) || 0;
@@ -6460,7 +6649,7 @@ function animNum(id, target){
  function tick(now){
  const p = Math.min((now-t0)/650, 1);
  const e = 1 - Math.pow(1-p, 3);
- el.textContent = Math.round(start + (target-start)*e);
+ el.textContent = Math.round(start + (target-start)*e) + suffix;
  if(p < 1) requestAnimationFrame(tick);
  }
  requestAnimationFrame(tick);
@@ -9806,6 +9995,25 @@ window._gpPoolAmt=1;
 
 if(document.readyState==='loading'){
 document.addEventListener('DOMContentLoaded',gpInitGuardian);
+
+/* ── Magic page: floating star particles ─────────────────────────────── */
+(function(){
+  var container = document.getElementById('how-particles');
+  if(!container) return;
+  var symbols = ['✨','⭐','🌟','💫','·','★','✦'];
+  for(var i=0;i<22;i++){
+    var s = document.createElement('span');
+    s.textContent = symbols[i % symbols.length];
+    s.style.cssText = [
+      'left:' + (Math.random()*98) + '%',
+      'top:' + (Math.random()*100) + '%',
+      'font-size:' + (10 + Math.random()*14) + 'px',
+      'animation-delay:' + (Math.random()*8) + 's',
+      'animation-duration:' + (7 + Math.random()*6) + 's',
+    ].join(';');
+    container.appendChild(s);
+  }
+})();
 }else{
 gpInitGuardian();
 }
