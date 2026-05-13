@@ -24,7 +24,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 
 /* ── LOGIN ──────────────────────────────────────────────── */
 .login-screen{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle at 50% 40%,#200A00,#000);
 }
 .login-card{
@@ -57,7 +57,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 .admin-wrap{display:none;}
 .admin-wrap.show{
   display:flex;flex-direction:column;
-  height:100vh;overflow:hidden;
+  height:100vh;height:100dvh;overflow:hidden;
 }
 
 /* Header */
@@ -344,6 +344,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .wish-cards{display:none!important;}
 }
 @media(max-width:768px){
+  .adm-header{height:auto;padding:10px 12px;gap:8px;align-items:flex-start;flex-wrap:wrap;}
+  .adm-header > div{min-width:0;}
+  .adm-logo{font-size:18px;}
+  .adm-domain{display:none;}
+  .adm-logout{margin-left:auto;padding:7px 12px;font-size:12px;}
   .adm-sidebar{display:none;}
   .mobile-nav{display:flex;}
   .adm-content{padding:16px;padding-bottom:calc(var(--mob-nav-h) + 16px);}
