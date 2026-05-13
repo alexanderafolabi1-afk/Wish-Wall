@@ -44,6 +44,12 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 }
 .adm-inp:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,123,44,.12);}
 .adm-inp::placeholder{color:rgba(255,255,255,.25);}
+.pw-wrap{position:relative;width:100%;margin-bottom:14px;}
+.pw-wrap .adm-inp{margin-bottom:0;padding-right:46px;}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;font-size:18px;line-height:1;
+  color:rgba(255,255,255,.45);padding:4px;transition:color .2s;}
+.pw-toggle:hover{color:rgba(255,255,255,.85);}
 .login-btn{
   width:100%;padding:15px;border-radius:50px;border:none;
   background:linear-gradient(135deg,var(--orange),var(--pink));
@@ -371,8 +377,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   <div class="login-card">
     <div class="login-icon">🔐</div>
     <h2 class="login-title">Admin Portal</h2>
-    <p class="login-sub">Wall Wishes — management console</p>
-    <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <p class="login-sub">The Wish Wall — management console</p>
+    <div class="pw-wrap">
+      <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+      <button type="button" class="pw-toggle" onclick="togglePwVisibility('adm-pw','adm-pw-eye')" aria-label="Toggle password visibility"><span id="adm-pw-eye">👁</span></button>
+    </div>
     <button class="login-btn" onclick="login()">Unlock ✨</button>
     <p class="login-err" id="login-err"></p>
     <p class="login-domain">wishwall.xyz · admin@wallwishes.xyz</p>
@@ -537,6 +546,23 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
             <button class="ctrl-action-btn ctrl-btn-csv" onclick="exportCSV()">📥 Export as CSV</button>
           </div>
 
+          <div class="ctrl-card" style="grid-column:1/-1">
+            <h3>🔑 Change Admin Password</h3>
+            <p>Update the admin login password. The new password is saved locally in this browser. You'll need to update the code (<code>ADMIN_PW</code>) on any other device.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+              <div class="pw-wrap" style="flex:1;min-width:200px;margin-bottom:0;">
+                <input class="adm-inp" type="password" id="new-pw" placeholder="New password" style="margin-bottom:0;">
+                <button type="button" class="pw-toggle" onclick="togglePwVisibility('new-pw','new-pw-eye')" aria-label="Toggle new password visibility"><span id="new-pw-eye">👁</span></button>
+              </div>
+              <div class="pw-wrap" style="flex:1;min-width:200px;margin-bottom:0;">
+                <input class="adm-inp" type="password" id="confirm-pw" placeholder="Confirm password" style="margin-bottom:0;">
+                <button type="button" class="pw-toggle" onclick="togglePwVisibility('confirm-pw','confirm-pw-eye')" aria-label="Toggle confirm password visibility"><span id="confirm-pw-eye">👁</span></button>
+              </div>
+              <button class="ctrl-action-btn" style="background:linear-gradient(135deg,var(--orange),var(--pink));flex-shrink:0;" onclick="changePassword()">🔑 Update Password</button>
+            </div>
+            <p id="pw-change-msg" style="margin-top:10px;font-size:13px;"></p>
+          </div>
+
         </div>
       </div>
 
@@ -607,8 +633,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 /* ============================================================
    AUTH — simple password gate
    ============================================================ */
-const ADMIN_PW  = 'Wishwall2026';
+const ADMIN_PW  = 'Admin@WishWall1'; // default — override via "Change Password" in Controls
 const ADMIN_KEY = 'ww_admin_auth';
+const ADMIN_PW_KEY = 'ww_admin_pw';
+
+function _effectivePw(){ return localStorage.getItem(ADMIN_PW_KEY) || ADMIN_PW; }
 
 /* ── Admin Netlify function helper ──────────────────────────────────────── */
 async function adminFetch(action, body = {}){
@@ -633,7 +662,7 @@ let respondTargetId = null;
 
 function login(){
   const pw = document.getElementById('adm-pw').value;
-  if(pw === ADMIN_PW){
+  if(pw === _effectivePw()){
     sessionStorage.setItem(ADMIN_KEY, '1');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('adm-wrap').classList.add('show');
@@ -642,6 +671,32 @@ function login(){
     document.getElementById('login-err').textContent = '❌ Wrong password. Try again.';
     document.getElementById('adm-pw').value = '';
   }
+}
+
+function togglePwVisibility(inputId, iconId){
+  const inp = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  if(inp.type === 'password'){
+    inp.type = 'text';
+    icon.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    icon.textContent = '👁';
+  }
+}
+
+function changePassword(){
+  const np = document.getElementById('new-pw').value.trim();
+  const cp = document.getElementById('confirm-pw').value.trim();
+  const msg = document.getElementById('pw-change-msg');
+  if(!np){ msg.style.color='var(--red)'; msg.textContent='❌ New password cannot be empty.'; return; }
+  if(np.length < 8){ msg.style.color='var(--red)'; msg.textContent='❌ Password must be at least 8 characters.'; return; }
+  if(np !== cp){ msg.style.color='var(--red)'; msg.textContent='❌ Passwords do not match.'; return; }
+  localStorage.setItem(ADMIN_PW_KEY, np);
+  document.getElementById('new-pw').value = '';
+  document.getElementById('confirm-pw').value = '';
+  msg.style.color='#4caf50';
+  msg.textContent='✅ Password updated! Use the new password next time you log in.';
 }
 
 function logout(){
