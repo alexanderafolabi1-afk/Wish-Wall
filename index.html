@@ -3504,6 +3504,19 @@ button { touch-action: manipulation; }
  .pin-btn { font-size: 13px; padding: 9px 16px; }
  .hero-title { font-size: clamp(2.8rem, 14vw, 4rem); }
 }
+@media(min-width:1600px){
+ .hero { max-width: 1560px; padding-left: var(--sp-5); padding-right: var(--sp-5); }
+ .wall-section { padding-left: var(--sp-4); padding-right: var(--sp-4); }
+ .wall-grid,
+ .wall-toolbar,
+ .how-strip { max-width: 1800px; margin-left: auto; margin-right: auto; }
+}
+@media(min-width:2200px){
+ .hero { max-width: 1700px; }
+ .wall-grid,
+ .wall-toolbar,
+ .how-strip { max-width: 2000px; }
+}
 
 /* Free coin banner */
 .free-coin-banner {
@@ -4169,6 +4182,21 @@ button { touch-action: manipulation; }
   --bottom-safe-offset: calc(80px + env(safe-area-inset-bottom, 0px));
   .mascot-wrap { bottom: var(--bottom-safe-offset); right: 14px; }
   .scr-top     { bottom: var(--bottom-safe-offset); right: 14px; }
+}
+@media(max-width: 360px){
+  header { padding: 8px 10px; gap: 6px; }
+  .logo-icon { width: 30px; height: 30px; font-size: 15px; }
+  nav { gap: 1px; }
+  .nav-tab { font-size: 10px; padding: 6px 8px; }
+  .pin-btn { font-size: 12px; padding: 8px 12px; min-height: 42px; }
+  .hero-title { font-size: clamp(2.3rem, 15vw, 3.2rem); }
+  .hero-sub { font-size: .95rem; line-height: 1.55; }
+  .wall-section { padding: 3px; }
+  .wall-grid { grid-template-columns: repeat(8, minmax(0,1fr)); gap: 1px; }
+  .search-inp { min-width: 100%; padding: 8px 12px; }
+  .fil-btn { padding: 8px 10px; font-size: 10px; }
+  .mascot-wrap { right: 10px; }
+  .scr-top { right: 10px; }
 }
 
 /* ── Cookie banner: safe-area bottom on notched devices ── */
