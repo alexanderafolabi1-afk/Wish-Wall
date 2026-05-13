@@ -3483,6 +3483,8 @@ footer {
 button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
 button { touch-action: manipulation; }
 
+@media(max-width:1280px){ .wall-grid { grid-template-columns: repeat(32, minmax(0,1fr)); gap: 2px; } }
+@media(max-width:1024px){ .wall-grid { grid-template-columns: repeat(25, minmax(0,1fr)); gap: 2px; } }
 /* Hero, collapse to single col on mobile */
 @media(max-width:768px){
  .hero { grid-template-columns: 1fr; gap: var(--sp-3); padding: var(--sp-5) var(--sp-3) var(--sp-3); }
@@ -3495,8 +3497,6 @@ button { touch-action: manipulation; }
  .wall-section { padding: 6px; }
  .logo-txt { font-size: 18px; }
 }
-@media(max-width:1280px){ .wall-grid { grid-template-columns: repeat(32, minmax(0,1fr)); gap: 2px; } }
-@media(max-width:1024px){ .wall-grid { grid-template-columns: repeat(25, minmax(0,1fr)); gap: 2px; } }
 @media(max-width:480px){
  .wall-grid { grid-template-columns: repeat(10, minmax(0,1fr)); gap: 1px; }
  .wall-section { padding: 4px; }
