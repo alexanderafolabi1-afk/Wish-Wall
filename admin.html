@@ -814,6 +814,7 @@ function changePassword(){
   const cp = document.getElementById('confirm-pw').value.trim();
   const msg = document.getElementById('pw-change-msg');
   if(!np){ msg.style.color='var(--red)'; msg.textContent='❌ New password cannot be empty.'; return; }
+  if(np.length < 8){ msg.style.color='var(--red)'; msg.textContent='❌ Password must be at least 8 characters.'; return; }
   if(np !== cp){ msg.style.color='var(--red)'; msg.textContent='❌ Passwords do not match.'; return; }
   localStorage.setItem(ADMIN_PW_KEY, np);
   document.getElementById('new-pw').value = '';
