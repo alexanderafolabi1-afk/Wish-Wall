@@ -1,3 +1,9 @@
+/admin
+  Content-Type: text/html; charset=UTF-8
+
+/admin.html
+  Content-Type: text/html; charset=UTF-8
+
 /privacy
   Content-Type: text/html; charset=UTF-8
 

@@ -1,0 +1,12 @@
+{
+  "name": "Wish Wall Admin",
+  "short_name": "WW Admin",
+  "description": "Wish Wall admin management console",
+  "start_url": "/admin.html",
+  "display": "standalone",
+  "background_color": "#0d0a06",
+  "theme_color": "#FFE566",
+  "icons": [
+    { "src": "/admin-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
