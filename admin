@@ -1185,8 +1185,12 @@ async function togglePause(){
   const isPaused = btn.dataset.paused === '1';
   if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wallwishes.xyz?')) return;
   try{
-    if(window.fbSetConfig) await window.fbSetConfig({ paused: !isPaused });
-    else toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
+    if(window.fbSetConfig){
+      await window.fbSetConfig({ paused: !isPaused });
+      toast(isPaused ? '▶️ Resumed' : '⏸ Paused');
+    } else {
+      toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
+    }
   } catch(e){ toast('❌ ' + e.message, 'red'); }
 }
 
