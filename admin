@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wish Wall Admin 🔐 — wallwishes.xyz</title>
+<title>Wish Wall Admin 🔐 — wishwall.xyz</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="/admin-manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
@@ -111,7 +111,7 @@
             const d = change.doc.data();
             const id = change.doc.id;
             if (!knownDonorIds.has(id)) {
-              try { new Notification('New donation', { body: '$' + d.amount + ' from ' + d.name }); } catch(_) {}
+              try { new Notification('New donation', { body: '\u00a3' + d.amount + ' from ' + d.name }); } catch(_) {}
             }
           }
         });
@@ -503,6 +503,56 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .adm-search{min-width:100%;}
   .ctrl-grid{grid-template-columns:1fr;}
 }
+/* ADMIN NAV TABS */
+.adm-nav{
+  display:flex;gap:4px;padding:12px 20px 0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+}
+.adm-nav-btn{
+  padding:10px 20px;border:none;border-radius:10px 10px 0 0;
+  background:transparent;color:rgba(255,255,255,.5);
+  font-family:var(--fn);font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.adm-nav-btn.active{background:var(--bg);color:#fff;border-top:2px solid var(--orange);}
+.adm-nav-btn:hover:not(.active){color:rgba(255,255,255,.8);}
+
+/* VISITOR LOG PANEL */
+.vis-panel{padding:24px 20px;}
+.vis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.vis-title{font-size:18px;font-weight:700;color:var(--yellow);}
+.vis-count{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;}
+.vis-clear-btn{
+  padding:8px 16px;border:1px solid var(--red);border-radius:8px;
+  background:transparent;color:var(--red);font-family:var(--fn);font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.vis-clear-btn:hover{background:rgba(255,51,102,.12);}
+.vis-table{width:100%;border-collapse:collapse;font-size:13px;}
+.vis-table th{
+  text-align:left;padding:10px 12px;color:rgba(255,255,255,.5);
+  font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;
+}
+.vis-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.vis-table tr:hover td{background:rgba(255,255,255,.03);}
+.vis-device-badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:600;}
+.vis-device-badge.mobile{background:rgba(0,212,255,.15);color:var(--blue);}
+.vis-device-badge.desktop{background:rgba(0,255,179,.15);color:var(--green);}
+.vis-empty{text-align:center;padding:48px 20px;color:rgba(255,255,255,.35);font-size:14px;line-height:1.6;}
+
+/* GROWTH / REAL DATA SECTIONS */
+.adm-section{margin:20px 0;border-radius:14px;overflow:hidden;border:1px solid;}
+.adm-section-banner{padding:14px 20px;font-weight:700;font-size:13px;letter-spacing:0.4px;text-transform:uppercase;}
+.adm-section-body{padding:18px 20px;display:grid;gap:10px;}
+.adm-section-row{font-size:14px;color:rgba(255,255,255,.8);}
+.adm-section-row strong{color:#fff;}
+.adm-section--amber{border-color:rgba(245,180,50,.3);}
+.adm-section--amber .adm-section-banner{background:rgba(245,180,50,.15);color:#F5B432;}
+.adm-section--amber .adm-section-body{background:rgba(245,180,50,.05);}
+.adm-section--green{border-color:rgba(0,196,132,.3);}
+.adm-section--green .adm-section-banner{background:rgba(0,196,132,.15);color:var(--green-dk);}
+.adm-section--green .adm-section-body{background:rgba(0,196,132,.05);}
+.adm-section-note{font-size:12px;color:rgba(255,255,255,.4);font-style:italic;}
 </style>
 </head>
 <body>
@@ -572,6 +622,14 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 
     <!-- Tab panels -->
     <div class="adm-content">
+
+      <!-- Admin Nav Tabs -->
+      <div class="adm-nav">
+        <button class="adm-nav-btn active" id="nav-dashboard" onclick="switchAdmPanel('dashboard')">📊 Dashboard</button>
+        <button class="adm-nav-btn" id="nav-visitors" onclick="switchAdmPanel('visitors')">👥 Visitors</button>
+      </div>
+
+      <div id="admin-dashboard">
 
       <!-- ▸ WISHES TAB ─────────────────────────────────── -->
       <div class="tab-panel active" id="tab-wishes">
@@ -676,6 +734,39 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 
         </div>
       </div>
+
+      <!-- ARTIFICIAL GROWTH DATA -->
+  <div class="adm-section adm-section--amber">
+    <div class="adm-section-banner">⚠️ Artificial Growth Data</div>
+    <div class="adm-section-body">
+      <div class="adm-section-row">The numbers below are artificially calculated based on a growth rate formula starting April 2026. They are display numbers only and do not reflect real database records.</div>
+      <div class="adm-section-row" id="admin-calc-days"></div>
+      <div class="adm-section-row">Calculated wishes granted: <strong id="admin-calc-granted"></strong></div>
+      <div class="adm-section-row">Calculated guardians: <strong id="admin-calc-guardians"></strong></div>
+      <div class="adm-section-row adm-section-note">Daily growth rates: 3 wishes granted per day &bull; 0.7 guardians per day</div>
+    </div>
+  </div>
+
+  <!-- REAL DATA -->
+  <div class="adm-section adm-section--green">
+    <div class="adm-section-banner">✅ Real Data</div>
+    <div class="adm-section-body">
+      <div class="adm-section-row">The records below are real entries from actual users and real transactions.</div>
+      <div class="adm-section-row">Real wishes from Firebase: shown in the wishes table below (updates live when Firebase is connected)</div>
+      <div class="adm-section-row">Real guardian donations: managed via Stripe (view transactions in the Stripe dashboard)</div>
+      <div class="adm-section-row adm-section-note">If Firebase is not connected these sections will be empty</div>
+    </div>
+  </div>
+
+      </div><!-- /admin-dashboard -->
+
+  <!-- Visitors Panel -->
+  <!-- NOTE: This visitor log uses localStorage which means it only tracks visits on the device
+       where admin.html is viewed. For cross-device visitor tracking, integrate Google Analytics
+       or Plausible Analytics by adding their script tag to index.html. -->
+  <div id="admin-visitors" class="vis-panel" style="display:none">
+    <div id="vis-content"></div>
+  </div>
 
     </div><!-- /adm-content -->
   </div><!-- /adm-layout -->
@@ -1094,8 +1185,12 @@ async function togglePause(){
   const isPaused = btn.dataset.paused === '1';
   if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wallwishes.xyz?')) return;
   try{
-    if(window.fbSetConfig) await window.fbSetConfig({ paused: !isPaused });
-    else toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
+    if(window.fbSetConfig){
+      await window.fbSetConfig({ paused: !isPaused });
+      toast(isPaused ? '▶️ Resumed' : '⏸ Paused');
+    } else {
+      toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
+    }
   } catch(e){ toast('❌ ' + e.message, 'red'); }
 }
 
@@ -1176,9 +1271,95 @@ function loadDemoIfNeeded(){
     setTimeout(() => {
       window.renderAdmin([]);
       window.renderDonors([]);
-      document.getElementById('queue-status').textContent = 'Firebase is not connected. Showing live-empty state only.';
+      const queueStatus = document.getElementById('queue-status');
+      if(queueStatus) queueStatus.textContent = 'Firebase is not connected. Showing live-empty state only.';
     }, 500);
   }
+}
+
+/* ============================================================
+   ADMIN NAV — panel switcher
+   ============================================================ */
+function switchAdmPanel(name) {
+  document.getElementById('admin-dashboard').style.display = name === 'dashboard' ? '' : 'none';
+  document.getElementById('admin-visitors').style.display = name === 'visitors' ? '' : 'none';
+  ['dashboard','visitors'].forEach(function(n) {
+    var btn = document.getElementById('nav-' + n);
+    if(btn) btn.classList.toggle('active', n === name);
+  });
+  if(name === 'visitors') renderVisitorLog();
+}
+
+/* ============================================================
+   VISITOR LOG
+   ============================================================ */
+function renderVisitorLog() {
+  var log = JSON.parse(localStorage.getItem('ww-visitor-log') || '[]');
+  var container = document.getElementById('vis-content');
+  if(!container) return;
+  if(log.length === 0) {
+    container.innerHTML = '<div class=\'vis-empty\'>No visits recorded yet.<br>Visits are tracked when real users visit the site.</div>';
+    return;
+  }
+  var rows = log.map(function(v) {
+    var deviceCls = (v.device || '').toLowerCase() === 'mobile' ? 'mobile' : 'desktop';
+    return '<tr>' +
+      '<td>' + escAdm(v.date || '') + '</td>' +
+      '<td>' + escAdm(v.time || '') + '</td>' +
+      '<td>' + escAdm(v.page || '') + '</td>' +
+      '<td>' + escAdm(v.country || '') + '</td>' +
+      '<td><span class=\'vis-device-badge ' + deviceCls + '\'>' + escAdm(v.device || '') + '</span></td>' +
+    '</tr>';
+  }).join('');
+  container.innerHTML =
+    '<div class=\'vis-header\'>' +
+      '<div><div class=\'vis-title\'>👥 Visitor Log</div>' +
+      '<div class=\'vis-count\'>' + log.length + ' visit' + (log.length !== 1 ? 's' : '') + ' recorded</div></div>' +
+      '<button class=\'vis-clear-btn\' onclick=\'clearVisitorLog()\'>🗑 Clear Log</button>' +
+    '</div>' +
+    '<div style=\'overflow-x:auto;\'>' +
+      '<table class=\'vis-table\'>' +
+        '<thead><tr><th>Date</th><th>Time</th><th>Page</th><th>Country</th><th>Device</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+    '</div>';
+}
+
+function clearVisitorLog() {
+  if(!confirm('Clear all visitor log entries?')) return;
+  localStorage.removeItem('ww-visitor-log');
+  renderVisitorLog();
+}
+
+function escAdm(str) {
+  var d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+/* ============================================================
+   ARTIFICIAL GROWTH DATA — calculated display numbers only
+   ============================================================ */
+function showAdminGrowthData() {
+  var base = new Date('2026-04-01');
+  var now = new Date();
+  var days = Math.max(0, Math.floor((now - base) / (1000 * 60 * 60 * 24)));
+  var granted = 185 + (days * 3);
+  var guardians = 158 + Math.floor(days * 0.7);
+
+  var gEl = document.getElementById('admin-calc-granted');
+  var guEl = document.getElementById('admin-calc-guardians');
+  var dEl = document.getElementById('admin-calc-days');
+
+  if (gEl) gEl.textContent = granted;
+  if (guEl) guEl.textContent = guardians + '+';
+  if (dEl) dEl.textContent = days + ' days since growth baseline';
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', showAdminGrowthData);
+} else {
+  showAdminGrowthData();
 }
 </script>
 

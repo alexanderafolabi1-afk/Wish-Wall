@@ -6,9 +6,154 @@
 <title>Wish Wall Admin 🔐 — wishwall.xyz</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="manifest" href="/admin-manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Quicksand:wght@400;600;700&family=Boogaloo&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getFirestore, collection, getDocs, doc, updateDoc, deleteDoc,
+    query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  // ⚠️ Same config as index.html
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
+    authDomain: "wallwishes-79dd2.firebaseapp.com",
+    projectId: "wallwishes-79dd2",
+    storageBucket: "wallwishes-79dd2.firebasestorage.app",
+    messagingSenderId: "496538589706",
+    appId: "1:496538589706:web:bb27da6e931f9155e31df3"
+  };
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    window._db  = db;
+    window._col = {
+      wishes: collection(db, 'wishes'),
+      donors: collection(db, 'donors'),
+      ledger: doc(db, 'meta', 'ledger'),
+      config: doc(db, 'meta', 'config'),
+    };
+    window._ops = { getDocs, doc, updateDoc, deleteDoc, query, orderBy, where, getDoc, setDoc, serverTimestamp, onSnapshot, writeBatch };
+
+    window.fbApprove = async (id) => {
+      await updateDoc(doc(db,'wishes',id), { status:'approved', approvedAt: serverTimestamp() });
+    };
+    window.fbReject = async (id) => {
+      await updateDoc(doc(db,'wishes',id), { status:'rejected', rejectedAt: serverTimestamp() });
+    };
+    window.fbGrant = async (id, cost) => {
+      await updateDoc(doc(db,'wishes',id), { status:'granted', grantedAt: serverTimestamp(), grantCost: cost });
+    };
+    window.fbDelete = async (id) => {
+      await deleteDoc(doc(db,'wishes',id));
+    };
+    window.fbUpdateLedger = async (data) => {
+      await setDoc(doc(db,'meta','ledger'), { ...data, updatedAt: serverTimestamp() }, { merge: true });
+    };
+    window.fbAddCheekyResponse = async (id, response) => {
+      await updateDoc(doc(db,'wishes',id), { cheekyResponse: response, respondedAt: serverTimestamp() });
+    };
+    window.fbSetConfig = async (data) => {
+      await setDoc(doc(db,'meta','config'), { ...data, updatedAt: serverTimestamp() }, { merge: true });
+    };
+    window.fbFlushQueue = async () => {
+      const q = query(collection(db,'wishes'), where('status','==','queued'));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const batch = writeBatch(db);
+        snap.docs.forEach(d => batch.update(d.ref, { status:'approved', approvedAt: serverTimestamp() }));
+        await batch.commit();
+      }
+      return snap.size;
+    };
+
+    // Track known IDs to detect new documents for notifications
+    let knownWishIds  = null;
+    let knownDonorIds = null;
+
+    // Wishes onSnapshot — render + wish notifications
+    const wishQ = query(window._col.wishes, orderBy('createdAt','desc'));
+    onSnapshot(wishQ, snap => {
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (knownWishIds !== null && Notification.permission === 'granted') {
+        const now = Date.now();
+        snap.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const w = change.doc.data();
+            const id = change.doc.id;
+            if (!knownWishIds.has(id) && (w.status === 'pending' || w.status === 'queued')) {
+              const created = w.createdAt?.toMillis ? w.createdAt.toMillis()
+                            : (w.createdAt ? new Date(w.createdAt).getTime() : 0);
+              if (created && now - created < 60000) {
+                try { new Notification('New wish posted', { body: (w.wishText || '').slice(0, 80), icon: '/favicon.ico' }); } catch(_) {}
+              }
+            }
+          }
+        });
+      }
+      knownWishIds = new Set(snap.docs.map(d => d.id));
+      window.renderAdmin(all);
+    });
+
+    // Donors onSnapshot — render + donation notifications
+    const donorQ = query(collection(db,'donors'), orderBy('createdAt','desc'));
+    onSnapshot(donorQ, snap => {
+      const donors = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (knownDonorIds !== null && Notification.permission === 'granted') {
+        snap.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const d = change.doc.data();
+            const id = change.doc.id;
+            if (!knownDonorIds.has(id)) {
+              try { new Notification('New donation', { body: '\u00a3' + d.amount + ' from ' + d.name }); } catch(_) {}
+            }
+          }
+        });
+      }
+      knownDonorIds = new Set(snap.docs.map(d => d.id));
+      window.renderDonors(donors);
+    });
+
+    // Ledger onSnapshot — live Magic Pool balance in stats strip
+    onSnapshot(doc(db,'meta','ledger'), snap => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const poolEl = document.getElementById('a-pool');
+        if (poolEl) poolEl.textContent = '\u00a3' + (data.potBalance || 0).toLocaleString();
+        const fields = { 'l-fees': data.totalFees, 'l-don': data.totalDonations,
+                         'l-gr': data.totalGranted, 'l-avg': data.avgCost, 'l-pot': data.potBalance };
+        Object.entries(fields).forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (el && val != null) el.value = val;
+        });
+      }
+    });
+
+    // Config onSnapshot — live pause state in Controls tab
+    onSnapshot(doc(db,'meta','config'), snap => {
+      if (snap.exists()) {
+        const paused = !!snap.data().paused;
+        const btn = document.getElementById('ctrl-pause-btn');
+        if (btn) {
+          btn.textContent = paused ? '\u25b6\ufe0f Resume Submissions' : '\u23f8 Pause New Submissions';
+          btn.dataset.paused = paused ? '1' : '0';
+          btn.className = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
+        }
+      }
+    });
+
+    window._fbReady = true;
+  } catch(e) {
+    console.warn('Firebase not configured:', e.message);
+    window._fbReady = false;
+  }
+</script>
 
 <style>
 :root{
@@ -17,15 +162,14 @@
   --bg:#0A0500;--surface:#161006;--border:rgba(255,255,255,.1);
   --fn:'Quicksand',sans-serif;--fn-d:'Boogaloo',cursive;--fn-n:'Caveat',cursive;
   --fn-stat:'Fraunces',serif;
-  --hdr-h:64px;--stats-h:80px;--mob-nav-h:64px;--sidebar-w:190px;--app-vh:100vh;
+  --hdr-h:64px;--stats-h:80px;--mob-nav-h:64px;--sidebar-w:190px;
 }
-@supports (height: 100dvh) { :root{--app-vh:100dvh;} }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--fn);background:var(--bg);color:#fff;}
 
 /* ── LOGIN ──────────────────────────────────────────────── */
 .login-screen{
-  min-height:var(--app-vh);display:flex;align-items:center;justify-content:center;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle at 50% 40%,#200A00,#000);
 }
 .login-card{
@@ -44,12 +188,6 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 }
 .adm-inp:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,123,44,.12);}
 .adm-inp::placeholder{color:rgba(255,255,255,.25);}
-.pw-wrap{position:relative;width:100%;margin-bottom:14px;}
-.pw-wrap .adm-inp{margin-bottom:0;padding-right:46px;}
-.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;font-size:18px;line-height:1;
-  color:rgba(255,255,255,.45);padding:4px;transition:color .2s;}
-.pw-toggle:hover{color:rgba(255,255,255,.85);}
 .login-btn{
   width:100%;padding:15px;border-radius:50px;border:none;
   background:linear-gradient(135deg,var(--orange),var(--pink));
@@ -64,7 +202,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 .admin-wrap{display:none;}
 .admin-wrap.show{
   display:flex;flex-direction:column;
-  height:var(--app-vh);overflow:hidden;
+  height:100vh;overflow:hidden;
 }
 
 /* Header */
@@ -252,6 +390,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 .ctrl-action-btn{
   width:100%;padding:14px 20px;border-radius:50px;border:1px solid;
   font-family:var(--fn-d);font-size:15px;cursor:pointer;transition:all .2s;
+  min-height:48px;
 }
 .ctrl-btn-pause{background:rgba(255,51,102,.15);color:var(--red);border-color:var(--red);}
 .ctrl-btn-pause:hover{background:var(--red);color:#fff;}
@@ -337,6 +476,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   border:none;background:transparent;color:rgba(255,255,255,.45);
   font-family:var(--fn);font-size:10px;font-weight:700;
   cursor:pointer;padding:4px 0;text-transform:uppercase;letter-spacing:.3px;
+  min-height:48px;
 }
 .mob-nav-btn.on{color:var(--orange);}
 .mob-nav-btn:active{color:var(--yellow);}
@@ -351,11 +491,6 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .wish-cards{display:none!important;}
 }
 @media(max-width:768px){
-  .adm-header{height:auto;padding:10px 12px;gap:8px;align-items:flex-start;flex-wrap:wrap;}
-  .adm-header > div{min-width:0;}
-  .adm-logo{font-size:18px;}
-  .adm-domain{display:none;}
-  .adm-logout{margin-left:auto;padding:7px 12px;font-size:12px;}
   .adm-sidebar{display:none;}
   .mobile-nav{display:flex;}
   .adm-content{padding:16px;padding-bottom:calc(var(--mob-nav-h) + 16px);}
@@ -366,9 +501,59 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   .wish-table-wrap{display:none;}
   .wish-cards{display:flex;}
   .adm-search{min-width:100%;}
+  .ctrl-grid{grid-template-columns:1fr;}
 }
+/* ADMIN NAV TABS */
+.adm-nav{
+  display:flex;gap:4px;padding:12px 20px 0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+}
+.adm-nav-btn{
+  padding:10px 20px;border:none;border-radius:10px 10px 0 0;
+  background:transparent;color:rgba(255,255,255,.5);
+  font-family:var(--fn);font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.adm-nav-btn.active{background:var(--bg);color:#fff;border-top:2px solid var(--orange);}
+.adm-nav-btn:hover:not(.active){color:rgba(255,255,255,.8);}
+
+/* VISITOR LOG PANEL */
+.vis-panel{padding:24px 20px;}
+.vis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.vis-title{font-size:18px;font-weight:700;color:var(--yellow);}
+.vis-count{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;}
+.vis-clear-btn{
+  padding:8px 16px;border:1px solid var(--red);border-radius:8px;
+  background:transparent;color:var(--red);font-family:var(--fn);font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.vis-clear-btn:hover{background:rgba(255,51,102,.12);}
+.vis-table{width:100%;border-collapse:collapse;font-size:13px;}
+.vis-table th{
+  text-align:left;padding:10px 12px;color:rgba(255,255,255,.5);
+  font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;
+}
+.vis-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.85);}
+.vis-table tr:hover td{background:rgba(255,255,255,.03);}
+.vis-device-badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:600;}
+.vis-device-badge.mobile{background:rgba(0,212,255,.15);color:var(--blue);}
+.vis-device-badge.desktop{background:rgba(0,255,179,.15);color:var(--green);}
+.vis-empty{text-align:center;padding:48px 20px;color:rgba(255,255,255,.35);font-size:14px;line-height:1.6;}
+
+/* GROWTH / REAL DATA SECTIONS */
+.adm-section{margin:20px 0;border-radius:14px;overflow:hidden;border:1px solid;}
+.adm-section-banner{padding:14px 20px;font-weight:700;font-size:13px;letter-spacing:0.4px;text-transform:uppercase;}
+.adm-section-body{padding:18px 20px;display:grid;gap:10px;}
+.adm-section-row{font-size:14px;color:rgba(255,255,255,.8);}
+.adm-section-row strong{color:#fff;}
+.adm-section--amber{border-color:rgba(245,180,50,.3);}
+.adm-section--amber .adm-section-banner{background:rgba(245,180,50,.15);color:#F5B432;}
+.adm-section--amber .adm-section-body{background:rgba(245,180,50,.05);}
+.adm-section--green{border-color:rgba(0,196,132,.3);}
+.adm-section--green .adm-section-banner{background:rgba(0,196,132,.15);color:var(--green-dk);}
+.adm-section--green .adm-section-body{background:rgba(0,196,132,.05);}
+.adm-section-note{font-size:12px;color:rgba(255,255,255,.4);font-style:italic;}
 </style>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
 </head>
 <body>
 
@@ -378,13 +563,10 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <div class="login-icon">🔐</div>
     <h2 class="login-title">Admin Portal</h2>
     <p class="login-sub">The Wish Wall — management console</p>
-    <div class="pw-wrap">
-      <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
-      <button type="button" class="pw-toggle" onclick="togglePwVisibility('adm-pw','adm-pw-eye')" aria-label="Toggle password visibility"><span id="adm-pw-eye">👁</span></button>
-    </div>
+    <input class="adm-inp" type="password" id="adm-pw" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()">Unlock ✨</button>
     <p class="login-err" id="login-err"></p>
-    <p class="login-domain">wishwall.xyz · admin@wallwishes.xyz</p>
+    <p class="login-domain">wallwishes.xyz · admin@wallwishes.xyz</p>
   </div>
 </div>
 
@@ -394,7 +576,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
   <div class="adm-header">
     <div>
       <span class="adm-logo">🧱 Wish Wall Admin</span>
-      <span class="adm-domain"> · wishwall.xyz</span>
+      <span class="adm-domain"> · wallwishes.xyz</span>
     </div>
     <button class="adm-logout" onclick="logout()">Log out</button>
   </div>
@@ -441,6 +623,14 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
     <!-- Tab panels -->
     <div class="adm-content">
 
+      <!-- Admin Nav Tabs -->
+      <div class="adm-nav">
+        <button class="adm-nav-btn active" id="nav-dashboard" onclick="switchAdmPanel('dashboard')">📊 Dashboard</button>
+        <button class="adm-nav-btn" id="nav-visitors" onclick="switchAdmPanel('visitors')">👥 Visitors</button>
+      </div>
+
+      <div id="admin-dashboard">
+
       <!-- ▸ WISHES TAB ─────────────────────────────────── -->
       <div class="tab-panel active" id="tab-wishes">
         <div class="adm-toolbar">
@@ -480,12 +670,12 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
       <!-- ▸ DONATIONS TAB ──────────────────────────────── -->
       <div class="tab-panel" id="tab-donations">
         <!--
-          NOTE: Pot balance is intentionally NOT displayed publicly on wishwall.xyz
+          NOTE: Pot balance is intentionally NOT displayed publicly on wallwishes.xyz
           per platform policy. This admin editor is for internal tracking only.
         -->
         <div class="led-editor">
           <h3>📊 Update Transparency Ledger</h3>
-          <p>⚠️ The pot balance is NOT publicly visible on wishwall.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
+          <p>⚠️ The pot balance is NOT publicly visible on wallwishes.xyz — internal tracking only. The public ledger shows fees, donations, granted count, and avg cost.</p>
           <div class="led-fields">
             <div class="led-field"><label>Wish Fees Collected (£)</label><input type="number" id="l-fees" value="0" min="0"></div>
             <div class="led-field"><label>Guardian Donations (£)</label><input type="number" id="l-don" value="0" min="0"></div>
@@ -510,10 +700,6 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
           <p style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px;">Sends queued emails via Resend where sendAfter &lt;= now and sent is not true. Requires RESEND_API_KEY in Netlify env vars.</p>
           <button class="led-save" id="send-queue-btn" onclick="sendQueuedEmails()" style="background:rgba(0,196,132,.2);border-color:#00c484;">📤 Send Queued Emails</button>
           <span id="queue-status" style="font-size:12px;color:rgba(255,255,255,.5);margin-left:12px;"></span>
-        </div>
-        <h3 class="sec-h">📋 Email Queue <button onclick="refreshEmailQueue()" style="font-size:11px;padding:4px 10px;margin-left:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:rgba(255,255,255,.7);cursor:pointer;">🔄 Refresh</button></h3>
-        <div class="donor-list" id="email-queue-list">
-          <div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Click Refresh to load queue.</div>
         </div>
       </div>
 
@@ -546,25 +732,41 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
             <button class="ctrl-action-btn ctrl-btn-csv" onclick="exportCSV()">📥 Export as CSV</button>
           </div>
 
-          <div class="ctrl-card" style="grid-column:1/-1">
-            <h3>🔑 Change Admin Password</h3>
-            <p>Update the admin login password. The new password is saved locally in this browser. You'll need to update the code (<code>ADMIN_PW</code>) on any other device.</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-              <div class="pw-wrap" style="flex:1;min-width:200px;margin-bottom:0;">
-                <input class="adm-inp" type="password" id="new-pw" placeholder="New password" style="margin-bottom:0;">
-                <button type="button" class="pw-toggle" onclick="togglePwVisibility('new-pw','new-pw-eye')" aria-label="Toggle new password visibility"><span id="new-pw-eye">👁</span></button>
-              </div>
-              <div class="pw-wrap" style="flex:1;min-width:200px;margin-bottom:0;">
-                <input class="adm-inp" type="password" id="confirm-pw" placeholder="Confirm password" style="margin-bottom:0;">
-                <button type="button" class="pw-toggle" onclick="togglePwVisibility('confirm-pw','confirm-pw-eye')" aria-label="Toggle confirm password visibility"><span id="confirm-pw-eye">👁</span></button>
-              </div>
-              <button class="ctrl-action-btn" style="background:linear-gradient(135deg,var(--orange),var(--pink));flex-shrink:0;" onclick="changePassword()">🔑 Update Password</button>
-            </div>
-            <p id="pw-change-msg" style="margin-top:10px;font-size:13px;"></p>
-          </div>
-
         </div>
       </div>
+
+      <!-- ARTIFICIAL GROWTH DATA -->
+  <div class="adm-section adm-section--amber">
+    <div class="adm-section-banner">⚠️ Artificial Growth Data</div>
+    <div class="adm-section-body">
+      <div class="adm-section-row">The numbers below are artificially calculated based on a growth rate formula starting April 2026. They are display numbers only and do not reflect real database records.</div>
+      <div class="adm-section-row" id="admin-calc-days"></div>
+      <div class="adm-section-row">Calculated wishes granted: <strong id="admin-calc-granted"></strong></div>
+      <div class="adm-section-row">Calculated guardians: <strong id="admin-calc-guardians"></strong></div>
+      <div class="adm-section-row adm-section-note">Daily growth rates: 3 wishes granted per day &bull; 0.7 guardians per day</div>
+    </div>
+  </div>
+
+  <!-- REAL DATA -->
+  <div class="adm-section adm-section--green">
+    <div class="adm-section-banner">✅ Real Data</div>
+    <div class="adm-section-body">
+      <div class="adm-section-row">The records below are real entries from actual users and real transactions.</div>
+      <div class="adm-section-row">Real wishes from Firebase: shown in the wishes table below (updates live when Firebase is connected)</div>
+      <div class="adm-section-row">Real guardian donations: managed via Stripe (view transactions in the Stripe dashboard)</div>
+      <div class="adm-section-row adm-section-note">If Firebase is not connected these sections will be empty</div>
+    </div>
+  </div>
+
+      </div><!-- /admin-dashboard -->
+
+  <!-- Visitors Panel -->
+  <!-- NOTE: This visitor log uses localStorage which means it only tracks visits on the device
+       where admin.html is viewed. For cross-device visitor tracking, integrate Google Analytics
+       or Plausible Analytics by adding their script tag to index.html. -->
+  <div id="admin-visitors" class="vis-panel" style="display:none">
+    <div id="vis-content"></div>
+  </div>
 
     </div><!-- /adm-content -->
   </div><!-- /adm-layout -->
@@ -591,8 +793,7 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 <div class="grant-modal" id="grant-modal">
   <div class="grant-box">
     <h3>✅😊 Mark as Granted</h3>
-    <p>Record the guardian email and cost. Emails will be sent to both the wisher and guardian. The note will be ticked green with a smile on the wall.</p>
-    <input class="grant-inp" type="email" id="grant-guardian-email" placeholder="Guardian email (optional)">
+    <p>Record the cost to grant this wish (optional). The note will be ticked green with a smile on the wall.</p>
     <input class="grant-inp" type="number" id="grant-cost" placeholder="Cost in £ (optional)" min="0">
     <div class="grant-btns">
       <button class="grant-ok" onclick="confirmGrant()">Grant It ✨</button>
@@ -632,27 +833,11 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;}
 
 /* ============================================================
    AUTH — simple password gate
+   ⚠️  For production: replace with Firebase Auth or equivalent
+   Contact: admin@wallwishes.xyz
    ============================================================ */
-const ADMIN_PW  = 'Admin@WishWall1'; // default — override via "Change Password" in Controls
+const ADMIN_PW  = 'wallwishes2025'; // ⚠️ CHANGE BEFORE DEPLOYING
 const ADMIN_KEY = 'ww_admin_auth';
-const ADMIN_PW_KEY = 'ww_admin_pw';
-
-function _effectivePw(){ return localStorage.getItem(ADMIN_PW_KEY) || ADMIN_PW; }
-
-/* ── Admin Netlify function helper ──────────────────────────────────────── */
-async function adminFetch(action, body = {}){
-  const res = await fetch('/.netlify/functions/admin-action', {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
-    body:    JSON.stringify({ action, ...body }),
-  });
-  if(!res.ok){
-    const text = await res.text().catch(() => String(res.status));
-    throw new Error(text || 'Request failed (' + res.status + ')');
-  }
-  return res.json();
-}
-
 
 let allAdmWishes    = [];
 let admFilter       = 'all';
@@ -662,41 +847,16 @@ let respondTargetId = null;
 
 function login(){
   const pw = document.getElementById('adm-pw').value;
-  if(pw === _effectivePw()){
+  if(pw === ADMIN_PW){
     sessionStorage.setItem(ADMIN_KEY, '1');
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('adm-wrap').classList.add('show');
     requestNotificationPermission();
+    loadDemoIfNeeded();
   } else {
     document.getElementById('login-err').textContent = '❌ Wrong password. Try again.';
     document.getElementById('adm-pw').value = '';
   }
-}
-
-function togglePwVisibility(inputId, iconId){
-  const inp = document.getElementById(inputId);
-  const icon = document.getElementById(iconId);
-  if(inp.type === 'password'){
-    inp.type = 'text';
-    icon.textContent = '🙈';
-  } else {
-    inp.type = 'password';
-    icon.textContent = '👁';
-  }
-}
-
-function changePassword(){
-  const np = document.getElementById('new-pw').value.trim();
-  const cp = document.getElementById('confirm-pw').value.trim();
-  const msg = document.getElementById('pw-change-msg');
-  if(!np){ msg.style.color='var(--red)'; msg.textContent='❌ New password cannot be empty.'; return; }
-  if(np.length < 8){ msg.style.color='var(--red)'; msg.textContent='❌ Password must be at least 8 characters.'; return; }
-  if(np !== cp){ msg.style.color='var(--red)'; msg.textContent='❌ Passwords do not match.'; return; }
-  localStorage.setItem(ADMIN_PW_KEY, np);
-  document.getElementById('new-pw').value = '';
-  document.getElementById('confirm-pw').value = '';
-  msg.style.color='#4caf50';
-  msg.textContent='✅ Password updated! Use the new password next time you log in.';
 }
 
 function logout(){
@@ -708,6 +868,7 @@ if(sessionStorage.getItem(ADMIN_KEY)){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('adm-wrap').classList.add('show');
   requestNotificationPermission();
+  loadDemoIfNeeded();
 }
 
 function requestNotificationPermission(){
@@ -726,28 +887,13 @@ function switchTab(name){
   document.querySelectorAll('.sidebar-btn, .mob-nav-btn').forEach(b =>
     b.classList.toggle('on', b.dataset.tab === name)
   );
+  const content = document.querySelector('.adm-content');
+  if(content) content.scrollTop = 0;
 }
 
 /* ============================================================
    RENDER — TABLE (desktop) + CARDS (mobile)
    ============================================================ */
-window.renderLedger = function(data){
-  var poolEl = document.getElementById('a-pool');
-  if(poolEl) poolEl.textContent = '£' + (data.potBalance || 0).toLocaleString();
-  var fields = {'l-fees':data.totalFees,'l-don':data.totalDonations,'l-gr':data.totalGranted,'l-avg':data.avgCost,'l-pot':data.potBalance};
-  Object.entries(fields).forEach(function(kv){
-    var el = document.getElementById(kv[0]);
-    if(el && kv[1] != null) el.value = kv[1];
-  });
-  var btn = document.getElementById('ctrl-pause-btn');
-  if(btn && data.paused != null){
-    var paused = !!data.paused;
-    btn.textContent    = paused ? '▶️ Resume Submissions' : '⏸ Pause New Submissions';
-    btn.dataset.paused = paused ? '1' : '0';
-    btn.className      = 'ctrl-action-btn' + (paused ? ' ctrl-btn-active' : ' ctrl-btn-pause');
-  }
-};
-
 window.renderAdmin = function(wishes){
   allAdmWishes = wishes;
   updateAdmStats();
@@ -757,19 +903,14 @@ window.renderAdmin = function(wishes){
 
 function updateAdmStats(){
   document.getElementById('a-total').textContent   = allAdmWishes.length;
-  document.getElementById('a-pending').textContent = allAdmWishes.filter(w => w.status === 'pending' || w.status === 'queued').length;
+  document.getElementById('a-pending').textContent = allAdmWishes.filter(w => w.status === 'pending').length;
   document.getElementById('a-granted').textContent = allAdmWishes.filter(w => w.status === 'granted').length;
   // a-pool updated by ledger onSnapshot
 }
 
 function getFiltered(){
-  let src = allAdmWishes;
-  if(admFilter === 'pending'){
-    src = src.filter(w => w.status === 'pending' || w.status === 'queued' ||
-                          (w.status === 'approved' && !w.grantedAt));
-  } else if(admFilter !== 'all'){
-    src = src.filter(w => w.status === admFilter);
-  }
+  let src = allAdmWishes.filter(w => w.warmup !== true);
+  if(admFilter !== 'all') src = src.filter(w => w.status === admFilter);
   if(admSearch){
     const q = admSearch.toLowerCase();
     src = src.filter(w =>
@@ -892,67 +1033,15 @@ window.renderDonors = function(donors){
       if(dt) dateStr = dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
     }catch(_){}
 
-    const cur    = (d.currency || 'USD').toUpperCase();
-    const symbol = cur === 'GBP' ? '£' : cur === 'EUR' ? '€' : '$';
-    const badge  = d.type ? `<span style="font-size:10px;background:rgba(255,255,255,.08);padding:2px 7px;border-radius:50px;margin-left:6px;">${esc(d.type)}</span>` : '';
-
     return `<div class="donor-card">
-  <div class="donor-amount">${symbol}${(d.amount||0).toFixed(2)}</div>
+  <div class="donor-amount">£${d.amount||0}</div>
   <div>
-    <div class="donor-info">${esc(d.name||'Anonymous')}${d.country ? ' · '+esc(d.country) : ''}${d.email ? ' · '+esc(d.email) : ''}${badge}</div>
+    <div class="donor-info">${esc(d.name||'Anonymous')}${d.email ? ' · '+esc(d.email) : ''}</div>
     <div class="donor-date">${dateStr}</div>
   </div>
 </div>`;
   }).join('');
 };
-
-/* ============================================================
-   EMAIL QUEUE
-   ============================================================ */
-window.renderEmailQueue = function(emails){
-  const el = document.getElementById('email-queue-list');
-  if(!el) return;
-
-  if(!emails.length){
-    el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">No queued emails 📭</div>';
-    return;
-  }
-
-  el.innerHTML = emails.map(e => {
-    let sendAfterStr = '';
-    try{
-      const d = e.sendAfter?.toDate ? e.sendAfter.toDate() : (e.sendAfter ? new Date(e.sendAfter) : null);
-      if(d) sendAfterStr = d.toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-    }catch(_){}
-
-    const sentBadge = e.sent
-      ? '<span style="color:var(--green);font-size:11px;font-weight:700;">✅ Sent</span>'
-      : '<span style="color:rgba(255,255,255,.4);font-size:11px;">⏳ Pending</span>';
-
-    return `<div class="donor-card">
-  <div style="flex:1">
-    <div class="donor-info">
-      ${esc(e.recipient||e.to||'—')}
-      · <em>${esc(e.type||'email')}</em>
-      ${e.step != null ? ' · step '+esc(String(e.step)) : ''}
-      ${sendAfterStr ? ' · after '+sendAfterStr : ''}
-    </div>
-    <div class="donor-date">${sentBadge}</div>
-  </div>
-</div>`;
-  }).join('');
-};
-
-async function refreshEmailQueue(){
-  const el = document.getElementById('email-queue-list');
-  if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.4);">Loading…</div>';
-  try{
-    const res = await adminFetch('getEmailQueue');
-    window.renderEmailQueue(res.docs || []);
-  }catch(err){
-    if(el) el.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,100,100,.6);">Failed to load: '+esc(err.message)+'</div>';
-  }
-}
 
 /* ============================================================
    FILTER & SEARCH
@@ -976,15 +1065,17 @@ function filterAdm(){
 async function approve(id){
   if(!confirm('Approve this wish and make it live on the wall?')) return;
   try{
-    await adminFetch('approve', { wishId: id });
-    toast('✅ Wish approved and live on wishwall.xyz!');
+    if(window.fbApprove) await window.fbApprove(id);
+    else { const w = allAdmWishes.find(x=>x.id===id); if(w) w.status='approved'; updateAdmStats(); paintTable(); paintCards(); }
+    toast('✅ Wish approved and live on wallwishes.xyz!');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
 }
 
 async function reject(id){
   if(!confirm('Reject this wish?')) return;
   try{
-    await adminFetch('reject', { wishId: id });
+    if(window.fbReject) await window.fbReject(id);
+    else { const w = allAdmWishes.find(x=>x.id===id); if(w) w.status='rejected'; updateAdmStats(); paintTable(); paintCards(); }
     toast('✗ Wish rejected.');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
 }
@@ -996,30 +1087,14 @@ function grantWish(id){
 }
 function closeGrantModal(){
   document.getElementById('grant-modal').classList.remove('open');
-  document.getElementById('grant-guardian-email').value = '';
   grantTargetId = null;
 }
 async function confirmGrant(){
   if(!grantTargetId) return;
-  const cost          = parseFloat(document.getElementById('grant-cost').value) || 0;
-  const guardianEmail = document.getElementById('grant-guardian-email').value.trim();
-  const wish          = allAdmWishes.find(w => w.id === grantTargetId);
+  const cost = parseFloat(document.getElementById('grant-cost').value) || 0;
   try{
-    // 1. Send wisher + guardian emails
-    if(wish){
-      fetch('/.netlify/functions/send-wish-granted', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wishId:       grantTargetId,
-          wishText:     wish.wishText || '',
-          name:         wish.name || '',
-          guardianEmail,
-        }),
-      }).catch(err => console.warn('Grant email failed:', err));
-    }
-    // 2. Update Firestore via admin-action (sets granted + increments totalGranted)
-    await adminFetch('grant', { wishId: grantTargetId, data: { cost } });
+    if(window.fbGrant) await window.fbGrant(grantTargetId, cost);
+    else { const w = allAdmWishes.find(x=>x.id===grantTargetId); if(w){ w.status='granted'; w.grantCost=cost; } updateAdmStats(); paintTable(); paintCards(); }
     closeGrantModal();
     toast('🎉 Wish granted! Note ticked green with smile on the wall.');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
@@ -1040,7 +1115,8 @@ async function confirmRespond(){
   const response = document.getElementById('respond-txt').value.trim();
   if(!response){ toast('Please enter a response.','red'); return; }
   try{
-    await adminFetch('respond', { wishId: respondTargetId, data: { response } });
+    if(window.fbAddCheekyResponse) await window.fbAddCheekyResponse(respondTargetId, response);
+    else { const w = allAdmWishes.find(x=>x.id===respondTargetId); if(w) w.cheekyResponse = response; paintTable(); paintCards(); }
     closeRespondModal();
     toast('💜 Response stamped on the wish!');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
@@ -1056,7 +1132,8 @@ document.getElementById('respond-modal').addEventListener('click', e => {
 async function del(id){
   if(!confirm('Permanently delete this wish? This cannot be undone.')) return;
   try{
-    await adminFetch('delete', { wishId: id });
+    if(window.fbDelete) await window.fbDelete(id);
+    else { allAdmWishes = allAdmWishes.filter(x=>x.id!==id); updateAdmStats(); paintTable(); paintCards(); }
     toast('🗑 Wish deleted.');
   } catch(e){ toast('❌ Error: '+e.message,'red'); }
 }
@@ -1070,11 +1147,11 @@ async function saveLedger(){
     totalDonations: parseFloat(document.getElementById('l-don').value)  || 0,
     totalGranted:   parseInt(document.getElementById('l-gr').value)     || 0,
     avgCost:        parseFloat(document.getElementById('l-avg').value)  || 0,
-    potBalance:     parseFloat(document.getElementById('l-pot').value)  || 0,
+    potBalance:     parseFloat(document.getElementById('l-pot').value)  || 0, // internal only, never exposed publicly
   };
   try{
-    await adminFetch('updateLedger', { data });
-    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wishwall.xyz.');
+    if(window.fbUpdateLedger) await window.fbUpdateLedger(data);
+    toast('💾 Ledger saved! Pot balance stored internally, not shown publicly on wallwishes.xyz.');
   } catch(e){ toast('❌ Ledger save failed: '+e.message,'red'); }
 }
 
@@ -1104,19 +1181,24 @@ async function sendQueuedEmails(){
    CONTROLS
    ============================================================ */
 async function togglePause(){
-  const btn      = document.getElementById('ctrl-pause-btn');
+  const btn     = document.getElementById('ctrl-pause-btn');
   const isPaused = btn.dataset.paused === '1';
-  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wishwall.xyz?')) return;
+  if(!confirm(isPaused ? 'Resume new wish submissions?' : 'Pause new wish submissions on wallwishes.xyz?')) return;
   try{
-    await adminFetch('setConfig', { data: { paused: !isPaused } });
+    if(window.fbSetConfig){
+      await window.fbSetConfig({ paused: !isPaused });
+      toast(isPaused ? '▶️ Resumed' : '⏸ Paused');
+    } else {
+      toast(isPaused ? '▶️ Submissions resumed (demo).' : '⏸ Submissions paused (demo).');
+    }
   } catch(e){ toast('❌ ' + e.message, 'red'); }
 }
 
 async function flushQueue(){
   if(!confirm('Promote all queued wishes to approved? This cannot be undone.')) return;
   try{
-    const result = await adminFetch('flushQueue');
-    toast('⚡ ' + (result.count || 0) + ' queued wishes promoted to approved!');
+    const count = window.fbFlushQueue ? await window.fbFlushQueue() : 0;
+    toast('⚡ ' + (count||0) + ' queued wishes promoted to approved!');
   } catch(e){ toast('❌ ' + e.message, 'red'); }
 }
 
@@ -1181,54 +1263,105 @@ function toast(msg, type='green'){
   toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-/* Firebase onSnapshot listeners populate all tabs with real data automatically.
-   No demo data — the dashboard always shows live Firebase content. */
+/* ============================================================
+   DEMO DATA
+   ============================================================ */
 function loadDemoIfNeeded(){
-  // intentionally empty — onSnapshot fires as soon as Firebase initialises
+  if(!window._fbReady){
+    setTimeout(() => {
+      window.renderAdmin([]);
+      window.renderDonors([]);
+      const queueStatus = document.getElementById('queue-status');
+      if(queueStatus) queueStatus.textContent = 'Firebase is not connected. Showing live-empty state only.';
+    }, 500);
+  }
+}
+
+/* ============================================================
+   ADMIN NAV — panel switcher
+   ============================================================ */
+function switchAdmPanel(name) {
+  document.getElementById('admin-dashboard').style.display = name === 'dashboard' ? '' : 'none';
+  document.getElementById('admin-visitors').style.display = name === 'visitors' ? '' : 'none';
+  ['dashboard','visitors'].forEach(function(n) {
+    var btn = document.getElementById('nav-' + n);
+    if(btn) btn.classList.toggle('active', n === name);
+  });
+  if(name === 'visitors') renderVisitorLog();
+}
+
+/* ============================================================
+   VISITOR LOG
+   ============================================================ */
+function renderVisitorLog() {
+  var log = JSON.parse(localStorage.getItem('ww-visitor-log') || '[]');
+  var container = document.getElementById('vis-content');
+  if(!container) return;
+  if(log.length === 0) {
+    container.innerHTML = '<div class=\'vis-empty\'>No visits recorded yet.<br>Visits are tracked when real users visit the site.</div>';
+    return;
+  }
+  var rows = log.map(function(v) {
+    var deviceCls = (v.device || '').toLowerCase() === 'mobile' ? 'mobile' : 'desktop';
+    return '<tr>' +
+      '<td>' + escAdm(v.date || '') + '</td>' +
+      '<td>' + escAdm(v.time || '') + '</td>' +
+      '<td>' + escAdm(v.page || '') + '</td>' +
+      '<td>' + escAdm(v.country || '') + '</td>' +
+      '<td><span class=\'vis-device-badge ' + deviceCls + '\'>' + escAdm(v.device || '') + '</span></td>' +
+    '</tr>';
+  }).join('');
+  container.innerHTML =
+    '<div class=\'vis-header\'>' +
+      '<div><div class=\'vis-title\'>👥 Visitor Log</div>' +
+      '<div class=\'vis-count\'>' + log.length + ' visit' + (log.length !== 1 ? 's' : '') + ' recorded</div></div>' +
+      '<button class=\'vis-clear-btn\' onclick=\'clearVisitorLog()\'>🗑 Clear Log</button>' +
+    '</div>' +
+    '<div style=\'overflow-x:auto;\'>' +
+      '<table class=\'vis-table\'>' +
+        '<thead><tr><th>Date</th><th>Time</th><th>Page</th><th>Country</th><th>Device</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+    '</div>';
+}
+
+function clearVisitorLog() {
+  if(!confirm('Clear all visitor log entries?')) return;
+  localStorage.removeItem('ww-visitor-log');
+  renderVisitorLog();
+}
+
+function escAdm(str) {
+  var d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
+}
+
+/* ============================================================
+   ARTIFICIAL GROWTH DATA — calculated display numbers only
+   ============================================================ */
+function showAdminGrowthData() {
+  var base = new Date('2026-04-01');
+  var now = new Date();
+  var days = Math.max(0, Math.floor((now - base) / (1000 * 60 * 60 * 24)));
+  var granted = 185 + (days * 3);
+  var guardians = 158 + Math.floor(days * 0.7);
+
+  var gEl = document.getElementById('admin-calc-granted');
+  var guEl = document.getElementById('admin-calc-guardians');
+  var dEl = document.getElementById('admin-calc-days');
+
+  if (gEl) gEl.textContent = granted;
+  if (guEl) guEl.textContent = guardians + '+';
+  if (dEl) dEl.textContent = days + ' days since growth baseline';
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', showAdminGrowthData);
+} else {
+  showAdminGrowthData();
 }
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
-const _app = firebase.initializeApp({
-  apiKey: "AIzaSyDzH05rgw2SWRf2_vdJwFjDqW_em8bZmMk",
-  authDomain: "wishwall-79dd2.firebaseapp.com",
-  projectId: "wishwall-79dd2",
-  storageBucket: "wishwall-79dd2.firebasestorage.app",
-  messagingSenderId: "496538589706",
-  appId: "1:496838589706:web:bb27da6e931f9155e31df3"
-});
-const _db = firebase.firestore();
-
-function _startAdminListeners() {
-  _db.collection('wishes').onSnapshot(function(snap) {
-    var wishes = snap.docs.map(function(d) {
-      return Object.assign({ id: d.id }, d.data());
-    });
-    if (typeof renderAdmin === 'function') renderAdmin(wishes);
-  }, function(err) { console.error('Wishes:', err.message); });
-
-  _db.collection('donors').onSnapshot(function(snap) {
-    var donors = snap.docs.map(function(d) {
-      return Object.assign({ id: d.id }, d.data());
-    });
-    if (typeof renderDonors === 'function') renderDonors(donors);
-  }, function(err) { console.error('Donors:', err.message); });
-
-  _db.collection('meta').doc('ledger').onSnapshot(function(doc) {
-    if (doc.exists && typeof renderLedger === 'function') renderLedger(doc.data());
-  }, function(err) { console.error('Ledger:', err.message); });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  var checkReady = setInterval(function() {
-    if (typeof renderAdmin === 'function') {
-      clearInterval(checkReady);
-      _startAdminListeners();
-    }
-  }, 200);
-});
-</script>
 </body>
 </html>

@@ -4787,6 +4787,69 @@ button { touch-action: manipulation; }
   .gp-pool-card { flex-direction:column; }
   .gp-pool-right svg { width:240px; height:210px; }
 }
+.ww-quiet-banner {
+  text-align:center;
+  padding:12px 20px;
+  background:rgba(245,150,50,0.08);
+  border-bottom:1px solid rgba(245,150,50,0.2);
+  font-size:13px;
+  color:rgba(180,90,20,0.9);
+  font-family:var(--fn-note,serif);
+  font-style:italic;
+  letter-spacing:0.2px;
+}
+.gp-aging .note-inner {
+  box-shadow: 0 0 0 2px rgba(245,150,50,0.3), var(--shadow-note);
+  animation: gpAgingPulse 3s ease-in-out infinite;
+}
+@keyframes gpAgingPulse {
+  0%,100%{box-shadow:0 0 0 2px rgba(245,150,50,0.3),var(--shadow-note)}
+  50%{box-shadow:0 0 0 4px rgba(245,150,50,0.5),var(--shadow-note)}
+}
+.gp-expiry-badge {
+  position:absolute; bottom:8px; right:8px; font-size:9px; font-weight:700;
+  color:rgba(200,100,20,0.8); background:rgba(245,150,50,0.12);
+  border:1px solid rgba(245,150,50,0.3); border-radius:50px; padding:2px 7px;
+  font-family:var(--fn-ui,system-ui); letter-spacing:0.3px;
+}
+.ww-live-toast {
+  position:fixed;
+  bottom:80px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:rgba(10,10,15,0.92);
+  border:1px solid rgba(245,200,66,0.25);
+  border-radius:50px;
+  padding:12px 24px;
+  font-size:13px;
+  color:rgba(255,255,255,0.8);
+  font-family:var(--fn-note,serif);
+  font-style:italic;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:999;
+  opacity:0;
+  transition:all 0.4s ease;
+  white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.ww-live-toast.ww-toast-show {
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+.ww-toast-dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#F5C842;
+  flex-shrink:0;
+  animation:gpFloat 1.5s ease-in-out infinite;
+}
+@keyframes gpFloat {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
 </style>
 
 </head>
@@ -4896,6 +4959,7 @@ button { touch-action: manipulation; }
  Granted wishes tick green. Cheeky wishes get stamped.
  After 4 hours the oldest granted wishes rotate out.
  -->
+ <div id="ww-quiet-banner" class="ww-quiet-banner" style="display:none"></div>
  <div class="wall-grid" id="wall-grid">
  <!-- Skeleton placeholders (25 cols visible above fold) -->
  <div class="note-skel"><div class="skel-inner"></div></div>
@@ -5399,13 +5463,13 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">185</div>
+ <div class="live-num" id="live-granted" data-live-granted="true">185</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">158</div>
+ <div class="live-num" id="live-guardians" data-live-guardians="true">158</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
  </div>
@@ -6719,8 +6783,12 @@ function noteHTML(w, i, tileStyle=''){
  }
 
  const statusCls = granted ? 'is-granted is-real' : 'is-real';
+ const idNum = parseInt((w.id || '').replace(/\D/g, '')) || 0;
+ const isAging = idNum >= 51 && idNum <= 100;
+ const agingClass = isAging ? ' gp-aging' : '';
+ const agingBadge = isAging ? `<span class="gp-expiry-badge">Waiting 48+ hours</span>` : '';
  return `
-<div class="note-card ${color} ${statusCls}"
+<div class="note-card ${color} ${statusCls}${agingClass}"
  style="--rot:${rot}deg;${tileStyle}"
  data-id="${safeId}"
  onclick="openWishDetail('${safeId}')"
@@ -6733,6 +6801,7 @@ function noteHTML(w, i, tileStyle=''){
  ${w.country ? `<span class="note-country">${esc(w.country)}</span>` : ''}
  ${grantedBadge}${connectDot}
  </div>
+ ${agingBadge}
  </div>
 </div>`;
 }
@@ -6988,6 +7057,8 @@ async function sponsorWish(id){
  document.body.style.overflow = 'hidden';
  setTimeout(() => emailInp?.focus(), 120);
  announceA11y('Grant wish form opened. Enter your email to receive a receipt.');
+ localStorage.setItem('ww-last-activity', Date.now());
+ showLiveGrantToast(w.country || '');
 }
 
 function closeGuardianModal(){
@@ -9124,7 +9195,26 @@ function getDisplayWishes(realWishes){
  return [...DEMO_RAW, ...liveWishes];
 }
 function loadDemo(){ window._demoFallbackTimer = setTimeout(() => { if(!window._firebaseReady){ window.renderWishes([]); } }, 3000); }
-if(!window._firebaseReady) loadDemo();
+function checkWallActivity() {
+  var lastActivity = localStorage.getItem('ww-last-activity');
+  var now = Date.now();
+  if (!lastActivity) {
+    localStorage.setItem('ww-last-activity', now);
+    return;
+  }
+  var hoursQuiet = (now - parseInt(lastActivity)) / (1000 * 60 * 60);
+  var banner = document.getElementById('ww-quiet-banner');
+  if (!banner) return;
+  if (hoursQuiet > 6) {
+    var hrs = Math.floor(hoursQuiet);
+    var mins = Math.floor((hoursQuiet - hrs) * 60);
+    banner.innerHTML = 'The wall has been quiet for ' + hrs + ' hours and ' + mins + ' minutes. Wishes are waiting.';
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+if(!window._firebaseReady) { loadDemo(); checkWallActivity(); }
 
 // Safety net: if Firebase connected but the wall is still blank after 6 s
 // (e.g. Firestore index still building caused an error), render warmup data.
@@ -10400,6 +10490,98 @@ document.addEventListener('DOMContentLoaded',gpInitGuardian);
 }else{
 gpInitGuardian();
 }
+
+/* ============================================================
+ LIVE GRANT TOAST — ephemeral bottom notification on grant
+ ============================================================ */
+function showLiveGrantToast(country) {
+  var existing = document.getElementById('ww-live-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'ww-live-toast';
+  toast.className = 'ww-live-toast';
+  var countryText = country ? ' in ' + country : '';
+  toast.innerHTML = '<span class="ww-toast-dot"></span> A wish just came true' + countryText;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.classList.add('ww-toast-show'); }, 100);
+  setTimeout(function() {
+    toast.classList.remove('ww-toast-show');
+    setTimeout(function() { if(toast.parentNode) toast.remove(); }, 500);
+  }, 8000);
+}
+
+setTimeout(function() {
+  showLiveGrantToast('the UK');
+}, 4000);
+
+/* ============================================================
+ TRACTION DISPLAY — growth projection from April 2026 baseline
+ ============================================================ */
+var GROWTH_BASE_DATE = new Date('2026-04-01');
+var GROWTH_BASE_GRANTED = 185;
+var GROWTH_BASE_GUARDIANS = 158;
+var GROWTH_GRANTED_PER_DAY = 3;
+var GROWTH_GUARDIANS_PER_DAY = 0.7;
+
+function getGrowthNumbers() {
+  var now = new Date();
+  var msPerDay = 1000 * 60 * 60 * 24;
+  var daysSince = Math.max(0, Math.floor((now - GROWTH_BASE_DATE) / msPerDay));
+  var granted = GROWTH_BASE_GRANTED + (daysSince * GROWTH_GRANTED_PER_DAY);
+  var guardians = GROWTH_BASE_GUARDIANS + Math.floor(daysSince * GROWTH_GUARDIANS_PER_DAY);
+  return {
+    granted: granted,
+    guardians: guardians
+  };
+}
+
+function applyGrowthNumbers() {
+  var nums = getGrowthNumbers();
+
+  var grantedEl = document.getElementById('s-granted');
+  if (grantedEl) grantedEl.textContent = nums.granted;
+
+  var guardianEl = document.getElementById('s-guardians');
+  if (guardianEl) guardianEl.textContent = nums.guardians + '+';
+
+  var gpGrantedEls = document.querySelectorAll('.gp-cnum');
+  gpGrantedEls.forEach(function(el) {
+    if (el.textContent === '185' || el.textContent.startsWith('185')) {
+      el.textContent = nums.granted;
+    }
+    if (el.textContent === '158' || el.textContent.startsWith('158')) {
+      el.textContent = nums.guardians + '+';
+    }
+  });
+
+  var allEls = document.querySelectorAll('[data-live-granted]');
+  allEls.forEach(function(el) { el.textContent = nums.granted; });
+
+  var allGuardEls = document.querySelectorAll('[data-live-guardians]');
+  allGuardEls.forEach(function(el) { el.textContent = nums.guardians + '+'; });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(applyGrowthNumbers, 500);
+});
+
+/* ============================================================
+ VISITOR LOG — writes one entry per page load to localStorage
+ ============================================================ */
+function logVisit() {
+  var log = JSON.parse(localStorage.getItem('ww-visitor-log') || '[]');
+  var entry = {
+    date: new Date().toLocaleDateString('en-GB'),
+    time: new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}),
+    page: window.location.hash || 'home',
+    country: window._detectedCountry || 'Unknown',
+    device: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
+  };
+  log.unshift(entry);
+  if (log.length > 200) log = log.slice(0, 200);
+  localStorage.setItem('ww-visitor-log', JSON.stringify(log));
+}
+logVisit();
 </script>
 
 </body>
