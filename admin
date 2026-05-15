@@ -1267,7 +1267,8 @@ function loadDemoIfNeeded(){
     setTimeout(() => {
       window.renderAdmin([]);
       window.renderDonors([]);
-      document.getElementById('queue-status').textContent = 'Firebase is not connected. Showing live-empty state only.';
+      const queueStatus = document.getElementById('queue-status');
+      if(queueStatus) queueStatus.textContent = 'Firebase is not connected. Showing live-empty state only.';
     }, 500);
   }
 }
