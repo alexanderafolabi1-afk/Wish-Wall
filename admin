@@ -111,7 +111,7 @@
             const d = change.doc.data();
             const id = change.doc.id;
             if (!knownDonorIds.has(id)) {
-              try { new Notification('New donation', { body: '$' + d.amount + ' from ' + d.name }); } catch(_) {}
+              try { new Notification('New donation', { body: '\u00a3' + d.amount + ' from ' + d.name }); } catch(_) {}
             }
           }
         });
