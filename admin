@@ -314,6 +314,20 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
 .vis-device-badge.desktop{background:rgba(0,255,179,.15);color:var(--green);}
 .vis-empty{text-align:center;padding:48px 20px;color:rgba(255,255,255,.35);font-size:14px;line-height:1.6;}
 
+/* GROWTH / REAL DATA SECTIONS */
+.adm-section{margin:20px 0;border-radius:14px;overflow:hidden;border:1px solid;}
+.adm-section-banner{padding:14px 20px;font-weight:700;font-size:13px;letter-spacing:0.4px;text-transform:uppercase;}
+.adm-section-body{padding:18px 20px;display:grid;gap:10px;}
+.adm-section-row{font-size:14px;color:rgba(255,255,255,.8);}
+.adm-section-row strong{color:#fff;}
+.adm-section--amber{border-color:rgba(245,180,50,.3);}
+.adm-section--amber .adm-section-banner{background:rgba(245,180,50,.15);color:#F5B432;}
+.adm-section--amber .adm-section-body{background:rgba(245,180,50,.05);}
+.adm-section--green{border-color:rgba(0,196,132,.3);}
+.adm-section--green .adm-section-banner{background:rgba(0,196,132,.15);color:var(--green-dk);}
+.adm-section--green .adm-section-body{background:rgba(0,196,132,.05);}
+.adm-section-note{font-size:12px;color:rgba(255,255,255,.4);font-style:italic;}
+
 </style>
 </head>
 <body>
@@ -356,6 +370,29 @@ body{font-family:var(--fn);background:var(--bg);color:#fff;min-height:100vh;}
       <div class="adm-stat"><span class="adm-stat-num" id="a-pending">0</span><span class="adm-stat-lbl">Pending Review</span></div>
       <div class="adm-stat"><span class="adm-stat-num" id="a-approved">0</span><span class="adm-stat-lbl">Live on Wall</span></div>
       <div class="adm-stat"><span class="adm-stat-num" id="a-granted">0</span><span class="adm-stat-lbl">Granted ✅</span></div>
+    </div>
+
+    <!-- ARTIFICIAL GROWTH DATA -->
+    <div class="adm-section adm-section--amber">
+      <div class="adm-section-banner">⚠️ Artificial Growth Data</div>
+      <div class="adm-section-body">
+        <div class="adm-section-row">The numbers below are artificially calculated based on a growth rate formula starting April 2026. They are display numbers only and do not reflect real database records.</div>
+        <div class="adm-section-row" id="admin-calc-days"></div>
+        <div class="adm-section-row">Calculated wishes granted: <strong id="admin-calc-granted"></strong></div>
+        <div class="adm-section-row">Calculated guardians: <strong id="admin-calc-guardians"></strong></div>
+        <div class="adm-section-row adm-section-note">Daily growth rates: 3 wishes granted per day &bull; 0.7 guardians per day</div>
+      </div>
+    </div>
+
+    <!-- REAL DATA -->
+    <div class="adm-section adm-section--green">
+      <div class="adm-section-banner">✅ Real Data</div>
+      <div class="adm-section-body">
+        <div class="adm-section-row">The records below are real entries from actual users and real transactions.</div>
+        <div class="adm-section-row">Real wishes from Firebase: shown in the wishes table below (updates live when Firebase is connected)</div>
+        <div class="adm-section-row">Real guardian donations: managed via Stripe (view transactions in the Stripe dashboard)</div>
+        <div class="adm-section-row adm-section-note">If Firebase is not connected these sections will be empty</div>
+      </div>
     </div>
 
     <!-- Ledger Editor -->
@@ -753,6 +790,31 @@ function escAdm(str) {
   var d = document.createElement('div');
   d.textContent = String(str);
   return d.innerHTML;
+}
+
+/* ============================================================
+   ARTIFICIAL GROWTH DATA — calculated display numbers only
+   ============================================================ */
+function showAdminGrowthData() {
+  var base = new Date('2026-04-01');
+  var now = new Date();
+  var days = Math.max(0, Math.floor((now - base) / (1000 * 60 * 60 * 24)));
+  var granted = 185 + (days * 3);
+  var guardians = 158 + Math.floor(days * 0.7);
+
+  var gEl = document.getElementById('admin-calc-granted');
+  var guEl = document.getElementById('admin-calc-guardians');
+  var dEl = document.getElementById('admin-calc-days');
+
+  if (gEl) gEl.textContent = granted;
+  if (guEl) guEl.textContent = guardians + '+';
+  if (dEl) dEl.textContent = days + ' days since growth baseline';
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', showAdminGrowthData);
+} else {
+  showAdminGrowthData();
 }
 
 function loadDemoIfNeeded(){

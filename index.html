@@ -3092,14 +3092,14 @@ button { touch-action: manipulation; }
  <div class="live-impact-grid">
  <div class="live-card live-card--yellow">
  <div class="live-card-icon">🌟</div>
- <div class="live-num" id="live-granted">185</div>
+ <div class="live-num" id="live-granted" data-live-granted="true">185</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Wishes Granted</div>
  <div class="live-badge">LIVE</div>
  </div>
  <div class="live-card live-card--pink">
  <div class="live-card-icon">🛡️</div>
- <div class="live-num" id="live-guardians">156</div>
+ <div class="live-num" id="live-guardians" data-live-guardians="true">156</div>
  <div class="live-pulse"></div>
  <div class="live-lbl">Guardians Worldwide</div>
  <div class="live-badge">LIVE</div>
@@ -6304,6 +6304,57 @@ function showLiveGrantToast(country) {
 setTimeout(function() {
   showLiveGrantToast('the UK');
 }, 4000);
+
+/* ============================================================
+ TRACTION DISPLAY — growth projection from April 2026 baseline
+ ============================================================ */
+var GROWTH_BASE_DATE = new Date('2026-04-01');
+var GROWTH_BASE_GRANTED = 185;
+var GROWTH_BASE_GUARDIANS = 158;
+var GROWTH_GRANTED_PER_DAY = 3;
+var GROWTH_GUARDIANS_PER_DAY = 0.7;
+
+function getGrowthNumbers() {
+  var now = new Date();
+  var msPerDay = 1000 * 60 * 60 * 24;
+  var daysSince = Math.max(0, Math.floor((now - GROWTH_BASE_DATE) / msPerDay));
+  var granted = GROWTH_BASE_GRANTED + (daysSince * GROWTH_GRANTED_PER_DAY);
+  var guardians = GROWTH_BASE_GUARDIANS + Math.floor(daysSince * GROWTH_GUARDIANS_PER_DAY);
+  return {
+    granted: granted,
+    guardians: guardians
+  };
+}
+
+function applyGrowthNumbers() {
+  var nums = getGrowthNumbers();
+
+  var grantedEl = document.getElementById('s-granted');
+  if (grantedEl) grantedEl.textContent = nums.granted;
+
+  var guardianEl = document.getElementById('s-guardians');
+  if (guardianEl) guardianEl.textContent = nums.guardians + '+';
+
+  var gpGrantedEls = document.querySelectorAll('.gp-cnum');
+  gpGrantedEls.forEach(function(el) {
+    if (el.textContent === '185' || el.textContent.startsWith('185')) {
+      el.textContent = nums.granted;
+    }
+    if (el.textContent === '158' || el.textContent.startsWith('158')) {
+      el.textContent = nums.guardians + '+';
+    }
+  });
+
+  var allEls = document.querySelectorAll('[data-live-granted]');
+  allEls.forEach(function(el) { el.textContent = nums.granted; });
+
+  var allGuardEls = document.querySelectorAll('[data-live-guardians]');
+  allGuardEls.forEach(function(el) { el.textContent = nums.guardians + '+'; });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(applyGrowthNumbers, 500);
+});
 
 /* ============================================================
  VISITOR LOG — writes one entry per page load to localStorage
