@@ -9285,9 +9285,12 @@ window.updateLedger = function(data){
  if(ledGr) ledGr.textContent = fmt(Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted);
 
 
- // Push to live impact counters
- liveStats.granted = Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted;
- if(Number.isFinite(totalGuardians) && totalGuardians > 0) liveStats.guardians = totalGuardians;
+ // Push to live impact counters — never go below the growth projection floor.
+ var _growth = (typeof getGrowthNumbers === 'function') ? getGrowthNumbers() : { granted: DEFAULT_LIVE_STATS.granted, guardians: DEFAULT_LIVE_STATS.guardians };
+ var _storedGranted  = Number.isFinite(totalGranted)   && totalGranted   > 0 ? totalGranted   : liveStats.granted;
+ var _storedGuardians= Number.isFinite(totalGuardians)  && totalGuardians  > 0 ? totalGuardians  : liveStats.guardians;
+ liveStats.granted   = Math.max(_storedGranted,   Math.round(_growth.granted));
+ liveStats.guardians = Math.max(_storedGuardians,  _growth.guardians);
  if(Number.isFinite(totalCountries) && totalCountries > 0) liveStats.countries = totalCountries;
  renderLiveStats();
 };
@@ -10537,32 +10540,34 @@ function getGrowthNumbers() {
 
 function applyGrowthNumbers() {
   var nums = getGrowthNumbers();
+  var g = Math.round(nums.granted);
+  var gu = nums.guardians;
 
-  var grantedEl = document.getElementById('s-granted');
-  if (grantedEl) grantedEl.textContent = nums.granted;
+  // Update liveStats so animLiveNum targets the growth numbers,
+  // preventing the existing 900ms animation loop from overwriting them.
+  if (typeof liveStats !== 'undefined') {
+    liveStats.granted = g;
+    liveStats.guardians = gu;
+  }
 
-  var guardianEl = document.getElementById('s-guardians');
-  if (guardianEl) guardianEl.textContent = nums.guardians + '+';
+  // Re-run the animated counter so it animates TO the growth values.
+  if (typeof renderLiveStats === 'function') renderLiveStats();
 
-  var gpGrantedEls = document.querySelectorAll('.gp-cnum');
-  gpGrantedEls.forEach(function(el) {
-    if (el.textContent === '185' || el.textContent.startsWith('185')) {
-      el.textContent = nums.granted;
-    }
-    if (el.textContent === '158' || el.textContent.startsWith('158')) {
-      el.textContent = nums.guardians + '+';
-    }
+  // Update any elements still using direct attribute selectors.
+  document.querySelectorAll('[data-live-granted]').forEach(function(el) {
+    el.textContent = g;
   });
-
-  var allEls = document.querySelectorAll('[data-live-granted]');
-  allEls.forEach(function(el) { el.textContent = nums.granted; });
-
-  var allGuardEls = document.querySelectorAll('[data-live-guardians]');
-  allGuardEls.forEach(function(el) { el.textContent = nums.guardians + '+'; });
+  document.querySelectorAll('[data-live-guardians]').forEach(function(el) {
+    el.textContent = gu + '+';
+  });
 }
 
+// Run immediately so liveStats is seeded before the 400ms renderLiveStats fires.
+applyGrowthNumbers();
+
+// DOMContentLoaded re-run catches any elements painted after first execution.
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(applyGrowthNumbers, 500);
+  setTimeout(applyGrowthNumbers, 50);
 });
 
 /* ============================================================
