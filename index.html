@@ -9249,10 +9249,16 @@ let liveStats = { ...DEFAULT_LIVE_STATS };
 function animLiveNum(id, target, prefix='', suffix='', duration=900){
  const el = document.getElementById(id);
  if(!el) return;
+ // Guard: skip NaN/Infinity targets (e.g. from growth constants not yet assigned)
+ if(!Number.isFinite(target)) return;
+ // Generation counter: cancel any in-flight animation on this element
+ el._animGen = (el._animGen || 0) + 1;
+ const gen = el._animGen;
  const raw = el.textContent.replace(/[^0-9]/g,'');
  const start = parseInt(raw) || 0;
  const t0 = performance.now();
  function tick(now){
+ if(el._animGen !== gen) return; // superseded by a newer call — stop
  const p = Math.min((now-t0)/duration, 1);
  const e = 1 - Math.pow(1-p, 3);
  const val = Math.round(start + (target-start)*e);
@@ -9285,9 +9291,15 @@ window.updateLedger = function(data){
  if(ledGr) ledGr.textContent = fmt(Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted);
 
 
- // Push to live impact counters
- liveStats.granted = Number.isFinite(totalGranted) && totalGranted > 0 ? totalGranted : liveStats.granted;
- if(Number.isFinite(totalGuardians) && totalGuardians > 0) liveStats.guardians = totalGuardians;
+ // Push to live impact counters — never go below the growth projection floor.
+ var _growth = (typeof getGrowthNumbers === 'function') ? getGrowthNumbers() : null;
+ // Guard: getGrowthNumbers() can return NaN if called before var constants are assigned (hoisting).
+ var _growthGranted   = (_growth && Number.isFinite(_growth.granted))   ? Math.round(_growth.granted)   : 0;
+ var _growthGuardians = (_growth && Number.isFinite(_growth.guardians)) ? _growth.guardians             : 0;
+ var _storedGranted   = Number.isFinite(totalGranted)   && totalGranted   > 0 ? totalGranted   : liveStats.granted;
+ var _storedGuardians = Number.isFinite(totalGuardians) && totalGuardians > 0 ? totalGuardians : liveStats.guardians;
+ liveStats.granted   = Math.max(_storedGranted,   _growthGranted   || _storedGranted);
+ liveStats.guardians = Math.max(_storedGuardians, _growthGuardians || _storedGuardians);
  if(Number.isFinite(totalCountries) && totalCountries > 0) liveStats.countries = totalCountries;
  renderLiveStats();
 };
@@ -10537,32 +10549,27 @@ function getGrowthNumbers() {
 
 function applyGrowthNumbers() {
   var nums = getGrowthNumbers();
+  var g = Math.round(nums.granted);
+  var gu = nums.guardians;
 
-  var grantedEl = document.getElementById('s-granted');
-  if (grantedEl) grantedEl.textContent = nums.granted;
+  // Update liveStats so animLiveNum targets the growth numbers,
+  // preventing the existing 900ms animation loop from overwriting them.
+  if (typeof liveStats !== 'undefined') {
+    liveStats.granted = g;
+    liveStats.guardians = gu;
+  }
 
-  var guardianEl = document.getElementById('s-guardians');
-  if (guardianEl) guardianEl.textContent = nums.guardians + '+';
-
-  var gpGrantedEls = document.querySelectorAll('.gp-cnum');
-  gpGrantedEls.forEach(function(el) {
-    if (el.textContent === '185' || el.textContent.startsWith('185')) {
-      el.textContent = nums.granted;
-    }
-    if (el.textContent === '158' || el.textContent.startsWith('158')) {
-      el.textContent = nums.guardians + '+';
-    }
-  });
-
-  var allEls = document.querySelectorAll('[data-live-granted]');
-  allEls.forEach(function(el) { el.textContent = nums.granted; });
-
-  var allGuardEls = document.querySelectorAll('[data-live-guardians]');
-  allGuardEls.forEach(function(el) { el.textContent = nums.guardians + '+'; });
+  // Re-run the animated counter so it animates TO the growth values.
+  // The generation-counter in animLiveNum cancels any previously running animation.
+  if (typeof renderLiveStats === 'function') renderLiveStats();
 }
 
+// Run immediately so liveStats is seeded before the 400ms renderLiveStats fires.
+applyGrowthNumbers();
+
+// DOMContentLoaded re-run catches any elements painted after first execution.
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(applyGrowthNumbers, 500);
+  setTimeout(applyGrowthNumbers, 50);
 });
 
 /* ============================================================
