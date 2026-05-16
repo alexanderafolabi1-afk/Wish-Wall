@@ -6717,7 +6717,7 @@ function paintWall(){
  let src = allWishes;
 
  if(curFilter === 'granted') src = src.filter(w => w.status === 'granted');
- else if(curFilter === 'live') src = src.filter(w => w.status !== 'granted');
+ else if(curFilter === 'live') src = src.filter(w => w.status === 'approved');
 
  if(searchQ){
  const q = searchQ.toLowerCase();
@@ -10562,6 +10562,32 @@ function applyGrowthNumbers() {
   // Re-run the animated counter so it animates TO the growth values.
   // The generation-counter in animLiveNum cancels any previously running animation.
   if (typeof renderLiveStats === 'function') renderLiveStats();
+
+  // FIX 1: Update every .stat-num, .impact-num, .lib-num element that still
+  // shows a hardcoded granted or guardian count, across all tabs.
+  document.querySelectorAll('.stat-num, .impact-num, .lib-num').forEach(function(el) {
+    var txt = el.textContent.replace(/[^0-9]/g, '');
+    if (txt === '185' || txt === '320' || (parseInt(txt) > 180 && parseInt(txt) < 400)) {
+      if (el.id !== 's-total' && el.id !== 'lib-raised') {
+        el.textContent = nums.granted;
+      }
+    }
+    // FIX 2: guardian numbers always show with + suffix
+    if (txt === '158' || txt === '189' || txt === '166' || txt === '167') {
+      el.textContent = nums.guardians + '+';
+    }
+  });
+
+  // FIX 1 & 2: Broad sweep — catch any remaining leaf-node elements that still
+  // show a hardcoded granted or guardian count anywhere on the page.
+  document.querySelectorAll('*').forEach(function(el) {
+    if (el.children.length === 0) {
+      if (el.textContent.trim() === '185') el.textContent = nums.granted;
+      if (el.textContent.trim() === '158') el.textContent = nums.guardians + '+';
+      if (el.textContent.trim() === '189') el.textContent = nums.guardians + '+';
+      if (el.textContent.trim() === '166') el.textContent = nums.guardians + '+';
+    }
+  });
 }
 
 // Run immediately so liveStats is seeded before the 400ms renderLiveStats fires.
