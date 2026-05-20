@@ -8514,7 +8514,7 @@ function goToStep(step){
  const email = (document.getElementById('f-email')?.value || '').trim();
  const idchk = document.getElementById('f-id-confirm')?.checked;
  if(!name) { shake(document.getElementById('f-name')); announceA11y('Please enter your full name.',true); return; }
- if(!email || !email.includes('@')) { shake(document.getElementById('f-email')); announceA11y('Please enter a valid email.',true); return; }
+ if(!isValidEmail(email)) { shake(document.getElementById('f-email')); announceA11y('Please enter a valid email.',true); return; }
  if(!idchk) { announceA11y('Please tick the ID confirmation box.',true); return; }
  updateWishPreview();
  }
@@ -8570,6 +8570,10 @@ function readWishAloud(){
  ============================================================ */
 const BLOCK = [];
 function hasProfanity(txt){ const l = txt.toLowerCase(); return BLOCK.some(w => l.includes(w)); }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function isValidEmail(email){
+ return EMAIL_RE.test(String(email || '').trim());
+}
 
 /* ============================================================
  SUBMIT WISH -> FIREBASE + STRIPE
@@ -8586,7 +8590,7 @@ async function submitWish(){
  if(!wishTxt){ shake(document.getElementById('f-wish')); return alert('✨ Please write your wish!'); }
  if(wishTxt.length > 350){ return alert('Keep your wish under 350 characters!'); }
  if(!name){ shake(document.getElementById('f-name')); return alert('Your full name is required it stays private and is used for verification only.'); }
- if(!email || !email.includes('@')){ shake(document.getElementById('f-email')); return alert('We need a valid email to notify you when your wish is granted 💌'); }
+ if(!isValidEmail(email)){ shake(document.getElementById('f-email')); return alert('We need a valid email to notify you when your wish is granted 💌'); }
  if(!idConfirm){ return alert('Please confirm that your name matches your government-issued ID to continue. This protects everyone on the wall.'); }
  if(hasProfanity(wishTxt)){ return alert('Please keep the magic family-friendly! 🌟'); }
 
@@ -8609,7 +8613,7 @@ async function submitWish(){
  anonymous: anon,
  idConfirmed: true,
  cat: _selectedCat || 'other',
- status: 'queued', // Starts queued; auto-promotes when wall has space
+ status: 'pending', // Hidden until Stripe confirms payment
  color: NOTE_COLS[Math.floor(Math.random() * NOTE_COLS.length)],
  country: window._userGeo?.detected
  ? `${window._userGeo.flag} ${window._userGeo.country}`
@@ -8620,30 +8624,20 @@ async function submitWish(){
  priceTier: window._pricingTier?.tier || 'TIER_1',
  potContrib: 1.00,
  queuedAt: new Date().toISOString(),
+ paymentRequired: true,
  };
- // If wall has space, promote directly to approved (skip queue)
- // Use _lastWishes (raw Firebase data) to avoid counting warmup/padding wishes
- const realWishes = window._lastWishes || window.allWishes.filter(w => !w.warmup);
- const activeCount = realWishes.filter(w =>
- w.status === 'approved' || w.status === 'granted'
- ).length;
- if(activeCount < WALL_CAPACITY){
- wishData.status = 'approved';
- wishData.promotedFrom = 'direct';
- }
 
  try {
  if(window._firebaseReady && window.saveWish){
  const docRef = await window.saveWish(wishData);
  const wishId = docRef.id;
- thisYear.push({ id: wishId, date: Date.now() });
- localStorage.setItem(yearKey, JSON.stringify(thisYear));
  const myCode = generateRefCode(email);
  localStorage.setItem('ww-mycode', myCode);
- scheduleWisherEmails(email, wishId);
  // Persist wish text across the Stripe redirect so checkReturn() can display it
  sessionStorage.setItem('ww-pending-wish', wishTxt);
  sessionStorage.setItem('ww-pending-refcode', myCode);
+ sessionStorage.setItem('ww-pending-wish-id', wishId);
+ sessionStorage.setItem('ww-pending-wish-email', email);
  // NOTE: configure your Stripe Payment Link's "After payment" redirect to:
  //   https://wallwishes.xyz/?payment=success
  // in the Stripe Dashboard → Payment Links → (your link) → Settings → After payment → Redirect to URL
@@ -8663,8 +8657,7 @@ async function submitWish(){
  console.error('Save error:', err);
  btn.disabled = false;
  btn.innerHTML = '✨ Pin It · <span class="dynamic-price">$1.99</span>';
- closeModal();
- showConf(wishTxt, localStorage.getItem('ww-mycode') || generateRefCode('fallback'));
+ alert('We could not start your payment. Please try again.');
  }
 }
 
@@ -8770,10 +8763,23 @@ function checkReturn(){
   } else {
    // Retrieve wish text saved before Stripe redirect; fall back gracefully
    const pendingWish = sessionStorage.getItem('ww-pending-wish') || '';
-   const pendingCode  = sessionStorage.getItem('ww-pending-refcode') || '';
+   const pendingCode = sessionStorage.getItem('ww-pending-refcode') || '';
+   const pendingWishId = sessionStorage.getItem('ww-pending-wish-id') || '';
+   const pendingWishEmail = sessionStorage.getItem('ww-pending-wish-email') || '';
    sessionStorage.removeItem('ww-pending-wish');
    sessionStorage.removeItem('ww-pending-refcode');
+   sessionStorage.removeItem('ww-pending-wish-id');
+   sessionStorage.removeItem('ww-pending-wish-email');
    if(pendingCode) localStorage.setItem('ww-mycode', pendingCode);
+   if(pendingWishId){
+    const yearKey = `ww-wishes-${new Date().getFullYear()}`;
+    const thisYear = JSON.parse(localStorage.getItem(yearKey) || '[]');
+    if(!thisYear.some(w => w.id === pendingWishId)){
+     thisYear.push({ id: pendingWishId, date: Date.now() });
+     localStorage.setItem(yearKey, JSON.stringify(thisYear));
+    }
+    if(pendingWishEmail) scheduleWisherEmails(pendingWishEmail, pendingWishId);
+   }
    const urlWish = p.get('wish');
    const txt = urlWish ? decodeURIComponent(urlWish) : (pendingWish || storedWishTxt || 'something wonderful...');
    history.replaceState({}, '', location.pathname);

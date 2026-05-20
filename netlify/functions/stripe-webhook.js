@@ -18,6 +18,7 @@ if (!admin.apps.length) {
   });
 }
 const db = admin.firestore();
+const WALL_CAPACITY = 1000;
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const FROM_EMAIL    = 'hello@wishwall.xyz';
@@ -231,14 +232,35 @@ exports.handler = async (event) => {
       }
 
     } else if (clientRef) {
-      // ── Pin payment: mark wish as approved ─────────────────────────────
+      // ── Pin payment: mark wish as paid, then place on wall/queue ───────
       const wishId = clientRef;
       try {
         const wishRef = db.collection('wishes').doc(wishId);
-        await wishRef.update({
-          status:     'approved',
-          approvedAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
+        const wishSnap = await wishRef.get();
+        if (!wishSnap.exists) {
+          throw new Error(`Wish not found for paid pin: ${wishId}`);
+        }
+        const wishData = wishSnap.data() || {};
+        const existingStatus = wishData.status || '';
+        let shouldApprove = existingStatus === 'approved' || existingStatus === 'granted';
+        if (!shouldApprove) {
+          const activeSnap = await db.collection('wishes')
+            .where('status', 'in', ['approved', 'granted'])
+            .get();
+          shouldApprove = activeSnap.size < WALL_CAPACITY;
+        }
+        const wishPatch = {
+          status: shouldApprove ? 'approved' : 'queued',
+          paidAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        };
+        if (shouldApprove) {
+          wishPatch.approvedAt = admin.firestore.FieldValue.serverTimestamp();
+          wishPatch.promotedFrom = 'direct';
+        } else if (!wishData.queuedAt) {
+          wishPatch.queuedAt = new Date().toISOString();
+        }
+        await wishRef.set(wishPatch, { merge: true });
 
         // Update ledger fees
         const ledgerRef = db.collection('meta').doc('ledger');
