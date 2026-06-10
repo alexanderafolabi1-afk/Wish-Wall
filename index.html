@@ -9379,7 +9379,10 @@ function initCookies(){
 }
 function acceptCookies(){
  const cb = document.getElementById('cookie-banner');
- if(cb){ cb.classList.remove('show'); cb.style.display = 'none'; }
+ if(cb){
+  cb.classList.remove('show');
+  cb.style.display = 'none';
+ }
  localStorage.setItem('ww-cookies-accepted','1');
  localStorage.setItem('ww-cookie-consent','all');
 }
