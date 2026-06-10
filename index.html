@@ -744,6 +744,7 @@ nav {
  font-weight: 400;
  font-size: 12px;
  padding: 7px 14px;
+ min-height: 44px;
  border-radius: 2px 8px 2px 8px; /* irregular */
  border: none; cursor: pointer;
  background: transparent;
@@ -786,6 +787,7 @@ nav {
  font-weight: 700;
  letter-spacing: -0.02em;
  padding: 10px 24px;
+ min-height: 44px;
  border-radius: 2px 12px 2px 12px; /* irregular */
  border: none; cursor: pointer;
  background: var(--urgency);
@@ -1427,6 +1429,7 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  padding: 9px 18px; border-radius: 2px 8px 2px 8px;
  border: 1.5px solid rgba(30,34,53,.15); background: transparent;
  color: var(--text); font-family: var(--fn-mono); font-size: 14px; cursor: pointer;
+ min-height: 44px;
  transition: all .2s;
 }
 .pool-amt-btn.sel.pool-amt-btn:hover {
@@ -1546,6 +1549,7 @@ input[type=range].wish-sl::-webkit-slider-thumb:hover { transform: scale(1.15); 
  background: var(--urgency); color: #FAF8F5;
  font-family: var(--fn-display); font-size: 1.3rem; font-weight: 900;
  letter-spacing: -0.02em; cursor: pointer;
+ min-height: 44px;
  box-shadow: 4px 4px 0 rgba(212,74,30,.3);
  transition: all .2s cubic-bezier(0.16,1,0.3,1);
  font-variation-settings: 'opsz' 40;
@@ -3496,6 +3500,8 @@ button { touch-action: manipulation; }
  .wall-grid { grid-template-columns: repeat(16, minmax(0,1fr)); gap: 1px; }
  .wall-section { padding: 6px; }
  .logo-txt { font-size: 18px; }
+ .gp-pool-card { flex-direction: column; }
+ .gp-corp-stats { flex-direction: column; }
 }
 @media(max-width:480px){
  .wall-grid { grid-template-columns: repeat(10, minmax(0,1fr)); gap: 1px; }
@@ -4307,6 +4313,7 @@ button { touch-action: manipulation; }
 .gp-corp-stats{flex-direction:column}
 .gp-cstat{border-right:none;border-bottom:1px solid rgba(0,0,0,.06)}
 .gp-cstat:last-child{border-bottom:none}
+.gp-corp-grid{grid-template-columns:1fr}
 }
 /* ============================================================
  GUARDIAN PAGE — STICKY NOTE CARDS
