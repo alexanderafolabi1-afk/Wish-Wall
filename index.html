@@ -4930,7 +4930,7 @@ button { touch-action: manipulation; }
 
  <!-- HERO STATS strip -->
  <div class="hero-stats" aria-label="Platform statistics">
-  <div class="stat-pill"><span class="stat-num" id="s-guardians">158</span><span>Guardians</span></div>
+  <div class="stat-pill"><span class="stat-num" id="s-guardians" data-live-guardians="true">158</span><span>Guardians</span></div>
   <div class="stat-pill"><span class="stat-num" id="s-countries">18+</span><span>Countries</span></div>
  </div>
 
@@ -5347,10 +5347,10 @@ button { touch-action: manipulation; }
 <div class="gp-fame">
 <p class="gp-eye" style="text-align:center">Guardian Hall of Fame</p>
 <h2 class="gp-sec-h">The generous souls who make wishes come true</h2>
-<p class="gp-sec-p">158 Guardians. 18+ countries. Every one chose to show up.</p>
+<p class="gp-sec-p"><span data-live-guardians="true">158</span> Guardians. 18+ countries. Every one chose to show up.</p>
 <div class="gp-fame-grid" id="gpFameGrid"></div>
 <div id="gpFameBtn" style="text-align:center;margin-top:18px">
-<button class="gp-ghost" onclick="gpExpandFame()">Show all 158 Guardians</button>
+<button class="gp-ghost" onclick="gpExpandFame()">Show all <span data-live-guardians="true">158</span> Guardians</button>
 </div>
 </div>
 
@@ -5359,8 +5359,8 @@ button { touch-action: manipulation; }
 <h2 class="gp-sec-h">The most powerful thing a company can do is make someone's real life better.</h2>
 <p class="gp-sec-p">Not with a campaign. With an act. Quietly. Verifiably. Permanently.</p>
 <div class="gp-corp-stats">
-<div class="gp-cstat"><span class="gp-cnum">185</span><span class="gp-clbl">Wishes granted</span></div>
-<div class="gp-cstat"><span class="gp-cnum">158</span><span class="gp-clbl">Guardians</span></div>
+<div class="gp-cstat"><span class="gp-cnum" data-live-granted="true">185</span><span class="gp-clbl">Wishes granted</span></div>
+<div class="gp-cstat"><span class="gp-cnum" data-live-guardians="true">158</span><span class="gp-clbl">Guardians</span></div>
 <div class="gp-cstat"><span class="gp-cnum">18+</span><span class="gp-clbl">Countries</span></div>
 <div class="gp-cstat"><span class="gp-cnum">100%</span><span class="gp-clbl">Transparent</span></div>
 </div>
@@ -5572,7 +5572,7 @@ button { touch-action: manipulation; }
  <div class="trust-badge">📊 Radically Transparent</div>
  <div class="trust-badge">✅ GDPR Compliant</div>
  <div class="trust-badge">🌍 Global Community</div>
- <div class="trust-badge">💛 158 Guardians</div>
+ <div class="trust-badge">💛 <span data-live-guardians="true">158</span> Guardians</div>
  <div class="trust-badge">⭐ No Hidden Fees. Ever.</div>
  </div>
  </div>
@@ -5597,12 +5597,12 @@ button { touch-action: manipulation; }
   </div>
   <div class="lib-divider"></div>
   <div class="lib-item">
-   <span class="lib-num">185</span>
+   <span class="lib-num" data-live-granted="true">185</span>
    <span class="lib-label">Wishes Granted</span>
   </div>
   <div class="lib-divider"></div>
   <div class="lib-item">
-   <span class="lib-num">158</span>
+   <span class="lib-num" data-live-guardians="true">158</span>
    <span class="lib-label">Active Guardians</span>
   </div>
   <div class="lib-divider"></div>
@@ -10594,6 +10594,10 @@ function applyGrowthNumbers() {
       if (el.textContent.trim() === '166') el.textContent = nums.guardians + '+';
     }
   });
+
+  // FIX 3: Update all elements explicitly marked with data-live-granted or data-live-guardians.
+  document.querySelectorAll('[data-live-granted]').forEach(function(el){ el.textContent = nums.granted; });
+  document.querySelectorAll('[data-live-guardians]').forEach(function(el){ el.textContent = nums.guardians + '+'; });
 }
 
 // Run immediately so liveStats is seeded before the 400ms renderLiveStats fires.
