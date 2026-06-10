@@ -10307,7 +10307,7 @@ function gpDonatePool(){
 var custom=parseFloat(document.getElementById('gpPoolCustom').value)||0;
 var amt=custom>0?custom:(window._gpPoolAmt||1);
 if(amt<1)return;
-var link=window.STRIPE_POOL_LINK||window.STRIPE_PAYMENT_LINK||'https://buy.stripe.com/placeholder';
+var link=window.STRIPE_POOL_LINK||window.STRIPE_PAYMENT_LINK||'https://buy.stripe.com/7sYeVf2X7eNh12SeUm1gs01';
 window.open(link,'_blank');
 }
 
@@ -10416,7 +10416,7 @@ sessionStorage.setItem("ww-checkout-amount",wish&&wish.est?String(wish.est):"1.0
 sessionStorage.setItem("ww-checkout-label","Guardian Grant · Wish #"+gpWishId);
 if(wish&&wish.wishText)sessionStorage.setItem("ww-sponsor-wish-text",wish.wishText);
 var link=STRIPE_GUARDIAN_GRANT_LINK;
-var separator=link.indexOf('?')!==-1?'&':'?';
+var separator=link.indexOf('?')!==-1?'&amp;':'?';
 window.location.href=link+separator+'client_reference_id=grant_'+gpWishId;
 }
 
