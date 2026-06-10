@@ -6131,6 +6131,9 @@ const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/14AbJ3fJTax1eTI8vY1gs00';
 // Create the $1.00 Payment Link in Stripe Dashboard → Payment Links, then paste the URL there.
 // After-payment redirect: https://wallwishes.xyz/?payment=success
 // Cancel URL           : https://wallwishes.xyz/guardian-checkout.html
+// Guardian Wish Grant payment link — used by gpProceed() to fund a specific wish
+// IMPORTANT: Set the Stripe success redirect URL for Guardian Wish Grant to https://wallwishes.xyz/#guard so the Proof of Grant screen appears after payment.
+const STRIPE_GUARDIAN_GRANT_LINK = 'https://buy.stripe.com/7sYeVf2X7eNh12SeUm1gs01';
 
 /* ============================================================
  REGIONAL PRICING (PPP tiers per audit recommendation)
@@ -10412,7 +10415,9 @@ sessionStorage.setItem("ww-sponsor-wish-id",gpWishId);
 sessionStorage.setItem("ww-checkout-amount",wish&&wish.est?String(wish.est):"1.00");
 sessionStorage.setItem("ww-checkout-label","Guardian Grant · Wish #"+gpWishId);
 if(wish&&wish.wishText)sessionStorage.setItem("ww-sponsor-wish-text",wish.wishText);
-window.location.href="guardian-checkout.html";
+var link=STRIPE_GUARDIAN_GRANT_LINK;
+var separator=link.indexOf('?')!==-1?'&':'?';
+window.location.href=link+separator+'client_reference_id=grant_'+gpWishId;
 }
 
 function gpSpinAgain(){
@@ -10632,6 +10637,48 @@ function logVisit() {
   localStorage.setItem('ww-visitor-log', JSON.stringify(log));
 }
 logVisit();
+
+/* ============================================================
+ STRIPE RETURN HANDLER — Proof of Grant after Guardian payment
+ ============================================================ */
+function handleStripeReturn() {
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('client_reference_id');
+  var session = params.get('session_id');
+  if (!ref && !session) return;
+  if (ref && ref.startsWith('grant_')) {
+    var wishId = ref.replace('grant_', '');
+    showProofOfGrant(wishId);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+    }
+  }
+}
+
+function showProofOfGrant(wishId) {
+  var wish = null;
+  var src = window.allWishes || window.DEMO || [];
+  for (var i = 0; i < src.length; i++) {
+    if (src[i].id === wishId) { wish = src[i]; break; }
+  }
+  var overlay = document.createElement('div');
+  overlay.id = 'proof-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  var wishText = wish ? wish.wishText : 'A wish on The Wish Wall';
+  var country = wish ? (wish.country || '') : '';
+  var today = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+  overlay.innerHTML = '';
+  document.body.appendChild(overlay);
+  var granted = JSON.parse(localStorage.getItem('ww-granted-wishes') || '[]');
+  if (wishId && granted.indexOf(wishId) === -1) {
+    granted.push(wishId);
+    localStorage.setItem('ww-granted-wishes', JSON.stringify(granted));
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  handleStripeReturn();
+});
 </script>
 
 </body>
