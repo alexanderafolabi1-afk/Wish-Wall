@@ -9378,7 +9378,8 @@ function initCookies(){
  if(!consent){ setTimeout(() => document.getElementById('cookie-banner')?.classList.add('show'), 1200); }
 }
 function acceptCookies(){
- document.getElementById('cookie-banner').style.display = 'none';
+ const cb = document.getElementById('cookie-banner');
+ if(cb){ cb.classList.remove('show'); cb.style.display = 'none'; }
  localStorage.setItem('ww-cookies-accepted','1');
  localStorage.setItem('ww-cookie-consent','all');
 }
